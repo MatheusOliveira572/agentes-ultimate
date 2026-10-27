@@ -9,7 +9,7 @@
 - Roteador: plural simples nas palavras dos pacotes; arquivo da pasta só reforça (sozinho não puxa pacote); pedido com
   assunto abaixo do mínimo vai para o núcleo em vez de ser tratado como trivial.
 - `.claude/base/.gitignore` criado sozinho (o grafo e o mapa automático ficam fora do git).
-- Testes dos ganchos: 22 casos.
+- Testes dos ganchos: 21 casos.
 
 ## 0.1.0 · 2026-10-27
 - Primeira versão: 14 agentes em 6 pacotes (núcleo, BI, Finanças, Produto, Software, Documentos), protocolo comum
