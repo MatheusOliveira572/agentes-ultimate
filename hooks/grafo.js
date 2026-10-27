@@ -83,8 +83,23 @@ function descrever(rel, conteudo) {
   return nome ? nome.replace(/^\s*\w+\s*:\s*/, '').trim() : '';
 }
 
+// Em repositório git, só entra o que o git não ignora (pasta de dados fora do git nunca vai para o mapa).
+function listarGit(cwd, proib) {
+  if (!fs.existsSync(path.join(cwd, '.git'))) return null;
+  try {
+    const r = require('child_process').spawnSync('git', ['ls-files', '-co', '--exclude-standard', '-z'],
+      { cwd, encoding: 'utf8', timeout: 2000, maxBuffer: 32 * 1024 * 1024, windowsHide: true });
+    if (r.status !== 0) return null;
+    return r.stdout.split('\0').filter(Boolean)
+      .filter((rel) => !rel.split('/').some((p) => IGNORAR_DIR.has(p)) && !proib.some((x) => x.test(rel)))
+      .slice(0, LIMITE_ARQUIVOS);
+  } catch (e) { return null; }
+}
+
 function listar(cwd, inicio) {
   const proib = sensiveis(cwd);
+  const doGit = listarGit(cwd, proib);
+  if (doGit) return doGit;
   const arquivos = [];
   const pilha = [''];
   while (pilha.length && arquivos.length < LIMITE_ARQUIVOS && Date.now() - inicio < LIMITE_MS) {

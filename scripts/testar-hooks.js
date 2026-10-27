@@ -100,6 +100,10 @@ r = trava('git commit -m dados');
 caso('commit com padrão do projeto bloqueado', r.code === 2 && /dados\/real\.csv/.test(r.err), `code ${r.code} ${r.err}`);
 const g = require(path.join(RAIZ, 'hooks', 'grafo.js')).obter(proj, 0);
 caso('arquivo sensível fica fora do grafo', !g.nos['dados/real.csv'] && !!g.nos['src/carga.js'], Object.keys(g.nos).join(', '));
+fs.mkdirSync(path.join(proj, 'privado')); fs.writeFileSync(path.join(proj, 'privado', 'saida.txt'), '# valor sigiloso\n');
+fs.writeFileSync(path.join(proj, '.gitignore'), 'privado/\n');
+const g2 = require(path.join(RAIZ, 'hooks', 'grafo.js')).obter(proj, 0);
+caso('pasta ignorada pelo git fica fora do grafo', !g2.nos['privado/saida.txt'] && !!g2.nos['src/carga.js'], Object.keys(g2.nos).join(', '));
 
 // Atualização automática: usa um "claude" falso que só anota que foi chamado.
 const marca = path.join(tmp, 'chamado.txt');

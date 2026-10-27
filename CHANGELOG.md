@@ -1,5 +1,10 @@
 # Mudanças
 
+## 0.3.1 · 2026-10-27
+- **Correção de privacidade:** em repositório git, o grafo e o mapa automático só incluem o que o git não ignora
+  (`git ls-files -co --exclude-standard`). Antes, pastas de dados fora do git (ex.: saídas com valores) entravam no
+  `MAPA-AUTO.md` local. Teste novo.
+
 ## 0.3.0 · 2026-10-27
 - **Atualização automática** (`hooks/atualizar.js`, SessionStart): no máximo 1 vez por dia, em segundo plano, roda
   `claude plugin marketplace update agentes-ultimate` e `claude plugin update agentes-ultimate@agentes-ultimate`; na
