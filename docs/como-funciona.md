@@ -20,9 +20,13 @@ Roda a cada pedido, antes do Claude responder. Sem IA, em milissegundos.
    parcial e avisa). Arquivos dos padrões de `sensiveis.txt` ficam de fora. Para ver na mão:
    `node <plugin>/hooks/grafo.js <pasta> "<pedido>"`.
 5. **Memória:** na 1ª vez numa pasta, cria `.claude/base/` com os modelos (não sobrescreve nada que já exista).
-6. **Saída:** uma linha para você (`Usando: …`) e o contexto para o Claude (pacotes, motivos, agentes, já feito).
+6. **Saída:** uma linha para você (`Usando: …`) e o contexto para o Claude: pacotes e motivos, os agentes com o
+   `subagent_type` completo, o catálogo inteiro (área → agentes), o "já feito" e a ordem de **delegar** (o
+   orquestrador coordena; quem faz o trabalho são os agentes).
+7. **Vocabulário não achou a área:** o Claude decide quais especialistas chamar, pelo assunto, olhando o catálogo e as
+   descrições dos agentes. As palavras são um atalho, não a única forma de escolher.
 
-O revisor entra sempre que há pacote.
+O revisor entra sempre, antes de entregar.
 
 ## 2. O orquestrador (skill `ultimate`)
 

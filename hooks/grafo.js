@@ -91,6 +91,7 @@ function listarGit(cwd, proib) {
       { cwd, encoding: 'utf8', timeout: 2000, maxBuffer: 32 * 1024 * 1024, windowsHide: true });
     if (r.status !== 0) return null;
     return r.stdout.split('\0').filter(Boolean)
+      .filter((rel) => !path.basename(rel).startsWith('~$')) // arquivo temporário do Office
       .filter((rel) => !rel.split('/').some((p) => IGNORAR_DIR.has(p)) && !proib.some((x) => x.test(rel)))
       .slice(0, LIMITE_ARQUIVOS);
   } catch (e) { return null; }
@@ -108,7 +109,7 @@ function listar(cwd, inicio) {
     try { itens = fs.readdirSync(path.join(cwd, relDir), { withFileTypes: true }); } catch (e) { continue; }
     for (const it of itens) {
       const rel = (relDir ? relDir + '/' : '') + it.name;
-      if (proib.some((r) => r.test(rel))) continue;
+      if (proib.some((r) => r.test(rel)) || it.name.startsWith('~$')) continue; // ~$ = temporário do Office
       if (it.isDirectory()) {
         if (!IGNORAR_DIR.has(it.name) && !(it.name.startsWith('.') && it.name !== '.claude')) pilha.push(rel);
       } else if (it.isFile()) {

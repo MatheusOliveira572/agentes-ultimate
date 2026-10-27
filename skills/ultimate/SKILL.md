@@ -18,7 +18,11 @@ também não começar do zero.
   planilha de fluxo de caixa" é Finanças, não Documentos).
 - Diga ao usuário, na 1ª linha, quem vai trabalhar ("Vou usar o designer-paineis e o analista-fpa; o revisor confere").
   Ele corrige com "era com <agente>".
-- Pedido simples (uma resposta, um ajuste de uma linha): faça você mesmo, sem agentes.
+- **Delegar é o padrão.** Trabalho de especialista (análise, planilha, código, documento, regra, desenho, pesquisa) vai
+  para os agentes indicados, chamados pela ferramenta Agent com o `subagent_type` que o roteador passou (os do plugin
+  têm o prefixo `agentes-ultimate:`). Você coordena, junta, cobra prova e chama o revisor. Faça você mesmo só a pergunta
+  de uma linha ou o ajuste trivial. O projeto pode mudar isso com `"delegar": "quando-precisar"` em
+  `.claude/base/config.json`.
 - Pergunte ao usuário só o que muda o resultado e não dá para descobrir lendo o projeto. Para o resto, escolha o padrão
   sensato e diga qual escolheu.
 

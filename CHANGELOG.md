@@ -1,5 +1,18 @@
 # Mudanças
 
+## 0.5.1 · 2026-10-27
+- **Delegar é o padrão:** pedido com trabalho de especialista vai para os agentes; o orquestrador coordena, junta,
+  cobra prova e chama o revisor. Antes, a instrução "se for simples, responda direto" fazia o Claude trabalhar sozinho.
+  Projeto pode trocar com `"delegar": "quando-precisar"` no `config.json`.
+- **Nome certo do agente:** o contexto passa o `subagent_type` completo (`agentes-ultimate:<nome>`); os agentes do
+  projeto (equivalências) vão sem prefixo.
+- **Vocabulário não achou a área? O Claude decide:** recebe o catálogo inteiro (área → agentes) e escolhe pelo assunto,
+  em vez de cair no núcleo. O catálogo também vai quando há pacote, para acrescentar outra área se faltar.
+- Plural em cada palavra das expressões ("unidades de negócios" acha "unidade de negócio"); vocabulário de pessoal e
+  folha (headcount, folha, verba, grade, quadro de pessoal) e de planilha (Excel, xlsx).
+- Mapa ignora o arquivo temporário do Office (`~$…`).
+- Testes dos ganchos: 45 casos.
+
 ## 0.5.0 · 2026-10-27
 - **Mapa ao vivo:** gancho `PostToolUse` (`hooks/atividade.js`) anota cada arquivo lido, editado, criado ou
   procurado, e por qual agente (só o caminho, em `.claude/base/.atividade.jsonl`, fora do git). Servidor local

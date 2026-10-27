@@ -50,6 +50,14 @@ caso('reforma tributária → Contábil', /Contábil/.test(msg(r)) && /especiali
 r = rot('projete o fluxo de caixa de 13 semanas e a necessidade de capital de giro');
 caso('caixa de 13 semanas → Finanças com tesouraria', /analista-tesouraria/.test(msg(r)), msg(r));
 
+r = rot('temos como ver uma análise em excel com isso, mostrando as unidades de negócios onde está crescendo o headcount e a folha por verba');
+caso('headcount e folha em Excel → Pessoas + Finanças', /Pessoas/.test(msg(r)) && /Finanças/.test(msg(r)), msg(r));
+caso('nome do agente completo para a ferramenta Agent', /agentes-ultimate:analista-rh/.test(ctx(r)) && /agentes-ultimate:revisor/.test(ctx(r)), ctx(r).slice(0, 400));
+caso('instrução manda delegar', /DELEGUE/.test(ctx(r)), ctx(r).slice(0, 400));
+
+r = rot('preciso organizar a mudança da sede para o novo prédio no ano que vem, com cronograma e responsáveis');
+caso('vocabulário não acha: o Claude decide pelo catálogo', /DECIDA VOCÊ/.test(ctx(r)) && /Catálogo/.test(ctx(r)) && /agentes-ultimate:comprador/.test(ctx(r)), ctx(r).slice(0, 500));
+
 fs.writeFileSync(path.join(proj, 'package.json'), '{}');
 r = rot('corrija o erro no script de importação');
 caso('pasta com package.json + erro → Software', /Software/.test(msg(r)), msg(r));

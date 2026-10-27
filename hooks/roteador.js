@@ -14,8 +14,9 @@ function normalizar(t) {
 }
 
 function contem(texto, termo) {
-  const t = normalizar(termo).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp('(^|[^a-z0-9&])' + t + '(e?s)?($|[^a-z0-9&])').test(texto); // aceita o plural simples
+  // Aceita o plural simples em cada palavra da expressão ("unidade de negocio" acha "unidades de negocios").
+  const t = normalizar(termo).split(/\s+/).map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(e?s)?').join('\\s+');
+  return new RegExp('(^|[^a-z0-9&])' + t + '($|[^a-z0-9&])').test(texto);
 }
 
 function palavras(texto) {
@@ -169,19 +170,30 @@ function main(d) {
   // Projeto com agentes próprios: .claude/base/config.json → "agentes": { "revisor": "revisor-qa", ... }.
   const equiv = (projetoCfg.agentes || {});
   const agentes = [...new Set(escolhidos.flatMap((id) => cfg.pacotes[id].agentes).concat(['revisor']).map((a) => equiv[a] || a))];
+  // Nome que o Claude Code usa para chamar: agentes do plugin vêm com o prefixo; os do projeto (equivalências), sem.
+  const doProjeto = new Set(Object.values(equiv));
+  const chamada = (a) => (doProjeto.has(a) ? a : 'agentes-ultimate:' + a);
   const nomesPac = escolhidos.map((id) => cfg.pacotes[id].nome);
   const linhaUsuario = escolhidos.length
     ? `Usando: ${nomesPac.join(' + ')} · ${agentes.join(', ')}`
-    : 'Usando: núcleo (planejador, pesquisador, revisor, redator)';
+    : 'Área não reconhecida pelo vocabulário: o Claude escolhe os especialistas';
+  // Vocabulário não achou a área: o Claude decide, com o catálogo inteiro na mão.
+  const catalogo = Object.values(cfg.pacotes).map((p) => `${p.nome}: ${p.agentes.map(chamadaFora).join(', ')}`).join(' | ');
+  function chamadaFora(a) { const e = equiv[a] || a; return Object.values(equiv).includes(e) ? e : 'agentes-ultimate:' + e; }
 
   const ctx = [
     '[agentes-ultimate] Pedido classificado automaticamente.',
     escolhidos.length
       ? 'Pacotes: ' + escolhidos.map((id) => `${cfg.pacotes[id].nome} (${motivos[id].slice(0, 4).join(', ')})`).join('; ') + '.'
-      : 'Nenhum pacote de assunto; use o núcleo.',
-    `Agentes indicados: ${agentes.join(', ')}${agenteExemplo ? ` (o usuário já indicou ${agenteExemplo} para pedido parecido)` : ''}.`,
-    'Conduza pela skill `ultimate` (contrato → construção → prova → revisor → usuário). Se o pedido for simples, responda direto sem acionar agentes.',
-    'Na 1ª linha da resposta, diga em poucas palavras quais agentes vai usar; o usuário corrige com "era com <agente>".',
+      : 'O vocabulário não reconheceu a área deste pedido. DECIDA VOCÊ quais especialistas o pedido precisa, pelo assunto (não pelo verbo), escolhendo no catálogo abaixo e nas descrições dos agentes disponíveis; não use só o núcleo por falta de palavra-chave.',
+    escolhidos.length
+      ? `Agentes indicados (subagent_type para a ferramenta Agent): ${agentes.map(chamada).join(', ')}${agenteExemplo ? ` (o usuário já indicou ${agenteExemplo} para pedido parecido)` : ''}. Se o pedido precisar de outra área, acrescente pelo catálogo.`
+      : 'Revisor (sempre antes de entregar): agentes-ultimate:revisor' + (equiv.revisor ? ` (neste projeto: ${equiv.revisor})` : '') + '.',
+    `Catálogo (área: subagent_type): ${catalogo}.`,
+    projetoCfg.delegar === 'quando-precisar'
+      ? 'Conduza pela skill `ultimate`. Delegue aos agentes quando o trabalho pedir um especialista; o resto, faça você.'
+      : 'DELEGUE: este pedido é trabalho de especialista. Você é o orquestrador: chame os agentes indicados com a ferramenta Agent (passe o contexto e o "já feito" abaixo), combine o resultado, chame o revisor antes de entregar e fale com o usuário. Não faça você mesmo a análise, o código ou o documento. Siga a skill `ultimate`. Só responda sem agentes se for uma pergunta de uma linha.',
+    'Na 1ª linha da resposta, diga quais agentes vai usar; o usuário corrige com "era com <agente>".',
   ];
   const antes = pastaPermitida(cwd) ? jaFeito(cwd, pedido) : [];
   if (antes.length) {
