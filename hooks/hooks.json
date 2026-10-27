@@ -1,6 +1,17 @@
 {
   "description": "agentes-ultimate: escolha automática dos agentes a cada pedido e travas de segurança.",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/atualizar.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [

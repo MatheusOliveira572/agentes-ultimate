@@ -37,7 +37,15 @@ claude plugin marketplace add MatheusOliveira572/agentes-ultimate
 claude plugin install agentes-ultimate@agentes-ultimate
 ```
 
-Para atualizar depois: `claude plugin marketplace update agentes-ultimate`.
+**Atualização automática:** uma vez por dia, ao abrir uma sessão, o plugin busca a versão nova em segundo plano
+(`claude plugin marketplace update` + `claude plugin update`). Ela vale a partir da próxima vez que você abrir o
+Claude Code, e uma linha avisa "agentes-ultimate atualizado: 0.2.0 → 0.3.0". Para desligar, defina
+`AGENTES_ULTIMATE_SEM_AUTOATUALIZAR=1`. Para atualizar na hora:
+
+```bash
+claude plugin marketplace update agentes-ultimate
+claude plugin update agentes-ultimate@agentes-ultimate
+```
 
 Para testar uma cópia local sem instalar: `claude --plugin-dir <pasta-do-repositório>`.
 
@@ -114,6 +122,10 @@ claude plugin validate .
 ```
 
 Edite sempre `fonte/`; `agents/` é gerado.
+
+**Publicar uma versão nova** (para chegar a todos os PCs instalados): suba o número em `.claude-plugin/plugin.json`
+(ex.: 0.3.0 → 0.3.1), registre no `CHANGELOG.md`, faça commit e `git push`. Sem subir o número, os outros PCs não
+percebem a mudança.
 
 ## Origem
 

@@ -101,6 +101,28 @@ caso('commit com padrão do projeto bloqueado', r.code === 2 && /dados\/real\.cs
 const g = require(path.join(RAIZ, 'hooks', 'grafo.js')).obter(proj, 0);
 caso('arquivo sensível fica fora do grafo', !g.nos['dados/real.csv'] && !!g.nos['src/carga.js'], Object.keys(g.nos).join(', '));
 
+// Atualização automática: usa um "claude" falso que só anota que foi chamado.
+const marca = path.join(tmp, 'chamado.txt');
+const falso = path.join(tmp, 'claude-falso.js');
+fs.writeFileSync(falso, `require('fs').appendFileSync(${JSON.stringify(marca)}, process.argv.slice(2).join(' ') + '\\n');`);
+const envAt = { ...env, AGENTES_ULTIMATE_FORCAR_ATUALIZAR: '1', AGENTES_ULTIMATE_CLAUDE_CMD: `"${process.execPath}" "${falso}"` };
+const atualizar = (e) => spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'atualizar.js')], { input: '{}', env: e, encoding: 'utf8' });
+const esperar = (ms) => { const fim = Date.now() + ms; while (Date.now() < fim && !(fs.existsSync(marca) && fs.readFileSync(marca, 'utf8').split('\n').length > 2)) { /* espera o processo em 2º plano */ } };
+let a = atualizar(envAt);
+esperar(8000);
+const chamadas = fs.existsSync(marca) ? fs.readFileSync(marca, 'utf8') : '';
+caso('atualização roda marketplace update e plugin update', a.status === 0 && /marketplace update agentes-ultimate/.test(chamadas) && /plugin update agentes-ultimate@agentes-ultimate/.test(chamadas), `status ${a.status} chamadas: ${chamadas}`);
+fs.writeFileSync(marca, '');
+a = atualizar(envAt);
+esperar(1500);
+caso('no mesmo dia não roda de novo', fs.readFileSync(marca, 'utf8') === '', fs.readFileSync(marca, 'utf8'));
+const estArq = path.join(casa, '.claude', 'agentes-ultimate', 'atualizacao.json');
+const est = JSON.parse(fs.readFileSync(estArq, 'utf8')); est.versaoVista = '0.0.1'; fs.writeFileSync(estArq, JSON.stringify(est));
+a = atualizar(envAt);
+caso('avisa quando a versão mudou', /0\.0\.1 →/.test(a.stdout), a.stdout);
+a = atualizar({ ...envAt, AGENTES_ULTIMATE_FORCAR_ATUALIZAR: '' });
+caso('cópia de desenvolvimento não se atualiza', a.status === 0 && !a.stdout, a.stdout);
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
