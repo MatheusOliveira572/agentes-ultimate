@@ -1,5 +1,12 @@
 # Mudanças
 
+## 0.4.1 · 2026-10-27
+- **Mapa visual** (`hooks/mapa-visual.js`, skill `ver-mapa`): página HTML sem internet com o grafo do projeto
+  (arquivos, quem cita quem, anotações da memória) e o caminho que o último pedido usou em destaque; clique, zoom,
+  busca. O roteador guarda o último pedido em `.claude/base/.ultima-busca.json`.
+- `.claude/base/.gitignore` de versões antigas ganha as linhas dos arquivos gerados que faltarem.
+- Testes dos ganchos: 36 casos.
+
 ## 0.4.0 · 2026-10-27
 - **16 agentes novos para as áreas da empresa:** RH (`analista-rh`, `recrutador`), Jurídico (`advogado-contratos`,
   `especialista-lgpd`), Compliance (`analista-compliance`), Contábil e tributário (`contador`,

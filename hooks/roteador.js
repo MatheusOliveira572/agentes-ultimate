@@ -62,7 +62,7 @@ const MODELOS = {
   'DIARIO.md': '# Diário do projeto\n\n> Uma linha por entrega: `- data [agente] o que foi feito → arquivo`. Mais recente no topo.\n\n',
   'PROPOSTAS.md': '# Propostas de melhoria dos agentes\n\n> Agente, problema, evidência, texto proposto. O curador avalia; o usuário aprova; a mudança vai para o CHANGELOG.\n\n',
   'CHANGELOG-AGENTES.md': '# Mudanças nas instruções dos agentes\n\n> Data, agente, o que mudou, motivo (proposta aprovada).\n\n',
-  '.gitignore': '# Gerados pelo agentes-ultimate (refeitos sozinhos)\n.grafo.json\nMAPA-AUTO.md\n',
+  '.gitignore': '# Gerados pelo agentes-ultimate (refeitos sozinhos)\n.grafo.json\nMAPA-AUTO.md\nMAPA.html\n.ultima-busca.json\n',
   'MAPA.md': '# Mapa do projeto\n\n> Onde fica cada coisa, para ninguém começar no escuro. Uma linha por item: `caminho → para que serve`.\n> Quem cria um arquivo ou pasta importante acrescenta a linha.\n\n',
 };
 
@@ -70,6 +70,14 @@ const MODELOS = {
 function jaFeito(cwd, pedido) {
   try {
     const r = require('./grafo').buscar(cwd, pedido);
+    // Guarda o que foi usado, para o mapa visual (MAPA.html) destacar o caminho do último pedido.
+    try {
+      fs.writeFileSync(path.join(cwd, '.claude', 'base', '.ultima-busca.json'), JSON.stringify({
+        pedido: pedido.slice(0, 300), em: new Date().toISOString(),
+        registros: r.registros.map((x) => ({ texto: x.texto.slice(0, 240), rotulo: x.rotulo, arquivos: x.arquivos })),
+        arquivos: r.arquivos.map((a) => ({ rel: a.rel, ligado: a.ligado })),
+      }));
+    } catch (e) { /* só leitura */ }
     return r.registros.map((x) => `(${x.rotulo}) ${x.texto.slice(0, 220)}`)
       .concat(r.arquivos.map((a) => `(arquivo${a.ligado ? ' ligado' : ''}) ${a.rel}${a.d ? ' — ' + a.d.slice(0, 120) : ''}`));
   } catch (e) { return []; }
@@ -84,6 +92,11 @@ function montarBase(cwd) {
       const arq = path.join(dir, nome);
       if (!fs.existsSync(arq)) { fs.writeFileSync(arq, conteudo); criados.push(nome); }
     }
+    // .gitignore de versões antigas: acrescenta os gerados que faltarem.
+    const gi = path.join(dir, '.gitignore');
+    const atual = fs.readFileSync(gi, 'utf8');
+    const faltam = MODELOS['.gitignore'].split('\n').filter((l) => l && !l.startsWith('#') && !atual.split(/\r?\n/).includes(l));
+    if (faltam.length) fs.appendFileSync(gi, (atual.endsWith('\n') ? '' : '\n') + faltam.join('\n') + '\n');
   } catch (e) { return []; }
   return criados;
 }

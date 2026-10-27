@@ -99,6 +99,12 @@ pedido → roteador (gancho) ─┬─ escolhe pacotes e agentes (palavras + arq
        → orquestrador (skill ultimate) → agentes → revisor → você
 ```
 
+**Ver o mapa:** peça "mostre o mapa" (skill `ver-mapa`) ou rode `node <plugin>/hooks/mapa-visual.js . --abrir`. Abre no
+navegador um desenho do projeto: cada arquivo é um ponto, cada "este arquivo cita aquele" é uma linha, as anotações da
+memória são quadrados roxos ligados aos arquivos que mencionam, e o que o **último pedido usou** aparece em verde (e o
+que está ligado a ele, em laranja). Clique num ponto para ver o que é e com quem se liga. Não é o raciocínio do modelo
+(isso não é visível); é o mapa que a base usa para não começar no escuro.
+
 A memória de cada projeto fica dentro dele, em `.claude/base/`:
 
 | Arquivo | Quem escreve | O que guarda |

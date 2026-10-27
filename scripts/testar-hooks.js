@@ -82,6 +82,14 @@ caso('mapa automático descreve e liga os arquivos', /src\/carga\.js` — Lê a 
 r = rot('quanto é 15% de 2300?');
 caso('trivial continua sem contexto', !r.out, r.out);
 
+// Mapa visual: registra o último pedido e gera o HTML com o que foi usado em destaque
+const ub = JSON.parse(fs.readFileSync(path.join(proj, '.claude', 'base', '.ultima-busca.json'), 'utf8'));
+caso('último pedido registrado para o mapa', /planilha de orçamento/.test(ub.pedido) && ub.arquivos.some((a) => a.rel === 'src/carga.js'), JSON.stringify(ub).slice(0, 200));
+const mv = require(path.join(RAIZ, 'hooks', 'mapa-visual.js')).gerar(proj);
+const html = fs.readFileSync(mv.destino, 'utf8');
+caso('MAPA.html gerado com os usados destacados', mv.usados > 0 && /src\/carga\.js/.test(html) && /"u":1|"u":2/.test(html), `${mv.nos} pontos, ${mv.usados} usados`);
+caso('.gitignore da base cobre os gerados', /MAPA\.html/.test(fs.readFileSync(path.join(proj, '.claude', 'base', '.gitignore'), 'utf8')), 'faltou MAPA.html');
+
 // Projeto com agentes e memória próprios (config.json)
 fs.mkdirSync(path.join(proj, 'docs'), { recursive: true });
 fs.writeFileSync(path.join(proj, 'docs', 'diario-antigo.md'), '# Diário\n- 2026-10-19 conciliação do orçamento com o razão fechada → src/carga.js\n');
