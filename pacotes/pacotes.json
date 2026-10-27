@@ -1,0 +1,41 @@
+{
+  "_como_usar": "Cada pacote diz quando entra (palavras do pedido e arquivos da pasta) e quais agentes traz. O roteador soma pontos: palavra = 1, expressão de 2+ palavras = 2, arquivo da pasta = 2. Entram os pacotes com pontos >= minimo. O núcleo entra sempre que o pedido não é trivial. Para criar um pacote novo, veja docs/criar-pacote.md.",
+  "minimo": 2,
+  "pacotes": {
+    "nucleo": {
+      "nome": "Núcleo",
+      "agentes": ["planejador", "pesquisador", "revisor", "redator", "curador"],
+      "sempre": true
+    },
+    "bi": {
+      "nome": "BI e painéis",
+      "agentes": ["designer-paineis", "engenheiro-dados", "dev-powerbi"],
+      "palavras": ["power bi", "powerbi", "pbip", "pbix", "dax", "tmdl", "pbir", "power query", "painel", "dashboard", "relatorio interativo", "visual", "segmentacao", "medida", "kpi", "drill", "bi"],
+      "arquivos": [".pbip", ".pbix", ".pbir", ".tmdl", ".SemanticModel", ".Report"]
+    },
+    "financas": {
+      "nome": "Finanças e FP&A",
+      "agentes": ["analista-fpa"],
+      "palavras": ["orcado", "orcamento", "realizado", "desvio", "tendencia", "forecast", "fpa", "fp&a", "custo", "despesa", "receita", "opex", "capex", "rateio", "fechamento", "dre", "fluxo de caixa", "centro de custo", "conciliacao", "razao", "ksb1", "margem", "ebitda"],
+      "arquivos": []
+    },
+    "produto": {
+      "nome": "Produto",
+      "agentes": ["gerente-produto"],
+      "palavras": ["escopo", "prioridade", "priorizar", "proposta", "roadmap", "historia de usuario", "criterio de aceite", "mvp", "requisito", "o que entra"],
+      "arquivos": []
+    },
+    "software": {
+      "nome": "Software",
+      "agentes": ["engenheiro-software", "testador-qa", "auditor-seguranca"],
+      "palavras": ["codigo", "script", "bug", "erro", "api", "teste", "testes", "python", "javascript", "typescript", "node", "refatorar", "arquitetura", "deploy", "repositorio", "seguranca", "senha", "publicar"],
+      "arquivos": ["package.json", "pyproject.toml", "requirements.txt", "go.mod", "Cargo.toml", ".sln", "pom.xml"]
+    },
+    "documentos": {
+      "nome": "Documentos e apresentações",
+      "agentes": ["designer-documentos", "redator"],
+      "palavras": ["apresentacao", "slides", "slide", "pptx", "relatorio", "word", "docx", "pdf", "manual", "e-mail", "email", "planilha para enviar", "formatar"],
+      "arquivos": [".pptx", ".docx"]
+    }
+  }
+}

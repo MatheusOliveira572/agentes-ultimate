@@ -1,0 +1,12 @@
+{
+  "name": "agentes-ultimate",
+  "version": "0.1.0",
+  "description": "Base de agentes especialistas para qualquer trabalho: você faz o pedido e a base escolhe sozinha os agentes, monta a memória do projeto e cobra prova antes de dizer que está pronto.",
+  "author": {
+    "name": "Matheus Oliveira"
+  },
+  "homepage": "https://github.com/MatheusOliveira572/agentes-ultimate",
+  "repository": "https://github.com/MatheusOliveira572/agentes-ultimate",
+  "license": "MIT",
+  "keywords": ["agentes", "subagentes", "memoria", "revisao", "power-bi", "fpa", "portugues"]
+}

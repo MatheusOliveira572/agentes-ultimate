@@ -1,0 +1,28 @@
+{
+  "description": "agentes-ultimate: escolha automática dos agentes a cada pedido e travas de segurança.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/roteador.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/travas.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

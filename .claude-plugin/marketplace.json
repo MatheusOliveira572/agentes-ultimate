@@ -1,0 +1,16 @@
+{
+  "name": "agentes-ultimate",
+  "owner": {
+    "name": "Matheus Oliveira"
+  },
+  "metadata": {
+    "description": "Base de agentes especialistas em português para o Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "agentes-ultimate",
+      "source": "./",
+      "description": "Agentes especialistas que se escolhem sozinhos pelo pedido, com memória por projeto, revisão independente e travas de segurança."
+    }
+  ]
+}
