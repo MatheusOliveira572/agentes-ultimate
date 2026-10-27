@@ -99,7 +99,10 @@ function main(d) {
   const globalDir = path.join(os.homedir(), '.claude', 'agentes-ultimate');
   const exemplosGlobal = path.join(globalDir, 'roteamento.json');
   const ultimoArq = path.join(globalDir, 'ultimo-pedido.json');
-  const todosAgentes = new Set(Object.values(cfg.pacotes).flatMap((p) => p.agentes));
+  let projetoCfg = {};
+  try { projetoCfg = JSON.parse(fs.readFileSync(path.join(cwd, '.claude', 'base', 'config.json'), 'utf8')); } catch (e) { /* sem config */ }
+  for (const id of projetoCfg.pacotes_desligados || []) delete cfg.pacotes[id];
+  const todosAgentes = new Set(Object.values(cfg.pacotes).flatMap((p) => p.agentes).concat(Object.values(projetoCfg.agentes || {})));
 
   // Correção do usuário: "era com <agente>" → aprende o exemplo e manda refazer.
   const corr = texto.match(/^\s*era (?:com|pro|para o|para a|do|da) (?:o |a )?([a-z0-9-]+)/);
@@ -148,7 +151,9 @@ function main(d) {
   if (trivial) sair(); // pergunta curta e sem assunto de pacote: responde direto, sem montar nada
 
   const criados = pastaPermitida(cwd) ? montarBase(cwd) : [];
-  const agentes = [...new Set(escolhidos.flatMap((id) => cfg.pacotes[id].agentes).concat(['revisor']))];
+  // Projeto com agentes próprios: .claude/base/config.json → "agentes": { "revisor": "revisor-qa", ... }.
+  const equiv = (projetoCfg.agentes || {});
+  const agentes = [...new Set(escolhidos.flatMap((id) => cfg.pacotes[id].agentes).concat(['revisor']).map((a) => equiv[a] || a))];
   const nomesPac = escolhidos.map((id) => cfg.pacotes[id].nome);
   const linhaUsuario = escolhidos.length
     ? `Usando: ${nomesPac.join(' + ')} · ${agentes.join(', ')}`

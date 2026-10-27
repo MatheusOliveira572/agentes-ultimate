@@ -148,15 +148,22 @@ function montar(cwd) {
   return { geradoEm: new Date().toISOString(), completo: Date.now() - inicio <= LIMITE_MS && arquivos.length < LIMITE_ARQUIVOS, nos };
 }
 
+// Configuração do projeto (.claude/base/config.json): memórias que o projeto já tinha e equivalência de agentes.
+function config(cwd) {
+  try { return JSON.parse(fs.readFileSync(path.join(cwd, '.claude', 'base', 'config.json'), 'utf8')); } catch (e) { return {}; }
+}
+
 // Registros da memória (linhas de lista) com os arquivos que cada um menciona.
 function registros(cwd, grafo) {
   const out = [];
   const nomes = Object.keys(grafo.nos);
   const porBase = new Map();
   for (const r of nomes) { const b = path.basename(r); if (b.length >= 5) { if (!porBase.has(b)) porBase.set(b, []); porBase.get(b).push(r); } }
-  for (const [arq, rotulo] of [['DIARIO.md', 'diário'], ['APRENDIZADOS.md', 'lição'], ['PROJETO.md', 'decisão'], ['MAPA.md', 'mapa']]) {
+  const fontes = [['.claude/base/DIARIO.md', 'diário'], ['.claude/base/APRENDIZADOS.md', 'lição'], ['.claude/base/PROJETO.md', 'decisão'], ['.claude/base/MAPA.md', 'mapa']];
+  for (const m of config(cwd).memoria || []) if (m && m.arquivo) fontes.push([m.arquivo, m.rotulo || 'memória']);
+  for (const [arq, rotulo] of fontes) {
     let linhas = [];
-    try { linhas = fs.readFileSync(path.join(cwd, '.claude', 'base', arq), 'utf8').split(/\r?\n/).filter((l) => /^\s*-\s+\S/.test(l)); } catch (e) { continue; }
+    try { linhas = fs.readFileSync(path.join(cwd, arq), 'utf8').split(/\r?\n/).filter((l) => /^\s*-\s+\S/.test(l)); } catch (e) { continue; }
     for (const l of linhas) {
       const liga = new Set();
       for (const r of nomes) if (r.length >= 6 && l.includes(r)) liga.add(r);
@@ -241,7 +248,7 @@ function buscar(cwd, pedido, opcoes = {}) {
   return { registros: regsOrd, arquivos };
 }
 
-module.exports = { obter, buscar, termos, radical, montar };
+module.exports = { obter, buscar, termos, radical, montar, config };
 
 if (require.main === module) {
   const cwd = path.resolve(process.argv[2] || process.cwd());

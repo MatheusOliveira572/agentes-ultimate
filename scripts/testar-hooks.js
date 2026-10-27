@@ -71,6 +71,18 @@ caso('mapa automático descreve e liga os arquivos', /src\/carga\.js` — Lê a 
 r = rot('quanto é 15% de 2300?');
 caso('trivial continua sem contexto', !r.out, r.out);
 
+// Projeto com agentes e memória próprios (config.json)
+fs.mkdirSync(path.join(proj, 'docs'), { recursive: true });
+fs.writeFileSync(path.join(proj, 'docs', 'diario-antigo.md'), '# Diário\n- 2026-10-19 conciliação do orçamento com o razão fechada → src/carga.js\n');
+fs.writeFileSync(path.join(proj, '.claude', 'base', 'config.json'), JSON.stringify({
+  agentes: { revisor: 'revisor-qa', 'analista-fpa': 'especialista-fpa' },
+  memoria: [{ arquivo: 'docs/diario-antigo.md', rotulo: 'diário do projeto' }],
+}));
+r = rot('refaça a conciliação do orçamento com o razão');
+caso('config: usa os agentes do projeto', /revisor-qa/.test(msg(r)) && /especialista-fpa/.test(msg(r)) && !/analista-fpa/.test(msg(r)), msg(r));
+caso('config: lê a memória que o projeto já tinha', /\(diário do projeto\)/.test(ctx(r)), (ctx(r).split('Já existe')[1] || '').slice(0, 400));
+fs.rmSync(path.join(proj, '.claude', 'base', 'config.json'));
+
 fs.writeFileSync(path.join(proj, '.claude', 'base', 'desligado'), '');
 fs.rmSync(path.join(proj, '.claude', 'base', 'PROJETO.md'));
 rot('monte o painel de custos no power bi');
