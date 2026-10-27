@@ -35,6 +35,28 @@ for (const arq of agentes) {
     else if (p < pos) erros.push(`${arq}: seção "${s}" fora de ordem`);
     else pos = p;
   }
+  // Padrão de excelência: 3 a 5 referências das melhores da função, cada uma com link aberto (nada "a confirmar").
+  const refs = (t.split('## Referências de mercado')[1] || '').split('## Método de trabalho')[0];
+  const itens = refs.split(/\n(?=- \*\*)/).filter((x) => /^\s*-?\s*\*\*/.test(x.trim()) || x.trim().startsWith('- **'));
+  const comLink = itens.filter((x) => /Fonte:\s*https:\/\/\S+/.test(x) && /\*\*Aqui:\*\*/.test(x));
+  if (comLink.length < 3 || itens.length > 5) erros.push(`${arq}: referências de mercado ${comLink.length} com "Aqui:" e "Fonte: https://" (exigido 3 a 5)`);
+  if (/a confirmar/i.test(refs)) erros.push(`${arq}: referência marcada "(a confirmar)": abra a fonte ou troque a referência`);
+  // Empresas DIFERENTES (pela 1ª palavra do nome: "Google (x)" e "Google People Ops" contam como uma só).
+  const empresas = new Set(comLink.filter((x) => /\[empresa\]/.test(x))
+    .map((x) => ((x.match(/\*\*([^*]+)\*\*/) || [])[1] || '').replace(/\(.*$/, '').trim().split(/\s+/)[0].toLowerCase())).size;
+  if (empresas < 3) erros.push(`${arq}: ${empresas} empresa(s) diferente(s) marcada(s) [empresa] (exigido pelo menos 3 das melhores empresas da função)`);
+  if (itens.some((x) => !/\[(empresa|norma|autor)\]/.test(x))) erros.push(`${arq}: referência sem marca [empresa], [norma] ou [autor]`);
+  // Evals: 3 a 20 casos, com pelo menos 1 regressão e 1 gatilho negativo.
+  const evArq = path.join(RAIZ, 'evals', nome + '.md');
+  if (!fs.existsSync(evArq)) erros.push(`${arq}: sem evals/${nome}.md`);
+  else {
+    const ev = fs.readFileSync(evArq, 'utf8');
+    const casos = (ev.match(/^### Caso/gm) || []).length;
+    if (casos < 3 || casos > 20) erros.push(`evals/${nome}.md: ${casos} casos (exigido 3 a 20)`);
+    if (!/Tipo:\s*regress/i.test(ev)) erros.push(`evals/${nome}.md: falta caso de regressão`);
+    if (!/Tipo:\s*gatilho negativo/i.test(ev)) erros.push(`evals/${nome}.md: falta caso de gatilho negativo`);
+    for (const campo of ['Pedido:', 'Deve:', 'Não deve:']) if ((ev.match(new RegExp(campo, 'g')) || []).length < casos) erros.push(`evals/${nome}.md: algum caso sem "${campo}"`);
+  }
   const especifico = t.length - comum.length;
   const linhas = t.slice(0, t.indexOf('## Protocolo comum')).split('\n').length;
   if (linhas > 90) avisos.push(`${arq}: parte específica com ${linhas} linhas (meta ≤ 90)`);

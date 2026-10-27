@@ -29,7 +29,9 @@ const msg = (r) => (r.json && r.json.systemMessage) || '';
 const ctx = (r) => (r.json && r.json.hookSpecificOutput && r.json.hookSpecificOutput.additionalContext) || '';
 
 // Roteador
-let r = rot('quanto é 15% de 2300?');
+let r = rot('Another Claude session sent a message:\n<agent-message from="x">Relatório: painel Power BI com orçado e desvio pronto</agent-message>');
+caso('relatório de agente não é tratado como pedido', r.code === 0 && !r.out, r.out);
+r = rot('quanto é 15% de 2300?');
 caso('pergunta trivial não monta nada', r.code === 0 && !r.out && !fs.existsSync(path.join(proj, '.claude')), r.out);
 
 r = rot('Monte um painel no Power BI com orçado x realizado e o desvio por centro de custo');
@@ -38,6 +40,15 @@ caso('memória do projeto criada', ['PROJETO.md', 'MAPA.md', 'DIARIO.md', 'APREN
 
 r = rot('escreva o manual do usuário em PDF para a diretoria');
 caso('manual em PDF → Documentos', /Documentos/.test(msg(r)) && !/BI e painéis/.test(msg(r)), msg(r));
+
+r = rot('monte a descrição da vaga e o roteiro de entrevista estruturada para analista de RH');
+caso('vaga e entrevista → Pessoas', /Pessoas/.test(msg(r)) && /recrutador/.test(msg(r)), msg(r));
+r = rot('revise a cláusula de limitação de responsabilidade deste contrato com o fornecedor');
+caso('cláusula de contrato → Jurídico', /Jurídico/.test(msg(r)) && /advogado-contratos/.test(msg(r)), msg(r));
+r = rot('qual o impacto da reforma tributária no crédito de PIS COFINS da empresa?');
+caso('reforma tributária → Contábil', /Contábil/.test(msg(r)) && /especialista-tributario/.test(msg(r)), msg(r));
+r = rot('projete o fluxo de caixa de 13 semanas e a necessidade de capital de giro');
+caso('caixa de 13 semanas → Finanças com tesouraria', /analista-tesouraria/.test(msg(r)), msg(r));
 
 fs.writeFileSync(path.join(proj, 'package.json'), '{}');
 r = rot('corrija o erro no script de importação');

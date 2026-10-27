@@ -95,6 +95,8 @@ function main(d) {
   const cfg = lerJson(path.join(RAIZ, 'pacotes', 'pacotes.json'), null);
   if (!cfg || !texto.trim()) sair();
   if (texto.trim().startsWith('/')) sair(); // comando: deixa o Claude Code tratar
+  // Relatório de agente ou aviso do sistema chegando como mensagem: não é pedido do usuário.
+  if (/<agent-message|another claude session sent a message|\[subagent hand-back\]|<task-notification|\[system notification/.test(texto)) sair();
 
   const globalDir = path.join(os.homedir(), '.claude', 'agentes-ultimate');
   const exemplosGlobal = path.join(globalDir, 'roteamento.json');

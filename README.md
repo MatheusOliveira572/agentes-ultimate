@@ -53,13 +53,31 @@ Para testar uma cópia local sem instalar: `claude --plugin-dir <pasta-do-reposi
 
 **Núcleo** (sempre disponível): `planejador`, `pesquisador`, `revisor`, `redator`, `curador`.
 
-| Pacote | Entra quando o pedido fala de… ou a pasta tem… | Agentes |
-|---|---|---|
-| BI e painéis | Power BI, DAX, painel, dashboard · `.pbip`, `.tmdl` | `designer-paineis`, `engenheiro-dados`, `dev-powerbi` |
-| Finanças e FP&A | orçado, realizado, desvio, custo, rateio, fechamento | `analista-fpa` |
-| Produto | escopo, prioridade, proposta, critério de aceite | `gerente-produto` |
-| Software | código, erro, script, API, testes · `package.json`, `pyproject.toml` | `engenheiro-software`, `testador-qa`, `auditor-seguranca` |
-| Documentos | apresentação, relatório, PDF, manual, e-mail · `.pptx`, `.docx` | `designer-documentos`, `redator` |
+30 agentes, cada um trabalhando como **as melhores empresas daquela função** (pelo menos 3 empresas diferentes por
+agente, com a prática documentada e a fonte aberta), com casos de teste próprios em `evals/`.
+
+| Pacote | Entra quando o pedido fala de… | Agentes | Algumas referências |
+|---|---|---|---|
+| BI e painéis | Power BI, DAX, painel, dashboard (ou a pasta tem `.pbip`) | `designer-paineis`, `engenheiro-dados`, `dev-powerbi` | Financial Times, Airbnb, Microsoft, SQLBI |
+| Finanças | orçado, realizado, desvio, fechamento, caixa, capital de giro | `analista-fpa`, `analista-tesouraria` | Microsoft Finance, Equinor, Apple, Ambev |
+| Contábil e tributário | contabilidade, CPC/IFRS, imposto, reforma tributária, SPED | `contador`, `especialista-tributario` | Deloitte, KPMG, Unilever |
+| Pessoas (RH) | vaga, entrevista, cargos e salários, desempenho, clima | `analista-rh`, `recrutador` | Google People Ops, Netflix, Natura, Amazon, Nubank |
+| Jurídico | contrato, cláusula, LGPD, dados pessoais | `advogado-contratos`, `especialista-lgpd` | GE, GitHub, Apple, Google, Microsoft |
+| Compliance e riscos | programa de integridade, controles, canal de denúncia | `analista-compliance` | Siemens, Petrobras, Microsoft |
+| Comercial | funil, proposta comercial, previsão de vendas, CRM | `executivo-vendas` | Salesforce, HubSpot, RD Station |
+| Marketing | posicionamento, campanha, marca, CAC/LTV | `estrategista-marketing` | P&G, Airbnb, Magalu, Google |
+| Clientes | atendimento, NPS, churn, SLA | `especialista-cs` | Amazon, Bain, Zendesk, Gainsight |
+| Operações e suprimentos | processos, lean, gargalo, compras, fornecedor | `analista-operacoes`, `comprador` | Toyota, Amazon, Danaher, Apple, P&G |
+| Estratégia | planejamento estratégico, OKR, business case | `estrategista` | Google, Amazon, BCG |
+| Comunicação | comunicado, imprensa, crise | `comunicador-corporativo` | J&J, Netflix, Amazon |
+| ESG | emissões, sustentabilidade, GRI, IFRS S2 | `especialista-esg` | Microsoft, Schneider Electric, Natura |
+| Produto | escopo, prioridade, proposta | `gerente-produto` | Amazon, Intercom, Nubank |
+| Software | código, erro, script, testes, segurança | `engenheiro-software`, `testador-qa`, `auditor-seguranca` | Google, Microsoft, Stripe, Spotify |
+| Documentos | apresentação, relatório, PDF, manual, e-mail | `designer-documentos`, `redator` | Duarte, Financial Times, Amazon, Mailchimp |
+
+Nas áreas reguladas (jurídico, tributário, contábil, trabalhista), o agente cita a lei com o artigo e o link oficial e
+diz quando a decisão precisa de advogado ou contador habilitado. O padrão completo está em
+[docs/padrao-agente.md](docs/padrao-agente.md).
 
 **Skills:**
 

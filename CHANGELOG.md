@@ -1,5 +1,21 @@
 # Mudanças
 
+## 0.4.0 · 2026-10-27
+- **16 agentes novos para as áreas da empresa:** RH (`analista-rh`, `recrutador`), Jurídico (`advogado-contratos`,
+  `especialista-lgpd`), Compliance (`analista-compliance`), Contábil e tributário (`contador`,
+  `especialista-tributario`), Tesouraria (`analista-tesouraria`), Comercial (`executivo-vendas`), Marketing
+  (`estrategista-marketing`), Clientes (`especialista-cs`), Operações (`analista-operacoes`, `comprador`), Estratégia
+  (`estrategista`), Comunicação (`comunicador-corporativo`) e ESG (`especialista-esg`). 17 pacotes no total.
+- **Padrão de excelência** (`docs/padrao-agente.md`), cobrado pelo validador: 3 a 5 referências com fonte aberta, das
+  quais **pelo menos 3 empresas diferentes** reconhecidas como as melhores daquela função (`[empresa]`); normas e
+  autores só completam; leis ficam no método. 3 a 20 evals por agente, com regressão e gatilho negativo.
+- Os 14 agentes anteriores refeitos nesse padrão: referências trocadas por empresas, práticas delas viraram passos do
+  método, evals novos em `evals/`.
+- **Config por projeto** (`.claude/base/config.json`): troca os agentes do plugin pelos do projeto, lê memórias que o
+  projeto já tinha e desliga pacotes.
+- Roteador ignora relatórios de agentes e avisos do sistema que chegam como mensagem.
+- Testes dos ganchos: 33 casos.
+
 ## 0.3.1 · 2026-10-27
 - **Correção de privacidade:** em repositório git, o grafo e o mapa automático só incluem o que o git não ignora
   (`git ls-files -co --exclude-standard`). Antes, pastas de dados fora do git (ex.: saídas com valores) entravam no

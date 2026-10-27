@@ -4,6 +4,9 @@ description: Cria ou revisa um agente especialista no padrão do agentes-ultimat
 ---
 # Criar ou revisar um agente
 
+0. Leia `docs/padrao-agente.md` do plugin: é o padrão de excelência, e o validador reprova o que não seguir.
+   Referências = **pelo menos 3 empresas diferentes que são as melhores naquela função** (marcadas `[empresa]`), com a
+   prática da própria empresa documentada e a fonte aberta; normas e autores só completam; leis vão no método.
 1. **Precisa mesmo?** Se um agente existente cobre a função, amplie-o. Um agente = uma responsabilidade.
 2. **Evals primeiro:** 3 a 5 casos reais em `.claude/agent-evals/<nome>.md` (pedido, deve, não deve), com pelo menos
    1 regressão (de uma lição) e 1 gatilho negativo (pedido que não é dele).
