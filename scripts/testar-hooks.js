@@ -34,7 +34,7 @@ caso('pergunta trivial não monta nada', r.code === 0 && !r.out && !fs.existsSyn
 
 r = rot('Monte um painel no Power BI com orçado x realizado e o desvio por centro de custo');
 caso('painel de orçamento → BI + Finanças', /BI e painéis/.test(msg(r)) && /Finanças/.test(msg(r)), msg(r));
-caso('memória do projeto criada', fs.existsSync(path.join(proj, '.claude', 'base', 'PROJETO.md')) && fs.existsSync(path.join(proj, '.claude', 'base', 'MAPA.md')), 'faltou .claude/base');
+caso('memória do projeto criada', ['PROJETO.md', 'MAPA.md', 'DIARIO.md', 'APRENDIZADOS.md', '.gitignore'].every((f) => fs.existsSync(path.join(proj, '.claude', 'base', f))), 'faltou arquivo em .claude/base');
 
 r = rot('escreva o manual do usuário em PDF para a diretoria');
 caso('manual em PDF → Documentos', /Documentos/.test(msg(r)) && !/BI e painéis/.test(msg(r)), msg(r));
@@ -51,6 +51,25 @@ caso('pedido parecido segue a correção', /analista-fpa/.test(msg(r)) || /anali
 fs.appendFileSync(path.join(proj, '.claude', 'base', 'DIARIO.md'), '- 2026-10-20 [dev-powerbi] página de desvio por centro de custo construída → powerbi/x\n');
 r = rot('ajuste a página de desvio por centro de custo no painel');
 caso('traz o trabalho já feito sobre o assunto', /Já existe trabalho relacionado/.test(ctx(r)) && /página de desvio/.test(ctx(r)), ctx(r).slice(0, 300));
+
+// Grafo: sinônimos, ligações e mapa automático
+fs.mkdirSync(path.join(proj, 'src'));
+fs.writeFileSync(path.join(proj, 'src', 'carga.js'), "// Lê a planilha de orçamento e grava a tabela fato\nconst r = require('./regras.js');\n");
+fs.writeFileSync(path.join(proj, 'src', 'regras.js'), '// Regras de desvio, sinal e arredondamento\nmodule.exports = {};\n');
+fs.appendFileSync(path.join(proj, '.claude', 'base', 'DIARIO.md'),
+  '- 2026-10-21 [engenheiro-dados] leitura da planilha corrigida (linhas de total) → src/carga.js\n' +
+  '- 2026-10-22 [designer-paineis] página de custos por gerência desenhada → docs/custos.md\n');
+const grafoArq = path.join(proj, '.claude', 'base', '.grafo.json');
+if (fs.existsSync(grafoArq)) fs.rmSync(grafoArq);
+r = rot('ajustar as despesas por área no painel');
+caso('sinônimo: "despesas por área" acha "custos por gerência"', /custos por gerência/.test(ctx(r)), ctx(r).slice(0, 400));
+r = rot('tem um erro na leitura da planilha de orçamento');
+caso('ligação: acha o arquivo e o que ele cita', /src\/carga\.js/.test(ctx(r)) && /src\/regras\.js/.test(ctx(r)), (ctx(r).split('Já existe')[1] || '').slice(0, 600));
+caso('ligação: acha o registro do diário do arquivo', /leitura da planilha corrigida/.test(ctx(r)), ctx(r).slice(0, 500));
+const mapa = fs.readFileSync(path.join(proj, '.claude', 'base', 'MAPA-AUTO.md'), 'utf8');
+caso('mapa automático descreve e liga os arquivos', /src\/carga\.js` — Lê a planilha de orçamento/.test(mapa) && /cita: regras\.js/.test(mapa), mapa.slice(0, 300));
+r = rot('quanto é 15% de 2300?');
+caso('trivial continua sem contexto', !r.out, r.out);
 
 fs.writeFileSync(path.join(proj, '.claude', 'base', 'desligado'), '');
 fs.rmSync(path.join(proj, '.claude', 'base', 'PROJETO.md'));
@@ -79,6 +98,8 @@ fs.writeFileSync(path.join(proj, '.claude', 'base', 'sensiveis.txt'), '# padrõe
 execSync('git add dados/real.csv', { cwd: proj });
 r = trava('git commit -m dados');
 caso('commit com padrão do projeto bloqueado', r.code === 2 && /dados\/real\.csv/.test(r.err), `code ${r.code} ${r.err}`);
+const g = require(path.join(RAIZ, 'hooks', 'grafo.js')).obter(proj, 0);
+caso('arquivo sensível fica fora do grafo', !g.nos['dados/real.csv'] && !!g.nos['src/carga.js'], Object.keys(g.nos).join(', '));
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');

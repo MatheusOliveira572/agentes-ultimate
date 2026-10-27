@@ -1,0 +1,27 @@
+{
+  "_como_usar": "Cada grupo é tratado como uma palavra só na busca do que já foi feito (sem acento, minúsculas). Acrescente grupos do seu domínio; palavra em dois grupos fica no primeiro.",
+  "grupos": [
+    ["custo", "despesa", "gasto", "opex"],
+    ["receita", "faturamento", "venda"],
+    ["orcado", "orcamento", "budget", "plano", "planejado"],
+    ["realizado", "real", "actual", "executado"],
+    ["tendencia", "forecast", "projecao", "previsao", "estimativa"],
+    ["desvio", "variacao", "diferenca", "gap"],
+    ["painel", "dashboard", "relatorio", "report"],
+    ["pagina", "tela", "aba", "view"],
+    ["erro", "bug", "falha", "defeito", "problema"],
+    ["teste", "testes", "validacao", "verificacao", "checagem"],
+    ["medida", "metrica", "indicador", "kpi"],
+    ["gerencia", "area", "departamento", "setor"],
+    ["centro", "cc"],
+    ["conta", "pacote", "natureza"],
+    ["cliente", "usuario", "consumidor"],
+    ["apresentacao", "slides", "deck", "ppt", "pptx"],
+    ["documento", "doc", "manual", "guia"],
+    ["script", "codigo", "programa", "rotina"],
+    ["importar", "carga", "ingestao", "ler", "leitura"],
+    ["publicar", "deploy", "lancar", "subir"],
+    ["seletor", "filtro", "segmentacao", "slicer"],
+    ["botao", "link", "atalho"]
+  ]
+}

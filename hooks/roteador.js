@@ -15,7 +15,7 @@ function normalizar(t) {
 
 function contem(texto, termo) {
   const t = normalizar(termo).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp('(^|[^a-z0-9&])' + t + '($|[^a-z0-9&])').test(texto);
+  return new RegExp('(^|[^a-z0-9&])' + t + '(e?s)?($|[^a-z0-9&])').test(texto); // aceita o plural simples
 }
 
 function palavras(texto) {
@@ -62,25 +62,17 @@ const MODELOS = {
   'DIARIO.md': '# Diário do projeto\n\n> Uma linha por entrega: `- data [agente] o que foi feito → arquivo`. Mais recente no topo.\n\n',
   'PROPOSTAS.md': '# Propostas de melhoria dos agentes\n\n> Agente, problema, evidência, texto proposto. O curador avalia; o usuário aprova; a mudança vai para o CHANGELOG.\n\n',
   'CHANGELOG-AGENTES.md': '# Mudanças nas instruções dos agentes\n\n> Data, agente, o que mudou, motivo (proposta aprovada).\n\n',
+  '.gitignore': '# Gerados pelo agentes-ultimate (refeitos sozinhos)\n.grafo.json\nMAPA-AUTO.md\n',
   'MAPA.md': '# Mapa do projeto\n\n> Onde fica cada coisa, para ninguém começar no escuro. Uma linha por item: `caminho → para que serve`.\n> Quem cria um arquivo ou pasta importante acrescenta a linha.\n\n',
 };
 
-// "Já feito sobre isto": linhas do diário, lições e mapa que dividem palavras com o pedido (sem IA, instantâneo).
-function jaFeito(cwd, texto) {
-  const dir = path.join(cwd, '.claude', 'base');
-  const meu = [...palavras(texto)].filter((w) => w.length > 3);
-  if (!meu.length) return [];
-  const achados = [];
-  for (const [arq, rotulo, max] of [['DIARIO.md', 'diário', 4], ['APRENDIZADOS.md', 'lição', 3], ['MAPA.md', 'mapa', 3]]) {
-    let linhas = [];
-    try { linhas = fs.readFileSync(path.join(dir, arq), 'utf8').split(/\r?\n/).filter((l) => /^\s*-\s/.test(l)); } catch (e) { continue; }
-    const pont = linhas.map((l) => {
-      const ws = palavras(normalizar(l));
-      return { l: l.trim(), s: meu.filter((w) => ws.has(w)).length };
-    }).filter((x) => x.s >= 2).sort((a, b) => b.s - a.s).slice(0, max);
-    for (const x of pont) achados.push(`(${rotulo}) ${x.l.slice(0, 220)}`);
-  }
-  return achados;
+// "Já feito sobre isto": pelo grafo do projeto (sinônimos + ligações entre memória e arquivos). Sem IA.
+function jaFeito(cwd, pedido) {
+  try {
+    const r = require('./grafo').buscar(cwd, pedido);
+    return r.registros.map((x) => `(${x.rotulo}) ${x.texto.slice(0, 220)}`)
+      .concat(r.arquivos.map((a) => `(arquivo${a.ligado ? ' ligado' : ''}) ${a.rel}${a.d ? ' — ' + a.d.slice(0, 120) : ''}`));
+  } catch (e) { return []; }
 }
 
 function montarBase(cwd) {
@@ -127,7 +119,8 @@ function main(d) {
     if (p.sempre) continue;
     let s = 0; const m = [];
     for (const w of p.palavras || []) if (contem(texto, w)) { s += w.includes(' ') ? 2 : 1; m.push(w); }
-    for (const a of p.arquivos || []) if (nomes.some((n) => n.endsWith(a) || n === a)) { s += 2; m.push('pasta tem ' + a); }
+    // Arquivo da pasta só reforça: sozinho não puxa o pacote (pergunta curta numa pasta com package.json não é Software).
+    if (s > 0) for (const a of p.arquivos || []) if (nomes.some((n) => n.endsWith(a) || n === a)) { s += 2; m.push('pasta tem ' + a); }
     pontos[id] = s; motivos[id] = m;
   }
 
@@ -148,7 +141,9 @@ function main(d) {
   }
 
   const escolhidos = Object.keys(pontos).filter((id) => pontos[id] >= (cfg.minimo || 2)).sort((a, b) => pontos[b] - pontos[a]);
-  const trivial = escolhidos.length === 0 && pedido.trim().length < 60;
+  // Trivial = curto e sem nenhuma palavra de assunto. Com assunto abaixo do mínimo, vai para o núcleo.
+  const algumAssunto = Object.values(pontos).some((s) => s > 0);
+  const trivial = escolhidos.length === 0 && !algumAssunto && pedido.trim().length < 60;
   gravarJson(ultimoArq, { pedido: pedido.slice(0, 500), em: new Date().toISOString() });
   if (trivial) sair(); // pergunta curta e sem assunto de pacote: responde direto, sem montar nada
 
@@ -168,12 +163,13 @@ function main(d) {
     'Conduza pela skill `ultimate` (contrato → construção → prova → revisor → usuário). Se o pedido for simples, responda direto sem acionar agentes.',
     'Na 1ª linha da resposta, diga em poucas palavras quais agentes vai usar; o usuário corrige com "era com <agente>".',
   ];
-  const antes = pastaPermitida(cwd) ? jaFeito(cwd, texto) : [];
+  const antes = pastaPermitida(cwd) ? jaFeito(cwd, pedido) : [];
   if (antes.length) {
-    ctx.push('Já existe trabalho relacionado neste projeto (comece daqui, não do zero):\n- ' + antes.join('\n- '));
+    ctx.push('Já existe trabalho relacionado neste projeto (comece daqui, não do zero; "ligado" = citado por/cita um arquivo do assunto):\n- ' + antes.join('\n- '));
   } else if (!criados.length) {
-    ctx.push('Nada relacionado no diário/mapa: antes de agir, procure no projeto (git log, busca pelos termos do pedido).');
+    ctx.push('Nada relacionado na memória nem no mapa: antes de agir, procure no projeto (git log, busca pelos termos do pedido).');
   }
+  if (pastaPermitida(cwd)) ctx.push('Mapa automático do projeto (o que é cada arquivo e quem cita quem): .claude/base/MAPA-AUTO.md.');
   if (criados.length) ctx.push(`Memória do projeto criada em .claude/base/ (${criados.join(', ')}). Preencha PROJETO.md com o objetivo assim que entender o pedido.`);
   out(ctx.join('\n'), linhaUsuario);
 }

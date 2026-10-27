@@ -7,7 +7,10 @@ Você só faz o pedido. A base:
 
 1. **escolhe sozinha** os especialistas certos, pelo assunto do pedido e pelos arquivos da pasta, e mostra a escolha
    numa linha (`Usando: BI e painéis + Finanças · designer-paineis, dev-powerbi, analista-fpa, revisor`);
-2. **não começa no escuro:** antes de agir, traz o que já foi feito sobre o assunto (diário, lições, mapa do projeto);
+2. **não começa no escuro:** antes de agir, traz o que já foi feito sobre o assunto. Ela mantém um **grafo do
+   projeto** (o que é cada arquivo, quem cita quem, e quais registros da memória falam de cada arquivo) e busca com
+   **sinônimos** ("despesas por área" acha "custos por gerência") e pelas **ligações** (pedido sobre um arquivo traz os
+   arquivos ligados e o histórico dele). Tudo local, sem IA;
 3. **monta a memória do projeto** na primeira vez, sem você pedir;
 4. **cobra prova:** nada é "pronto" sem um comando rodado e lido; um revisor independente confere antes de você;
 5. **aprende:** erro vira lição com causa e evidência; lição que se repete vira regra; e você aprova qualquer mudança
@@ -75,7 +78,8 @@ A memória de cada projeto fica dentro dele, em `.claude/base/`:
 | Arquivo | Quem escreve | O que guarda |
 |---|---|---|
 | `PROJETO.md` | orquestrador | objetivo, decisões com data, restrições, "retomar aqui" |
-| `MAPA.md` | todos | onde fica cada coisa |
+| `MAPA.md` | todos | onde fica cada coisa (escrito à mão) |
+| `MAPA-AUTO.md` | a base, sozinha | cada arquivo com uma linha dizendo o que é e quem cita quem (refeito a cada 10 min ou commit novo; fora do git) |
 | `DIARIO.md` | todos | uma linha por entrega |
 | `APRENDIZADOS.md` | todos | lições com causa, evidência e "vale para" |
 | `PROPOSTAS.md` | todos | melhorias nas instruções dos agentes, à espera da sua aprovação |

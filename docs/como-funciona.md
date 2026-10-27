@@ -9,8 +9,16 @@ Roda a cada pedido, antes do Claude responder. Sem IA, em milissegundos.
    pasta (raiz + 1 nível) = 2. Entram os pacotes com pontos ≥ `minimo` (2). Acentos e maiúsculas não importam.
 3. **Suas correções:** quando você diz `era com <agente>`, o pedido anterior é guardado com esse agente. Um pedido novo
    que divida ≥ 50% das palavras com um guardado ganha +3 pontos no pacote daquele agente.
-4. **Já feito:** procura em `DIARIO.md`, `APRENDIZADOS.md` e `MAPA.md` as linhas que dividem 2+ palavras com o pedido e
-   as entrega ao Claude como ponto de partida.
+4. **Já feito (`hooks/grafo.js`):** o grafo do projeto tem como nós os arquivos (cada um com uma linha tirada do 1º
+   título ou comentário) e como ligações "A cita B" (o nome do arquivo B aparece em A). Os registros da memória
+   (diário, lições, decisões, mapa) ficam ligados aos arquivos que mencionam. A busca:
+   - transforma o pedido em termos: sem acento, no singular, e pelo grupo de sinônimos (`pacotes/sinonimos.json`);
+   - pontua arquivos (nome + descrição) e registros que dividem termos com o pedido; registro ligado a um arquivo do
+     assunto ganha pontos;
+   - dá **1 salto** pelas ligações: arquivos que citam ou são citados pelos do assunto entram como "ligado".
+   O grafo é refeito quando tem mais de 10 minutos ou quando o commit muda, em no máximo ~2,5 s (projeto grande fica
+   parcial e avisa). Arquivos dos padrões de `sensiveis.txt` ficam de fora. Para ver na mão:
+   `node <plugin>/hooks/grafo.js <pasta> "<pedido>"`.
 5. **Memória:** na 1ª vez numa pasta, cria `.claude/base/` com os modelos (não sobrescreve nada que já exista).
 6. **Saída:** uma linha para você (`Usando: …`) e o contexto para o Claude (pacotes, motivos, agentes, já feito).
 
@@ -59,5 +67,6 @@ defeito que você achou ─► regra automática no verificador do projeto (prov
 
 - A escolha é por palavras e arquivos: pedidos ambíguos podem cair no pacote errado; a linha `Usando:` e o
   `era com <agente>` existem para isso.
-- O "já feito" acha linhas por palavras em comum; não entende sinônimos.
+- O "já feito" entende os sinônimos da lista e as ligações por nome de arquivo, não o significado livre do texto.
+  Acrescente grupos de sinônimos do seu domínio em `pacotes/sinonimos.json`.
 - As referências de mercado dos agentes estão marcadas "(a confirmar)" até alguém abrir e conferir cada fonte.

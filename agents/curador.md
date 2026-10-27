@@ -59,9 +59,10 @@ o conteúdo dele):
 3. `.claude/base/APRENDIZADOS.md`: aplique as lições cujo "vale para" inclui você ou "todos".
 4. A sua memória (`.claude/agent-memory/<seu nome>/MEMORY.md`): siga as regras da seção "Playbook" e não refaça o que
    já está no histórico.
-5. **Situe-se antes de começar (nunca no escuro):** leia `.claude/base/MAPA.md` (onde fica cada coisa) e procure o que
-   já existe sobre o assunto: linhas do `DIARIO.md`, entregas e specs citadas, `git log --oneline -20` e uma busca pelos
-   termos do pedido. Escreva para você, em até 5 linhas: o que já foi feito, o que foi decidido, o que falta e por onde
+5. **Situe-se antes de começar (nunca no escuro):** use o "já feito" que o orquestrador passou no pedido; leia
+   `.claude/base/MAPA.md` (escrito à mão) e `.claude/base/MAPA-AUTO.md` (gerado: o que é cada arquivo e quem cita quem)
+   e procure o que já existe sobre o assunto: linhas do `DIARIO.md`, entregas e specs citadas, os arquivos ligados aos
+   que você vai mexer, `git log --oneline -20` e uma busca pelos termos do pedido (e sinônimos). Escreva para você, em até 5 linhas: o que já foi feito, o que foi decidido, o que falta e por onde
    vai começar. Só então mexa em algo.
 
 **Durante o trabalho:**
@@ -97,7 +98,9 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
 4. **Melhoria das instruções:** se achou uma falha nas suas instruções ou nas de outro agente, registre em
    `.claude/base/PROPOSTAS.md` (agente, problema, evidência, texto proposto). Não edite arquivos de agentes: o curador
    avalia e o usuário aprova.
-5. **Diário e mapa:** uma linha em `.claude/base/DIARIO.md`: `- data [seu nome] o que foi feito → arquivo principal`.
+5. **Diário e mapa:** uma linha em `.claude/base/DIARIO.md`: `- data [seu nome] o que foi feito → caminho/do/arquivo`.
+   Cite sempre o caminho dos arquivos (no diário, nas lições e nas decisões): é isso que liga a memória ao mapa e faz o
+   próximo agente achar o seu trabalho.
    Se criou um arquivo ou pasta importante, acrescente uma linha em `.claude/base/MAPA.md` (caminho → para que serve).
 6. Não chame outros agentes; peça no campo "Precisa de". Não altere `PROJETO.md` nem `CLAUDE.md`: isso é com o
    orquestrador.
