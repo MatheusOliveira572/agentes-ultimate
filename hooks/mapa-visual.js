@@ -83,11 +83,15 @@ main{position:relative;height:calc(100% - 64px)}canvas{width:100%;height:100%;di
 #info{position:absolute;right:16px;top:16px;width:min(360px,calc(100% - 32px));background:var(--papel);border:1px solid var(--linha);border-radius:12px;padding:12px 14px;box-shadow:0 6px 24px rgba(0,0,0,.08);display:none}
 #info b{word-break:break-all}#info p{margin:6px 0 0;color:var(--suave)}
 #pedido{position:absolute;left:16px;bottom:16px;max-width:min(560px,calc(100% - 32px));background:var(--papel);border:1px solid var(--linha);border-radius:12px;padding:10px 14px;font-size:13px}
+#linha{position:absolute;left:16px;top:16px;width:min(340px,calc(100% - 32px));max-height:45%;overflow:auto;background:var(--papel);border:1px solid var(--linha);border-radius:12px;padding:10px 12px;font-size:12px;display:none}
+#linha h2{font-size:13px;margin:0 0 6px;display:flex;align-items:center;gap:6px}#linha h2 i{width:8px;height:8px;border-radius:50%;background:var(--usado);display:inline-block;animation:pisca 1.2s infinite}
+#linha ol{list-style:none;margin:0;padding:0}#linha li{padding:3px 0;border-top:1px solid var(--linha);word-break:break-all}#linha li b{font-weight:600}
+@keyframes pisca{50%{opacity:.25}}
 </style></head><body>
 <header><div><h1 id="titulo">Mapa do projeto</h1><div class="sub" id="sub"></div></div>
 <input id="q" placeholder="Buscar arquivo ou anotação…" aria-label="Buscar">
 <div class="leg"><span><i style="background:var(--usado)"></i>usado no último pedido</span><span><i style="background:var(--ligado)"></i>ligado (1 salto)</span><span><i style="background:var(--memoria)"></i>memória</span><span><i style="background:var(--suave)"></i>arquivo</span></div></header>
-<main><canvas id="c"></canvas><div id="info"></div><div id="pedido"></div></main>
+<main><canvas id="c"></canvas><div id="info"></div><div id="pedido"></div><div id="linha"><h2><i></i>Ao vivo</h2><ol id="eventos"></ol></div></main>
 <script>
 const D=/*DADOS*/null;
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -133,6 +137,22 @@ if(m<0){info.style.display='none';return;}const n=N[m];info.style.display='block
 const p1=document.createElement('p');p1.textContent=(n.t==='r'?'Anotação da memória':'Arquivo')+(n.d&&n.t!=='r'?' — '+n.d:'')+' · '+viz[m].length+' ligação(ões)'+(n.u===2?' · ligado ao último pedido':n.u?' · usado no último pedido':'');info.append(p1);
 const lst=document.createElement('p');lst.textContent='Liga com: '+viz[m].slice(0,8).map(j=>N[j].t==='r'?N[j].d:N[j].id.split('/').pop()).join(', ')+(viz[m].length>8?'…':'');info.append(lst);}
 document.getElementById('q').addEventListener('input',e=>{filtro=e.target.value.trim().toLowerCase();});
+// Ao vivo: aberto pelo servidor local, recebe cada arquivo lido/editado e acende o ponto na hora.
+const CORES_AG=['#2563eb','#db2777','#0891b2','#ca8a04','#7c3aed','#16a34a','#ea580c','#4f46e5'];const corAg={};
+function corDo(a){if(!corAg[a])corAg[a]=a==='principal'?'#2563eb':CORES_AG[(Object.keys(corAg).length+1)%CORES_AG.length];return corAg[a];}
+const porId=new Map(N.map((n,i)=>[n.id,i]));
+function vivoNo(ev){let i=porId.get(ev.arquivo);if(i===undefined){N.push({t:'a',id:ev.arquivo,d:'(novo)',pasta:'',u:0,x:(Math.random()-.5)*80,y:(Math.random()-.5)*80,vx:0,vy:0,g:0});viz.push([]);i=N.length-1;porId.set(ev.arquivo,i);calor=Math.max(calor,.3);}
+const n=N[i];n.vivo={acao:ev.acao,cor:corDo(ev.agente),ate:Date.now()+(ev.acao==='leu'?4000:15000)};n.toques=(n.toques||0)+1;}
+const desenhaBase=desenha;desenha=function(){desenhaBase();const agora=Date.now();
+cx.setTransform(dpr*cam.k,0,0,dpr*cam.k,dpr*(W/2+cam.x),dpr*(H/2+cam.y));
+for(const n of N){if(!n.vivo||n.vivo.ate<agora)continue;const f=(n.vivo.ate-agora)/(n.vivo.acao==='leu'?4000:15000);const r=(8+10*(1-f%1))/Math.sqrt(cam.k);
+cx.globalAlpha=.25+.6*f;cx.strokeStyle=n.vivo.acao==='leu'?n.vivo.cor:css('--foco');cx.lineWidth=3/cam.k;cx.beginPath();cx.arc(n.x,n.y,r,0,7);cx.stroke();
+cx.globalAlpha=1;cx.fillStyle=css('--tinta');cx.font='600 '+(12/cam.k)+'px system-ui';cx.fillText(n.id.split('/').pop(),n.x+r+3/cam.k,n.y+4/cam.k);}cx.globalAlpha=1;};
+if(location.protocol.startsWith('http')){const lin=document.getElementById('linha'),ol=document.getElementById('eventos');lin.style.display='block';
+const es=new EventSource('/eventos');es.onmessage=m=>{let ev;try{ev=JSON.parse(m.data);}catch(e){return;}
+if(ev.arquivo)vivoNo(ev);const li=document.createElement('li');const hora=new Date(ev.em).toLocaleTimeString('pt-BR');
+const b=document.createElement('b');b.textContent=ev.agente;b.style.color=corDo(ev.agente);li.append(hora+' · ',b,' '+ev.acao+' ',ev.arquivo||('"'+(ev.busca||'')+'"'));ol.prepend(li);while(ol.children.length>60)ol.lastChild.remove();};
+es.onerror=()=>{lin.querySelector('h2').lastChild.textContent=' Ao vivo (reconectando…)';};es.onopen=()=>{lin.querySelector('h2').lastChild.textContent=' Ao vivo';};}
 </script></body></html>`;
 
 module.exports = { gerar };

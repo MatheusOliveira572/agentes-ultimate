@@ -1,5 +1,14 @@
 # Mudanças
 
+## 0.5.0 · 2026-10-27
+- **Mapa ao vivo:** gancho `PostToolUse` (`hooks/atividade.js`) anota cada arquivo lido, editado, criado ou
+  procurado, e por qual agente (só o caminho, em `.claude/base/.atividade.jsonl`, fora do git). Servidor local
+  (`hooks/mapa-servidor.js`, 127.0.0.1, para sozinho após 2 h sem uso) transmite na hora: o arquivo acende na cor do
+  agente, edição fica vermelha, arquivo novo vira ponto novo, e a lista "Ao vivo" mostra quem fez o quê.
+- Abrir: skill `ver-mapa` ("mostre o mapa"), ou sozinho a cada sessão com `"mapa": { "abrir_sozinho": true }` no
+  `.claude/base/config.json` do projeto (desligado por padrão).
+- Testes dos ganchos: 41 casos (atividade, servidor, transmissão, abertura automática).
+
 ## 0.4.1 · 2026-10-27
 - **Mapa visual** (`hooks/mapa-visual.js`, skill `ver-mapa`): página HTML sem internet com o grafo do projeto
   (arquivos, quem cita quem, anotações da memória) e o caminho que o último pedido usou em destaque; clique, zoom,

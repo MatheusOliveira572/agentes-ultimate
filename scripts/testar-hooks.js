@@ -90,6 +90,37 @@ const html = fs.readFileSync(mv.destino, 'utf8');
 caso('MAPA.html gerado com os usados destacados', mv.usados > 0 && /src\/carga\.js/.test(html) && /"u":1|"u":2/.test(html), `${mv.nos} pontos, ${mv.usados} usados`);
 caso('.gitignore da base cobre os gerados', /MAPA\.html/.test(fs.readFileSync(path.join(proj, '.claude', 'base', '.gitignore'), 'utf8')), 'faltou MAPA.html');
 
+// Atividade ao vivo: o gancho anota o arquivo tocado (só o caminho)
+const atv = (tool, input, extra = {}) => hook('atividade.js', { tool_name: tool, tool_input: input, cwd: proj, hook_event_name: 'PostToolUse', ...extra });
+const atvArq = path.join(proj, '.claude', 'base', '.atividade.jsonl');
+atv('Read', { file_path: path.join(proj, 'src', 'carga.js') });
+atv('Edit', { file_path: 'src/regras.js' }, { agent_type: 'dev-powerbi' });
+atv('Read', { file_path: path.join(tmp, 'fora.txt') });
+const linhasAtv = fs.existsSync(atvArq) ? fs.readFileSync(atvArq, 'utf8').trim().split('\n').map((l) => JSON.parse(l)) : [];
+caso('atividade: anota leitura e edição com o agente', linhasAtv.length === 2 && linhasAtv[0].acao === 'leu' && linhasAtv[0].arquivo === 'src/carga.js' && linhasAtv[1].acao === 'editou' && linhasAtv[1].agente === 'dev-powerbi', JSON.stringify(linhasAtv));
+caso('atividade: arquivo fora do projeto não é anotado', !linhasAtv.some((l) => /fora/.test(l.arquivo || '')), JSON.stringify(linhasAtv));
+
+// Mapa ao vivo: servidor local responde, serve a página e transmite um evento novo
+const testeServidor = `
+const http=require('http'),fs=require('fs'),path=require('path'),{spawnSync}=require('child_process');
+const proj=process.argv[1],srv=process.argv[2];
+spawnSync(process.execPath,[srv,proj],{encoding:'utf8'});
+const est=JSON.parse(fs.readFileSync(path.join(proj,'.claude','base','.mapa-servidor.json'),'utf8'));
+const get=(p)=>new Promise(ok=>http.get({host:'127.0.0.1',port:est.porta,path:p},r=>{let b='';r.on('data',c=>b+=c);r.on('end',()=>ok({s:r.statusCode,b}));}).on('error',()=>ok({s:0,b:''})));
+(async()=>{const s=await get('/saude');const p=await get('/');
+let recebido=false;const req=http.get({host:'127.0.0.1',port:est.porta,path:'/eventos'},r=>{r.on('data',c=>{if(String(c).includes('novo-arquivo.js'))recebido=true;});});
+await new Promise(r=>setTimeout(r,700));
+fs.appendFileSync(path.join(proj,'.claude','base','.atividade.jsonl'),JSON.stringify({em:new Date().toISOString(),acao:'criou',arquivo:'src/novo-arquivo.js',agente:'principal'})+'\\n');
+await new Promise(r=>setTimeout(r,1800));req.destroy();
+try{process.kill(est.pid);}catch(e){}
+console.log(JSON.stringify({saude:s.s,pagina:/Ao vivo/.test(p.b)&&/src\\/carga\\.js/.test(p.b),recebido}));})();`;
+const rs = spawnSync(process.execPath, ['-e', testeServidor, proj, path.join(RAIZ, 'hooks', 'mapa-servidor.js')], { encoding: 'utf8', env, timeout: 30000 });
+let srvRes = {}; try { srvRes = JSON.parse((rs.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
+caso('servidor do mapa responde e serve a página', srvRes.saude === 200 && srvRes.pagina === true, rs.stdout + rs.stderr);
+caso('servidor transmite o evento novo na hora', srvRes.recebido === true, rs.stdout + rs.stderr);
+const auto = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'mapa-servidor.js'), '--auto'], { cwd: proj, encoding: 'utf8', env });
+caso('abrir sozinho fica desligado sem config', auto.status === 0 && !auto.stdout, auto.stdout);
+
 // Projeto com agentes e memória próprios (config.json)
 fs.mkdirSync(path.join(proj, 'docs'), { recursive: true });
 fs.writeFileSync(path.join(proj, 'docs', 'diario-antigo.md'), '# Diário\n- 2026-10-19 conciliação do orçamento com o razão fechada → src/carga.js\n');

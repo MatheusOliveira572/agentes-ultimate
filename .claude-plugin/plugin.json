@@ -1,6 +1,6 @@
 {
   "name": "agentes-ultimate",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Base de agentes especialistas para qualquer trabalho: você faz o pedido e a base escolhe sozinha os agentes, monta a memória do projeto e cobra prova antes de dizer que está pronto.",
   "author": {
     "name": "Matheus Oliveira"
