@@ -21,7 +21,7 @@ function instalar() {
   if (atual !== texto) { fs.mkdirSync(path.dirname(destino), { recursive: true }); fs.writeFileSync(destino, texto); }
 }
 
-const cheia = (frac, n) => { const c = Math.round(Math.max(0, Math.min(1, frac)) * n); return '█'.repeat(c) + '░'.repeat(n - c); };
+const cheia = (frac, n, estimado) => { const c = Math.round(Math.max(0, Math.min(1, frac)) * n); return (estimado ? '▒' : '█').repeat(c) + '░'.repeat(n - c); };
 
 function linhas(d) {
   const agora = Date.now();
@@ -42,7 +42,8 @@ function linhas(d) {
     else fim = `fim ${p.de ? R.hhmm(p.de) + '–' : 'até '}${R.hhmm(p.ate)}`;
     const corpo = [
       agente,
-      p.frac == null ? '' : `${cheia(p.frac, 12)} ${String(Math.round(p.frac * 100)).padStart(2)}%`,
+      // % informado pelo agente: barra cheia; estimado pelo tempo (sem progresso gravado): barra clara e "~".
+      p.frac == null ? '' : `${cheia(p.frac, 12, p.estimado)} ${p.estimado ? '~' : ''}${String(Math.round(p.frac * 100)).padStart(2)}%`,
       p.prog ? `${p.prog.feito}/${p.prog.total}${p.prog.agora ? ' · ' + p.prog.agora : ''}` : '',
       `${p.decorridoMin} min`,
       fim,

@@ -266,9 +266,15 @@ function previsao(cwd, { agente, cod, inicio, descricao, classe, agora = Date.no
   let termina = null;
   if (prog && frac >= 0.15 && frac < 1 && decorrido > 60000) termina = inicio + decorrido / frac;
   else if (ate) termina = de ? (de + ate) / 2 : ate;
-  if (termina != null) termina = Math.max(Math.ceil(agora / cinco) * cinco, Math.round(termina / cinco) * cinco);
+  if (termina != null) {
+    termina = Math.max(Math.ceil(agora / cinco) * cinco, Math.round(termina / cinco) * cinco);
+    // O ritmo de poucas etapas engana (1 de 6 em 2 min): com faixa, o término fica dentro dela.
+    if (de && termina < de) termina = de;
+    if (ate && termina > ate) termina = ate;
+  }
   const passou = ate && agora > ate ? Math.round((agora - ate) / 60000) : null;
-  return { prog, frac, de, ate, fonte, termina, passou, decorridoMin: Math.round(decorrido / 60000) };
+  // estimado = o agente não gravou progresso: o % é tempo decorrido ÷ faixa e aparece com outra forma.
+  return { prog, frac, estimado: !prog, de, ate, fonte, termina, passou, decorridoMin: Math.round(decorrido / 60000) };
 }
 
 // Último sinal de vida de um agente: a gravação mais recente do progresso dele (mesmo vencida) ou o início.
@@ -315,7 +321,7 @@ function agentesAgora(cwd, { agora = Date.now(), resumo = null } = {}) {
     const s = situacao(cwd, r, p, lig.cod, agora);
     if (s.estado === 'some') continue;
     out.push({ id: r.id, agente: r.agente, cod: lig.cod, estado: s.estado, sinal: s.sinal, inicio,
-      pct: p.frac == null ? null : Math.round(p.frac * 100), etapa: p.prog ? p.prog.agora.split(/\s+/).filter(Boolean).slice(0, 4).join(' ') : '',
+      pct: p.frac == null ? null : Math.round(p.frac * 100), estimado: p.estimado, etapa: p.prog ? p.prog.agora.split(/\s+/).filter(Boolean).slice(0, 4).join(' ') : '',
       feito: p.prog ? p.prog.feito : null, total: p.prog ? p.prog.total : null, termina: p.termina, de: p.de, ate: p.ate, passou: p.passou, fonte: p.fonte });
   }
   return out;

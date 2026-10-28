@@ -626,6 +626,31 @@ const skillU = fs.readFileSync(path.join(RAIZ, 'skills', 'ultimate', 'SKILL.md')
 caso('código: a skill ultimate e o eval do revisor usam [revisa:cod] e a correção reusa o código', /\[revisa:/.test(skillU) && /reus/.test(skillU) &&
   /\[revisa:/.test(fs.readFileSync(path.join(RAIZ, 'evals', 'revisor.md'), 'utf8')), 'falta a regra');
 
+// ---- M-4 · % estimado (sem progresso gravado) aparece diferente do informado, e o término respeita a faixa ----
+const p11 = path.join(tmp, 'projeto11'); const b11 = path.join(p11, '.claude', 'base');
+fs.mkdirSync(path.join(b11, '.progresso'), { recursive: true });
+const iso11 = (min) => new Date(Date.now() + min * 60000).toISOString();
+const hm11 = (min) => new Date(Date.now() + min * 60000).toTimeString().slice(0, 5);
+fs.writeFileSync(path.join(b11, '.agentes.jsonl'), [
+  { em: iso11(-10), tipo: 'inicio', id: 'k1', agente: 'redator', cod: 'e1', classe: 'texto' },        // sem progresso
+  { em: iso11(-2), tipo: 'inicio', id: 'k2', agente: 'dev-powerbi', cod: 'e2', classe: 'construcao' }, // 1 de 6 em 2 min, faixa de 60–80 min
+  { em: iso11(-20), tipo: 'inicio', id: 'k3', agente: 'pesquisador', cod: 'e3', classe: 'pesquisa' },  // 1 de 10 em 20 min, faixa de 25–40 min
+].map((x) => JSON.stringify(x)).join('\n') + '\n');
+for (const [ag11, c, de, ate] of [['redator', 'e1', 20, 40], ['dev-powerbi', 'e2', 58, 78], ['pesquisador', 'e3', 5, 20]]) estimar(['registrar', '--agente', ag11, '--cod', c, '--de', hm11(de), '--ate', hm11(ate)], p11);
+fs.writeFileSync(path.join(b11, '.progresso', 'dev-powerbi-e2.json'), JSON.stringify({ feito: 1, total: 6, agora: 'modelo' }));
+fs.writeFileSync(path.join(b11, '.progresso', 'pesquisador-e3.json'), JSON.stringify({ feito: 1, total: 10, agora: 'fontes' }));
+const ag11 = require(path.join(RAIZ, 'hooks', 'registro.js')).agentesAgora(p11, { resumo: null });
+const k = (id) => ag11.find((x) => x.id === id) || {};
+caso('% estimado: sem progresso gravado o % vem marcado como estimado e o término fica dentro da faixa', k('k1').estimado === true && k('k1').termina <= k('k1').ate && k('k1').termina >= k('k1').de,
+  JSON.stringify(k('k1')));
+caso('% real: com progresso o % não é estimado e o ritmo é limitado pela faixa (nem antes do início, nem depois do fim)', k('k2').estimado === false && k('k2').termina >= k('k2').de &&
+  k('k3').estimado === false && k('k3').termina <= k('k3').ate, JSON.stringify([k('k2'), k('k3')]));
+const t11 = (id, ag11b, desc) => ({ id, type: 'local_agent', agentType: ag11b, status: 'running', description: desc, startTime: Date.parse(iso11(-10)) });
+br = barra({ cwd: p11, columns: 200, tasks: [t11('a', 'redator', 'texto [cod:e1]'), t11('b', 'dev-powerbi', 'telas [cod:e2]')] });
+caso('barra: % estimado com "~", % informado sem', /~\d+%/.test(br.porId.a || '') && !/~/.test(br.porId.b || ''), br.out);
+const pag11 = fs.readFileSync(path.join(RAIZ, 'hooks', 'mapa-visual.js'), 'utf8');
+caso('painel: barra tracejada e "(estimado)" para o % sem progresso, cheia para o informado', /\.trilho\.estimado/.test(pag11) && /\(estimado\)/.test(pag11) && /repeating-linear-gradient/.test(pag11), 'falta a forma do estimado');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
