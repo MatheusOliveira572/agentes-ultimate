@@ -276,3 +276,14 @@ registradas a curadoria e o relatório teriam pouco a dizer.
 - Plugin: `fonte/comum.md`, `fonte/agentes/nucleo/curador.md`, `evals/revisor.md`, `hooks/hooks.json`,
   `.claude-plugin/plugin.json` (0.5.1), `CHANGELOG.md`, `hooks/atividade.js`, `hooks/roteador.js` (trechos).
 - Método: apetite e corte (Basecamp, Shape Up); classe de referência (Flyvbjerg); Definição de Pronto (Scrum Guide).
+
+## Decisões do usuário (28/10)
+1. **Escopo:** dividir. 0.7.0 = estimativa, barra e placar (blocos 0 a 4); 0.7.1 = laço de melhoria.
+2. **Barra:** a skill pode escrever no `~/.claude/settings.json` do usuário, com aprovação e cópia de segurança.
+3. **Evals:** rodar só quando mudar instrução de agente. Observação do orquestrador: `claude plugin eval` **existe** na
+   versão instalada (V2 confirmada falsa), então o bloco 0 só precisa validar o formato de caso que ele aceita.
+4. **Relatório mensal:** 3 linhas na abertura da sessão (fica para a 0.7.1).
+5. **Pedido novo, entra na 0.7.0:** o **mapa ao vivo mostra os agentes trabalhando**, cada um com o **% do trabalho**
+   (do progresso gravado pelo agente), a **hora prevista de término** (da estimativa calibrada) e um aviso quando
+   **cada agente termina** (não só o fim geral). Painel lateral "Agentes agora": nome e cor do agente, barra de %,
+   etapa atual em até 4 palavras, "termina por volta de 17h40", e o marcador no grafo com um anel de progresso.
