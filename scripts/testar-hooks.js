@@ -606,6 +606,26 @@ hook('execucoes.js', { cwd: p9, hook_event_name: 'SubagentStop', agent_id: 'h1',
 caso('agente tirado do painel que termina depois ainda entra no registro', lerJsonl(execArq).length === nEx9 + 1 && lerJsonl(execArq).pop().id === 'h1', `${nEx9}`);
 caso('o início de sessão chama o registro', /execucoes\.js/.test(JSON.stringify(JSON.parse(fs.readFileSync(path.join(RAIZ, 'hooks', 'hooks.json'), 'utf8')).hooks.SessionStart)), 'sem execucoes.js no SessionStart');
 
+// ---- M-3 · o código é do trabalho: o revisor recebe [revisa:cod] e não herda a faixa nem o código do autor ----
+// (p7 já tem a faixa do dev-powerbi com o código ab12)
+exe({ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_use_id: 'trv1', tool_input: { description: 'revise a rodada [revisa:ab12]', prompt: 'Revise o trabalho [cod:ab12] do dev-powerbi', subagent_type: 'agentes-ultimate:revisor' } });
+exe({ hook_event_name: 'SubagentStart', agent_id: 'rv1', agent_type: 'agentes-ultimate:revisor' });
+exe({ hook_event_name: 'SubagentStop', agent_id: 'rv1', agent_type: 'agentes-ultimate:revisor', agent_transcript_path: transcricao('rv1.jsonl', '2026-10-28T12:00:00.000Z', '2026-10-28T12:15:00.000Z'),
+  last_assistant_message: 'Placar: autor=dev-powerbi cod=ab12 veredito=sim B=0 A=0 M=0 b=0' });
+const rv1 = lerJsonl(execArq).find((x) => x.id === 'rv1') || {};
+caso('código: o revisor com [revisa:ab12] (e [cod:ab12] só no pedido) não fica com o código nem a faixa do autor', rv1.cod === null && rv1.fonte_estimativa === 'sem' && rv1.classe === 'revisao', JSON.stringify(rv1));
+const R10 = require(path.join(RAIZ, 'hooks', 'registro.js'));
+caso('código: a faixa registrada só vale para o mesmo agente', R10.estimativaPara(p7, 'revisor', 'ab12', Date.now()) === null && !!R10.estimativaPara(p7, 'dev-powerbi', 'ab12', Date.now()), 'faixa de outro agente');
+re = estimar(['registrar', '--agente', 'revisor', '--cod', 'ab12', '--de', '10:00', '--ate', '10:30']);
+const re10 = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--agente', 'revisor', '--estimado', '20', '--cod', 'ab12', '--registrar'], { cwd: p7, env, encoding: 'utf8' });
+caso('código: estimar.js recusa o código do trabalho de outro agente e explica o [revisa:]', re.status !== 0 && re10.status !== 0 && /\[revisa:ab12\]/.test(re.stderr) &&
+  !lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl')).some((x) => x.agente === 'revisor' && x.cod === 'ab12'), `${re.status} ${re.stderr} | ${re10.status} ${re10.stderr}`);
+re = estimar(['registrar', '--agente', 'dev-powerbi', '--cod', 'ab12', '--de', '10:00', '--ate', '10:30']);
+caso('código: correção do mesmo trabalho pelo autor reusa o código', re.status === 0, re.stderr);
+const skillU = fs.readFileSync(path.join(RAIZ, 'skills', 'ultimate', 'SKILL.md'), 'utf8');
+caso('código: a skill ultimate e o eval do revisor usam [revisa:cod] e a correção reusa o código', /\[revisa:/.test(skillU) && /reus/.test(skillU) &&
+  /\[revisa:/.test(fs.readFileSync(path.join(RAIZ, 'evals', 'revisor.md'), 'utf8')), 'falta a regra');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

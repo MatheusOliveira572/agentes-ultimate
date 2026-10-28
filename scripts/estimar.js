@@ -16,6 +16,12 @@ function opcoes(argv) {
   return o;
 }
 const falha = (msg) => { console.error(msg); process.exit(2); };
+// O código é do trabalho: outro agente com o mesmo código (ex.: o revisor com o código do autor) é recusado.
+function codigoDeOutro(cwd, agente, cod) {
+  if (!cod) return;
+  const outro = R.lerJsonl(path.join(R.base(cwd), '.estimativas.jsonl')).find((e) => e.cod === cod && e.agente !== agente);
+  if (outro) falha(`o código ${cod} é do trabalho do ${outro.agente}. Para revisar esse trabalho, ponha [revisa:${cod}] na descrição e dê ao ${agente} um código próprio [cod:xxxx].`);
+}
 
 function registrar(o) {
   const cwd = path.resolve(o.pasta || process.cwd());
@@ -28,6 +34,7 @@ function registrar(o) {
   if (estimado != null && !(estimado > 0)) falha('--estimado em minutos, maior que zero');
   const cod = o.cod && o.cod !== true ? R.codDe(`[cod:${o.cod}]`) : null;
   if (o.cod && !cod) falha('--cod: 2 a 16 letras ou números (ex.: ab12)');
+  codigoDeOutro(cwd, agente, cod);
   const linha = { em: new Date().toISOString(), agente, classe: R.classeValida(o.classe === true ? '' : o.classe), cod,
     de: new Date(de).toISOString(), ate: new Date(ate).toISOString(), estimado_min: estimado };
   R.acrescentar(path.join(R.base(cwd), '.estimativas.jsonl'), linha);
@@ -115,6 +122,7 @@ function faixa(o) {
     if (!res.de) falha(res.texto);
     const cod = o.cod && o.cod !== true ? R.codDe(`[cod:${o.cod}]`) : null;
     if (o.cod && !cod) falha('--cod: 2 a 16 letras ou números (ex.: ab12)');
+    codigoDeOutro(path.resolve(o.pasta || process.cwd()), agente, cod);
     R.acrescentar(path.join(R.base(path.resolve(o.pasta || process.cwd())), '.estimativas.jsonl'), { em: new Date().toISOString(), agente,
       classe: classe || 'outra', cod, de: res.de, ate: res.ate, estimado_min: estimado, base: `${res.nivel} n=${res.n}` });
     res.registrada = true;

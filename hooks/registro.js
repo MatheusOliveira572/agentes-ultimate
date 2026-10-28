@@ -18,7 +18,9 @@ const versaoPlugin = () => { try { return require('../.claude-plugin/plugin.json
 // "agentes-ultimate:dev-powerbi" e "dev-powerbi" são o mesmo agente.
 const agenteCurto = (a) => String(a || '').split(':').pop().trim();
 
-// Código do pedido que o orquestrador põe no fim da descrição: [cod:ab12].
+// Código do trabalho que o orquestrador põe no fim da descrição: [cod:ab12]. O código é do trabalho, não do lançamento:
+// a correção do mesmo trabalho reusa o código (e conta como retrabalho); o revisor recebe [revisa:ab12], que não é
+// código dele (não herda faixa nem progresso).
 function codDe(...textos) {
   for (const t of textos) { const m = /\[cod:([a-z0-9][a-z0-9-]{1,15})\]/i.exec(String(t || '')); if (m) return m[1].toLowerCase(); }
   return null;
@@ -125,7 +127,7 @@ function estimativaPara(cwd, agente, cod, inicio) {
   const lista = lerJsonl(path.join(base(cwd), '.estimativas.jsonl'));
   for (let i = lista.length - 1; i >= 0; i--) {
     const e = lista[i];
-    if (cod && e.cod === cod) return e;
+    if (cod && e.cod === cod && e.agente === agente) return e; // a faixa é do agente que a recebeu
   }
   if (cod) return null;
   const limite = (inicio || Date.now()) - 15 * 60 * 1000;

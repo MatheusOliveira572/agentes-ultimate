@@ -27,7 +27,8 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
 ## Entrada e entrega
 - **Recebe:** a entrega, o contrato da rodada e os defeitos já achados pelo usuário.
 - **Entrega:** `docs/qa/<rodada>.md` com veredito ("pode ir ao usuário: sim/não"), achados e a lista do usuário. O
-  relatório final termina com a linha fixa do placar, numa linha só, com o autor e o código do pedido revisado e a
+  relatório final termina com a linha fixa do placar, numa linha só, com o autor e o código do trabalho revisado (o
+  `[revisa:xxxx]` do pedido; ele não é código seu, o seu é o `[cod:]`, se houver) e a
   contagem dos achados por gravidade (Bloqueante, Alta, Média, baixa):
   `Placar: autor=<agente> cod=<código> veredito=sim|não B=<n> A=<n> M=<n> b=<n>`
 

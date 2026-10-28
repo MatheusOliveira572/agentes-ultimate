@@ -22,7 +22,7 @@ function tratar(d) {
   if ((ev === 'PreToolUse' || ev === 'PostToolUse') && /^(Agent|Task)$/.test(d.tool_name || '')) {
     const ti = d.tool_input || {};
     const agente = R.agenteCurto(ti.subagent_type || 'general-purpose');
-    const cod = R.codDe(ti.description, ti.prompt);
+    const cod = R.codDe(ti.description); // só a descrição: o pedido pode citar o código de outro trabalho
     const tu = d.tool_use_id ? String(d.tool_use_id) : null;
     if (ev === 'PreToolUse') {
       R.acrescentar(arq, { em: iso(agora), tipo: 'pedido', ref: ref(), tu, agente, cod, classe: R.classeDe(ti.description), bg: !!ti.run_in_background });
