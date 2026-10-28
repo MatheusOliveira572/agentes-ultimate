@@ -1,5 +1,47 @@
 # Mudanças
 
+## 0.7.0 · 2026-10-28
+- **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**
+  - o plugin liga a barra pelo próprio `settings.json` (o plano supunha que não; a skill `instalar-barra` não foi
+    necessária);
+  - `claude plugin eval` existe;
+  - os campos reais dos ganchos `Agent`, `SubagentStart` e `SubagentStop`. O `SubagentStop` chega 2 vezes por agente.
+- **Registro de cada execução** (`hooks/execucoes.js`): ciclo de vida do agente em `.claude/base/.agentes.jsonl`
+  (pedido → lançado → início → fim). Uma linha por execução em `~/.claude/agentes-ultimate/execucoes.jsonl`, com:
+  - agente, tipo de tarefa (`pacotes/classes-tarefa.json`), minutos pelas pontas da transcrição (256 KB de cada lado);
+  - faixa registrada, código do pedido e código anônimo do projeto;
+  - nunca o pedido nem o caminho.
+- **Código do pedido `[cod:xxxx]`** na descrição do agente: liga progresso, faixa, registro e placar, e separa dois
+  agentes do mesmo tipo trabalhando ao mesmo tempo.
+- **Estimativa** (`scripts/estimar.js`):
+  - `faixa` usa a classe de referência em cascata (agente+classe → agente → classe → todos, até n ≥ 3) e dá a
+    mediana e o p75 dos minutos reais;
+  - com `--estimado`, corrige pelo fator real ÷ estimado; sem histórico, estimado × 1 a × 2;
+  - `--registrar` grava a mesma faixa;
+  - `registrar` é o único jeito de gravar a faixa (UTF-8 garantido);
+  - `importar` traz as execuções antigas das transcrições do projeto.
+  - A skill `ultimate` manda calcular, registrar e dizer a faixa com a base.
+- **Progresso:** o protocolo comum ganha o passo 10: gravar `.claude/base/.progresso/<agente>-<código>.json`
+  (feito, total, etapa) ao fim de cada etapa. `validar.js` exige o passo e a ferramenta `Write` em todo agente.
+- **Barra por agente** no painel do Claude Code (`hooks/barra.js`): barra, %, etapa, minutos e "fim 14h10–14h50"
+  ou "passou da previsão (+n min)". Liga pelo `settings.json` do plugin, por um lançador fixo
+  (`~/.claude/agentes-ultimate/barra.js`) que o início de sessão regrava, porque o comando da barra não recebe
+  `CLAUDE_PLUGIN_ROOT`.
+- **Placar** (`scripts/placar.js`, skills `placar` e `registrar-defeito`):
+  - o revisor termina o relatório com a linha fixa `Placar: autor= cod= veredito= B= A= M= b=`, que o gancho lê da
+    última mensagem ou do fim da transcrição;
+  - por agente: de primeira, defeitos por gravidade, escaparam ao usuário, retrabalho e acerto da faixa, mais a taxa
+    de captura do revisor;
+  - revisor sem a linha vira aviso em `estado.json`; novo caso 6 no eval do revisor.
+- **Mapa ao vivo · "Agentes agora":**
+  - painel lateral com cada agente trabalhando: cor, barra de %, etapa em até 4 palavras, "termina por volta de
+    17h40" (pelo ritmo do progresso ou pela faixa), "passou da previsão" ou "terminou às";
+  - aviso e linha no "Ao vivo" quando cada agente termina;
+  - anel de progresso no marcador do agente; nome do agente sem o prefixo do plugin;
+  - nova rota `/agentes`.
+- Testes dos ganchos: 89 casos (37 novos, cada um visto falhando antes da mudança). Os commits dos blocos 1 a 3
+  dizem 65, 70 e 78 casos; os números certos são 63, 68 e 76.
+
 ## 0.6.0 · 2026-10-28
 - **Mapa sem F5:** o servidor avisa a página quando o último pedido muda (`tipo:"busca"`: destaques, caixa "Último
   pedido" e arquivo citado que ainda não estava no desenho) e quando o grafo refeito muda (`tipo:"grafo"`: a página

@@ -89,6 +89,9 @@ diz quando a decisão precisa de advogado ou contador habilitado. O padrão comp
 | `criar-agente` | Cria um agente novo no padrão, com evals |
 | `rascunho` | Trabalha numa cópia isolada (git worktree) sem atrapalhar a versão em uso |
 | `metodo-powerbi` | Como construir Power BI premium com agentes: PBIP gerado, testes pelo motor, Desktop Bridge |
+| `ver-mapa` | Abre o mapa do projeto ao vivo, com o painel "Agentes agora" |
+| `placar` | Placar por agente: passou no revisor de primeira, defeitos, retrabalho, acerto da estimativa |
+| `registrar-defeito` | Registra um defeito que o usuário achou e que escapou do revisor |
 
 ## Como funciona
 
@@ -111,6 +114,33 @@ criados". Roda só no seu computador (127.0.0.1) e guarda só caminhos, nunca co
 sessão: `"mapa": { "abrir_sozinho": true }` em `.claude/base/config.json` (vale para o projeto) ou em
 `~/.claude/agentes-ultimate/config.json` (vale para todos os seus projetos); se já houver uma aba aberta, não abre
 outra. Não é o raciocínio do modelo (isso não é visível); é onde o trabalho está acontecendo.
+
+**Agentes agora (no mapa):** um painel lateral lista cada agente trabalhando, com a cor dele, a barra de %, a etapa em
+que está e "termina por volta de 17h40"; quando cada um termina, aparece o aviso "revisor terminou · 41 min". O
+marcador do agente no desenho ganha um anel que enche com o progresso.
+
+**Barra no painel de agentes do Claude Code:** cada agente ganha uma linha
+`dev-powerbi · ███████░░░░░ 58% · 4/7 · lote final · 38 min · fim 14h10–14h50`. Liga sozinha com o plugin (o
+`settings.json` dele); se você ou o projeto já tiverem uma `subagentStatusLine` própria, vale a sua.
+
+**De onde vêm o % e o horário:**
+- o **%** é o que o agente grava ao fim de cada etapa (`.claude/base/.progresso/<agente>-<código>.json`); sem isso,
+  é o tempo passado sobre a previsão;
+- o **horário** vem da faixa que o orquestrador registra ao lançar o agente:
+  `node scripts/estimar.js faixa --agente <nome> --classe <tipo> --cod <código> --registrar`.
+  A faixa sai das execuções parecidas já registradas (mediana e p75), corrigida pelo quanto as estimativas
+  costumam errar;
+- cada execução fica em `~/.claude/agentes-ultimate/execucoes.jsonl`, só com metadados (agente, tipo de tarefa,
+  minutos, código anônimo do projeto), nunca o pedido. Para trazer o histórico antigo de um projeto:
+  `node scripts/estimar.js importar`.
+
+**Placar:** o revisor termina cada relatório com a linha
+`Placar: autor=<agente> cod=<código> veredito=sim|não B= A= M= b=`. O `/placar` mostra, por agente:
+- quantas vezes passou de primeira;
+- os defeitos por gravidade;
+- os que escaparam ao usuário (`/registrar-defeito`);
+- o retrabalho e o acerto da faixa;
+- a taxa de captura do revisor (meta de 80%).
 
 A memória de cada projeto fica dentro dele, em `.claude/base/`:
 
@@ -140,6 +170,8 @@ cria memória na sua pasta de usuário nem na raiz do disco.
 
 - Nada sai do seu computador por causa do plugin: os ganchos só leem o pedido e a pasta, localmente.
 - As correções `era com…` ficam em `~/.claude/agentes-ultimate/` (só o texto do pedido e o agente).
+- Execuções, revisões e defeitos ficam em `~/.claude/agentes-ultimate/*.jsonl` só com metadados (agente, tipo de
+  tarefa, minutos, contagens, código anônimo do projeto); o texto de um defeito fica só no projeto.
 - Publicar (`git push`, `npm publish`, deploy de produção) sempre pede confirmação.
 - Commit de `.env`, chaves e dos padrões de `sensiveis.txt` é bloqueado.
 

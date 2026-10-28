@@ -67,6 +67,22 @@ defeito que você achou ─► regra automática no verificador do projeto (prov
 | commit com `.env`, chaves, credenciais ou padrões de `.claude/base/sensiveis.txt` | bloqueia, com o motivo |
 | heredoc gravando script com barra invertida | bloqueia (o arquivo sairia estragado) |
 
+## 6. Estimativa, barra e placar (0.7.0)
+
+| Peça | Gancho ou comando | Grava em |
+|---|---|---|
+| Registro de cada execução | `hooks/execucoes.js` (`PreToolUse`/`PostToolUse` do `Agent`, `SubagentStart`, `SubagentStop`) | `.claude/base/.agentes.jsonl`; `~/.claude/agentes-ultimate/execucoes.jsonl` (só metadados) |
+| Faixa de término | `scripts/estimar.js faixa … --registrar` (o orquestrador, ao lançar o agente) | `.claude/base/.estimativas.jsonl` |
+| Progresso | o próprio agente, ao fim de cada etapa (passo 10 do protocolo) | `.claude/base/.progresso/<agente>-<código>.json` |
+| Barra por agente | `hooks/barra.js` pelo `settings.json` do plugin → `~/.claude/agentes-ultimate/barra.js` | — |
+| Placar | linha fixa do revisor lida no `SubagentStop`; `scripts/placar.js` | `revisoes.jsonl`, `defeitos.jsonl`, `placar.json`, `estado.json` |
+| Agentes agora | `hooks/mapa-servidor.js` (`/agentes` e evento `agentes`) | — |
+
+O código do pedido (`[cod:xxxx]` no fim da descrição do agente) liga as peças. Barra e mapa usam a mesma conta
+(`previsao` em `hooks/registro.js`):
+- o % é o progresso gravado; sem ele, o tempo passado sobre o fim da faixa;
+- o término sai do ritmo do progresso; sem ritmo, do meio da faixa.
+
 ## Limites conhecidos
 
 - A escolha é por palavras e arquivos: pedidos ambíguos podem cair no pacote errado; a linha `Usando:` e o
