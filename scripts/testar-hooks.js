@@ -318,6 +318,29 @@ const z1 = ex.filter((x) => x.id === 'z1');
 caso('importar: execuções antigas entram uma vez, com classe e sem o pedido', re.status === 0 && re7b.status === 0 && z1.length === 1 && z1[0].fonte_estimativa === 'importado' &&
   z1[0].minutos === 25 && z1[0].classe === 'spec' && !ex.some((x) => x.id === 'z2') && !/R\$ 3|custos/.test(fs.readFileSync(execArq, 'utf8')), `${re.stdout}${re.stderr} ${JSON.stringify(z1)}`);
 
+// ---- 0.7.0 · faixa pela classe de referência (cascata até n ≥ 3) e fator real ÷ estimado ----
+[[10, 10], [20, 10], [30, 25], [40, 20], [50, 50]].forEach(([min, est], i) => fs.appendFileSync(execArq, JSON.stringify({ id: 'r' + i, agente: 'analista-x', classe: 'dados',
+  projeto: 'abcd1234', minutos: min, estimado_min: est, fonte_estimativa: 'registrada' }) + '\n'));
+fs.appendFileSync(execArq, JSON.stringify({ id: 'r9', agente: 'analista-x', classe: 'dados', minutos: 900, retomado: true }) + '\n');
+const faixa = (argv, e = env) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', ...argv], { cwd: p7, env: e, encoding: 'utf8' });
+  try { return JSON.parse(r.stdout); } catch (x) { return { erro: r.stdout + r.stderr }; } };
+let fx = faixa(['--agente', 'analista-x', '--classe', 'dados', '--inicio', '14:00']);
+caso('faixa sem estimado: mediana e p75 dos minutos reais (10..50 → 30 e 40), retomado fora', fx.nivel === 'agente+classe' && fx.n === 5 && fx.mediana === 30 && fx.p75 === 40 &&
+  /^14h30–14h40/.test(fx.texto), JSON.stringify(fx));
+fx = faixa(['--agente', 'analista-x', '--classe', 'dados', '--estimado', '60', '--inicio', '14:00']);
+caso('faixa com estimado: corrige pelo fator real ÷ estimado (mediana 1,2 e p75 2 → 72 a 120 min)', fx.fator_mediana === 1.2 && fx.fator_p75 === 2 && fx.de_min === 72 && fx.ate_min === 120 &&
+  /fator 1,2/.test(fx.texto), JSON.stringify(fx));
+fx = faixa(['--agente', 'agente-novo', '--classe', 'dados']);
+const fx2 = faixa(['--agente', 'analista-x', '--classe', 'texto']);
+caso('faixa: cascata cai de nível quando n < 3 (agente novo → classe; classe sem histórico → agente)', fx.nivel === 'classe' && fx.n === 5 && fx2.nivel === 'agente' && fx2.n === 5, JSON.stringify([fx, fx2]));
+const casaVazia = path.join(tmp, 'casa-vazia'); fs.mkdirSync(casaVazia);
+fx = faixa(['--agente', 'analista-x', '--estimado', '30', '--inicio', '9:00'], { ...env, HOME: casaVazia, USERPROFILE: casaVazia });
+caso('faixa sem histórico: estimado × 1 a × 2, dito no texto', fx.nivel === 'sem histórico' && fx.de_min === 30 && fx.ate_min === 60 && /sem histórico/.test(fx.texto), JSON.stringify(fx));
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--agente', 'analista-x', '--classe', 'dados', '--cod', 'fx01', '--registrar'], { cwd: p7, env, encoding: 'utf8' });
+const regFx = lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl')).find((x) => x.cod === 'fx01');
+caso('faixa --registrar grava a mesma faixa que mostrou', re.status === 0 && regFx && regFx.agente === 'analista-x' && regFx.classe === 'dados' &&
+  Math.round((Date.parse(regFx.ate) - Date.parse(regFx.de)) / 60000) >= 5, `${re.stdout}${re.stderr} ${JSON.stringify(regFx)}`);
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

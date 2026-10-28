@@ -73,9 +73,59 @@ function importar(o) {
   console.log(`importar · ${lidas} transcrições lidas · ${novas} execuções novas · ${puladas} puladas (não terminadas, sem tipo ou já registradas) · 0 erro · ${Date.now() - t0} ms`);
 }
 
+// Faixa de término pela classe de referência. Sem --estimado: [mediana, p75] dos minutos reais das execuções
+// parecidas. Com --estimado (conta de baixo para cima do orquestrador): estimado × [mediana, p75] do fator real ÷
+// estimado (corrige o otimismo). Sem histórico (n < 3 em todos os níveis): estimado × 1 a × 2.
+function faixa(o) {
+  const agente = R.agenteCurto(o.agente === true ? '' : o.agente);
+  const classe = o.classe && o.classe !== true ? R.classeValida(o.classe) : null;
+  const estimado = o.estimado != null && o.estimado !== true ? Number(String(o.estimado).replace(',', '.')) : null;
+  if (estimado != null && !(estimado > 0)) falha('--estimado em minutos, maior que zero');
+  const inicio = o.inicio && o.inicio !== true ? R.deHora(o.inicio) : Date.now();
+  if (inicio == null) falha('--inicio HH:MM');
+  const execs = R.execucoes();
+  const ref = R.referencia(execs, agente, classe);
+  const mins = ref.lista.map((x) => x.minutos);
+  const r1 = (x) => (x == null ? null : Math.round(x * 10) / 10);
+  const r2 = (x) => (x == null ? null : Math.round(x * 100) / 100);
+  const res = { agente, classe, nivel: ref.nivel, n: ref.lista.length, mediana: r1(R.quantil(mins, 0.5)), p75: r1(R.quantil(mins, 0.75)),
+    estimado_min: estimado, fator_nivel: null, fator_n: 0, fator_mediana: null, fator_p75: null, de_min: null, ate_min: null };
+  if (estimado) {
+    const rf = R.referencia(execs, agente, classe, (x) => x.estimado_min > 0);
+    const fat = rf.lista.map((x) => x.minutos / x.estimado_min);
+    if (fat.length) {
+      Object.assign(res, { fator_nivel: rf.nivel, fator_n: fat.length, fator_mediana: r2(R.quantil(fat, 0.5)), fator_p75: r2(R.quantil(fat, 0.75)) });
+      res.de_min = r1(estimado * res.fator_mediana); res.ate_min = r1(estimado * Math.max(res.fator_mediana, res.fator_p75));
+    } else { res.de_min = estimado; res.ate_min = estimado * 2; res.nivel = ref.n ? res.nivel : 'sem histórico'; res.fator_nivel = 'sem histórico'; }
+  } else if (ref.lista.length) { res.de_min = res.mediana; res.ate_min = Math.max(res.mediana, res.p75); }
+  const virgula = (x) => String(x).replace('.', ',');
+  if (res.de_min == null) {
+    res.texto = `sem histórico (n=0 para ${agente || 'este agente'}): informe --estimado <min>`;
+  } else {
+    const cinco = 5 * 60000;
+    res.de = new Date(Math.floor((inicio + res.de_min * 60000) / cinco) * cinco).toISOString();
+    res.ate = new Date(Math.max(Math.ceil((inicio + res.ate_min * 60000) / cinco) * cinco, Date.parse(res.de) + cinco)).toISOString();
+    const partes = [`${R.hhmm(Date.parse(res.de))}–${R.hhmm(Date.parse(res.ate))}`];
+    if (res.n) partes.push(`base n=${res.n} (${res.nivel})`, `mediana ${virgula(res.mediana)} min`, `p75 ${virgula(res.p75)} min`);
+    else partes.push('sem histórico');
+    if (estimado) partes.push(res.fator_mediana != null ? `estimado ${virgula(estimado)} min × fator ${virgula(res.fator_mediana)} (n=${res.fator_n}, ${res.fator_nivel})` : `estimado ${virgula(estimado)} min × 1 a 2 (fator sem histórico)`);
+    res.texto = partes.join(' · ');
+  }
+  if (o.registrar) {
+    if (!res.de) falha(res.texto);
+    const cod = o.cod && o.cod !== true ? R.codDe(`[cod:${o.cod}]`) : null;
+    if (o.cod && !cod) falha('--cod: 2 a 16 letras ou números (ex.: ab12)');
+    R.acrescentar(path.join(R.base(path.resolve(o.pasta || process.cwd())), '.estimativas.jsonl'), { em: new Date().toISOString(), agente,
+      classe: classe || 'outra', cod, de: res.de, ate: res.ate, estimado_min: estimado, base: `${res.nivel} n=${res.n}` });
+    res.registrada = true;
+  }
+  console.log(o.json ? JSON.stringify(res) : res.texto + (res.registrada ? ' · registrada' : ''));
+}
+
 const o = opcoes(process.argv.slice(2));
 const cmd = o._[0];
 if (cmd === 'registrar') registrar(o);
+else if (cmd === 'faixa') faixa(o);
 else if (cmd === 'importar') importar(o);
 else falha('uso: node estimar.js registrar --agente <nome> --de HH:MM --ate HH:MM [--classe <tipo>] [--cod <código>] [--estimado <min>]\n' +
   '     node estimar.js importar [--pasta <projeto>]');

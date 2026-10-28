@@ -139,6 +139,33 @@ function progressoPara(cwd, agente, cod, agora = Date.now()) {
   return null;
 }
 
+// Quantil com interpolação linear (q = 0,5 mediana; 0,75 p75).
+function quantil(v, q) {
+  const s = v.filter((x) => typeof x === 'number' && isFinite(x)).sort((a, b) => a - b);
+  if (!s.length) return null;
+  const i = q * (s.length - 1), lo = Math.floor(i), hi = Math.ceil(i);
+  return s[lo] + (s[hi] - s[lo]) * (i - lo);
+}
+// Classe de referência (Flyvbjerg): as execuções parecidas, em cascata até ter n ≥ 3: agente+classe → agente →
+// classe → todos. Execução retomada fica fora (o tempo inclui a espera). Devolve { nivel, lista }.
+function referencia(execs, agente, classe, filtro = () => true, minimo = 3) {
+  const validas = execs.filter((x) => x && x.minutos > 0 && !x.retomado && filtro(x));
+  const temClasse = classe && classe !== 'outra';
+  const niveis = [
+    ['agente+classe', agente && temClasse, (x) => x.agente === agente && x.classe === classe],
+    ['agente', agente, (x) => x.agente === agente],
+    ['classe', temClasse, (x) => x.classe === classe],
+    ['todos', true, () => true],
+  ];
+  for (const [nivel, vale, f] of niveis) {
+    if (!vale) continue;
+    const lista = validas.filter(f);
+    if (lista.length >= minimo) return { nivel, lista };
+  }
+  return { nivel: 'sem histórico', lista: [] };
+}
+const execucoes = () => lerJsonl(path.join(pastaGlobal(), 'execucoes.jsonl'), 64 * 1024 * 1024);
+
 // Hora "14:10" ou "14h10" no dia de referência (local). Devolve ms ou null.
 function deHora(txt, ref = Date.now()) {
   const m = /^(\d{1,2})\s*[:h]\s*(\d{2})$/i.exec(String(txt || '').trim());
@@ -151,4 +178,5 @@ const hhmm = (ms) => { const d = new Date(ms); return `${d.getHours()}h${String(
 module.exports = {
   base, pastaGlobal, versaoPlugin, agenteCurto, codDe, classes, classeValida, classeDe, projetoHash, nomeCurto, permitida,
   lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, VALIDADE_PROGRESSO_MS,
+  quantil, referencia, execucoes,
 };
