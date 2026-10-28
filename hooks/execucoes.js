@@ -23,15 +23,19 @@ function tratar(d) {
     const ti = d.tool_input || {};
     const agente = R.agenteCurto(ti.subagent_type || 'general-purpose');
     const cod = R.codDe(ti.description, ti.prompt);
+    const tu = d.tool_use_id ? String(d.tool_use_id) : null;
     if (ev === 'PreToolUse') {
-      R.acrescentar(arq, { em: iso(agora), tipo: 'pedido', ref: ref(), agente, cod, classe: R.classeDe(ti.description), bg: !!ti.run_in_background });
+      R.acrescentar(arq, { em: iso(agora), tipo: 'pedido', ref: ref(), tu, agente, cod, classe: R.classeDe(ti.description), bg: !!ti.run_in_background });
       return;
     }
+    // O PostToolUse traz no mesmo pacote o agentId e a descrição com o código: é o par exato (em segundo plano chega
+    // logo depois do lançamento; em primeiro plano, no fim). Os ganchos rodam em paralelo, então o SubagentStart pode
+    // ter chegado antes: quem lê usa este par (R.ligacao) no lugar do palpite do início.
     const resp = d.tool_response || {};
-    if (resp.status !== 'async_launched' || !resp.agentId) return; // o agente em primeiro plano já terminou: o SubagentStop registra
+    if (!resp.agentId) return;
     const regs = R.lerJsonl(arq);
-    const p = pedidoLivre(regs, agente, cod, agora);
-    R.acrescentar(arq, { em: iso(agora), tipo: 'lancado', id: String(resp.agentId), agente, cod: cod || (p && p.cod) || null,
+    const p = pedidoLivre(regs, agente, cod, agora, tu);
+    R.acrescentar(arq, { em: iso(agora), tipo: 'lancado', id: String(resp.agentId), tu, agente, cod,
       classe: (p && p.classe) || R.classeDe(ti.description), ref: p ? p.ref : null });
     return;
   }
@@ -43,10 +47,19 @@ function tratar(d) {
   if (ev === 'SubagentStart') {
     const regs = R.lerJsonl(arq);
     if (regs.some((r) => r.tipo === 'inicio' && r.id === id)) return; // retomada do mesmo agente
+    // Código, em ordem de certeza: o .meta.json do agente (descrição e tool_use_id dele), o par do PostToolUse, e só
+    // então o pedido mais antigo do mesmo tipo (palpite, marcado provisório).
+    const meta = R.metaAgente(d.transcript_path, id);
     const lancado = regs.find((r) => r.tipo === 'lancado' && r.id === id);
-    const p = lancado ? null : pedidoLivre(regs, agente, null, agora);
-    const fonte = lancado || p || {};
-    R.acrescentar(arq, { em: iso(agora), tipo: 'inicio', id, agente, cod: fonte.cod || null, classe: fonte.classe || 'outra', ref: p ? p.ref : (lancado && lancado.ref) || null });
+    let fonte = null, provisorio = false;
+    if (meta) {
+      const p = pedidoLivre(regs, agente, null, agora, meta.toolUseId) || {};
+      fonte = { cod: R.codDe(meta.description), classe: p.classe || R.classeDe(meta.description), ref: p.ref || null };
+    } else if (lancado) fonte = lancado;
+    else { fonte = pedidoLivre(regs, agente, null, agora) || {}; provisorio = true; }
+    const linha = { em: iso(agora), tipo: 'inicio', id, agente, cod: fonte.cod || null, classe: fonte.classe || 'outra', ref: fonte.ref || null, sessao: d.session_id || null };
+    if (provisorio) linha.provisorio = true;
+    R.acrescentar(arq, linha);
     return;
   }
 
@@ -54,15 +67,17 @@ function tratar(d) {
     const regs = R.lerJsonl(arq);
     if (regs.some((r) => r.tipo === 'fim' && r.id === id)) return; // o SubagentStop chega 2 vezes para o mesmo agente
     const ini = regs.find((r) => r.tipo === 'inicio' && r.id === id) || {};
+    const lig = R.ligacao(regs, id);
+    const meta = d.agent_transcript_path ? R.metaAgente(null, id, String(d.agent_transcript_path).replace(/\.jsonl$/, '.meta.json')) : null;
     const pontas = d.agent_transcript_path ? R.pontasTranscricao(d.agent_transcript_path) : { inicio: null, fim: null };
     const inicio = pontas.inicio || Date.parse(ini.em) || agora;
     const fim = Math.max(inicio, pontas.fim || agora);
     const minutos = Math.round((fim - inicio) / 6000) / 10;
-    const cod = ini.cod || null;
+    const cod = meta ? R.codDe(meta.description) : lig.cod;
     const est = R.estimativaPara(cwd, agente, cod, inicio);
     R.acrescentar(arq, { em: iso(agora), tipo: 'fim', id, agente, cod, minutos });
     const linha = {
-      id, agente, classe: est ? R.classeValida(est.classe) : (ini.classe || 'outra'), projeto: R.projetoHash(cwd),
+      id, agente, classe: est ? R.classeValida(est.classe) : (lig.classe || 'outra'), projeto: R.projetoHash(cwd),
       inicio: iso(inicio), fim: iso(fim), minutos,
       estimado_min: est && est.estimado_min != null ? est.estimado_min : null,
       faixa_de: est ? est.de : null, faixa_ate: est ? est.ate : null, fonte_estimativa: est ? 'registrada' : 'sem',
@@ -104,7 +119,8 @@ function placarDoRevisor(cwd, agente, id, msg, cauda) {
 }
 
 // O pedido (PreToolUse) mais antigo do mesmo agente que ainda não virou lançamento nem início, dos últimos 10 min.
-function pedidoLivre(regs, agente, cod, agora) {
+function pedidoLivre(regs, agente, cod, agora, tu) {
+  if (tu) { const exato = regs.find((r) => r.tipo === 'pedido' && r.tu === tu); if (exato) return exato; }
   const usados = new Set(regs.filter((r) => (r.tipo === 'lancado' || r.tipo === 'inicio') && r.ref).map((r) => r.ref));
   return regs.find((r) => r.tipo === 'pedido' && r.agente === agente && !usados.has(r.ref) && (!cod || r.cod === cod) &&
     agora - Date.parse(r.em) < DEZ_MIN) || null;

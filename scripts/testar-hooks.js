@@ -517,15 +517,66 @@ const p60 = path.join(tmp, 'projeto60'); fs.mkdirSync(path.join(p60, '.claude', 
 const tr60 = transcricao('t60.jsonl', '2026-10-28T10:00:00.000Z', '2026-10-28T10:20:00.000Z');
 const fim60 = (id) => { const t = Date.now(); spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { input: JSON.stringify({ cwd: p60, hook_event_name: 'SubagentStop', agent_id: id,
   agent_type: 'agentes-ultimate:revisor', agent_transcript_path: tr60, last_assistant_message: `Placar: autor=dev-powerbi cod=z${id} veredito=não B=0 A=1 M=0 b=0` }), env: env60, encoding: 'utf8' }); return Date.now() - t; };
+// Abrir um Node no Windows custa de 0,2 a 1 s conforme a carga da máquina: mede-se, intercalado, um Node vazio, e o gancho
+// pode custar no máximo 300 ms além dele (o defeito antigo custava 26 s).
+const vazio = () => { const t = Date.now(); spawnSync(process.execPath, ['-e', ''], { env: env60 }); return Date.now() - t; };
+const med = (l) => l.slice().sort((a, b) => a - b)[Math.floor(l.length / 2)];
 fim60('aquece');
-const tempos60 = [1, 2, 3, 4, 5].map((i) => fim60('m' + i)).sort((a, b) => a - b);
-caso(`escala: com 60 mil execuções o fim de um agente leva menos de 0,5 s (mediana de 5: ${tempos60[2]} ms)`, tempos60[2] < 500 && lerJsonl(path.join(casa60, '.claude', 'agentes-ultimate', 'revisoes.jsonl')).length === 20006,
-  `${tempos60.join(', ')} ms`);
+const tempos60 = [], vazios = [];
+for (let i = 1; i <= 5; i++) { tempos60.push(fim60('m' + i)); vazios.push(vazio()); }
+caso(`escala: com 60 mil execuções o fim de um agente custa menos de 0,3 s além de abrir o Node (mediana ${med(tempos60)} ms; Node vazio ${med(vazios)} ms)`,
+  med(tempos60) - med(vazios) < 300 && lerJsonl(path.join(casa60, '.claude', 'agentes-ultimate', 'revisoes.jsonl')).length === 20006, `${tempos60.join(', ')} ms × vazio ${vazios.join(', ')} ms`);
 const barra60 = () => { const t = Date.now(); spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js')], { input: JSON.stringify({ cwd: p60, columns: 120, tasks: [{ id: 'x', agentType: 'dev-powerbi',
   status: 'running', description: 'monte a página', startTime: Date.now() - 600000 }] }), env: env60, encoding: 'utf8' }); return Date.now() - t; };
 barra60();
-const temposB = [1, 2, 3, 4, 5].map(barra60).sort((a, b) => a - b);
-caso(`escala: com 60 mil execuções a barra leva menos de 0,5 s (mediana de 5: ${temposB[2]} ms)`, temposB[2] < 500, `${temposB.join(', ')} ms`);
+const temposB = [], vaziosB = [];
+for (let i = 1; i <= 5; i++) { temposB.push(barra60()); vaziosB.push(vazio()); }
+caso(`escala: com 60 mil execuções a barra custa menos de 0,3 s além de abrir o Node (mediana ${med(temposB)} ms; Node vazio ${med(vaziosB)} ms)`,
+  med(temposB) - med(vaziosB) < 300, `${temposB.join(', ')} ms × vazio ${vaziosB.join(', ')} ms`);
+
+// ---- M-2 · dois agentes do mesmo tipo lançados juntos não trocam de código (ganchos em paralelo, inícios a 5 ms) ----
+const testeParalelo = `
+const {spawn}=require('child_process'),path=require('path'),fs=require('fs');
+const [gancho,raiz,casaP]=process.argv.slice(1);
+const env={...process.env,HOME:casaP,USERPROFILE:casaP};
+const roda=(d)=>new Promise(ok=>{const p=spawn(process.execPath,[gancho],{env,stdio:['pipe','ignore','ignore']});p.on('close',ok);p.stdin.end(JSON.stringify(d));});
+const espera=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{const erros=[];const R=require(path.join(raiz,'hooks','registro.js'));
+for(let k=0;k<20;k++){const cwd=path.join(casaP,'p'+k);fs.mkdirSync(path.join(cwd,'.claude','base'),{recursive:true});
+const tipo='agentes-ultimate:dev-powerbi',A='ida'+k,B='idb'+k;
+const ti=(c)=>({description:'tarefa [cod:'+c+']',prompt:'p',subagent_type:tipo,run_in_background:true});
+await roda({cwd,hook_event_name:'PreToolUse',tool_name:'Agent',tool_use_id:'tua'+k,tool_input:ti('xa'+k)});
+await roda({cwd,hook_event_name:'PreToolUse',tool_name:'Agent',tool_use_id:'tub'+k,tool_input:ti('xb'+k)});
+const ps=[];ps.push(roda({cwd,hook_event_name:'SubagentStart',agent_id:B,agent_type:tipo}));await espera(5);
+ps.push(roda({cwd,hook_event_name:'SubagentStart',agent_id:A,agent_type:tipo}));
+ps.push(roda({cwd,hook_event_name:'PostToolUse',tool_name:'Agent',tool_use_id:'tua'+k,tool_input:ti('xa'+k),tool_response:{status:'async_launched',agentId:A}}));await espera(5);
+ps.push(roda({cwd,hook_event_name:'PostToolUse',tool_name:'Agent',tool_use_id:'tub'+k,tool_input:ti('xb'+k),tool_response:{status:'async_launched',agentId:B}}));
+await Promise.all(ps);
+const ag=R.agentesAgora(cwd);const a=ag.find(x=>x.id===A)||{},b=ag.find(x=>x.id===B)||{};
+if(a.cod!=='xa'+k||b.cod!=='xb'+k)erros.push('painel '+k+': '+a.cod+' '+b.cod);
+await roda({cwd,hook_event_name:'SubagentStop',agent_id:A,agent_type:tipo});await roda({cwd,hook_event_name:'SubagentStop',agent_id:B,agent_type:tipo});}
+const ex=fs.readFileSync(path.join(casaP,'.claude','agentes-ultimate','execucoes.jsonl'),'utf8').trim().split('\\n').map(l=>JSON.parse(l));
+for(const x of ex){const k=x.id.replace(/^id[ab]/,'');const certo=(x.id.startsWith('ida')?'xa':'xb')+k;if(x.cod!==certo)erros.push('registro '+x.id+': '+x.cod);}
+console.log(JSON.stringify({n:ex.length,erros}));})();`;
+const casaPar = path.join(tmp, 'casa-paralelo'); fs.mkdirSync(casaPar);
+const rp = spawnSync(process.execPath, ['-e', testeParalelo, path.join(RAIZ, 'hooks', 'execucoes.js'), RAIZ, casaPar], { encoding: 'utf8', timeout: 240000 });
+let par = {}; try { par = JSON.parse((rp.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
+caso('código certo: 20 rodadas com dois agentes do mesmo tipo em paralelo (inícios a 5 ms), no painel e no registro', par.n === 40 && par.erros && par.erros.length === 0, rp.stdout + rp.stderr);
+// agente em primeiro plano: sem PostToolUse até o fim; o código vem do .meta.json ao lado da transcrição
+const pMeta = path.join(tmp, 'projeto-meta'); fs.mkdirSync(path.join(pMeta, '.claude', 'base'), { recursive: true });
+const dMeta = path.join(tmp, 'sessao-meta', 'subagents'); fs.mkdirSync(dMeta, { recursive: true });
+const exeM = (d) => hook('execucoes.js', { cwd: pMeta, transcript_path: path.join(tmp, 'sessao-meta.jsonl'), ...d });
+for (const [c, t] of [['fa01', 'tf1'], ['fb02', 'tf2']]) exeM({ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_use_id: t, tool_input: { description: `x [cod:${c}]`, subagent_type: 'analista-fpa' } });
+for (const [id, c, t] of [['fg2', 'fb02', 'tf2'], ['fg1', 'fa01', 'tf1']]) {
+  fs.writeFileSync(path.join(dMeta, `agent-${id}.meta.json`), JSON.stringify({ agentType: 'analista-fpa', description: `x [cod:${c}]`, toolUseId: t }));
+  fs.copyFileSync(transcricao(id + '.jsonl', '2026-10-28T08:00:00.000Z', '2026-10-28T08:10:00.000Z'), path.join(dMeta, `agent-${id}.jsonl`));
+  exeM({ hook_event_name: 'SubagentStart', agent_id: id, agent_type: 'analista-fpa' });
+}
+const agM = require(path.join(RAIZ, 'hooks', 'registro.js')).agentesAgora(pMeta);
+caso('código certo em primeiro plano já no início, pelo .meta.json do agente', (agM.find((x) => x.id === 'fg1') || {}).cod === 'fa01' && (agM.find((x) => x.id === 'fg2') || {}).cod === 'fb02', JSON.stringify(agM));
+for (const id of ['fg2', 'fg1']) exeM({ hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'analista-fpa', agent_transcript_path: path.join(dMeta, `agent-${id}.jsonl`) });
+const exM = lerJsonl(execArq).filter((x) => /^fg/.test(x.id));
+caso('código certo em primeiro plano no registro, pelo .meta.json do agente', exM.length === 2 && exM.find((x) => x.id === 'fg1').cod === 'fa01' && exM.find((x) => x.id === 'fg2').cod === 'fb02', JSON.stringify(exM));
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');

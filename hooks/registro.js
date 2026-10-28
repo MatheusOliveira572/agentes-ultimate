@@ -104,6 +104,22 @@ function pontasTranscricao(arq) {
   } catch (e) { return { inicio: null, fim: null, cauda: '' }; } finally { if (fd !== undefined) try { fs.closeSync(fd); } catch (e) { /* já fechado */ } }
 }
 
+// .meta.json que o Claude Code grava ao lado da transcrição do agente (agentType, description, toolUseId): a ligação
+// exata entre o agente e a descrição com o código. Pela transcrição da sessão: <sessao>.jsonl → <sessao>/subagents/
+// agent-<id>.meta.json; ou pelo caminho direto.
+function metaAgente(transcricaoSessao, id, direto) {
+  const f = direto || (transcricaoSessao ? path.join(String(transcricaoSessao).replace(/\.jsonl$/, ''), 'subagents', `agent-${id}.meta.json`) : null);
+  if (!f) return null;
+  try { const m = JSON.parse(fs.readFileSync(f, 'utf8')); return m && typeof m === 'object' ? m : null; } catch (e) { return null; }
+}
+// Código e classe de um agente, em ordem de certeza: o par do PostToolUse (lancado), o início exato, o início provisório.
+function ligacao(regs, id) {
+  const l = regs.find((r) => r.tipo === 'lancado' && r.id === id);
+  if (l) return { cod: l.cod || null, classe: l.classe || 'outra' };
+  const i = regs.find((r) => r.tipo === 'inicio' && r.id === id) || {};
+  return { cod: i.cod || null, classe: i.classe || 'outra' };
+}
+
 // Faixa registrada para um agente: pelo código do pedido; sem código, a mais recente do agente até 15 min antes do início.
 function estimativaPara(cwd, agente, cod, inicio) {
   const lista = lerJsonl(path.join(base(cwd), '.estimativas.jsonl'));
@@ -266,12 +282,13 @@ function agentesAgora(cwd, { agora = Date.now(), resumo = null } = {}) {
     if (f) {
       const fim = Date.parse(f.em);
       if (agora - fim > 10 * 60000) continue;
-      out.push({ id: r.id, agente: r.agente, cod: r.cod || null, estado: 'terminou', inicio, fim, minutos: f.minutos, pct: 100 });
+      out.push({ id: r.id, agente: r.agente, cod: f.cod || ligacao(regs, r.id).cod, estado: 'terminou', inicio, fim, minutos: f.minutos, pct: 100 });
       continue;
     }
     if (!(agora - inicio < 12 * 60 * 60000)) continue;
-    const p = previsao(cwd, { agente: r.agente, cod: r.cod, inicio, classe: r.classe, agora, resumo });
-    out.push({ id: r.id, agente: r.agente, cod: r.cod || null, estado: 'trabalhando', inicio,
+    const lig = ligacao(regs, r.id);
+    const p = previsao(cwd, { agente: r.agente, cod: lig.cod, inicio, classe: lig.classe, agora, resumo });
+    out.push({ id: r.id, agente: r.agente, cod: lig.cod, estado: 'trabalhando', inicio,
       pct: p.frac == null ? null : Math.round(p.frac * 100), etapa: p.prog ? p.prog.agora.split(/\s+/).filter(Boolean).slice(0, 4).join(' ') : '',
       feito: p.prog ? p.prog.feito : null, total: p.prog ? p.prog.total : null, termina: p.termina, de: p.de, ate: p.ate, passou: p.passou, fonte: p.fonte });
   }
@@ -290,5 +307,5 @@ const hhmm = (ms) => { const d = new Date(ms); return `${d.getHours()}h${String(
 module.exports = {
   base, pastaGlobal, versaoPlugin, agenteCurto, codDe, classes, classeValida, classeDe, projetoHash, nomeCurto, permitida,
   lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, VALIDADE_PROGRESSO_MS,
-  quantil, execucoes, previsao, agentesAgora, indice, resumoExecucoes, referenciaResumo, chaveRevisao, indiceRevisoes,
+  quantil, execucoes, previsao, agentesAgora, indice, resumoExecucoes, referenciaResumo, chaveRevisao, indiceRevisoes, metaAgente, ligacao,
 };
