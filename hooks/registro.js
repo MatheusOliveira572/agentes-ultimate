@@ -269,14 +269,36 @@ function previsao(cwd, { agente, cod, inicio, descricao, classe, agora = Date.no
   return { prog, frac, de, ate, fonte, termina, passou, decorridoMin: Math.round(decorrido / 60000) };
 }
 
+// Último sinal de vida de um agente: a gravação mais recente do progresso dele (mesmo vencida) ou o início.
+function ultimoSinal(cwd, agente, cod, inicio) {
+  let t = inicio || 0;
+  for (const n of cod ? [`${agente}-${cod}.json`, `${agente}.json`] : [`${agente}.json`]) {
+    try { t = Math.max(t, fs.statSync(path.join(base(cwd), '.progresso', n)).mtimeMs); } catch (e) { /* sem arquivo */ }
+  }
+  return t;
+}
+// Agente sem fim (parado com TaskStop ou sessão fechada não disparam o SubagentStop): passou do prazo (fim da faixa +
+// 30 min; sem faixa, início + 3 h) e está sem sinal há 30 min → "sem notícia"; 2 h depois disso, sai do painel.
+const PRAZO_FOLGA = 30 * 60000, PRAZO_SEM_FAIXA = 3 * 60 * 60000, SOME_APOS = 2 * 60 * 60000;
+function situacao(cwd, r, p, cod, agora) {
+  const inicio = Date.parse(r.em);
+  const sinal = ultimoSinal(cwd, r.agente, cod, inicio);
+  const prazo = p.ate ? p.ate + PRAZO_FOLGA : inicio + PRAZO_SEM_FAIXA;
+  const semNoticia = Math.max(prazo, sinal + PRAZO_FOLGA);
+  if (agora > semNoticia + SOME_APOS) return { estado: 'some', sinal };
+  return { estado: agora > semNoticia ? 'sem-noticia' : 'trabalhando', sinal };
+}
+
 // Agentes agora (painel do mapa ao vivo): quem começou e não terminou (até 12 h atrás) e quem terminou nos últimos
 // 10 min, com %, etapa (até 4 palavras), término previsto e faixa. Lê .claude/base/.agentes.jsonl.
 function agentesAgora(cwd, { agora = Date.now(), resumo = null } = {}) {
   const regs = lerJsonl(path.join(base(cwd), '.agentes.jsonl'));
   const fins = new Map(regs.filter((r) => r.tipo === 'fim').map((r) => [r.id, r]));
+  const fora = new Set(regs.filter((r) => r.tipo === 'abandonado').map((r) => r.id));
   const out = [];
   for (const r of regs) {
     if (r.tipo !== 'inicio' || out.some((x) => x.id === r.id)) continue;
+    if (fora.has(r.id) && !fins.has(r.id)) continue;
     const inicio = Date.parse(r.em);
     const f = fins.get(r.id);
     if (f) {
@@ -288,7 +310,9 @@ function agentesAgora(cwd, { agora = Date.now(), resumo = null } = {}) {
     if (!(agora - inicio < 12 * 60 * 60000)) continue;
     const lig = ligacao(regs, r.id);
     const p = previsao(cwd, { agente: r.agente, cod: lig.cod, inicio, classe: lig.classe, agora, resumo });
-    out.push({ id: r.id, agente: r.agente, cod: lig.cod, estado: 'trabalhando', inicio,
+    const s = situacao(cwd, r, p, lig.cod, agora);
+    if (s.estado === 'some') continue;
+    out.push({ id: r.id, agente: r.agente, cod: lig.cod, estado: s.estado, sinal: s.sinal, inicio,
       pct: p.frac == null ? null : Math.round(p.frac * 100), etapa: p.prog ? p.prog.agora.split(/\s+/).filter(Boolean).slice(0, 4).join(' ') : '',
       feito: p.prog ? p.prog.feito : null, total: p.prog ? p.prog.total : null, termina: p.termina, de: p.de, ate: p.ate, passou: p.passou, fonte: p.fonte });
   }
@@ -307,5 +331,5 @@ const hhmm = (ms) => { const d = new Date(ms); return `${d.getHours()}h${String(
 module.exports = {
   base, pastaGlobal, versaoPlugin, agenteCurto, codDe, classes, classeValida, classeDe, projetoHash, nomeCurto, permitida,
   lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, VALIDADE_PROGRESSO_MS,
-  quantil, execucoes, previsao, agentesAgora, indice, resumoExecucoes, referenciaResumo, chaveRevisao, indiceRevisoes, metaAgente, ligacao,
+  quantil, execucoes, previsao, agentesAgora, indice, resumoExecucoes, referenciaResumo, chaveRevisao, indiceRevisoes, metaAgente, ligacao, ultimoSinal, PRAZO_FOLGA,
 };

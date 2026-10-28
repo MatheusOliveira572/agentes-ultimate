@@ -18,6 +18,11 @@
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/barra.js\" --instalar",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/execucoes.js\"",
+            "timeout": 5
           }
         ]
       }

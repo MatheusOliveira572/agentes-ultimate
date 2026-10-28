@@ -578,6 +578,34 @@ for (const id of ['fg2', 'fg1']) exeM({ hook_event_name: 'SubagentStop', agent_i
 const exM = lerJsonl(execArq).filter((x) => /^fg/.test(x.id));
 caso('código certo em primeiro plano no registro, pelo .meta.json do agente', exM.length === 2 && exM.find((x) => x.id === 'fg1').cod === 'fa01' && exM.find((x) => x.id === 'fg2').cod === 'fb02', JSON.stringify(exM));
 
+// ---- M-1 · agente parado (TaskStop) ou sessão fechada não fica "trabalhando" ----
+const p9 = path.join(tmp, 'projeto9'); const b9 = path.join(p9, '.claude', 'base');
+fs.mkdirSync(path.join(b9, '.progresso'), { recursive: true });
+const iso9 = (min) => new Date(Date.now() + min * 60000).toISOString();
+const hm9 = (min) => new Date(Date.now() + min * 60000).toTimeString().slice(0, 5);
+fs.writeFileSync(path.join(b9, '.agentes.jsonl'), [
+  { em: iso9(-90), tipo: 'inicio', id: 'h1', agente: 'dev-powerbi', cod: 's1', classe: 'construcao', sessao: 'S1' },   // faixa venceu há 40 min, sem sinal
+  { em: iso9(-90), tipo: 'inicio', id: 'h2', agente: 'redator', cod: 's2', classe: 'texto', sessao: 'S1' },            // faixa venceu, mas gravou progresso há pouco
+  { em: iso9(-240), tipo: 'inicio', id: 'h3', agente: 'analista-fpa', cod: 's3', classe: 'regras', sessao: 'S1' },     // sem notícia há mais de 2 h
+  { em: iso9(-200), tipo: 'inicio', id: 'h4', agente: 'pesquisador', cod: 's4', classe: 'pesquisa', sessao: 'S1' },    // sem faixa, 3 h 20 sem sinal
+].map((x) => JSON.stringify(x)).join('\n') + '\n');
+for (const [ag9, c, de, ate] of [['dev-powerbi', 's1', -70, -40], ['redator', 's2', -70, -40], ['analista-fpa', 's3', -220, -190]]) estimar(['registrar', '--agente', ag9, '--cod', c, '--de', hm9(de), '--ate', hm9(ate)], p9);
+fs.writeFileSync(path.join(b9, '.progresso', 'redator-s2.json'), JSON.stringify({ feito: 2, total: 3, agora: 'revisão final' }));
+const R9 = require(path.join(RAIZ, 'hooks', 'registro.js'));
+let ag9 = R9.agentesAgora(p9, { resumo: null });
+const est9 = (id) => (ag9.find((x) => x.id === id) || {}).estado;
+caso('sem notícia: passou do fim da faixa + 30 min sem progresso', est9('h1') === 'sem-noticia' && est9('h2') === 'trabalhando', JSON.stringify(ag9.map((x) => [x.id, x.estado])));
+caso('sem notícia some 2 h depois; sem faixa, o prazo é o início + 3 h', !ag9.some((x) => x.id === 'h3') && est9('h4') === 'sem-noticia', JSON.stringify(ag9.map((x) => [x.id, x.estado])));
+fs.appendFileSync(path.join(b9, '.agentes.jsonl'), JSON.stringify({ em: iso9(-5), tipo: 'inicio', id: 'h5', agente: 'redator', cod: 's5', classe: 'texto', sessao: 'S2' }) + '\n');
+hook('execucoes.js', { cwd: p9, hook_event_name: 'SessionStart', session_id: 'S2', source: 'startup' });
+ag9 = R9.agentesAgora(p9, { resumo: null });
+caso('início de sessão tira do painel os agentes sem sinal da sessão anterior (e mantém os da atual)', !ag9.some((x) => ['h1', 'h4'].includes(x.id)) && est9('h5') === 'trabalhando' && est9('h2') === 'trabalhando',
+  JSON.stringify(ag9.map((x) => [x.id, x.estado])));
+const nEx9 = lerJsonl(execArq).length;
+hook('execucoes.js', { cwd: p9, hook_event_name: 'SubagentStop', agent_id: 'h1', agent_type: 'dev-powerbi' });
+caso('agente tirado do painel que termina depois ainda entra no registro', lerJsonl(execArq).length === nEx9 + 1 && lerJsonl(execArq).pop().id === 'h1', `${nEx9}`);
+caso('o início de sessão chama o registro', /execucoes\.js/.test(JSON.stringify(JSON.parse(fs.readFileSync(path.join(RAIZ, 'hooks', 'hooks.json'), 'utf8')).hooks.SessionStart)), 'sem execucoes.js no SessionStart');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

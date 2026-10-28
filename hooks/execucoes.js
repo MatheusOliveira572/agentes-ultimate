@@ -40,6 +40,20 @@ function tratar(d) {
     return;
   }
 
+  // Início de sessão: agente de outra sessão sem fim e sem sinal há 30 min sai do painel ("abandonado"). Se ele ainda
+  // terminar, o SubagentStop registra normalmente (só o "fim" evita a repetição).
+  if (ev === 'SessionStart') {
+    const regs = R.lerJsonl(arq);
+    const fechados = new Set(regs.filter((r) => r.tipo === 'fim' || r.tipo === 'abandonado').map((r) => r.id));
+    for (const r of regs) {
+      if (r.tipo !== 'inicio' || fechados.has(r.id) || (d.session_id && r.sessao === d.session_id)) continue;
+      if (agora - R.ultimoSinal(cwd, r.agente, R.ligacao(regs, r.id).cod, Date.parse(r.em)) < R.PRAZO_FOLGA) continue;
+      R.acrescentar(arq, { em: iso(agora), tipo: 'abandonado', id: r.id, agente: r.agente });
+      fechados.add(r.id);
+    }
+    return;
+  }
+
   const agente = R.agenteCurto(d.agent_type);
   const id = d.agent_id ? String(d.agent_id) : '';
   if (!agente || !id) return; // agentes internos do Claude Code vêm sem tipo

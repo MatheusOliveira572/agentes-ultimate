@@ -110,7 +110,7 @@ canvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 .ag .enche{height:100%;border-radius:999px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
 .ag .trilho.sem .enche{width:30%!important;opacity:.55;animation:vai 1.8s ease-in-out infinite}
 .ag .etapa{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ag .fim{color:var(--suave);margin-top:2px;font-variant-numeric:tabular-nums}
-.ag .fim.atraso{color:var(--foco);font-weight:600}.ag.feito{opacity:.7}.ag.feito .pct{color:var(--usado)}.ag.chegou{animation:chega 1.2s ease-out}
+.ag .fim.atraso{color:var(--foco);font-weight:600}.ag.feito{opacity:.7}.ag.parado{opacity:.62}.ag.parado .pct{color:var(--suave);font-weight:600}.ag.feito .pct{color:var(--usado)}.ag.chegou{animation:chega 1.2s ease-out}
 @keyframes vai{from{transform:translateX(-110%)}to{transform:translateX(340%)}}@keyframes chega{30%{background:color-mix(in srgb,var(--usado) 14%,transparent)}}
 #dica{position:absolute;left:0;top:0;max-width:300px;padding:10px 12px;font-size:12.5px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;z-index:2}
 #dica.ver{opacity:1;transform:none}
@@ -362,7 +362,8 @@ partes.forEach((p,i)=>{if(i){const sp=document.createElement('span');sp.classNam
 // ---- agentes agora: painel com %, etapa e término previsto de cada agente; aviso quando cada um termina ----
 let agLista=[];const agEstado={},agCaixa=new Map();
 function pctDe(nome){const a=agLista.find(x=>x.estado==='trabalhando'&&nomeAg(x.agente)===nome);return a&&a.pct!=null?a.pct:null;}
-function textoFim(a){if(a.estado==='terminou')return['terminou às '+hm(a.fim)+(a.minutos!=null?' · '+Math.round(a.minutos)+' min':''),false];
+const ORDEM_EST={trabalhando:0,'sem-noticia':1,terminou:2};
+function textoFim(a){if(a.estado==='sem-noticia')return['sem notícia desde '+hm(a.sinal||a.inicio)+' · parado ou sessão fechada?',false];if(a.estado==='terminou')return['terminou às '+hm(a.fim)+(a.minutos!=null?' · '+Math.round(a.minutos)+' min':''),false];
 if(a.passou!=null)return['passou da previsão ('+hm(a.ate)+') · +'+a.passou+' min',true];if(a.termina)return['termina por volta de '+hm(a.termina),false];return['sem previsão ainda',false];}
 function aplicaAgentes(ev){const lista=ev.lista||[];const fins=lista.filter(a=>agEstado[a.id]==='trabalhando'&&a.estado==='terminou');
 for(const k in agEstado)delete agEstado[k];for(const a of lista)agEstado[a.id]=a.estado;agLista=lista;
@@ -371,15 +372,15 @@ const m=agentes[nome];if(m&&!m.pousado&&!lista.some(x=>x.estado==='trabalhando'&
 if(fins.length)aviso(fins.map(a=>nomeAg(a.agente)+' terminou'+(a.minutos!=null?' · '+Math.round(a.minutos)+' min':'')).join('   ·   '));
 desenhaAgentes(fins.map(a=>a.id));}
 function desenhaAgentes(chegaram){const box=el('agentes'),ls=el('agLista');const trab=agLista.filter(a=>a.estado==='trabalhando').length;
-box.classList.toggle('tem',agLista.length>0);el('agN').textContent=trab?trab+' trabalhando':'todos terminaram';
+box.classList.toggle('tem',agLista.length>0);el('agN').textContent=trab?trab+' trabalhando':agLista.some(a=>a.estado==='sem-noticia')?'nenhum trabalhando':'todos terminaram';
 const repetidos={};for(const a of agLista){const n=nomeAg(a.agente);repetidos[n]=(repetidos[n]||0)+1;}
-const ordem=agLista.slice().sort((x,y)=>(x.estado===y.estado?0:x.estado==='trabalhando'?-1:1)||x.inicio-y.inicio);const vivos=new Set();
+const ordem=agLista.slice().sort((x,y)=>((ORDEM_EST[x.estado]||0)-(ORDEM_EST[y.estado]||0))||x.inicio-y.inicio);const vivos=new Set();
 for(const a of ordem){vivos.add(a.id);let c=agCaixa.get(a.id);
 if(!c){c=document.createElement('div');c.className='ag';c.innerHTML='<div class="lin"><i class="pt"></i><b></b><span class="cod"></span><span class="pct"></span></div><div class="trilho"><div class="enche"></div></div><div class="etapa"></div><div class="fim"></div>';agCaixa.set(a.id,c);}
-ls.append(c);const nome=nomeAg(a.agente),cor=corDo(nome),feito=a.estado==='terminou';c.classList.toggle('feito',feito);
+ls.append(c);const nome=nomeAg(a.agente),feito=a.estado==='terminou',parado=a.estado==='sem-noticia',cor=parado?C.suave:corDo(nome);c.classList.toggle('feito',feito);c.classList.toggle('parado',parado);
 if(chegaram&&chegaram.indexOf(a.id)>=0){c.classList.remove('chegou');void c.offsetWidth;c.classList.add('chegou');}
 c.querySelector('.pt').style.background=cor;c.querySelector('b').textContent=nome;c.querySelector('.cod').textContent=repetidos[nome]>1&&a.cod?a.cod:'';
-c.querySelector('.pct').textContent=feito?'pronto':a.pct!=null?a.pct+'%':'';
+c.querySelector('.pct').textContent=feito?'pronto':parado?'sem notícia':a.pct!=null?a.pct+'%':'';
 const tr=c.querySelector('.trilho'),en=c.querySelector('.enche');tr.classList.toggle('sem',!feito&&a.pct==null);en.style.background=feito?C.usado:cor;en.style.width=(feito?100:a.pct||0)+'%';
 tr.setAttribute('role','progressbar');tr.setAttribute('aria-valuemin','0');tr.setAttribute('aria-valuemax','100');if(a.pct!=null)tr.setAttribute('aria-valuenow',String(feito?100:a.pct));else tr.removeAttribute('aria-valuenow');
 c.querySelector('.etapa').textContent=feito?'concluído':(a.etapa||'trabalhando')+(a.total?' · '+a.feito+'/'+a.total:'');
