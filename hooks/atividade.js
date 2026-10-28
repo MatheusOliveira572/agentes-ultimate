@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Atividade ao vivo (PostToolUse): anota cada arquivo que o Claude ou um agente lê, edita, cria ou procura, para o
-// mapa ao vivo mostrar onde o trabalho está acontecendo. Grava só o caminho (nunca o conteúdo) em
-// .claude/base/.atividade.jsonl (fora do git). Nunca bloqueia: em qualquer erro, sai 0.
+// mapa ao vivo mostrar onde o trabalho está acontecendo; no Stop, anota o fim do trabalho com o resumo. Grava só o
+// caminho (nunca o conteúdo) em .claude/base/.atividade.jsonl (fora do git). Nunca bloqueia: em qualquer erro, sai 0.
 'use strict';
 const fs = require('fs');
 const os = require('os');
@@ -18,12 +18,31 @@ function permitida(cwd) {
   return fs.existsSync(path.join(p, '.claude', 'base')); // só onde a base já foi montada
 }
 
+// Fim do trabalho (Stop): resume o que foi tocado desde o último fim, para o mapa avisar "Trabalho concluído".
+function fim(cwd) {
+  const arq = path.join(cwd, '.claude', 'base', '.atividade.jsonl');
+  let linhas = [];
+  try { linhas = fs.readFileSync(arq, 'utf8').trim().split('\n'); } catch (e) { return; }
+  const conta = { leu: new Set(), editou: new Set(), criou: new Set() };
+  const agentes = new Set();
+  for (let i = linhas.length - 1; i >= 0; i--) {
+    let ev; try { ev = JSON.parse(linhas[i]); } catch (e) { continue; }
+    if (ev.tipo === 'fim') break;
+    if (ev.arquivo && conta[ev.acao]) conta[ev.acao].add(ev.arquivo);
+    if (ev.agente) agentes.add(ev.agente);
+  }
+  if (!agentes.size) return; // nada feito desde o último fim
+  fs.appendFileSync(arq, JSON.stringify({ em: new Date().toISOString(), tipo: 'fim', agente: 'principal', lidos: conta.leu.size,
+    editados: conta.editou.size, criados: conta.criou.size, agentes: [...agentes] }) + '\n');
+}
+
 let entrada = '';
 process.stdin.on('data', (c) => { entrada += c; });
 process.stdin.on('end', () => {
   try {
     const d = JSON.parse(entrada || '{}');
     const cwd = d.cwd || process.cwd();
+    if (d.hook_event_name === 'Stop') { if (permitida(cwd)) fim(cwd); process.exit(0); }
     const ferramenta = d.tool_name || '';
     if (!ACAO[ferramenta] || !permitida(cwd)) process.exit(0);
     const ti = d.tool_input || {};

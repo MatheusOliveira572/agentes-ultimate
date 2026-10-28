@@ -103,9 +103,14 @@ pedido → roteador (gancho) ─┬─ escolhe pacotes e agentes (palavras + arq
 arquivo é um ponto, cada "este arquivo cita aquele" é uma linha, as anotações da memória são quadrados roxos, e o que o
 **último pedido usou** aparece em verde (o que está ligado a ele, em laranja). **Enquanto o Claude trabalha**, cada
 arquivo que ele ou um agente lê acende na cor do agente, o que é editado fica vermelho, e uma lista mostra "14:32 ·
-dev-powerbi editou medidas.js". Roda só no seu computador (127.0.0.1) e guarda só caminhos, nunca conteúdo. Para abrir
-sozinho a cada sessão: `"mapa": { "abrir_sozinho": true }` em `.claude/base/config.json`. Não é o raciocínio do modelo
-(isso não é visível); é onde o trabalho está acontecendo.
+dev-powerbi editou medidas.js". **Tudo se atualiza sozinho, sem F5:** o destaque do novo pedido, o grafo refeito (quem
+já está no desenho fica onde está) e as ligações de uso: quando um agente lê A e depois edita ou cria B, nasce uma linha
+A → B com um cometa, que fica como trilha. Cada agente é um marcador com o nome dele, que desliza até o arquivo que está
+tocando; "Seguir" faz a câmera acompanhar; ao fim do trabalho aparece "Trabalho concluído · X lidos, Y editados, Z
+criados". Roda só no seu computador (127.0.0.1) e guarda só caminhos, nunca conteúdo. Para abrir sozinho a cada
+sessão: `"mapa": { "abrir_sozinho": true }` em `.claude/base/config.json` (vale para o projeto) ou em
+`~/.claude/agentes-ultimate/config.json` (vale para todos os seus projetos); se já houver uma aba aberta, não abre
+outra. Não é o raciocínio do modelo (isso não é visível); é onde o trabalho está acontecendo.
 
 A memória de cada projeto fica dentro dele, em `.claude/base/`:
 

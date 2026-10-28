@@ -1,5 +1,24 @@
 # Mudanças
 
+## 0.6.0 · 2026-10-28
+- **Mapa sem F5:** o servidor avisa a página quando o último pedido muda (`tipo:"busca"`: destaques, caixa "Último
+  pedido" e arquivo citado que ainda não estava no desenho) e quando o grafo refeito muda (`tipo:"grafo"`: a página
+  busca `/dados` e junta sem embaralhar; quem já está fica onde está, quem chega entra perto dos vizinhos). O grafo é
+  refeito também 8 s depois de uma edição ou arquivo novo. `mapa-visual.js` exporta `dados(cwd)`.
+- **Ligações feitas sozinhas:** quando um agente lê A e depois edita ou cria B, nasce a ligação de uso A → B com um
+  cometa, que fica como trilha durante a sessão; arquivo novo surge com uma onda perto do que o agente lia, ligado a
+  ele (provisório, até o grafo refeito trazer as ligações de "cita").
+- **Marcador por agente** com nome e cor, que desliza até o arquivo tocado; partículas no caminho ativo; botão
+  "Seguir" (a câmera acompanha; desliga ao arrastar); contador da sessão (lidos, editados, criados, agentes ativos).
+- **Acabamento:** entrada em cascata, grafo "respirando" em repouso, ligações em curva com peso pela relevância,
+  pastas como regiões com halo e nome, cartões em vidro fosco ao passar o mouse e ao clicar, zoom e arraste com
+  inércia, botão "Enquadrar", rótulos sem sobreposição, claro e escuro automáticos, respeita "reduzir movimento".
+- **Tudo automático:** gancho `Stop` anota o fim do trabalho e o mapa avisa "Trabalho concluído · X lidos, Y
+  editados, Z criados", com os marcadores pousando e a trilha em destaque. Abrir sozinho também pela configuração do
+  usuário (`~/.claude/agentes-ultimate/config.json` → `"mapa": { "abrir_sozinho": true }`; a do projeto prevalece);
+  no início da sessão não abre outra janela se já houver aba conectada. Servidor de versão antiga é trocado sozinho.
+- Testes dos ganchos: 52 casos.
+
 ## 0.5.1 · 2026-10-27
 - **Delegar é o padrão:** pedido com trabalho de especialista vai para os agentes; o orquestrador coordena, junta,
   cobra prova e chama o revisor. Antes, a instrução "se for simples, responda direto" fazia o Claude trabalhar sozinho.

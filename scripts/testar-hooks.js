@@ -96,6 +96,9 @@ caso('último pedido registrado para o mapa', /planilha de orçamento/.test(ub.p
 const mv = require(path.join(RAIZ, 'hooks', 'mapa-visual.js')).gerar(proj);
 const html = fs.readFileSync(mv.destino, 'utf8');
 caso('MAPA.html gerado com os usados destacados', mv.usados > 0 && /src\/carga\.js/.test(html) && /"u":1|"u":2/.test(html), `${mv.nos} pontos, ${mv.usados} usados`);
+let erroScript = '';
+try { new Function(html.split('<script>')[1].split('</script>')[0]); } catch (e) { erroScript = e.message; }
+caso('script da página do mapa é JavaScript válido', !erroScript, erroScript);
 caso('.gitignore da base cobre os gerados', /MAPA\.html/.test(fs.readFileSync(path.join(proj, '.claude', 'base', '.gitignore'), 'utf8')), 'faltou MAPA.html');
 
 // Atividade ao vivo: o gancho anota o arquivo tocado (só o caminho)
@@ -120,14 +123,56 @@ let recebido=false;const req=http.get({host:'127.0.0.1',port:est.porta,path:'/ev
 await new Promise(r=>setTimeout(r,700));
 fs.appendFileSync(path.join(proj,'.claude','base','.atividade.jsonl'),JSON.stringify({em:new Date().toISOString(),acao:'criou',arquivo:'src/novo-arquivo.js',agente:'principal'})+'\\n');
 await new Promise(r=>setTimeout(r,1800));req.destroy();
+let busca=-1,t1=0;const req2=http.get({host:'127.0.0.1',port:est.porta,path:'/eventos'},r=>{r.on('data',c=>{if(busca<0&&t1&&/"tipo":"busca"/.test(String(c))&&String(c).includes('pedido novo do teste'))busca=Date.now()-t1;});});
+await new Promise(r=>setTimeout(r,700));t1=Date.now();
+fs.writeFileSync(path.join(proj,'.claude','base','.ultima-busca.json'),JSON.stringify({pedido:'pedido novo do teste',em:new Date().toISOString(),registros:[],arquivos:[{rel:'src/regras.js',ligado:false}]}));
+while(busca<0&&Date.now()-t1<2000)await new Promise(r=>setTimeout(r,50));req2.destroy();
+const d=await get('/dados');let dj=null;try{dj=JSON.parse(d.b);}catch(e){}
 try{process.kill(est.pid);}catch(e){}
-console.log(JSON.stringify({saude:s.s,pagina:/Ao vivo/.test(p.b)&&/src\\/carga\\.js/.test(p.b),recebido}));})();`;
+console.log(JSON.stringify({saude:s.s,pagina:/Ao vivo/.test(p.b)&&/src\\/carga\\.js/.test(p.b),recebido,busca,dados:d.s===200&&!!dj&&Array.isArray(dj.nos)&&Array.isArray(dj.arestas)}));})();`;
 const rs = spawnSync(process.execPath, ['-e', testeServidor, proj, path.join(RAIZ, 'hooks', 'mapa-servidor.js')], { encoding: 'utf8', env, timeout: 30000 });
 let srvRes = {}; try { srvRes = JSON.parse((rs.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
 caso('servidor do mapa responde e serve a página', srvRes.saude === 200 && srvRes.pagina === true, rs.stdout + rs.stderr);
 caso('servidor transmite o evento novo na hora', srvRes.recebido === true, rs.stdout + rs.stderr);
+caso('servidor avisa o último pedido novo em até 2 s', srvRes.busca >= 0 && srvRes.busca <= 2000, rs.stdout + rs.stderr);
+caso('servidor entrega os dados atuais em /dados', srvRes.dados === true, rs.stdout + rs.stderr);
 const auto = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'mapa-servidor.js'), '--auto'], { cwd: proj, encoding: 'utf8', env });
 caso('abrir sozinho fica desligado sem config', auto.status === 0 && !auto.stdout, auto.stdout);
+
+// Fim do trabalho: o gancho Stop anota o resumo do que foi tocado (1 lido, 1 editado, 1 criado até aqui)
+const ultimaAtv = () => { try { return JSON.parse(fs.readFileSync(atvArq, 'utf8').trim().split('\n').pop()); } catch (e) { return {}; } };
+hook('atividade.js', { cwd: proj, hook_event_name: 'Stop', stop_hook_active: false });
+const fimEv = ultimaAtv();
+caso('fim do trabalho anotado pelo Stop com o resumo', fimEv.tipo === 'fim' && fimEv.lidos === 1 && fimEv.editados === 1 && fimEv.criados === 1, JSON.stringify(fimEv));
+const nAtv = fs.readFileSync(atvArq, 'utf8').trim().split('\n').length;
+hook('atividade.js', { cwd: proj, hook_event_name: 'Stop', stop_hook_active: false });
+caso('Stop sem trabalho novo não repete o aviso', fs.readFileSync(atvArq, 'utf8').trim().split('\n').length === nAtv, `${nAtv} linhas antes`);
+
+// Abrir sozinho pela configuração do usuário, e uma aba só (o comando de abrir é trocado por um que só anota)
+const cfgUsu = path.join(casa, '.claude', 'agentes-ultimate', 'config.json');
+fs.mkdirSync(path.dirname(cfgUsu), { recursive: true });
+fs.writeFileSync(cfgUsu, JSON.stringify({ mapa: { abrir_sozinho: true } }));
+const abriu = path.join(tmp, 'abriu.txt');
+const anota = path.join(tmp, 'anota-abrir.js');
+fs.writeFileSync(anota, `require('fs').appendFileSync(${JSON.stringify(abriu)}, process.argv[2] + '\\n');`);
+const testeAuto = `
+const http=require('http'),fs=require('fs'),path=require('path'),{spawnSync}=require('child_process');
+const proj=process.argv[1],srv=process.argv[2],abriu=process.argv[3];
+const conta=()=>fs.existsSync(abriu)?fs.readFileSync(abriu,'utf8').split('\\n').filter(Boolean).length:0;
+const espera=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{spawnSync(process.execPath,[srv,'--auto'],{cwd:proj,encoding:'utf8'});
+for(let i=0;i<40&&conta()<1;i++)await espera(100);const primeira=conta();
+let est={};try{est=JSON.parse(fs.readFileSync(path.join(proj,'.claude','base','.mapa-servidor.json'),'utf8'));}catch(e){}
+const req=http.get({host:'127.0.0.1',port:est.porta||1,path:'/eventos'},r=>r.resume());req.on('error',()=>{});
+await espera(600);spawnSync(process.execPath,[srv,'--auto'],{cwd:proj,encoding:'utf8'});await espera(2000);const segunda=conta();
+req.destroy();try{process.kill(est.pid);}catch(e){}
+console.log(JSON.stringify({primeira,segunda}));})();`;
+const ra = spawnSync(process.execPath, ['-e', testeAuto, proj, path.join(RAIZ, 'hooks', 'mapa-servidor.js'), abriu],
+  { encoding: 'utf8', env: { ...env, AGENTES_ULTIMATE_ABRIR_CMD: `"${process.execPath}" "${anota}"` }, timeout: 30000 });
+let au = {}; try { au = JSON.parse((ra.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
+caso('abrir sozinho lê a configuração do usuário', au.primeira === 1, ra.stdout + ra.stderr);
+caso('não abre segunda janela com aba já conectada', au.primeira === 1 && au.segunda === 1, ra.stdout + ra.stderr);
+fs.rmSync(cfgUsu);
 
 // Projeto com agentes e memória próprios (config.json)
 fs.mkdirSync(path.join(proj, 'docs'), { recursive: true });
