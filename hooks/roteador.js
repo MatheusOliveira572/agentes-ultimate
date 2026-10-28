@@ -23,6 +23,17 @@ function palavras(texto) {
   return new Set(texto.split(/[^a-z0-9&]+/).filter((p) => p.length > 2));
 }
 
+// O que vai para a pasta do usuário (último pedido e exemplos do "era com"): só os termos que o aprendizado compara,
+// sem caminhos, endereços, e-mails, valores nem palavras com número. Nunca o texto do pedido.
+function termos(pedido) {
+  const limpo = normalizar(pedido)
+    .replace(/https?:\/\/\S+/g, ' ')
+    .replace(/\S+@\S+/g, ' ')
+    .replace(/(?:[a-z]:|\\\\[^\s\\]+)[\\/][^\s"'<>|]*/g, ' ')
+    .replace(/(?:~|\.{1,2})?\/?[^\s"'<>|/\\]+(?:[\\/][^\s"'<>|/\\]+)+/g, ' ');
+  return [...palavras(limpo)].filter((w) => !/\d/.test(w)).sort().slice(0, 60);
+}
+
 function lerJson(arq, padrao) {
   try { return JSON.parse(fs.readFileSync(arq, 'utf8')); } catch (e) { return padrao; }
 }
@@ -124,9 +135,10 @@ function main(d) {
   const corr = texto.match(/^\s*era (?:com|pro|para o|para a|do|da) (?:o |a )?([a-z0-9-]+)/);
   if (corr && todosAgentes.has(corr[1])) {
     const ultimo = lerJson(ultimoArq, {});
-    const ex = lerJson(exemplosGlobal, []);
-    if (ultimo.pedido) { ex.unshift({ pedido: ultimo.pedido, agente: corr[1], em: new Date().toISOString() }); gravarJson(exemplosGlobal, ex.slice(0, 300)); }
-    out(`[agentes-ultimate] O usuário corrigiu a escolha: refaça o pedido anterior ("${(ultimo.pedido || '').slice(0, 160)}") com o agente \`${corr[1]}\`. O exemplo foi guardado para os próximos pedidos parecidos.`,
+    const ex = lerJson(exemplosGlobal, []).map((e) => (e.pedido ? { termos: termos(e.pedido), agente: e.agente, em: e.em } : e)); // antigos com texto viram termos
+    const t = ultimo.termos || (ultimo.pedido ? termos(ultimo.pedido) : []);
+    if (t.length) { ex.unshift({ termos: t, agente: corr[1], em: new Date().toISOString() }); gravarJson(exemplosGlobal, ex.slice(0, 300)); }
+    out(`[agentes-ultimate] O usuário corrigiu a escolha: refaça o pedido anterior (o da mensagem antes desta) com o agente \`${corr[1]}\`. O exemplo foi guardado para os próximos pedidos parecidos.`,
       `Anotado: pedidos assim vão para ${corr[1]}.`);
     return;
   }
@@ -148,7 +160,7 @@ function main(d) {
   const meu = palavras(texto);
   let agenteExemplo = null;
   for (const e of ex) {
-    const outro = palavras(normalizar(e.pedido));
+    const outro = new Set(e.termos || termos(e.pedido));
     const inter = [...meu].filter((w) => outro.has(w)).length;
     const uniao = new Set([...meu, ...outro]).size || 1;
     if (inter / uniao >= 0.5) { agenteExemplo = e.agente; break; }
@@ -163,7 +175,7 @@ function main(d) {
   // Trivial = curto e sem nenhuma palavra de assunto. Com assunto abaixo do mínimo, vai para o núcleo.
   const algumAssunto = Object.values(pontos).some((s) => s > 0);
   const trivial = escolhidos.length === 0 && !algumAssunto && pedido.trim().length < 60;
-  gravarJson(ultimoArq, { pedido: pedido.slice(0, 500), em: new Date().toISOString() });
+  gravarJson(ultimoArq, { termos: termos(pedido), em: new Date().toISOString() });
   if (trivial) sair(); // pergunta curta e sem assunto de pacote: responde direto, sem montar nada
 
   const criados = pastaPermitida(cwd) ? montarBase(cwd) : [];

@@ -66,6 +66,15 @@ r = rot('era com o analista-fpa');
 caso('correção "era com" aprende', /analista-fpa/.test(msg(r)) && fs.existsSync(path.join(casa, '.claude', 'agentes-ultimate', 'roteamento.json')), msg(r));
 r = rot('corrija o erro no script de importação');
 caso('pedido parecido segue a correção', /analista-fpa/.test(msg(r)) || /analista-fpa/.test(ctx(r)), msg(r));
+// b-5: na pasta do usuário fica só o que o aprendizado usa (termos), sem valores, números, caminhos nem e-mails
+rot('ajuste o texto do comunicado de R$ 2 mi que está em C:\\Users\\fulano\\Documentos\\comunicado-2026.docx e mande para fulano@empresa.com.br');
+const ultimoTxt = fs.readFileSync(path.join(casa, '.claude', 'agentes-ultimate', 'ultimo-pedido.json'), 'utf8');
+caso('último pedido guarda só termos: sem R$ 2 mi, caminho, e-mail ou número', /comunicado/.test(ultimoTxt) && !/R\$|2 mi|fulano|Users|Documentos|empresa|@|\d{2}/.test(ultimoTxt.replace(/"em":\s*"[^"]*"/, '')) && !/"pedido"/.test(ultimoTxt), ultimoTxt);
+r = rot('era com o redator');
+const rotTxt = fs.readFileSync(path.join(casa, '.claude', 'agentes-ultimate', 'roteamento.json'), 'utf8');
+caso('exemplos do "era com" só com termos (os antigos com texto são convertidos)', /redator/.test(rotTxt) && /importacao/.test(rotTxt) && !/"pedido"/.test(rotTxt) && !/fulano|R\$/.test(rotTxt) && /redator/.test(msg(r)), rotTxt.slice(0, 400));
+r = rot('corrija o erro no script de importação');
+caso('pedido parecido continua seguindo a correção antiga convertida', /analista-fpa/.test(msg(r)) || /analista-fpa/.test(ctx(r)), msg(r));
 
 fs.appendFileSync(path.join(proj, '.claude', 'base', 'DIARIO.md'), '- 2026-10-20 [dev-powerbi] página de desvio por centro de custo construída → powerbi/x\n');
 r = rot('ajuste a página de desvio por centro de custo no painel');
