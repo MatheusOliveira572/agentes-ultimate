@@ -63,7 +63,7 @@ const MODELOS = {
   'DIARIO.md': '# Diário do projeto\n\n> Uma linha por entrega: `- data [agente] o que foi feito → arquivo`. Mais recente no topo.\n\n',
   'PROPOSTAS.md': '# Propostas de melhoria dos agentes\n\n> Agente, problema, evidência, texto proposto. O curador avalia; o usuário aprova; a mudança vai para o CHANGELOG.\n\n',
   'CHANGELOG-AGENTES.md': '# Mudanças nas instruções dos agentes\n\n> Data, agente, o que mudou, motivo (proposta aprovada).\n\n',
-  '.gitignore': '# Gerados pelo agentes-ultimate (refeitos sozinhos)\n.grafo.json\nMAPA-AUTO.md\nMAPA.html\n.ultima-busca.json\n.atividade.jsonl\n.atividade.jsonl.1\n.mapa-servidor.json\n',
+  '.gitignore': '# Gerados pelo agentes-ultimate (refeitos sozinhos)\n.grafo.json\nMAPA-AUTO.md\nMAPA.html\n.ultima-busca.json\n.atividade.jsonl\n.atividade.jsonl.1\n.mapa-servidor.json\n.agentes.jsonl\n.agentes.jsonl.1\n.estimativas.jsonl\n.estimativas.jsonl.1\n.progresso/\n',
   'MAPA.md': '# Mapa do projeto\n\n> Onde fica cada coisa, para ninguém começar no escuro. Uma linha por item: `caminho → para que serve`.\n> Quem cria um arquivo ou pasta importante acrescenta a linha.\n\n',
 };
 

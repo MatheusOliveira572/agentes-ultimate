@@ -1,5 +1,5 @@
 {
-  "description": "agentes-ultimate: escolha automática dos agentes a cada pedido e travas de segurança.",
+  "description": "agentes-ultimate: escolha automática dos agentes a cada pedido, travas de segurança, mapa ao vivo e registro de cada execução de agente.",
   "hooks": {
     "SessionStart": [
       {
@@ -24,6 +24,16 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/atividade.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/execucoes.js\"",
             "timeout": 5
           }
         ]
@@ -59,6 +69,38 @@
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/travas.js\"",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/execucoes.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/execucoes.js\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/execucoes.js\"",
+            "timeout": 5
           }
         ]
       }

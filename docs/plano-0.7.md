@@ -1,5 +1,30 @@
 # Plano da versão 0.7.0 · melhoria contínua dos agentes e das estimativas
 
+## Verificado em 2026-10-28 (bloco 0, Claude Code 2.1.302)
+
+- **V1 · sim, ao contrário da hipótese.** Um plugin pode ligar a barra: o `settings.json` na raiz do plugin aceita só
+  `agent` e `subagentStatusLine` (documentação `plugins/components.md`, "Default settings"; no código do 2.1.302,
+  `Tho=["agent","subagentStatusLine"]`). A configuração do usuário e a do projeto vencem a do plugin (o MVP Orçamento
+  mantém a barra dele em `.claude/settings.json`). O comando vai cru para o shell, com o ambiente da sessão e
+  `CLAUDE_PROJECT_DIR`, **sem** `CLAUDE_PLUGIN_ROOT` (código da função que roda a barra), e a pasta do plugin muda a
+  cada versão. Por isso o `settings.json` chama um lançador fixo, `$HOME/.claude/agentes-ultimate/barra.js`, que o
+  gancho de início de sessão regrava apontando para a versão instalada. A skill `instalar-barra` não é necessária.
+- **V2 · `claude plugin eval` existe** (`claude plugin --help`: casos em `evals/**/case.yaml` ou `prompt.md` +
+  `graders/*.md`). Fica para a 0.7.1 (laço de melhoria).
+- **V3 · confirmado** com um plugin de teste que grava só as chaves recebidas, em `claude -p` com 1 agente:
+  - `PreToolUse` do `Agent`: `tool_input` = `description`, `prompt`, `subagent_type`, `run_in_background` (o
+    `[cod:xxxx]` chega na descrição).
+  - `SubagentStart`: `agent_id`, `agent_type` (sem descrição).
+  - `SubagentStop`: `agent_id`, `agent_type`, `agent_transcript_path`, `last_assistant_message`, e **dispara 2 vezes
+    para o mesmo `agent_id`** (a 2ª sem `last_assistant_message`): o registro precisa tirar repetidos pelo id.
+  - `PostToolUse` do `Agent`: `tool_response` com `agentId`, `agentType`, `status`, `totalDurationMs`,
+    `totalTokens`, `handbackReport`, `content`. Em segundo plano (`run_in_background`) ele chega **antes** do
+    `SubagentStart`, com `status: "async_launched"` e o mesmo `agentId`: é assim que o código do pedido se liga ao id.
+  - Com `SubagentHandback`, o relatório não vem em `last_assistant_message` (documentação dos ganchos): o placar lê
+    a linha fixa do revisor pelo fim da transcrição do agente.
+  - Entrada da barra (código do 2.1.302 e `statusline.md`): `columns` e `tasks[]` com `id`, `name`, `type`,
+    `agentType`, `status`, `description`, `label`, `startTime`, `tokenCount`, `cwd`.
+
 Planejador, 2026-10-28. Só desenho: nada aqui está construído. Começa **depois** que a 0.6.0 (engenheiro de software,
 `hooks/` e `scripts/testar-hooks.js`) estiver no commit, porque quase todo bloco mexe em `hooks/hooks.json`,
 `hooks/roteador.js` e `scripts/testar-hooks.js`.

@@ -100,6 +100,8 @@ let erroScript = '';
 try { new Function(html.split('<script>')[1].split('</script>')[0]); } catch (e) { erroScript = e.message; }
 caso('script da página do mapa é JavaScript válido', !erroScript, erroScript);
 caso('.gitignore da base cobre os gerados', /MAPA\.html/.test(fs.readFileSync(path.join(proj, '.claude', 'base', '.gitignore'), 'utf8')), 'faltou MAPA.html');
+const gi7 = fs.readFileSync(path.join(proj, '.claude', 'base', '.gitignore'), 'utf8');
+caso('.gitignore da base cobre progresso, estimativas e agentes', ['.progresso/', '.estimativas.jsonl', '.agentes.jsonl'].every((l) => gi7.split(/\r?\n/).includes(l)), gi7);
 
 // Atividade ao vivo: o gancho anota o arquivo tocado (só o caminho)
 const atv = (tool, input, extra = {}) => hook('atividade.js', { tool_name: tool, tool_input: input, cwd: proj, hook_event_name: 'PostToolUse', ...extra });
@@ -241,6 +243,80 @@ a = atualizar(envAt);
 caso('avisa quando a versão mudou', /0\.0\.1 →/.test(a.stdout), a.stdout);
 a = atualizar({ ...envAt, AGENTES_ULTIMATE_FORCAR_ATUALIZAR: '' });
 caso('cópia de desenvolvimento não se atualiza', a.status === 0 && !a.stdout, a.stdout);
+
+// ---- 0.7.0 · registro de cada execução e da faixa estimada ----
+const p7 = path.join(tmp, 'projeto7');
+fs.mkdirSync(path.join(p7, '.claude', 'base'), { recursive: true });
+const execArq = path.join(casa, '.claude', 'agentes-ultimate', 'execucoes.jsonl');
+const lerJsonl = (f) => { try { return fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)); } catch (e) { return []; } };
+const exe = (dados) => hook('execucoes.js', { cwd: p7, session_id: 's1', ...dados });
+const estimar = (argv, cwd = p7) => spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), ...argv], { cwd, env, encoding: 'utf8' });
+const linhaTr = (ts) => JSON.stringify({ type: 'assistant', timestamp: ts, message: { content: 'texto do agente' } }) + '\n';
+function transcricao(nome, ini, fim, mb = 0) {
+  const f = path.join(tmp, nome);
+  fs.writeFileSync(f, linhaTr(ini));
+  if (mb) { const miolo = Buffer.from(linhaTr(ini).repeat(2000)); const fd = fs.openSync(f, 'a'); for (let n = 0; n < mb * 1024 * 1024; n += miolo.length) fs.writeSync(fd, miolo); fs.closeSync(fd); }
+  fs.appendFileSync(f, linhaTr(fim));
+  return f;
+}
+let re = estimar(['registrar', '--agente', 'agentes-ultimate:dev-powerbi', '--classe', 'construção', '--cod', 'ab12', '--de', '14:10', '--ate', '14h50', '--estimado', '40']);
+const est7 = lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl'));
+const de7 = est7[0] ? new Date(est7[0].de) : null;
+caso('estimar registrar grava a faixa em UTF-8 (classe com acento vira "construcao")', re.status === 0 && est7.length === 1 && est7[0].agente === 'dev-powerbi' &&
+  est7[0].classe === 'construcao' && est7[0].cod === 'ab12' && est7[0].estimado_min === 40 && de7 && de7.getHours() === 14 && de7.getMinutes() === 10,
+  `status ${re.status} ${re.stderr} ${JSON.stringify(est7)}`);
+re = estimar(['registrar', '--agente', 'dev-powerbi', '--de', '14:10']);
+caso('estimar registrar recusa faixa incompleta', re.status !== 0 && lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl')).length === 1, `status ${re.status}`);
+
+exe({ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_input: { description: 'Painel de custos R$ 2 mi [cod:ab12]', prompt: 'Monte o painel de R$ 2 mi', subagent_type: 'agentes-ultimate:dev-powerbi' } });
+exe({ hook_event_name: 'SubagentStart', agent_id: 'a1', agent_type: 'agentes-ultimate:dev-powerbi' });
+const tr1 = transcricao('a1.jsonl', '2026-10-28T13:00:00.000Z', '2026-10-28T13:42:30.000Z');
+exe({ hook_event_name: 'SubagentStop', agent_id: 'a1', agent_type: 'agentes-ultimate:dev-powerbi', agent_transcript_path: tr1, last_assistant_message: 'pronto, R$ 2 mi' });
+exe({ hook_event_name: 'SubagentStop', agent_id: 'a1', agent_type: 'agentes-ultimate:dev-powerbi', agent_transcript_path: tr1 });
+let ex = lerJsonl(execArq);
+caso('registro: uma linha por execução (a parada repetida do mesmo agente não duplica)', ex.length === 1, JSON.stringify(ex));
+const e1 = ex[0] || {};
+caso('registro: agente, classe, código, minutos pela transcrição e a faixa registrada', e1.agente === 'dev-powerbi' && e1.cod === 'ab12' && e1.minutos === 42.5 &&
+  e1.classe === 'construcao' && e1.fonte_estimativa === 'registrada' && e1.estimado_min === 40 && !!e1.faixa_ate, JSON.stringify(e1));
+const bruto = fs.existsSync(execArq) ? fs.readFileSync(execArq, 'utf8') : '';
+caso('registro global sem o pedido, valores ou caminho (só o código anônimo do projeto)', bruto && !/R\$|2 mi|[Pp]ainel|projeto7|a1\.jsonl/.test(bruto) && /^[0-9a-f]{8}$/.test(e1.projeto || ''), bruto);
+re = exe({});
+const re2 = exe({ hook_event_name: 'SubagentStop' });
+caso('registro: entrada sem campos sai 0 e não grava', re.code === 0 && re2.code === 0 && lerJsonl(execArq).length === 1, `${re.code} ${re2.code}`);
+const tr2 = transcricao('a2.jsonl', '2026-10-28T10:00:00.000Z', '2026-10-28T11:30:00.000Z', 40);
+exe({ hook_event_name: 'SubagentStart', agent_id: 'a2', agent_type: 'revisor' });
+exe({ hook_event_name: 'SubagentStop', agent_id: 'a2', agent_type: 'revisor', agent_transcript_path: tr2 });
+const t0 = Date.now();
+require(path.join(RAIZ, 'hooks', 'registro.js')).pontasTranscricao(tr2);
+const ms = Date.now() - t0; // só a leitura (abrir processo no Windows varia de 0,2 a 5 s e não é o que se mede aqui)
+ex = lerJsonl(execArq);
+caso('registro: transcrição de 40 MB lida só nas pontas, em menos de 1 s', ex.length === 2 && ex[1].minutos === 90 && ex[1].classe === 'outra' && ms < 1000, `${ms} ms ${JSON.stringify(ex[1])}`);
+// dois agentes do mesmo tipo em segundo plano: cada um fica com o seu código, mesmo terminando fora de ordem
+for (const [cod, id, desc] of [['x1', 'b1', 'revise a página de custos'], ['x2', 'b2', 'corrija o erro da carga']]) {
+  const ti = { description: `${desc} [cod:${cod}]`, prompt: 'p', subagent_type: 'agentes-ultimate:engenheiro-dados', run_in_background: true };
+  exe({ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_input: ti });
+  exe({ hook_event_name: 'PostToolUse', tool_name: 'Agent', tool_input: ti, tool_response: { status: 'async_launched', agentId: id, agentType: 'agentes-ultimate:engenheiro-dados' } });
+}
+for (const id of ['b2', 'b1']) exe({ hook_event_name: 'SubagentStart', agent_id: id, agent_type: 'agentes-ultimate:engenheiro-dados' });
+for (const id of ['b2', 'b1']) exe({ hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'agentes-ultimate:engenheiro-dados', agent_transcript_path: transcricao(id + '.jsonl', '2026-10-28T09:00:00.000Z', '2026-10-28T09:10:00.000Z') });
+ex = lerJsonl(execArq);
+const b1 = ex.find((x) => x.id === 'b1') || {}, b2 = ex.find((x) => x.id === 'b2') || {};
+caso('registro: dois agentes do mesmo tipo ficam cada um com o seu código', b1.cod === 'x1' && b2.cod === 'x2', JSON.stringify([b1, b2]));
+caso('registro: sem faixa registrada, a classe vem das palavras do pedido', b1.classe === 'revisao' && b2.classe === 'correcao' && b1.fonte_estimativa === 'sem', JSON.stringify([b1, b2]));
+// importar o passado: transcrições antigas do projeto (pasta do Claude Code com o nome da pasta do projeto)
+const slug7 = path.resolve(p7).replace(/[^A-Za-z0-9]/g, '-');
+const sub7 = path.join(casa, '.claude', 'projects', slug7, 'sessao-antiga', 'subagents');
+fs.mkdirSync(sub7, { recursive: true });
+fs.writeFileSync(path.join(sub7, 'agent-z1.meta.json'), JSON.stringify({ agentType: 'designer-paineis', description: 'desenhe a tela de custos R$ 3 mi', finished: true }));
+fs.copyFileSync(transcricao('z1.jsonl', '2026-10-20T08:00:00.000Z', '2026-10-20T08:25:00.000Z'), path.join(sub7, 'agent-z1.jsonl'));
+fs.writeFileSync(path.join(sub7, 'agent-z2.meta.json'), JSON.stringify({ agentType: 'designer-paineis', description: 'x', finished: false }));
+fs.copyFileSync(transcricao('z2.jsonl', '2026-10-20T08:00:00.000Z', '2026-10-20T08:05:00.000Z'), path.join(sub7, 'agent-z2.jsonl'));
+re = estimar(['importar']);
+const re7b = estimar(['importar']);
+ex = lerJsonl(execArq);
+const z1 = ex.filter((x) => x.id === 'z1');
+caso('importar: execuções antigas entram uma vez, com classe e sem o pedido', re.status === 0 && re7b.status === 0 && z1.length === 1 && z1[0].fonte_estimativa === 'importado' &&
+  z1[0].minutos === 25 && z1[0].classe === 'spec' && !ex.some((x) => x.id === 'z2') && !/R\$ 3|custos/.test(fs.readFileSync(execArq, 'utf8')), `${re.stdout}${re.stderr} ${JSON.stringify(z1)}`);
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');

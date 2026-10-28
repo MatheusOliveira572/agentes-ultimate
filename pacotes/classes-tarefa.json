@@ -1,0 +1,15 @@
+{
+  "_leia": "Tipos de tarefa para o registro de execuções e a estimativa por classe de referência. Lista fechada e genérica: a classe vem da faixa registrada (estimar.js registrar --classe) ou, sem ela, das palavras da descrição do pedido; na ordem desta lista, a primeira que achar uma palavra vence. Sem acerto: \"outra\". A descrição nunca é guardada.",
+  "classes": {
+    "revisao": ["revise", "revisar", "revisão", "revisao", "confira", "conferir", "audite", "auditoria", "qa"],
+    "correcao": ["corrija", "corrigir", "correção", "correcao", "conserte", "erro", "defeito", "bug", "falha"],
+    "curadoria": ["curadoria", "curador", "condense", "memórias", "lições"],
+    "pesquisa": ["pesquise", "pesquisa", "pesquisar", "referências", "benchmark", "levantamento"],
+    "plano": ["plano", "planeje", "planejar", "cronograma", "roteiro", "estimativa"],
+    "spec": ["especificação", "especificacao", "spec", "desenhe", "protótipo", "prototipo", "mockup", "wireframe", "gabarito"],
+    "regras": ["regra", "regras", "fórmula", "formula", "catálogo", "catalogo", "política"],
+    "dados": ["dados", "carga", "conciliação", "conciliacao", "importação", "importacao", "base de dados", "etl"],
+    "texto": ["texto", "redija", "redigir", "relatório", "manual", "documento", "e-mail", "apresentação"],
+    "construcao": ["construa", "construir", "construção", "construcao", "implemente", "implementar", "monte", "montar", "crie", "criar", "rodada", "versão"]
+  }
+}
