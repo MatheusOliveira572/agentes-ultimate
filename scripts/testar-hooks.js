@@ -651,6 +651,40 @@ caso('barra: % estimado com "~", % informado sem', /~\d+%/.test(br.porId.a || ''
 const pag11 = fs.readFileSync(path.join(RAIZ, 'hooks', 'mapa-visual.js'), 'utf8');
 caso('painel: barra tracejada e "(estimado)" para o % sem progresso, cheia para o informado', /\.trilho\.estimado/.test(pag11) && /\(estimado\)/.test(pag11) && /repeating-linear-gradient/.test(pag11), 'falta a forma do estimado');
 
+// ---- M-5 · bordas que os mutantes B2, C1 e C2 atravessaram ----
+const casaM5 = path.join(tmp, 'casa-m5'); const gM5 = path.join(casaM5, '.claude', 'agentes-ultimate'); fs.mkdirSync(gM5, { recursive: true });
+const envM5 = { ...env, HOME: casaM5, USERPROFILE: casaM5 };
+const lin = (l) => l.map((x) => JSON.stringify(x)).join('\n') + '\n';
+// B2: cascata em par — 2 execuções de agente+classe caem para o nível "agente"; 3 ficam em "agente+classe"
+fs.writeFileSync(path.join(gM5, 'execucoes.jsonl'), lin([
+  { id: 'q1', agente: 'ag2', classe: 'dados', minutos: 100 }, { id: 'q2', agente: 'ag2', classe: 'dados', minutos: 100 }, { id: 'q3', agente: 'ag2', classe: 'texto', minutos: 10 },
+  { id: 'q4', agente: 'ag3', classe: 'dados', minutos: 20 }, { id: 'q5', agente: 'ag3', classe: 'dados', minutos: 20 }, { id: 'q6', agente: 'ag3', classe: 'dados', minutos: 20 },
+]));
+const fxM5 = (a) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', '--agente', a, '--classe', 'dados'], { cwd: p7, env: envM5, encoding: 'utf8' });
+  try { return JSON.parse(r.stdout); } catch (e) { return { erro: r.stdout + r.stderr }; } };
+const f2 = fxM5('ag2'), f3 = fxM5('ag3');
+caso('cascata em par: n = 2 cai para o nível de cima (agente), n = 3 fica (agente+classe)', f2.nivel === 'agente' && f2.n === 3 && f3.nivel === 'agente+classe' && f3.n === 3, JSON.stringify([f2, f3]));
+// C1 e C2: retrabalho só depois do "não", e "de primeira" por trabalho (código), não por autor
+fs.writeFileSync(path.join(gM5, 'execucoes.jsonl'), lin([
+  { id: 'w1a', agente: 'dev', cod: 'w1', projeto: 'p1', inicio: '2026-10-28T10:00:00Z', minutos: 10 },
+  { id: 'w1b', agente: 'dev', cod: 'w1', projeto: 'p1', inicio: '2026-10-28T12:00:00Z', minutos: 5 },
+  { id: 'w2a', agente: 'dev', cod: 'w2', projeto: 'p1', inicio: '2026-10-28T13:00:00Z', minutos: 5 },
+]));
+fs.writeFileSync(path.join(gM5, 'revisoes.jsonl'), lin([
+  { em: '2026-10-28T11:00:00Z', autor: 'dev', cod: 'w1', projeto: 'p1', veredito: 'nao', B: 0, A: 1, M: 0, b: 0 },
+  { em: '2026-10-28T14:00:00Z', autor: 'dev', cod: 'w2', projeto: 'p1', veredito: 'sim', B: 0, A: 0, M: 0, b: 0 },
+]));
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { cwd: p7, env: envM5, encoding: 'utf8' });
+let devM5 = {}; try { devM5 = JSON.parse(re.stdout).agentes.dev; } catch (e) { /* falhou */ }
+caso('retrabalho: conta só a execução do mesmo trabalho depois do "não" (1, não 2 nem 0)', devM5.retrabalho === 1, re.stdout + re.stderr);
+caso('de primeira: é por trabalho; outro código do mesmo autor aprovado de primeira conta (1 de 2)', devM5.revisados === 2 && devM5.de_primeira === 1, re.stdout + re.stderr);
+const pC2 = path.join(tmp, 'projeto-c2'); fs.mkdirSync(path.join(pC2, '.claude', 'base'), { recursive: true });
+for (const [id, c, v] of [['c2a', 'w1', 'não'], ['c2b', 'w2', 'sim']]) {
+  hook('execucoes.js', { cwd: pC2, hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'revisor', last_assistant_message: `Placar: autor=dev cod=${c} veredito=${v} B=0 A=0 M=0 b=0` });
+}
+const rvC2 = lerJsonl(revArq).filter((x) => x.id === 'c2a' || x.id === 'c2b');
+caso('de primeira no registro: a 1ª revisão de outro código do mesmo autor é "de primeira"', rvC2.length === 2 && rvC2[0].primeira === true && rvC2[1].primeira === true, JSON.stringify(rvC2));
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
