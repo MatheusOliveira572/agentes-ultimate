@@ -65,6 +65,7 @@ function nomeCurto(cwd) {
 function permitida(cwd) {
   const p = path.resolve(cwd || '');
   if (!cwd || p === path.parse(p).root || p === path.resolve(os.homedir())) return false;
+  if (process.env.AGENTES_ULTIMATE_SEM_PASTA === '1') return false; // a mesma chave que desliga a base e o mapa
   if (fs.existsSync(path.join(base(p), 'desligado'))) return false;
   return fs.existsSync(base(p));
 }

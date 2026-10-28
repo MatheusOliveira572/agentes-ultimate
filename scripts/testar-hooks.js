@@ -713,6 +713,15 @@ caso('achados sem ids: o que continua aberto não conta 2 vezes (A 1, M 1)', dM6
 caso('achados com ids: conta por achado (A-1 uma vez; M-1 e M-2 → M 2) e a taxa usa a mesma conta', rM6.A === 1 && rM6.M === 2 && plM6.captura && plM6.captura.pegos === 5, re.stdout + re.stderr);
 caso('revisor e eval pedem os ids na linha fixa', /ids=/.test(fs.readFileSync(path.join(RAIZ, 'agents', 'revisor.md'), 'utf8')) && /ids=/.test(fs.readFileSync(path.join(RAIZ, 'evals', 'revisor.md'), 'utf8')), 'falta ids=');
 
+// ---- b-1 · AGENTES_ULTIMATE_SEM_PASTA=1 desliga também o registro (claude -p aninhado em teste não suja o histórico) ----
+const pB1 = path.join(tmp, 'projeto-b1'); fs.mkdirSync(path.join(pB1, '.claude', 'base'), { recursive: true });
+const nExB1 = lerJsonl(execArq).length;
+for (const d of [{ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_input: { description: 'x [cod:sp01]', subagent_type: 'redator' } },
+  { hook_event_name: 'SubagentStart', agent_id: 'sp1', agent_type: 'redator' }, { hook_event_name: 'SubagentStop', agent_id: 'sp1', agent_type: 'redator' }]) {
+  spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { input: JSON.stringify({ cwd: pB1, ...d }), env: { ...env, AGENTES_ULTIMATE_SEM_PASTA: '1' }, encoding: 'utf8' });
+}
+caso('AGENTES_ULTIMATE_SEM_PASTA=1 desliga o registro de execuções', !fs.existsSync(path.join(pB1, '.claude', 'base', '.agentes.jsonl')) && lerJsonl(execArq).length === nExB1, 'gravou');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
