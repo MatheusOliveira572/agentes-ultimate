@@ -13,12 +13,18 @@ const path = require('path');
 const R = require('./registro');
 
 function instalar() {
-  const destino = path.join(R.pastaGlobal(), 'barra.js');
   const texto = '// Lançador da barra dos agentes: gerado pelo agentes-ultimate a cada início de sessão. Não edite.\n' +
     `try { require(${JSON.stringify(__filename)}); } catch (e) { process.exit(0); }\n`;
-  let atual = '';
-  try { atual = fs.readFileSync(destino, 'utf8'); } catch (e) { /* ainda não existe */ }
-  if (atual !== texto) { fs.mkdirSync(path.dirname(destino), { recursive: true }); fs.writeFileSync(destino, texto); }
+  // O settings.json chama "$HOME/.claude/agentes-ultimate/barra.js". No Windows a pasta do usuário é USERPROFILE e o
+  // $HOME do shell pode apontar para outro lugar (rede corporativa): grava nos dois.
+  const pastas = new Set([R.pastaGlobal()]);
+  if (process.env.HOME) pastas.add(path.join(process.env.HOME, '.claude', 'agentes-ultimate'));
+  for (const p of pastas) {
+    const destino = path.join(p, 'barra.js');
+    let atual = '';
+    try { atual = fs.readFileSync(destino, 'utf8'); } catch (e) { /* ainda não existe */ }
+    try { if (atual !== texto) { fs.mkdirSync(p, { recursive: true }); fs.writeFileSync(destino, texto); } } catch (e) { /* pasta sem acesso */ }
+  }
 }
 
 const cheia = (frac, n, estimado) => { const c = Math.round(Math.max(0, Math.min(1, frac)) * n); return (estimado ? '▒' : '█').repeat(c) + '░'.repeat(n - c); };

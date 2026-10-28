@@ -110,7 +110,7 @@ try { new Function(html.split('<script>')[1].split('</script>')[0]); } catch (e)
 caso('script da página do mapa é JavaScript válido', !erroScript, erroScript);
 caso('.gitignore da base cobre os gerados', /MAPA\.html/.test(fs.readFileSync(path.join(proj, '.claude', 'base', '.gitignore'), 'utf8')), 'faltou MAPA.html');
 const gi7 = fs.readFileSync(path.join(proj, '.claude', 'base', '.gitignore'), 'utf8');
-caso('.gitignore da base cobre progresso, estimativas e agentes', ['.progresso/', '.estimativas.jsonl', '.agentes.jsonl'].every((l) => gi7.split(/\r?\n/).includes(l)), gi7);
+caso('.gitignore da base cobre progresso, estimativas e agentes', ['.progresso/', '.estimativas.jsonl', '.agentes.jsonl', '.fins/'].every((l) => gi7.split(/\r?\n/).includes(l)), gi7);
 
 // Atividade ao vivo: o gancho anota o arquivo tocado (só o caminho)
 const atv = (tool, input, extra = {}) => hook('atividade.js', { tool_name: tool, tool_input: input, cwd: proj, hook_event_name: 'PostToolUse', ...extra });
@@ -721,6 +721,42 @@ for (const d of [{ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_input
   spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { input: JSON.stringify({ cwd: pB1, ...d }), env: { ...env, AGENTES_ULTIMATE_SEM_PASTA: '1' }, encoding: 'utf8' });
 }
 caso('AGENTES_ULTIMATE_SEM_PASTA=1 desliga o registro de execuções', !fs.existsSync(path.join(pB1, '.claude', 'base', '.agentes.jsonl')) && lerJsonl(execArq).length === nExB1, 'gravou');
+
+// ---- b-2 · com histórico de minutos e nenhum estimado, o texto não diz "sem histórico" na base ----
+fs.writeFileSync(path.join(gM5, 'execucoes.jsonl'), lin([1, 2, 3].map((i) => ({ id: 'h' + i, agente: 'ag9', classe: 'dados', minutos: 10 * i }))));
+const fB2 = (() => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', '--agente', 'ag9', '--classe', 'dados', '--estimado', '30'], { cwd: p7, env: envM5, encoding: 'utf8' });
+  try { return JSON.parse(r.stdout); } catch (e) { return { erro: r.stdout + r.stderr }; } })();
+caso('faixa: com minutos mas sem estimados, a base mostra o nível certo e só o fator fica "sem histórico"', fB2.nivel === 'agente+classe' && /base n=3 \(agente\+classe\)/.test(fB2.texto) && /fator sem histórico/.test(fB2.texto), JSON.stringify(fB2));
+
+// ---- b-3 · lançador da barra também no $HOME quando ele difere da pasta do usuário (rede corporativa) ----
+const casaU = path.join(tmp, 'casa-userprofile'), casaH = path.join(tmp, 'casa-home'); fs.mkdirSync(casaU); fs.mkdirSync(casaH);
+spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js'), '--instalar'], { input: '{}', env: { ...process.env, USERPROFILE: casaU, HOME: casaH }, encoding: 'utf8' });
+const temLanc = (c) => fs.existsSync(path.join(c, '.claude', 'agentes-ultimate', 'barra.js'));
+caso('lançador gravado na pasta do usuário e no $HOME quando são diferentes', process.platform !== 'win32' || (temLanc(casaU) && temLanc(casaH)), `${temLanc(casaU)} ${temLanc(casaH)}`);
+
+// ---- b-4 · as duas chamadas do mesmo SubagentStop em paralelo não duplicam nem perdem a linha Placar ----
+const testeDuplo = `
+const {spawn}=require('child_process'),path=require('path'),fs=require('fs');
+const [gancho,casaD,trBase]=process.argv.slice(1);
+const env={...process.env,HOME:casaD,USERPROFILE:casaD};
+const roda=(d)=>new Promise(ok=>{const p=spawn(process.execPath,[gancho],{env,stdio:['pipe','ignore','ignore']});p.on('close',ok);p.stdin.end(JSON.stringify(d));});
+(async()=>{const cwd=path.join(casaD,'proj');fs.mkdirSync(path.join(cwd,'.claude','base'),{recursive:true});
+for(let k=0;k<10;k++){const id='dup'+k;const tr=path.join(casaD,id+'.jsonl');
+fs.writeFileSync(tr,fs.readFileSync(trBase,'utf8')+JSON.stringify({type:'assistant',timestamp:'2026-10-28T10:30:00Z',message:{content:'Placar: autor=dev cod=dd'+k+' veredito=sim B=0 A=0 M=0 b=0'}})+'\\n');
+await roda({cwd,hook_event_name:'SubagentStart',agent_id:id,agent_type:'revisor'});
+const base={cwd,hook_event_name:'SubagentStop',agent_id:id,agent_type:'revisor',agent_transcript_path:tr};
+await Promise.all([roda({...base,last_assistant_message:'Placar: autor=dev cod=dd'+k+' veredito=sim B=0 A=0 M=0 b=0'}),roda(base)]);}
+const ler=(n)=>{try{return fs.readFileSync(path.join(casaD,'.claude','agentes-ultimate',n),'utf8').trim().split('\\n').filter(Boolean).map(l=>JSON.parse(l));}catch(e){return [];}};
+console.log(JSON.stringify({exec:ler('execucoes.jsonl').length,rev:ler('revisoes.jsonl').length}));})();`;
+const casaDup = path.join(tmp, 'casa-dup'); fs.mkdirSync(casaDup);
+const rd = spawnSync(process.execPath, ['-e', testeDuplo, path.join(RAIZ, 'hooks', 'execucoes.js'), casaDup, transcricao('dup-base.jsonl', '2026-10-28T10:00:00.000Z', '2026-10-28T10:20:00.000Z')], { encoding: 'utf8', timeout: 120000 });
+let dup = {}; try { dup = JSON.parse((rd.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
+caso('SubagentStop repetido em paralelo (10 vezes): 1 execução e 1 linha Placar por agente', dup.exec === 10 && dup.rev === 10, rd.stdout + rd.stderr);
+
+// ---- b-6 · código da linha Placar limitado a 16 caracteres, como o [cod:] ----
+const nRevB6 = lerJsonl(revArq).length;
+hook('execucoes.js', { cwd: p7, hook_event_name: 'SubagentStop', agent_id: 'b6', agent_type: 'revisor', last_assistant_message: 'Placar: autor=dev cod=abcdefghijklmnopqrstuvwxyz veredito=sim B=0 A=0 M=0 b=0' });
+caso('linha Placar com código de mais de 16 caracteres não é aceita', lerJsonl(revArq).length === nRevB6, 'aceitou');
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');

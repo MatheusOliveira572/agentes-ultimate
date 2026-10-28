@@ -103,7 +103,7 @@ function faixa(o) {
     if (fat.length) {
       Object.assign(res, { fator_nivel: rf.nivel, fator_n: fat.length, fator_mediana: r2(R.quantil(fat, 0.5)), fator_p75: r2(R.quantil(fat, 0.75)) });
       res.de_min = r1(estimado * res.fator_mediana); res.ate_min = r1(estimado * Math.max(res.fator_mediana, res.fator_p75));
-    } else { res.de_min = estimado; res.ate_min = estimado * 2; res.nivel = ref.n ? res.nivel : 'sem histórico'; res.fator_nivel = 'sem histórico'; }
+    } else { res.de_min = estimado; res.ate_min = estimado * 2; res.nivel = mins.length ? res.nivel : 'sem histórico'; res.fator_nivel = 'sem histórico'; }
   } else if (mins.length) { res.de_min = res.mediana; res.ate_min = Math.max(res.mediana, res.p75); }
   const virgula = (x) => String(x).replace('.', ',');
   if (res.de_min == null) {

@@ -80,6 +80,7 @@ function tratar(d) {
   if (ev === 'SubagentStop') {
     const regs = R.lerJsonl(arq);
     if (regs.some((r) => r.tipo === 'fim' && r.id === id)) return; // o SubagentStop chega 2 vezes para o mesmo agente
+    if (!travarFim(cwd, id)) return; // as 2 chamadas podem chegar ao mesmo tempo: só a que cria a trava segue
     const ini = regs.find((r) => r.tipo === 'inicio' && r.id === id) || {};
     const lig = R.ligacao(regs, id);
     const meta = d.agent_transcript_path ? R.metaAgente(null, id, String(d.agent_transcript_path).replace(/\.jsonl$/, '.meta.json')) : null;
@@ -112,7 +113,7 @@ function tratar(d) {
 // Vem da última mensagem do agente ou, com SubagentHandback, do fim da transcrição. Revisor sem a linha: aviso.
 // ids (opcional): os achados abertos nesta revisão, com o mesmo id da anterior quando o achado continua aberto; o
 // placar conta cada achado uma vez por trabalho.
-const LINHA_PLACAR = /Placar:\s*autor=([\w:.-]+)\s+cod=([\w-]+)\s+veredito=(sim|n[ãa]o)\s+B=(\d+)\s+A=(\d+)\s+M=(\d+)\s+b=(\d+)(?:\s+ids=([\w.,-]*))?/gi;
+const LINHA_PLACAR = /Placar:\s*autor=([\w:.-]+)\s+cod=([\w-]{1,16})\s+veredito=(sim|n[ãa]o)\s+B=(\d+)\s+A=(\d+)\s+M=(\d+)\s+b=(\d+)(?:\s+ids=([\w.,-]*))?/gi;
 function placarDoRevisor(cwd, agente, id, msg, cauda) {
   let m = null;
   for (const txt of [msg, cauda]) { const todas = [...String(txt || '').matchAll(LINHA_PLACAR)]; if (todas.length) { m = todas[todas.length - 1]; break; } }
@@ -134,6 +135,21 @@ function placarDoRevisor(cwd, agente, id, msg, cauda) {
   rev.primeira = ja ? !ja.chaves[R.chaveRevisao(rev)] : null; // índice frio e histórico grande: o placar decide depois
   R.acrescentar(path.join(dir, 'revisoes.jsonl'), rev, 64 * 1024 * 1024);
   R.indiceRevisoes(64 * 1024);
+}
+
+// Trava do fim de um agente: criar o arquivo com "wx" é atômico, então só uma das chamadas repetidas segue. Travas de
+// mais de 1 dia são apagadas de vez em quando (pasta .claude/base/.fins/, fora do git).
+function travarFim(cwd, id) {
+  const fs = require('fs');
+  const dir = path.join(R.base(cwd), '.fins');
+  try {
+    fs.mkdirSync(dir, { recursive: true });
+    fs.closeSync(fs.openSync(path.join(dir, id.replace(/[^\w-]/g, '_')), 'wx'));
+  } catch (e) { return e.code !== 'EEXIST'; } // sem pasta ou sem permissão: segue (o "fim" no .agentes evita a maioria)
+  if (Math.random() < 0.05) {
+    try { const limite = Date.now() - 24 * 60 * 60000; for (const f of fs.readdirSync(dir)) { const p = path.join(dir, f); if (fs.statSync(p).mtimeMs < limite) fs.rmSync(p); } } catch (e) { /* fica para a próxima */ }
+  }
+  return true;
 }
 
 // O pedido (PreToolUse) mais antigo do mesmo agente que ainda não virou lançamento nem início, dos últimos 10 min.
