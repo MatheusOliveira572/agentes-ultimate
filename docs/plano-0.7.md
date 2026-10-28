@@ -27,6 +27,14 @@
     a linha fixa do revisor pelo fim da transcrição do agente.
   - Entrada da barra (código do 2.1.302 e `statusline.md`): `columns` e `tasks[]` com `id`, `name`, `type`,
     `agentType`, `status`, `description`, `label`, `startTime`, `tokenCount`, `cwd`.
+- **V3, acréscimos da revisão** (3 sondas do revisor, `docs/revisao-0.7.0.md`, e correções M-1/M-2/b-4):
+  - o `SubagentStop` às vezes vem **1 vez só** e sem `last_assistant_message`. A linha Placar já está no fim da
+    transcrição quando o gancho roda, e a trava `.fins/<id>` cobre as 2 chamadas em paralelo;
+  - com os ganchos rodando em paralelo, o `SubagentStart` **pode chegar antes** do `PostToolUse` que traz o
+    `agentId`. A ligação vem do `.meta.json` ao lado da transcrição do agente (`agentType`, `description`,
+    `toolUseId`, gravado também em primeiro plano) ou do próprio `PostToolUse`, nunca da ordem;
+  - agente parado com `TaskStop` **não dispara** `SubagentStop`. O painel usa o prazo da faixa ("sem notícia") e
+    a limpeza no `SessionStart`.
 
 Planejador, 2026-10-28. Só desenho: nada aqui está construído. Começa **depois** que a 0.6.0 (engenheiro de software,
 `hooks/` e `scripts/testar-hooks.js`) estiver no commit, porque quase todo bloco mexe em `hooks/hooks.json`,

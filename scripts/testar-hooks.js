@@ -23,6 +23,9 @@ function hook(script, dados) {
 const rot = (prompt, cwd = proj) => hook('roteador.js', { prompt, cwd, hook_event_name: 'UserPromptSubmit' });
 const trava = (command, cwd = proj) => hook('travas.js', { tool_name: 'Bash', tool_input: { command }, cwd, hook_event_name: 'PreToolUse' });
 
+// Peças do registro (0.7.0). Numa cópia de versão antiga, sem o arquivo, cada função devolve [] e o caso falha em vez de
+// derrubar a bateria: é assim que se prova que o caso falhava antes.
+function registro() { try { return require(path.join(RAIZ, 'hooks', 'registro.js')); } catch (e) { return new Proxy({}, { get: () => () => [] }); } }
 let falhas = 0;
 function caso(nome, ok, detalhe) { console.log(`${ok ? 'ok   ' : 'FALHA'} ${nome}${ok ? '' : ' → ' + detalhe}`); if (!ok) falhas++; }
 const msg = (r) => (r.json && r.json.systemMessage) || '';
@@ -296,7 +299,7 @@ const tr2 = transcricao('a2.jsonl', '2026-10-28T10:00:00.000Z', '2026-10-28T11:3
 exe({ hook_event_name: 'SubagentStart', agent_id: 'a2', agent_type: 'revisor' });
 exe({ hook_event_name: 'SubagentStop', agent_id: 'a2', agent_type: 'revisor', agent_transcript_path: tr2 });
 const t0 = Date.now();
-require(path.join(RAIZ, 'hooks', 'registro.js')).pontasTranscricao(tr2);
+registro().pontasTranscricao(tr2);
 const ms = Date.now() - t0; // só a leitura (abrir processo no Windows varia de 0,2 a 5 s e não é o que se mede aqui)
 ex = lerJsonl(execArq);
 caso('registro: transcrição de 40 MB lida só nas pontas, em menos de 1 s', ex.length === 2 && ex[1].minutos === 90 && ex[1].classe === 'outra' && ms < 1000, `${ms} ms ${JSON.stringify(ex[1])}`);
@@ -445,7 +448,7 @@ fs.writeFileSync(path.join(b8, '.agentes.jsonl'), ag8.map((x) => JSON.stringify(
 fs.writeFileSync(path.join(b8, '.progresso', 'dev-powerbi-m1.json'), JSON.stringify({ feito: 3, total: 5, agora: 'lote final das telas extra' }));
 const hm8 = (minFrente) => new Date(Date.now() + minFrente * 60000).toTimeString().slice(0, 5);
 estimar(['registrar', '--agente', 'designer-paineis', '--cod', 'm2', '--de', hm8(20), '--ate', hm8(40)], p8);
-const R8 = require(path.join(RAIZ, 'hooks', 'registro.js'));
+const R8 = registro();
 const agora8 = R8.agentesAgora ? R8.agentesAgora(p8) : [];
 const q1 = agora8.find((x) => x.id === 'g1') || {}, q2 = agora8.find((x) => x.id === 'g2') || {}, q3 = agora8.find((x) => x.id === 'g3') || {};
 caso('agentes agora: cada agente com %, etapa em até 4 palavras e término pelo ritmo', q1.estado === 'trabalhando' && q1.pct === 60 && q1.etapa === 'lote final das telas' &&
@@ -505,7 +508,7 @@ function placarAntigo({ execs, revs, defs }) {
   for (const r of Object.values(porCod)) { const naos = revs.filter((x) => x.projeto === r.projeto && x.autor === r.autor && x.cod === r.cod && x.veredito === 'nao').map((x) => Date.parse(x.em));
     if (!naos.length || !r.cod) continue; const p = Math.min(...naos); de(r.autor).retrabalho += execs.filter((x) => x.agente === r.autor && x.cod === r.cod && x.projeto === r.projeto && Date.parse(x.inicio) > p).length; }
   for (const d of defs) de(d.agente).escaparam++;
-  const q = require(path.join(RAIZ, 'hooks', 'registro.js')).quantil;
+  const q = registro().quantil;
   for (const a of Object.values(ag)) { a.erro_mediano = a._e.length ? Math.round(q(a._e, 0.5) * 10) / 10 : null; delete a._e; }
   const pegos = revs.reduce((t, r) => t + ['B', 'A', 'M', 'b'].reduce((u, g) => u + (Number(r[g]) || 0), 0), 0);
   return { agentes: ag, captura: { pegos, usuario: defs.length, taxa: pegos + defs.length ? Math.round(pegos / (pegos + defs.length) * 1000) / 10 : null, meta: 80 } };
@@ -519,7 +522,7 @@ re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--js
 let plNovo = {}; try { plNovo = JSON.parse(re.stdout); } catch (e) { /* falhou */ }
 const plVelho = placarAntigo(histEq);
 caso('escala: o placar dá o mesmo resultado da regra antiga (3 mil execuções, 1 mil revisões)', JSON.stringify(ordena(plNovo.agentes)) === JSON.stringify(ordena(plVelho.agentes)) &&
-  JSON.stringify(ordena(plNovo.captura)) === JSON.stringify(ordena(plVelho.captura)), `novo ${JSON.stringify(ordena(plNovo.agentes)).slice(0, 300)}\nvelho ${JSON.stringify(ordena(plVelho.agentes)).slice(0, 300)}`);
+  JSON.stringify(ordena(plNovo.captura)) === JSON.stringify(ordena(plVelho.captura)), `novo ${String(JSON.stringify(ordena(plNovo.agentes))).slice(0, 300)}\nvelho ${String(JSON.stringify(ordena(plVelho.agentes))).slice(0, 300)}`);
 const casa60 = path.join(tmp, 'casa60'); gravarHist(casa60, sintetico(60000, 20000));
 const env60 = { ...env, HOME: casa60, USERPROFILE: casa60 };
 const p60 = path.join(tmp, 'projeto60'); fs.mkdirSync(path.join(p60, '.claude', 'base'), { recursive: true });
@@ -581,7 +584,7 @@ for (const [id, c, t] of [['fg2', 'fb02', 'tf2'], ['fg1', 'fa01', 'tf1']]) {
   fs.copyFileSync(transcricao(id + '.jsonl', '2026-10-28T08:00:00.000Z', '2026-10-28T08:10:00.000Z'), path.join(dMeta, `agent-${id}.jsonl`));
   exeM({ hook_event_name: 'SubagentStart', agent_id: id, agent_type: 'analista-fpa' });
 }
-const agM = require(path.join(RAIZ, 'hooks', 'registro.js')).agentesAgora(pMeta);
+const agM = registro().agentesAgora(pMeta);
 caso('código certo em primeiro plano já no início, pelo .meta.json do agente', (agM.find((x) => x.id === 'fg1') || {}).cod === 'fa01' && (agM.find((x) => x.id === 'fg2') || {}).cod === 'fb02', JSON.stringify(agM));
 for (const id of ['fg2', 'fg1']) exeM({ hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'analista-fpa', agent_transcript_path: path.join(dMeta, `agent-${id}.jsonl`) });
 const exM = lerJsonl(execArq).filter((x) => /^fg/.test(x.id));
@@ -600,7 +603,7 @@ fs.writeFileSync(path.join(b9, '.agentes.jsonl'), [
 ].map((x) => JSON.stringify(x)).join('\n') + '\n');
 for (const [ag9, c, de, ate] of [['dev-powerbi', 's1', -70, -40], ['redator', 's2', -70, -40], ['analista-fpa', 's3', -220, -190]]) estimar(['registrar', '--agente', ag9, '--cod', c, '--de', hm9(de), '--ate', hm9(ate)], p9);
 fs.writeFileSync(path.join(b9, '.progresso', 'redator-s2.json'), JSON.stringify({ feito: 2, total: 3, agora: 'revisão final' }));
-const R9 = require(path.join(RAIZ, 'hooks', 'registro.js'));
+const R9 = registro();
 let ag9 = R9.agentesAgora(p9, { resumo: null });
 const est9 = (id) => (ag9.find((x) => x.id === id) || {}).estado;
 caso('sem notícia: passou do fim da faixa + 30 min sem progresso', est9('h1') === 'sem-noticia' && est9('h2') === 'trabalhando', JSON.stringify(ag9.map((x) => [x.id, x.estado])));
@@ -623,7 +626,7 @@ exe({ hook_event_name: 'SubagentStop', agent_id: 'rv1', agent_type: 'agentes-ult
   last_assistant_message: 'Placar: autor=dev-powerbi cod=ab12 veredito=sim B=0 A=0 M=0 b=0' });
 const rv1 = lerJsonl(execArq).find((x) => x.id === 'rv1') || {};
 caso('código: o revisor com [revisa:ab12] (e [cod:ab12] só no pedido) não fica com o código nem a faixa do autor', rv1.cod === null && rv1.fonte_estimativa === 'sem' && rv1.classe === 'revisao', JSON.stringify(rv1));
-const R10 = require(path.join(RAIZ, 'hooks', 'registro.js'));
+const R10 = registro();
 caso('código: a faixa registrada só vale para o mesmo agente', R10.estimativaPara(p7, 'revisor', 'ab12', Date.now()) === null && !!R10.estimativaPara(p7, 'dev-powerbi', 'ab12', Date.now()), 'faixa de outro agente');
 re = estimar(['registrar', '--agente', 'revisor', '--cod', 'ab12', '--de', '10:00', '--ate', '10:30']);
 const re10 = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--agente', 'revisor', '--estimado', '20', '--cod', 'ab12', '--registrar'], { cwd: p7, env, encoding: 'utf8' });
@@ -648,7 +651,7 @@ fs.writeFileSync(path.join(b11, '.agentes.jsonl'), [
 for (const [ag11, c, de, ate] of [['redator', 'e1', 20, 40], ['dev-powerbi', 'e2', 58, 78], ['pesquisador', 'e3', 5, 20]]) estimar(['registrar', '--agente', ag11, '--cod', c, '--de', hm11(de), '--ate', hm11(ate)], p11);
 fs.writeFileSync(path.join(b11, '.progresso', 'dev-powerbi-e2.json'), JSON.stringify({ feito: 1, total: 6, agora: 'modelo' }));
 fs.writeFileSync(path.join(b11, '.progresso', 'pesquisador-e3.json'), JSON.stringify({ feito: 1, total: 10, agora: 'fontes' }));
-const ag11 = require(path.join(RAIZ, 'hooks', 'registro.js')).agentesAgora(p11, { resumo: null });
+const ag11 = registro().agentesAgora(p11, { resumo: null });
 const k = (id) => ag11.find((x) => x.id === id) || {};
 caso('% estimado: sem progresso gravado o % vem marcado como estimado e o término fica dentro da faixa', k('k1').estimado === true && k('k1').termina <= k('k1').ate && k('k1').termina >= k('k1').de,
   JSON.stringify(k('k1')));

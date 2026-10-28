@@ -117,7 +117,8 @@ outra. Não é o raciocínio do modelo (isso não é visível); é onde o trabal
 
 **Agentes agora (no mapa):** um painel lateral lista cada agente trabalhando, com a cor dele, a barra de %, a etapa em
 que está e "termina por volta de 17h40"; quando cada um termina, aparece o aviso "revisor terminou · 41 min". O
-marcador do agente no desenho ganha um anel que enche com o progresso.
+marcador do agente no desenho ganha um anel que enche com o progresso. Agente parado no meio (ou sessão fechada)
+vira "sem notícia", em cinza, depois do fim da faixa + 30 min sem progresso, e sai do painel 2 h depois.
 
 **Barra no painel de agentes do Claude Code:** cada agente ganha uma linha
 `dev-powerbi · ███████░░░░░ 58% · 4/7 · lote final · 38 min · fim 14h10–14h50`. Liga sozinha com o plugin (o
@@ -125,7 +126,9 @@ marcador do agente no desenho ganha um anel que enche com o progresso.
 
 **De onde vêm o % e o horário:**
 - o **%** é o que o agente grava ao fim de cada etapa (`.claude/base/.progresso/<agente>-<código>.json`); sem isso,
-  é o tempo passado sobre a previsão;
+  é o tempo passado sobre a previsão e aparece como estimado (barra tracejada, "~21% (estimado)");
+- o **código** `[cod:xxxx]` é do trabalho: a correção do mesmo trabalho reusa o código; o revisor recebe
+  `[revisa:xxxx]` e não herda a faixa do autor;
 - o **horário** vem da faixa que o orquestrador registra ao lançar o agente:
   `node scripts/estimar.js faixa --agente <nome> --classe <tipo> --cod <código> --registrar`.
   A faixa sai das execuções parecidas já registradas (mediana e p75), corrigida pelo quanto as estimativas
@@ -135,7 +138,8 @@ marcador do agente no desenho ganha um anel que enche com o progresso.
   `node scripts/estimar.js importar`.
 
 **Placar:** o revisor termina cada relatório com a linha
-`Placar: autor=<agente> cod=<código> veredito=sim|não B= A= M= b=`. O `/placar` mostra, por agente:
+`Placar: autor=<agente> cod=<código> veredito=sim|não B= A= M= b= ids=A-1,M-2`. Cada achado conta uma vez por trabalho,
+mesmo que continue aberto na revisão seguinte. O `/placar` mostra, por agente:
 - quantas vezes passou de primeira;
 - os defeitos por gravidade;
 - os que escaparam ao usuário (`/registrar-defeito`);
@@ -169,7 +173,8 @@ cria memória na sua pasta de usuário nem na raiz do disco.
 ## Privacidade e segurança
 
 - Nada sai do seu computador por causa do plugin: os ganchos só leem o pedido e a pasta, localmente.
-- As correções `era com…` ficam em `~/.claude/agentes-ultimate/` (só o texto do pedido e o agente).
+- O último pedido e as correções `era com…` ficam em `~/.claude/agentes-ultimate/` só como termos (palavras de
+  assunto, sem valores, números, caminhos nem e-mails) e o agente; nunca o texto do pedido.
 - Execuções, revisões e defeitos ficam em `~/.claude/agentes-ultimate/*.jsonl` só com metadados (agente, tipo de
   tarefa, minutos, contagens, código anônimo do projeto); o texto de um defeito fica só no projeto.
 - Publicar (`git push`, `npm publish`, deploy de produção) sempre pede confirmação.

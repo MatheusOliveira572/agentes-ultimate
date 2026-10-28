@@ -42,6 +42,59 @@
 - Testes dos ganchos: 89 casos (37 novos, cada um visto falhando antes da mudança). Os commits dos blocos 1 a 3
   dizem 65, 70 e 78 casos; os números certos são 63, 68 e 76.
 
+### Correções da revisão independente (`docs/revisao-0.7.0.md`), antes de publicar
+A versão continua 0.7.0 (não tinha sido publicada). Um commit por item.
+- **A-1 · fim do agente lento com o histórico:**
+  - antes, o `SubagentStop` refazia o placar inteiro, com custo quadrático (2,4 s com 10 mil execuções, 122 s com
+    60 mil);
+  - agora o gancho só acrescenta a linha e atualiza, pelo trecho novo, um índice por chave
+    (`~/.claude/agentes-ultimate/.indice-*.json`: primeira revisão por trabalho; minutos e fator por chave, os 500
+    mais recentes);
+  - o placar completo é refeito só pela skill `placar` e pelo registro de defeito; o retrabalho é calculado numa
+    passada;
+  - barra, mapa e `estimar.js faixa` usam o mesmo resumo;
+  - medido com 60 mil execuções e 20 mil revisões: o fim do agente custa até 0,3 s além de abrir o Node (281 ms, com
+    Node vazio a 163 ms; 187 ms numa medida com a máquina livre), e a barra também;
+  - o placar dá o mesmo resultado da regra antiga.
+- **M-1 · agente parado:** agente parado (`TaskStop`) ou sessão fechada não fica mais "trabalhando":
+  - passou do fim da faixa + 30 min sem progresso (sem faixa, início + 3 h), vira "sem notícia" (cinza) e sai do
+    painel 2 h depois;
+  - o início de sessão tira do painel os agentes sem sinal de sessões anteriores (se ainda terminarem, o registro
+    vale).
+- **M-2 · troca de código:** dois agentes do mesmo tipo lançados juntos não trocam mais de código. A ligação vem do
+  par certo, não da ordem de chegada:
+  - o `.meta.json` que o Claude Code grava ao lado da transcrição do agente;
+  - o `PostToolUse` do `Agent` (com `agentId` e a descrição);
+  - o `tool_use_id`.
+
+  O pedido mais antigo do mesmo tipo vira só palpite provisório. Provado com 20 rodadas, inícios a 5 ms.
+- **M-3 · regra do código:** o código é do **trabalho**:
+  - correção do mesmo trabalho reusa o código do autor (é o retrabalho);
+  - o revisor recebe `[revisa:xxxx]`, não `[cod:]`, e não herda faixa nem progresso;
+  - o código só é lido da descrição;
+  - a faixa vale só para o mesmo agente, e o `estimar.js` recusa o código de outro agente.
+- **M-4 · % estimado:**
+  - sem progresso gravado, o % aparece como estimado: barra tracejada e "~21% (estimado)" no painel, "▒" e "~21%"
+    na barra;
+  - o término pelo ritmo das etapas fica dentro da faixa.
+- **M-5:** casos para os mutantes B2 (cascata em par), C1 (valor do retrabalho) e C2 ("de primeira" por trabalho).
+  Mutação numa cópia: os 3 são pegos.
+- **M-6 · achado contado duas vezes:** a linha fixa do revisor ganha `ids=A-1,M-2,…`, e o achado ainda aberto mantém
+  o id. O placar conta cada achado uma vez por trabalho (sem ids: o maior número de cada gravidade entre as revisões).
+- **b-5 · privacidade:** `ultimo-pedido.json` e os exemplos do "era com" guardam só os termos do pedido (sem
+  valores, números, caminhos nem e-mails), nunca o texto; os exemplos antigos são convertidos.
+- **Baixos:**
+  - b-1: `AGENTES_ULTIMATE_SEM_PASTA=1` desliga o registro;
+  - b-2: texto da faixa sem o "sem histórico" errado;
+  - b-3: lançador também no `$HOME` quando ele difere da pasta do usuário;
+  - b-4: trava contra o `SubagentStop` repetido em paralelo;
+  - b-6: código da linha Placar limitado a 16 caracteres;
+  - b-7: prova dos casos "falhando antes" em `docs/provas/0.7.0-casos-antes.md` (69 de 73 casos novos falham na
+    0.6.0; os 4 que passam são negativos).
+- Fica para depois: sal no código anônimo do projeto (b-6; tudo é local hoje) e retrabalho pelas correções "era com"
+  (b-7; o registro não guarda qual agente estava errado).
+- Testes dos ganchos: 125 casos, todos passando.
+
 ## 0.6.0 · 2026-10-28
 - **Mapa sem F5:** o servidor avisa a página quando o último pedido muda (`tipo:"busca"`: destaques, caixa "Último
   pedido" e arquivo citado que ainda não estava no desenho) e quando o grafo refeito muda (`tipo:"grafo"`: a página

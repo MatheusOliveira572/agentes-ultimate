@@ -75,13 +75,20 @@ defeito que você achou ─► regra automática no verificador do projeto (prov
 | Faixa de término | `scripts/estimar.js faixa … --registrar` (o orquestrador, ao lançar o agente) | `.claude/base/.estimativas.jsonl` |
 | Progresso | o próprio agente, ao fim de cada etapa (passo 10 do protocolo) | `.claude/base/.progresso/<agente>-<código>.json` |
 | Barra por agente | `hooks/barra.js` pelo `settings.json` do plugin → `~/.claude/agentes-ultimate/barra.js` | — |
-| Placar | linha fixa do revisor lida no `SubagentStop`; `scripts/placar.js` | `revisoes.jsonl`, `defeitos.jsonl`, `placar.json`, `estado.json` |
+| Placar | linha fixa do revisor lida no `SubagentStop` (só grava a linha); `scripts/placar.js` refaz o placar quando a skill pede | `revisoes.jsonl`, `defeitos.jsonl`, `placar.json`, `estado.json` |
+| Índices | ganchos e leitores, só pelo trecho novo dos `.jsonl` | `.indice-execucoes.json` (minutos e fator por chave), `.indice-revisoes.json` (primeira revisão por trabalho) |
 | Agentes agora | `hooks/mapa-servidor.js` (`/agentes` e evento `agentes`) | — |
 
-O código do pedido (`[cod:xxxx]` no fim da descrição do agente) liga as peças. Barra e mapa usam a mesma conta
-(`previsao` em `hooks/registro.js`):
-- o % é o progresso gravado; sem ele, o tempo passado sobre o fim da faixa;
-- o término sai do ritmo do progresso; sem ritmo, do meio da faixa.
+O código do trabalho (`[cod:xxxx]` no fim da descrição do agente) liga as peças:
+- ele é lido só da descrição;
+- a correção do mesmo trabalho reusa o código, e o revisor recebe `[revisa:xxxx]`;
+- o agente se liga ao código pelo `.meta.json` do agente ou pelo `PostToolUse` do `Agent` (par exato), nunca pela
+  ordem de chegada.
+
+Barra e mapa usam a mesma conta (`previsao` em `hooks/registro.js`):
+- o % é o progresso gravado; sem ele, o tempo passado sobre o fim da faixa, marcado como estimado;
+- o término sai do ritmo do progresso, limitado à faixa; sem ritmo, do meio da faixa;
+- agente sem fim e sem sinal depois do prazo vira "sem notícia" e sai do painel 2 h depois.
 
 ## Limites conhecidos
 
