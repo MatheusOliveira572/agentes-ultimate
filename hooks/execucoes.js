@@ -108,9 +108,11 @@ function tratar(d) {
 }
 
 // Linha fixa no fim do relatório do revisor:
-//   Placar: autor=<agente> cod=<código> veredito=sim|não B=<n> A=<n> M=<n> b=<n>
+//   Placar: autor=<agente> cod=<código> veredito=sim|não B=<n> A=<n> M=<n> b=<n> ids=<A-1,M-2,…>
 // Vem da última mensagem do agente ou, com SubagentHandback, do fim da transcrição. Revisor sem a linha: aviso.
-const LINHA_PLACAR = /Placar:\s*autor=([\w:.-]+)\s+cod=([\w-]+)\s+veredito=(sim|n[ãa]o)\s+B=(\d+)\s+A=(\d+)\s+M=(\d+)\s+b=(\d+)/gi;
+// ids (opcional): os achados abertos nesta revisão, com o mesmo id da anterior quando o achado continua aberto; o
+// placar conta cada achado uma vez por trabalho.
+const LINHA_PLACAR = /Placar:\s*autor=([\w:.-]+)\s+cod=([\w-]+)\s+veredito=(sim|n[ãa]o)\s+B=(\d+)\s+A=(\d+)\s+M=(\d+)\s+b=(\d+)(?:\s+ids=([\w.,-]*))?/gi;
 function placarDoRevisor(cwd, agente, id, msg, cauda) {
   let m = null;
   for (const txt of [msg, cauda]) { const todas = [...String(txt || '').matchAll(LINHA_PLACAR)]; if (todas.length) { m = todas[todas.length - 1]; break; } }
@@ -126,6 +128,8 @@ function placarDoRevisor(cwd, agente, id, msg, cauda) {
   const projeto = R.projetoHash(cwd), autor = R.agenteCurto(m[1]), cod = m[2].toLowerCase();
   const rev = { em: new Date().toISOString(), revisor: agente, id, autor, cod, projeto,
     veredito: /^sim$/i.test(m[3]) ? 'sim' : 'nao', B: +m[4], A: +m[5], M: +m[6], b: +m[7] };
+  const ids = String(m[8] || '').split(',').map((x) => x.trim()).filter((x) => x && x.length <= 12).slice(0, 60);
+  if (ids.length) rev.ids = ids;
   const ja = R.indiceRevisoes(256 * 1024); // índice por chave, lido só no trecho novo
   rev.primeira = ja ? !ja.chaves[R.chaveRevisao(rev)] : null; // índice frio e histórico grande: o placar decide depois
   R.acrescentar(path.join(dir, 'revisoes.jsonl'), rev, 64 * 1024 * 1024);

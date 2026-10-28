@@ -37,13 +37,26 @@ function calcular({ projeto } = {}) {
     }
   }
   // Tudo agrupado por chave numa passada (linear): revisões por trabalho e o primeiro "não" de cada um.
-  const porCod = {}, primeiroNao = {};
+  // Achados por trabalho, cada um contado uma vez: com ids, a união deles (a gravidade é a 1ª letra: B, A, M, b);
+  // sem ids, o maior número de cada gravidade entre as revisões (o que continua aberto não soma de novo).
+  const GS = ['B', 'A', 'M', 'b'];
+  const porCod = {}, primeiroNao = {}, achados = {};
   for (const r of revs) {
     const a = de(r.autor);
-    for (const g of ['B', 'A', 'M', 'b']) a[g] += Number(r[g]) || 0;
     const k = R.chaveRevisao(r);
+    const ac = (achados[k] = achados[k] || { autor: r.autor, ids: new Set(), max: { B: 0, A: 0, M: 0, b: 0 } });
+    if (Array.isArray(r.ids) && r.ids.length) for (const id of r.ids) ac.ids.add(String(id));
+    else for (const g of GS) ac.max[g] = Math.max(ac.max[g], Number(r[g]) || 0);
     if (!porCod[k]) { porCod[k] = r; a.revisados++; if (r.veredito === 'sim') a.de_primeira++; }
     if (r.veredito === 'nao' && r.cod) { const t = Date.parse(r.em); if (!(primeiroNao[k] <= t)) primeiroNao[k] = t; }
+  }
+  let pegos = 0;
+  for (const ac of Object.values(achados)) {
+    const a = de(ac.autor);
+    for (const g of GS) {
+      const n = Math.max(ac.max[g], [...ac.ids].filter((id) => id[0] === g).length);
+      a[g] += n; pegos += n;
+    }
   }
   // Retrabalho: execuções do autor com o mesmo código que começaram depois do primeiro "não".
   for (const x of execs) {
@@ -53,7 +66,6 @@ function calcular({ projeto } = {}) {
   }
   for (const d of defs) de(d.agente).escaparam++;
   for (const a of Object.values(ag)) { a.erro_mediano = a._erros.length ? Math.round(R.quantil(a._erros, 0.5) * 10) / 10 : null; delete a._erros; }
-  const pegos = revs.reduce((s, r) => s + ['B', 'A', 'M', 'b'].reduce((t, g) => t + (Number(r[g]) || 0), 0), 0);
   const usuario = defs.length;
   const captura = { pegos, usuario, taxa: pegos + usuario ? Math.round(pegos / (pegos + usuario) * 1000) / 10 : null, meta: 80 };
   return { gerado_em: new Date().toISOString(), projeto: projeto || null, agentes: ag, captura };

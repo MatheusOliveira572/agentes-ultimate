@@ -13,8 +13,11 @@ description: Mostra o placar dos agentes — quantas vezes cada um passou no rev
    Não invente número: o que o placar não tiver ("—"), diga que ainda não há registro.
 3. De onde vêm os números (só metadados, nunca o conteúdo do pedido):
    - execuções e minutos: o gancho de cada agente que termina (`execucoes.jsonl`);
-   - revisor: a linha fixa `Placar: autor=… cod=… veredito=… B= A= M= b=` no fim do relatório (`revisoes.jsonl`);
+   - revisor: a linha fixa `Placar: autor=… cod=… veredito=… B= A= M= b= ids=…` no fim do relatório
+     (`revisoes.jsonl`); cada achado conta uma vez por trabalho (pelos ids; sem ids, o maior número de cada gravidade
+     entre as revisões do mesmo código);
      revisão sem essa linha não conta e vira aviso em `estado.json`;
    - defeitos que escaparam: a skill `registrar-defeito` (`defeitos.jsonl`; o texto fica só no projeto);
-   - retrabalho: execuções do autor com o mesmo código de pedido depois de um "não" do revisor;
+   - retrabalho: execuções do autor com o mesmo código de trabalho depois de um "não" do revisor (a correção reusa o
+     código);
    - acerto da estimativa: execuções com faixa registrada (`estimar.js faixa --registrar`).

@@ -67,7 +67,7 @@ for (const arq of agentes) {
 }
 
 // Placar (0.7.0): o revisor termina o relatório com a linha fixa que o gancho lê, e o eval cobra a linha.
-const LINHA_FIXA = 'Placar: autor=<agente> cod=<código> veredito=sim|não B=<n> A=<n> M=<n> b=<n>';
+const LINHA_FIXA = 'Placar: autor=<agente> cod=<código> veredito=sim|não B=<n> A=<n> M=<n> b=<n> ids=<A-1,M-2,…>';
 try { if (!fs.readFileSync(path.join(dirAg, 'revisor.md'), 'utf8').includes(LINHA_FIXA)) erros.push(`revisor.md: falta a linha fixa do placar ("${LINHA_FIXA}")`); } catch (e) { erros.push('revisor.md não existe'); }
 try { if (!/Placar:/.test(fs.readFileSync(path.join(RAIZ, 'evals', 'revisor.md'), 'utf8'))) erros.push('evals/revisor.md: falta o caso da linha Placar'); } catch (e) { /* já acusado acima */ }
 

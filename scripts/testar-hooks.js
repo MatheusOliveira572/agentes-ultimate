@@ -685,6 +685,25 @@ for (const [id, c, v] of [['c2a', 'w1', 'não'], ['c2b', 'w2', 'sim']]) {
 const rvC2 = lerJsonl(revArq).filter((x) => x.id === 'c2a' || x.id === 'c2b');
 caso('de primeira no registro: a 1ª revisão de outro código do mesmo autor é "de primeira"', rvC2.length === 2 && rvC2[0].primeira === true && rvC2[1].primeira === true, JSON.stringify(rvC2));
 
+// ---- M-6 · a 2ª revisão do mesmo trabalho não soma de novo o achado que continua aberto ----
+const pM6 = path.join(tmp, 'projeto-m6'); fs.mkdirSync(path.join(pM6, '.claude', 'base'), { recursive: true });
+const casaM6 = path.join(tmp, 'casa-m6'); fs.mkdirSync(casaM6);
+const envM6 = { ...env, HOME: casaM6, USERPROFILE: casaM6 };
+const revM6 = (id, linha) => spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { input: JSON.stringify({ cwd: pM6, hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'revisor',
+  last_assistant_message: linha }), env: envM6, encoding: 'utf8' });
+revM6('n1', 'Placar: autor=dev cod=s1 veredito=não B=0 A=1 M=1 b=0');            // sem ids: o Alto e o Médio continuam abertos na 2ª
+revM6('n2', 'Placar: autor=dev cod=s1 veredito=não B=0 A=1 M=1 b=0');
+revM6('i1', 'Placar: autor=redator cod=s2 veredito=não B=0 A=1 M=1 b=0 ids=A-1,M-1'); // com ids: A-1 continua, M-1 fechou, M-2 é novo
+revM6('i2', 'Placar: autor=redator cod=s2 veredito=não B=0 A=1 M=1 b=0 ids=A-1,M-2');
+const rvM6 = lerJsonl(path.join(casaM6, '.claude', 'agentes-ultimate', 'revisoes.jsonl'));
+caso('achados: a linha fixa aceita ids e o registro guarda a lista', rvM6.length === 4 && JSON.stringify(rvM6[3].ids) === '["A-1","M-2"]', JSON.stringify(rvM6));
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { cwd: pM6, env: envM6, encoding: 'utf8' });
+let plM6 = {}; try { plM6 = JSON.parse(re.stdout); } catch (e) { /* falhou */ }
+const dM6 = (plM6.agentes || {}).dev || {}, rM6 = (plM6.agentes || {}).redator || {};
+caso('achados sem ids: o que continua aberto não conta 2 vezes (A 1, M 1)', dM6.A === 1 && dM6.M === 1, re.stdout + re.stderr);
+caso('achados com ids: conta por achado (A-1 uma vez; M-1 e M-2 → M 2) e a taxa usa a mesma conta', rM6.A === 1 && rM6.M === 2 && plM6.captura && plM6.captura.pegos === 5, re.stdout + re.stderr);
+caso('revisor e eval pedem os ids na linha fixa', /ids=/.test(fs.readFileSync(path.join(RAIZ, 'agents', 'revisor.md'), 'utf8')) && /ids=/.test(fs.readFileSync(path.join(RAIZ, 'evals', 'revisor.md'), 'utf8')), 'falta ids=');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
