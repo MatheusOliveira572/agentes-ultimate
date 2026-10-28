@@ -166,6 +166,37 @@ function referencia(execs, agente, classe, filtro = () => true, minimo = 3) {
 }
 const execucoes = () => lerJsonl(path.join(pastaGlobal(), 'execucoes.jsonl'), 64 * 1024 * 1024);
 
+// Previsão de um agente em andamento (a barra e o mapa usam a mesma conta):
+// - progresso: o que o agente gravou (feito/total); sem ele, tempo decorrido ÷ fim da faixa (no máximo 99%);
+// - faixa: a registrada pelo orquestrador; sem ela, início + [mediana, p75] das execuções parecidas;
+// - termina: pelo ritmo (início + decorrido ÷ progresso, quando já passou de 15%), senão o meio da faixa; arredonda
+//   para 5 min e nunca fica no passado; passou do fim da faixa → passou = minutos além dela.
+function previsao(cwd, { agente, cod, inicio, descricao, agora = Date.now(), execs }) {
+  inicio = inicio || agora;
+  const prog = progressoPara(cwd, agente, cod, agora);
+  let de = null, ate = null, fonte = null;
+  const est = estimativaPara(cwd, agente, cod, inicio);
+  if (est && Date.parse(est.ate)) { de = Date.parse(est.de) || null; ate = Date.parse(est.ate); fonte = 'registrada'; }
+  if (!ate) {
+    const ref = referencia(execs || execucoes(), agente, classeDe(descricao));
+    if (ref.lista.length) {
+      const m = ref.lista.map((x) => x.minutos);
+      de = inicio + quantil(m, 0.5) * 60000; ate = inicio + Math.max(quantil(m, 0.5), quantil(m, 0.75)) * 60000; fonte = 'historico';
+    }
+  }
+  const decorrido = Math.max(0, agora - inicio);
+  let frac = null;
+  if (prog) frac = prog.feito / prog.total;
+  else if (ate && ate > inicio) frac = Math.min(0.99, decorrido / (ate - inicio));
+  const cinco = 5 * 60000;
+  let termina = null;
+  if (prog && frac >= 0.15 && frac < 1 && decorrido > 60000) termina = inicio + decorrido / frac;
+  else if (ate) termina = de ? (de + ate) / 2 : ate;
+  if (termina != null) termina = Math.max(Math.ceil(agora / cinco) * cinco, Math.round(termina / cinco) * cinco);
+  const passou = ate && agora > ate ? Math.round((agora - ate) / 60000) : null;
+  return { prog, frac, de, ate, fonte, termina, passou, decorridoMin: Math.round(decorrido / 60000) };
+}
+
 // Hora "14:10" ou "14h10" no dia de referência (local). Devolve ms ou null.
 function deHora(txt, ref = Date.now()) {
   const m = /^(\d{1,2})\s*[:h]\s*(\d{2})$/i.exec(String(txt || '').trim());
@@ -178,5 +209,5 @@ const hhmm = (ms) => { const d = new Date(ms); return `${d.getHours()}h${String(
 module.exports = {
   base, pastaGlobal, versaoPlugin, agenteCurto, codDe, classes, classeValida, classeDe, projetoHash, nomeCurto, permitida,
   lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, VALIDADE_PROGRESSO_MS,
-  quantil, referencia, execucoes,
+  quantil, referencia, execucoes, previsao,
 };

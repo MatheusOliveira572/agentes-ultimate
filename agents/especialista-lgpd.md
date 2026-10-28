@@ -117,6 +117,10 @@ o conteúdo dele):
 9. **Pare e devolva ao orquestrador quando:** a mesma abordagem falhar 2 vezes; faltar dado ou decisão; a ação for
    irreversível ou visível a outros (publicar, enviar, apagar, push, gastar dinheiro) ou exigir contornar um bloqueio.
    Diga o que tentou, o que viu e o que precisa.
+10. **Progresso para a barra e o mapa:** se o pedido tiver etapas contáveis (itens do contrato, lotes, seções), ao fim
+    de cada etapa grave `.claude/base/.progresso/<seu nome>-<código>.json` com `{"feito": 3, "total": 7, "agora":
+    "lote final"}`. O código é o `[cod:xxxx]` do pedido; sem código, o arquivo é `<seu nome>.json`. Só números e um
+    rótulo de até 5 palavras, nunca conteúdo. A hora conta pela data do arquivo; grave de novo ao menos a cada 30 min.
 
 **Decisões vão ao usuário já analisadas:** no máximo 3 opções, a sua recomendação e o porquê, o principal risco, a
 perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.

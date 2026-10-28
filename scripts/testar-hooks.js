@@ -341,6 +341,46 @@ const regFx = lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl')).f
 caso('faixa --registrar grava a mesma faixa que mostrou', re.status === 0 && regFx && regFx.agente === 'analista-x' && regFx.classe === 'dados' &&
   Math.round((Date.parse(regFx.ate) - Date.parse(regFx.de)) / 60000) >= 5, `${re.stdout}${re.stderr} ${JSON.stringify(regFx)}`);
 
+// ---- 0.7.0 · progresso gravado pelo agente e barra por agente no painel do Claude Code ----
+const prog7 = path.join(p7, '.claude', 'base', '.progresso');
+fs.mkdirSync(prog7, { recursive: true });
+fs.writeFileSync(path.join(prog7, 'dev-powerbi-k1.json'), JSON.stringify({ feito: 3, total: 4, agora: 'lote final das telas extra' }));
+fs.writeFileSync(path.join(prog7, 'dev-powerbi-k2.json'), JSON.stringify({ feito: 1, total: 4, agora: 'modelo' }));
+const velho = path.join(prog7, 'revisor-k3.json');
+fs.writeFileSync(velho, JSON.stringify({ feito: 2, total: 3, agora: 'conferência' }));
+const meiaHora = (Date.now() - 31 * 60000) / 1000; fs.utimesSync(velho, meiaHora, meiaHora);
+estimar(['registrar', '--agente', 'revisor', '--cod', 'k3', '--de', new Date(Date.now() - 30 * 60000).toTimeString().slice(0, 5), '--ate', new Date(Date.now() - 20 * 60000).toTimeString().slice(0, 5)]);
+const agoraMs = Date.now();
+const tarefas = [
+  { id: 't1', type: 'local_agent', agentType: 'agentes-ultimate:dev-powerbi', status: 'running', description: 'telas da escala [cod:k1]', startTime: agoraMs - 20 * 60000, tokenCount: 1 },
+  { id: 't2', type: 'local_agent', agentType: 'agentes-ultimate:dev-powerbi', status: 'running', description: 'modelo novo [cod:k2]', startTime: agoraMs - 5 * 60000, tokenCount: 1 },
+  { id: 't3', type: 'local_agent', agentType: 'agentes-ultimate:revisor', status: 'running', description: 'revise a rodada [cod:k3]', startTime: agoraMs - 40 * 60000, tokenCount: 1 },
+  { id: 't4', type: 'local_agent', agentType: 'Explore', status: 'completed', description: 'x', startTime: agoraMs - 60000, tokenCount: 1 },
+];
+const barra = (dados, script = path.join(RAIZ, 'hooks', 'barra.js')) => {
+  const r = spawnSync(process.execPath, [script], { input: typeof dados === 'string' ? dados : JSON.stringify(dados), env, encoding: 'utf8' });
+  const linhas = (r.stdout || '').trim().split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch (e) { return { erro: l }; } });
+  return { code: r.status, out: r.stdout, linhas, porId: Object.fromEntries(linhas.map((l) => [l.id, l.content])) };
+};
+let br = barra({ cwd: p7, columns: 200, tasks: tarefas });
+caso('barra: dois agentes do mesmo tipo com códigos diferentes têm progressos diferentes', /75%/.test(br.porId.t1 || '') && /3\/4/.test(br.porId.t1 || '') &&
+  /25%/.test(br.porId.t2 || '') && /1\/4 · modelo/.test(br.porId.t2 || ''), br.out);
+caso('barra: rótulo da etapa com até 5 palavras e só tarefas em andamento', /lote final das telas extra/.test(br.porId.t1 || '') && !('t4' in br.porId), br.out);
+caso('barra: progresso de mais de 30 min é ignorado e a faixa vencida avisa "passou da previsão"', !/2\/3/.test(br.porId.t3 || '') && /passou da previsão.*\+\d+ min/.test(br.porId.t3 || ''), br.out);
+br = barra({ cwd: p7, columns: 40, tasks: tarefas });
+caso('barra: corta na largura da coluna', br.linhas.length === 3 && br.linhas.every((l) => [...l.content].length <= 40), br.out);
+br = barra('{isto não é json');
+caso('barra: entrada inválida sai 0 sem texto', br.code === 0 && !br.out, `${br.code} ${br.out}`);
+const lancador = path.join(casa, '.claude', 'agentes-ultimate', 'barra.js');
+re = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js'), '--instalar'], { input: '{}', env, encoding: 'utf8' });
+br = fs.existsSync(lancador) ? barra({ cwd: p7, columns: 200, tasks: tarefas }, lancador) : { porId: {} };
+caso('barra --instalar grava o lançador fixo e ele mostra a mesma barra', re.status === 0 && /75%/.test(br.porId.t1 || ''), `${re.status} ${re.stderr} ${JSON.stringify(br.porId)}`);
+let cfgPlugin = {}; try { cfgPlugin = JSON.parse(fs.readFileSync(path.join(RAIZ, 'settings.json'), 'utf8')); } catch (e) { /* sem arquivo */ }
+caso('settings.json do plugin liga a barra pelo lançador fixo', cfgPlugin.subagentStatusLine && cfgPlugin.subagentStatusLine.type === 'command' &&
+  /\$HOME\/\.claude\/agentes-ultimate\/barra\.js/.test(cfgPlugin.subagentStatusLine.command), JSON.stringify(cfgPlugin));
+const ses = JSON.parse(fs.readFileSync(path.join(RAIZ, 'hooks', 'hooks.json'), 'utf8')).hooks.SessionStart[0].hooks.map((h) => h.command).join(' ');
+caso('o início de sessão regrava o lançador (a pasta do plugin muda a cada versão)', /barra\.js" --instalar/.test(ses), ses);
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

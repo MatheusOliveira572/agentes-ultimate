@@ -28,6 +28,9 @@ for (const arq of agentes) {
   const desc = (cab.match(/^description:\s*(.+)$/m) || [])[1] || '';
   if (!/Use para/.test(desc) || !/Não use para/.test(desc)) erros.push(`${arq}: description sem "Use para" e "Não use para"`);
   if (!t.includes(comum)) erros.push(`${arq}: protocolo comum diferente de fonte/comum.md (rode o gerador)`);
+  // Progresso para a barra e o mapa (0.7.0): o passo está no protocolo e o agente consegue gravar o arquivo.
+  if (!/\.claude\/base\/\.progresso\/<seu nome>-<código>\.json/.test(t)) erros.push(`${arq}: falta o passo de gravar o progresso (.claude/base/.progresso/)`);
+  if (!/^tools:.*\bWrite\b/m.test(cab)) erros.push(`${arq}: sem a ferramenta Write (precisa gravar o progresso e a memória)`);
   let pos = -1;
   for (const s of SECOES) {
     const p = t.indexOf(s);

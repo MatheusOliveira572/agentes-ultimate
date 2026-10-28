@@ -1,0 +1,6 @@
+{
+  "subagentStatusLine": {
+    "type": "command",
+    "command": "node \"$HOME/.claude/agentes-ultimate/barra.js\""
+  }
+}

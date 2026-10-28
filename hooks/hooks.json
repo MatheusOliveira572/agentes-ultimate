@@ -13,6 +13,11 @@
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/mapa-servidor.js\" --auto",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/barra.js\" --instalar",
+            "timeout": 5
           }
         ]
       }

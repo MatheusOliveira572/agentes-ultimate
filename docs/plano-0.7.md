@@ -9,6 +9,9 @@
   `CLAUDE_PROJECT_DIR`, **sem** `CLAUDE_PLUGIN_ROOT` (código da função que roda a barra), e a pasta do plugin muda a
   cada versão. Por isso o `settings.json` chama um lançador fixo, `$HOME/.claude/agentes-ultimate/barra.js`, que o
   gancho de início de sessão regrava apontando para a versão instalada. A skill `instalar-barra` não é necessária.
+  Prova: `claude -p --plugin-dir <plugin> --debug` registrou "Cached plugin settings with keys: subagentStatusLine",
+  o início de sessão gravou o lançador, e o comando `node "$HOME/.claude/agentes-ultimate/barra.js"` deu a mesma
+  barra no bash e no PowerShell. Falta só ver a barra no painel do Claude Code (print do usuário).
 - **V2 · `claude plugin eval` existe** (`claude plugin --help`: casos em `evals/**/case.yaml` ou `prompt.md` +
   `graders/*.md`). Fica para a 0.7.1 (laço de melhoria).
 - **V3 · confirmado** com um plugin de teste que grava só as chaves recebidas, em `claude -p` com 1 agente:
