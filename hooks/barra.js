@@ -26,7 +26,7 @@ const cheia = (frac, n) => { const c = Math.round(Math.max(0, Math.min(1, frac))
 function linhas(d) {
   const agora = Date.now();
   const largura = Math.max(20, Number(d.columns) || 100);
-  let execs = null; // lidas uma vez, só se algum agente precisar do histórico
+  let resumo; // lido uma vez, só se algum agente precisar do histórico
   const out = [];
   for (const t of d.tasks || []) {
     if (!t || !t.id || (t.status && t.status !== 'running')) continue;
@@ -34,8 +34,8 @@ function linhas(d) {
     const cwd = t.cwd || d.cwd || process.cwd();
     const cod = R.codDe(t.description, t.label);
     const inicio = Number(t.startTime) || agora;
-    if (!execs && !R.estimativaPara(cwd, agente, cod, inicio)) execs = R.execucoes();
-    const p = R.previsao(cwd, { agente, cod, inicio, descricao: t.description, agora, execs: execs || [] });
+    if (resumo === undefined && !R.estimativaPara(cwd, agente, cod, inicio)) resumo = R.resumoExecucoes();
+    const p = R.previsao(cwd, { agente, cod, inicio, descricao: t.description, agora, resumo: resumo || null });
     let fim;
     if (!p.ate) fim = 'sem previsão';
     else if (p.passou != null) fim = `passou da previsão (${R.hhmm(p.ate)}) · +${p.passou} min`;

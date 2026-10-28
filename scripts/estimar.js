@@ -83,21 +83,21 @@ function faixa(o) {
   if (estimado != null && !(estimado > 0)) falha('--estimado em minutos, maior que zero');
   const inicio = o.inicio && o.inicio !== true ? R.deHora(o.inicio) : Date.now();
   if (inicio == null) falha('--inicio HH:MM');
-  const execs = R.execucoes();
-  const ref = R.referencia(execs, agente, classe);
-  const mins = ref.lista.map((x) => x.minutos);
+  const resumo = R.resumoExecucoes();
+  const ref = R.referenciaResumo(resumo, agente, classe);
+  const mins = ref.valores;
   const r1 = (x) => (x == null ? null : Math.round(x * 10) / 10);
   const r2 = (x) => (x == null ? null : Math.round(x * 100) / 100);
-  const res = { agente, classe, nivel: ref.nivel, n: ref.lista.length, mediana: r1(R.quantil(mins, 0.5)), p75: r1(R.quantil(mins, 0.75)),
+  const res = { agente, classe, nivel: ref.nivel, n: mins.length, mediana: r1(R.quantil(mins, 0.5)), p75: r1(R.quantil(mins, 0.75)),
     estimado_min: estimado, fator_nivel: null, fator_n: 0, fator_mediana: null, fator_p75: null, de_min: null, ate_min: null };
   if (estimado) {
-    const rf = R.referencia(execs, agente, classe, (x) => x.estimado_min > 0);
-    const fat = rf.lista.map((x) => x.minutos / x.estimado_min);
+    const rf = R.referenciaResumo(resumo, agente, classe, 'fat');
+    const fat = rf.valores;
     if (fat.length) {
       Object.assign(res, { fator_nivel: rf.nivel, fator_n: fat.length, fator_mediana: r2(R.quantil(fat, 0.5)), fator_p75: r2(R.quantil(fat, 0.75)) });
       res.de_min = r1(estimado * res.fator_mediana); res.ate_min = r1(estimado * Math.max(res.fator_mediana, res.fator_p75));
     } else { res.de_min = estimado; res.ate_min = estimado * 2; res.nivel = ref.n ? res.nivel : 'sem histórico'; res.fator_nivel = 'sem histórico'; }
-  } else if (ref.lista.length) { res.de_min = res.mediana; res.ate_min = Math.max(res.mediana, res.p75); }
+  } else if (mins.length) { res.de_min = res.mediana; res.ate_min = Math.max(res.mediana, res.p75); }
   const virgula = (x) => String(x).replace('.', ',');
   if (res.de_min == null) {
     res.texto = `sem histórico (n=0 para ${agente || 'este agente'}): informe --estimado <min>`;

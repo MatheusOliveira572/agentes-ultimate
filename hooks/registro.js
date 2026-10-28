@@ -147,40 +147,96 @@ function quantil(v, q) {
   return s[lo] + (s[hi] - s[lo]) * (i - lo);
 }
 // Classe de referência (Flyvbjerg): as execuções parecidas, em cascata até ter n ≥ 3: agente+classe → agente →
-// classe → todos. Execução retomada fica fora (o tempo inclui a espera). Devolve { nivel, lista }.
-function referencia(execs, agente, classe, filtro = () => true, minimo = 3) {
-  const validas = execs.filter((x) => x && x.minutos > 0 && !x.retomado && filtro(x));
-  const temClasse = classe && classe !== 'outra';
-  const niveis = [
-    ['agente+classe', agente && temClasse, (x) => x.agente === agente && x.classe === classe],
-    ['agente', agente, (x) => x.agente === agente],
-    ['classe', temClasse, (x) => x.classe === classe],
-    ['todos', true, () => true],
-  ];
-  for (const [nivel, vale, f] of niveis) {
-    if (!vale) continue;
-    const lista = validas.filter(f);
-    if (lista.length >= minimo) return { nivel, lista };
-  }
-  return { nivel: 'sem histórico', lista: [] };
-}
+// classe → todos. Execução retomada fica fora (o tempo inclui a espera). Ver referenciaResumo.
 const execucoes = () => lerJsonl(path.join(pastaGlobal(), 'execucoes.jsonl'), 64 * 1024 * 1024);
+
+// Índice incremental de um .jsonl que só cresce: guarda quantos bytes já leu e o resumo; a cada uso lê só o que chegou
+// depois (custo proporcional ao novo, não ao histórico). Arquivo menor que o já lido (girou para .1 ou foi apagado) →
+// refaz do zero com o .1 e o atual. Gravação por arquivo temporário + troca de nome (dois ganchos ao mesmo tempo não
+// corrompem: no pior caso um refaz o trecho). maxNovo: se faltar ler mais do que isso, devolve null (o gancho não paga
+// a reconstrução; quem lê sem pressa passa Infinity).
+const MAX_POR_CHAVE = 500;
+function indice(nome, vazio, reduzir, maxNovo = Infinity) {
+  const arq = path.join(pastaGlobal(), nome + '.jsonl');
+  const arqIdx = path.join(pastaGlobal(), `.indice-${nome}.json`);
+  let idx = null;
+  try { idx = JSON.parse(fs.readFileSync(arqIdx, 'utf8')); } catch (e) { /* sem índice */ }
+  let tam = 0;
+  try { tam = fs.statSync(arq).size; } catch (e) { /* sem arquivo */ }
+  const refazer = !idx || idx.v !== 1 || tam < idx.bytes;
+  if (!refazer && tam === idx.bytes) return idx.estado;
+  let ler = refazer ? tam : tam - idx.bytes;
+  if (refazer) { try { ler += fs.statSync(arq + '.1').size; } catch (e) { /* sem .1 */ } }
+  if (ler > maxNovo) return refazer ? null : idx.estado;
+  if (refazer) {
+    idx = { v: 1, bytes: 0, estado: vazio() };
+    ler1(arq + '.1', 0, (o) => reduzir(idx.estado, o));
+  }
+  idx.bytes += ler1(arq, idx.bytes, (o) => reduzir(idx.estado, o));
+  try {
+    fs.mkdirSync(pastaGlobal(), { recursive: true });
+    const tmp = `${arqIdx}.${process.pid}.tmp`;
+    fs.writeFileSync(tmp, JSON.stringify(idx)); fs.renameSync(tmp, arqIdx);
+  } catch (e) { /* fica para a próxima */ }
+  return idx.estado;
+}
+// Lê de "desde" até a última quebra de linha, passa cada objeto a "cada" e devolve quantos bytes consumiu.
+function ler1(arq, desde, cada) {
+  let fd;
+  try {
+    fd = fs.openSync(arq, 'r');
+    const tam = fs.fstatSync(fd).size;
+    if (tam <= desde) return 0;
+    const buf = Buffer.alloc(tam - desde);
+    fs.readSync(fd, buf, 0, buf.length, desde);
+    const fimLinha = buf.lastIndexOf(10);
+    if (fimLinha < 0) return 0;
+    for (const l of buf.subarray(0, fimLinha).toString('utf8').split('\n')) { if (!l.trim()) continue; try { cada(JSON.parse(l)); } catch (e) { /* linha quebrada */ } }
+    return fimLinha + 1;
+  } catch (e) { return 0; } finally { if (fd !== undefined) try { fs.closeSync(fd); } catch (e) { /* já fechado */ } }
+}
+// Resumo das execuções para a estimativa: minutos (e fator real ÷ estimado) por chave, os 500 mais recentes de cada.
+// Chaves: "ac:<agente>|<classe>", "a:<agente>", "c:<classe>", "*".
+function resumoExecucoes(maxNovo = Infinity) {
+  const poe = (m, k, v) => { const l = (m[k] = m[k] || []); l.push(v); if (l.length > MAX_POR_CHAVE) l.shift(); };
+  return indice('execucoes', () => ({ min: {}, fat: {} }), (e, x) => {
+    if (!x || !(x.minutos > 0) || x.retomado) return;
+    const chaves = ['*'];
+    if (x.agente) chaves.push('a:' + x.agente);
+    if (x.classe && x.classe !== 'outra') chaves.push('c:' + x.classe);
+    if (x.agente && x.classe && x.classe !== 'outra') chaves.push(`ac:${x.agente}|${x.classe}`);
+    for (const k of chaves) { poe(e.min, k, x.minutos); if (x.estimado_min > 0) poe(e.fat, k, x.minutos / x.estimado_min); }
+  }, maxNovo);
+}
+// Revisões por chave (projeto|autor|código): a primeira revisão de cada trabalho é a que conta "de primeira".
+const chaveRevisao = (r) => `${r.projeto}|${r.autor}|${r.cod}`;
+function indiceRevisoes(maxNovo = Infinity) {
+  return indice('revisoes', () => ({ chaves: {} }), (e, r) => { if (r && r.autor) { const k = chaveRevisao(r); if (!e.chaves[k]) e.chaves[k] = r.veredito === 'sim' ? 's' : 'n'; } }, maxNovo);
+}
+// Classe de referência pelo resumo (mesma cascata da função referencia): { nivel, valores }.
+function referenciaResumo(resumo, agente, classe, tipo = 'min', minimo = 3) {
+  const m = (resumo && resumo[tipo]) || {};
+  const temClasse = classe && classe !== 'outra';
+  const niveis = [['agente+classe', agente && temClasse, `ac:${agente}|${classe}`], ['agente', agente, 'a:' + agente], ['classe', temClasse, 'c:' + classe], ['todos', true, '*']];
+  for (const [nivel, vale, k] of niveis) if (vale && (m[k] || []).length >= minimo) return { nivel, valores: m[k] };
+  return { nivel: 'sem histórico', valores: [] };
+}
 
 // Previsão de um agente em andamento (a barra e o mapa usam a mesma conta):
 // - progresso: o que o agente gravou (feito/total); sem ele, tempo decorrido ÷ fim da faixa (no máximo 99%);
 // - faixa: a registrada pelo orquestrador; sem ela, início + [mediana, p75] das execuções parecidas;
 // - termina: pelo ritmo (início + decorrido ÷ progresso, quando já passou de 15%), senão o meio da faixa; arredonda
 //   para 5 min e nunca fica no passado; passou do fim da faixa → passou = minutos além dela.
-function previsao(cwd, { agente, cod, inicio, descricao, classe, agora = Date.now(), execs }) {
+function previsao(cwd, { agente, cod, inicio, descricao, classe, agora = Date.now(), resumo }) {
   inicio = inicio || agora;
   const prog = progressoPara(cwd, agente, cod, agora);
   let de = null, ate = null, fonte = null;
   const est = estimativaPara(cwd, agente, cod, inicio);
   if (est && Date.parse(est.ate)) { de = Date.parse(est.de) || null; ate = Date.parse(est.ate); fonte = 'registrada'; }
   if (!ate) {
-    const ref = referencia(execs || execucoes(), agente, classe || classeDe(descricao));
-    if (ref.lista.length) {
-      const m = ref.lista.map((x) => x.minutos);
+    const ref = referenciaResumo(resumo === undefined ? resumoExecucoes() : resumo, agente, classe || classeDe(descricao));
+    if (ref.valores.length) {
+      const m = ref.valores;
       de = inicio + quantil(m, 0.5) * 60000; ate = inicio + Math.max(quantil(m, 0.5), quantil(m, 0.75)) * 60000; fonte = 'historico';
     }
   }
@@ -199,7 +255,7 @@ function previsao(cwd, { agente, cod, inicio, descricao, classe, agora = Date.no
 
 // Agentes agora (painel do mapa ao vivo): quem começou e não terminou (até 12 h atrás) e quem terminou nos últimos
 // 10 min, com %, etapa (até 4 palavras), término previsto e faixa. Lê .claude/base/.agentes.jsonl.
-function agentesAgora(cwd, { agora = Date.now(), execs } = {}) {
+function agentesAgora(cwd, { agora = Date.now(), resumo = null } = {}) {
   const regs = lerJsonl(path.join(base(cwd), '.agentes.jsonl'));
   const fins = new Map(regs.filter((r) => r.tipo === 'fim').map((r) => [r.id, r]));
   const out = [];
@@ -214,7 +270,7 @@ function agentesAgora(cwd, { agora = Date.now(), execs } = {}) {
       continue;
     }
     if (!(agora - inicio < 12 * 60 * 60000)) continue;
-    const p = previsao(cwd, { agente: r.agente, cod: r.cod, inicio, classe: r.classe, agora, execs: execs || [] });
+    const p = previsao(cwd, { agente: r.agente, cod: r.cod, inicio, classe: r.classe, agora, resumo });
     out.push({ id: r.id, agente: r.agente, cod: r.cod || null, estado: 'trabalhando', inicio,
       pct: p.frac == null ? null : Math.round(p.frac * 100), etapa: p.prog ? p.prog.agora.split(/\s+/).filter(Boolean).slice(0, 4).join(' ') : '',
       feito: p.prog ? p.prog.feito : null, total: p.prog ? p.prog.total : null, termina: p.termina, de: p.de, ate: p.ate, passou: p.passou, fonte: p.fonte });
@@ -234,5 +290,5 @@ const hhmm = (ms) => { const d = new Date(ms); return `${d.getHours()}h${String(
 module.exports = {
   base, pastaGlobal, versaoPlugin, agenteCurto, codDe, classes, classeValida, classeDe, projetoHash, nomeCurto, permitida,
   lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, VALIDADE_PROGRESSO_MS,
-  quantil, referencia, execucoes, previsao, agentesAgora,
+  quantil, execucoes, previsao, agentesAgora, indice, resumoExecucoes, referenciaResumo, chaveRevisao, indiceRevisoes,
 };

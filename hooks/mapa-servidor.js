@@ -107,10 +107,10 @@ function servir() {
   // abre a página e de novo sempre que muda (progresso gravado, faixa, início ou fim de um agente).
   const R = require('./registro');
   const EXECS = path.join(R.pastaGlobal(), 'execucoes.jsonl');
-  let execs = { marca: null, lista: [] };
-  const execsAtuais = () => { const m = marca(EXECS); if (m !== execs.marca) execs = { marca: m, lista: R.execucoes() }; return execs.lista; };
+  let resumo = { marca: null, r: null };
+  const resumoAtual = () => { const m = marca(EXECS); if (m !== resumo.marca) resumo = { marca: m, r: R.resumoExecucoes() }; return resumo.r; };
   let fotoAgentes = '[]';
-  const agentesAgora = () => { try { return JSON.stringify(R.agentesAgora(cwd, { execs: execsAtuais() })); } catch (e) { return fotoAgentes; } };
+  const agentesAgora = () => { try { return JSON.stringify(R.agentesAgora(cwd, { resumo: resumoAtual() })); } catch (e) { return fotoAgentes; } };
   const msgAgentes = () => `data: {"tipo":"agentes","agora":${Date.now()},"lista":${fotoAgentes}}\n\n`;
   fotoAgentes = agentesAgora();
   setInterval(() => {

@@ -462,6 +462,71 @@ let ag = {}; try { ag = JSON.parse((rg.stdout || '').trim().split('\n').pop()); 
 caso('mapa: /agentes entrega os agentes e a página tem o painel "Agentes agora"', ag.n === 3 && ag.painel === true, rg.stdout + rg.stderr);
 caso('mapa: quem abre recebe os agentes na hora e um agente novo chega em até 3 s', ag.inicial === true && ag.ms >= 0 && ag.ms <= 3000, rg.stdout + rg.stderr);
 
+// ---- A-1 · escala: histórico grande não deixa o fim do agente lento, e o placar dá o mesmo resultado ----
+// Gerador determinístico de histórico (execuções e uma revisão por código, para comparar com a regra antiga).
+function sintetico(nExec, nRev, semente = 7) {
+  let s = semente; const rnd = () => { s = (s * 1103515245 + 12345) % 2147483648; return s / 2147483648; };
+  const ags = ['dev-powerbi', 'designer-paineis', 'engenheiro-dados', 'analista-fpa', 'redator', 'pesquisador'];
+  const cls = ['construcao', 'spec', 'dados', 'regras', 'texto', 'pesquisa', 'correcao'];
+  const projs = ['aaaa1111', 'bbbb2222', 'cccc3333'];
+  const t0 = Date.parse('2026-01-01T00:00:00Z'), passo = 60000 * 7;
+  const revs = []; const execs = [];
+  for (let k = 0; k < nRev; k++) {
+    revs.push({ em: new Date(t0 + (k * nExec / nRev + 0.5) * passo).toISOString(), revisor: 'revisor', autor: ags[k % ags.length], cod: 'c' + k, projeto: projs[k % 3],
+      veredito: rnd() < 0.4 ? 'nao' : 'sim', B: rnd() < 0.1 ? 1 : 0, A: Math.floor(rnd() * 3), M: Math.floor(rnd() * 3), b: Math.floor(rnd() * 4) });
+  }
+  for (let i = 0; i < nExec; i++) {
+    const k = Math.floor(rnd() * nRev); const r = revs[k]; const comCod = rnd() < 0.6;
+    const ini = t0 + i * passo; const min = Math.round((5 + rnd() * 90) * 10) / 10;
+    const est = rnd() < 0.5 ? Math.round(10 + rnd() * 60) : null; const faixa = rnd() < 0.5;
+    execs.push({ id: 'e' + i, agente: comCod ? r.autor : ags[i % ags.length], classe: cls[i % cls.length], projeto: comCod ? r.projeto : projs[i % 3],
+      inicio: new Date(ini).toISOString(), fim: new Date(ini + min * 60000).toISOString(), minutos: min, estimado_min: est,
+      faixa_de: faixa ? new Date(ini + 20 * 60000).toISOString() : null, faixa_ate: faixa ? new Date(ini + 50 * 60000).toISOString() : null,
+      fonte_estimativa: faixa ? 'registrada' : 'sem', cod: comCod ? r.cod : null, retomado: rnd() < 0.02 || undefined });
+  }
+  return { execs, revs, defs: revs.filter((r, k) => k % 9 === 0).map((r) => ({ em: r.em, agente: r.autor, projeto: r.projeto, gravidade: 'A' })) };
+}
+// A regra do placar da 0.7.0 antes da correção (quadrática), para provar que o resultado não mudou.
+function placarAntigo({ execs, revs, defs }) {
+  const ag = {}; const de = (n) => (ag[n] = ag[n] || { execucoes: 0, revisados: 0, de_primeira: 0, B: 0, A: 0, M: 0, b: 0, escaparam: 0, retrabalho: 0, com_faixa: 0, dentro_faixa: 0, erro_mediano: null, _e: [] });
+  for (const x of execs) { const a = de(x.agente); a.execucoes++; const ini = Date.parse(x.inicio), ate = Date.parse(x.faixa_ate), dF = Date.parse(x.faixa_de);
+    if (ate && ini && x.minutos > 0 && ate > ini) { a.com_faixa++; const fim = ini + x.minutos * 60000; if (fim <= ate && (!dF || fim >= dF)) a.dentro_faixa++; const ff = (ate - ini) / 60000; a._e.push(Math.abs(x.minutos - ff) / ff * 100); } }
+  const porCod = {};
+  for (const r of revs) { const a = de(r.autor); for (const g of ['B', 'A', 'M', 'b']) a[g] += Number(r[g]) || 0; const k = `${r.projeto}|${r.autor}|${r.cod}`; if (!porCod[k]) { porCod[k] = r; a.revisados++; if (r.veredito === 'sim') a.de_primeira++; } }
+  for (const r of Object.values(porCod)) { const naos = revs.filter((x) => x.projeto === r.projeto && x.autor === r.autor && x.cod === r.cod && x.veredito === 'nao').map((x) => Date.parse(x.em));
+    if (!naos.length || !r.cod) continue; const p = Math.min(...naos); de(r.autor).retrabalho += execs.filter((x) => x.agente === r.autor && x.cod === r.cod && x.projeto === r.projeto && Date.parse(x.inicio) > p).length; }
+  for (const d of defs) de(d.agente).escaparam++;
+  const q = require(path.join(RAIZ, 'hooks', 'registro.js')).quantil;
+  for (const a of Object.values(ag)) { a.erro_mediano = a._e.length ? Math.round(q(a._e, 0.5) * 10) / 10 : null; delete a._e; }
+  const pegos = revs.reduce((t, r) => t + ['B', 'A', 'M', 'b'].reduce((u, g) => u + (Number(r[g]) || 0), 0), 0);
+  return { agentes: ag, captura: { pegos, usuario: defs.length, taxa: pegos + defs.length ? Math.round(pegos / (pegos + defs.length) * 1000) / 10 : null, meta: 80 } };
+}
+const gravarHist = (casaX, h) => { const g = path.join(casaX, '.claude', 'agentes-ultimate'); fs.mkdirSync(g, { recursive: true });
+  for (const [n, l] of [['execucoes', h.execs], ['revisoes', h.revs], ['defeitos', h.defs]]) fs.writeFileSync(path.join(g, n + '.jsonl'), l.map((x) => JSON.stringify(x)).join('\n') + '\n'); };
+const ordena = (o) => (o && typeof o === 'object' && !Array.isArray(o) ? Object.fromEntries(Object.keys(o).sort().map((k) => [k, ordena(o[k])])) : o);
+const casaEq = path.join(tmp, 'casa-eq'); const histEq = sintetico(3000, 1000);
+gravarHist(casaEq, histEq);
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { cwd: p7, env: { ...env, HOME: casaEq, USERPROFILE: casaEq }, encoding: 'utf8' });
+let plNovo = {}; try { plNovo = JSON.parse(re.stdout); } catch (e) { /* falhou */ }
+const plVelho = placarAntigo(histEq);
+caso('escala: o placar dá o mesmo resultado da regra antiga (3 mil execuções, 1 mil revisões)', JSON.stringify(ordena(plNovo.agentes)) === JSON.stringify(ordena(plVelho.agentes)) &&
+  JSON.stringify(ordena(plNovo.captura)) === JSON.stringify(ordena(plVelho.captura)), `novo ${JSON.stringify(ordena(plNovo.agentes)).slice(0, 300)}\nvelho ${JSON.stringify(ordena(plVelho.agentes)).slice(0, 300)}`);
+const casa60 = path.join(tmp, 'casa60'); gravarHist(casa60, sintetico(60000, 20000));
+const env60 = { ...env, HOME: casa60, USERPROFILE: casa60 };
+const p60 = path.join(tmp, 'projeto60'); fs.mkdirSync(path.join(p60, '.claude', 'base'), { recursive: true });
+const tr60 = transcricao('t60.jsonl', '2026-10-28T10:00:00.000Z', '2026-10-28T10:20:00.000Z');
+const fim60 = (id) => { const t = Date.now(); spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { input: JSON.stringify({ cwd: p60, hook_event_name: 'SubagentStop', agent_id: id,
+  agent_type: 'agentes-ultimate:revisor', agent_transcript_path: tr60, last_assistant_message: `Placar: autor=dev-powerbi cod=z${id} veredito=não B=0 A=1 M=0 b=0` }), env: env60, encoding: 'utf8' }); return Date.now() - t; };
+fim60('aquece');
+const tempos60 = [1, 2, 3, 4, 5].map((i) => fim60('m' + i)).sort((a, b) => a - b);
+caso(`escala: com 60 mil execuções o fim de um agente leva menos de 0,5 s (mediana de 5: ${tempos60[2]} ms)`, tempos60[2] < 500 && lerJsonl(path.join(casa60, '.claude', 'agentes-ultimate', 'revisoes.jsonl')).length === 20006,
+  `${tempos60.join(', ')} ms`);
+const barra60 = () => { const t = Date.now(); spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js')], { input: JSON.stringify({ cwd: p60, columns: 120, tasks: [{ id: 'x', agentType: 'dev-powerbi',
+  status: 'running', description: 'monte a página', startTime: Date.now() - 600000 }] }), env: env60, encoding: 'utf8' }); return Date.now() - t; };
+barra60();
+const temposB = [1, 2, 3, 4, 5].map(barra60).sort((a, b) => a - b);
+caso(`escala: com 60 mil execuções a barra leva menos de 0,5 s (mediana de 5: ${temposB[2]} ms)`, temposB[2] < 500, `${temposB.join(', ')} ms`);
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

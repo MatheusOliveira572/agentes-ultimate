@@ -70,9 +70,11 @@ function tratar(d) {
     };
     const nome = R.nomeCurto(cwd);
     if (nome) linha.nome_projeto = nome;
-    R.acrescentar(path.join(R.pastaGlobal(), 'execucoes.jsonl'), linha, 20 * 1024 * 1024);
+    R.acrescentar(path.join(R.pastaGlobal(), 'execucoes.jsonl'), linha, 64 * 1024 * 1024);
     placarDoRevisor(cwd, agente, id, d.last_assistant_message, pontas.cauda);
-    try { require('../scripts/placar.js').refazer(); } catch (e) { /* o placar se refaz na próxima vez */ }
+    // Só o resumo incremental (o trecho novo); se ele estiver muito atrás, quem lê sem pressa refaz. O placar completo
+    // é refeito pela skill placar, nunca aqui.
+    R.resumoExecucoes(64 * 1024);
   }
 }
 
@@ -93,10 +95,12 @@ function placarDoRevisor(cwd, agente, id, msg, cauda) {
     return;
   }
   const projeto = R.projetoHash(cwd), autor = R.agenteCurto(m[1]), cod = m[2].toLowerCase();
-  const antes = R.lerJsonl(path.join(dir, 'revisoes.jsonl'), 64 * 1024 * 1024);
-  R.acrescentar(path.join(dir, 'revisoes.jsonl'), { em: new Date().toISOString(), revisor: agente, id, autor, cod, projeto,
-    veredito: /^sim$/i.test(m[3]) ? 'sim' : 'nao', B: +m[4], A: +m[5], M: +m[6], b: +m[7],
-    primeira: !antes.some((r) => r.projeto === projeto && r.autor === autor && r.cod === cod) }, 20 * 1024 * 1024);
+  const rev = { em: new Date().toISOString(), revisor: agente, id, autor, cod, projeto,
+    veredito: /^sim$/i.test(m[3]) ? 'sim' : 'nao', B: +m[4], A: +m[5], M: +m[6], b: +m[7] };
+  const ja = R.indiceRevisoes(256 * 1024); // índice por chave, lido só no trecho novo
+  rev.primeira = ja ? !ja.chaves[R.chaveRevisao(rev)] : null; // índice frio e histórico grande: o placar decide depois
+  R.acrescentar(path.join(dir, 'revisoes.jsonl'), rev, 64 * 1024 * 1024);
+  R.indiceRevisoes(64 * 1024);
 }
 
 // O pedido (PreToolUse) mais antigo do mesmo agente que ainda não virou lançamento nem início, dos últimos 10 min.

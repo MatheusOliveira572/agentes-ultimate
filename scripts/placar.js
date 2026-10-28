@@ -36,19 +36,20 @@ function calcular({ projeto } = {}) {
       a._erros.push(Math.abs(x.minutos - fimFaixa) / fimFaixa * 100);
     }
   }
-  const porCod = {};
+  // Tudo agrupado por chave numa passada (linear): revisões por trabalho e o primeiro "não" de cada um.
+  const porCod = {}, primeiroNao = {};
   for (const r of revs) {
     const a = de(r.autor);
     for (const g of ['B', 'A', 'M', 'b']) a[g] += Number(r[g]) || 0;
-    const k = `${r.projeto}|${r.autor}|${r.cod}`;
+    const k = R.chaveRevisao(r);
     if (!porCod[k]) { porCod[k] = r; a.revisados++; if (r.veredito === 'sim') a.de_primeira++; }
+    if (r.veredito === 'nao' && r.cod) { const t = Date.parse(r.em); if (!(primeiroNao[k] <= t)) primeiroNao[k] = t; }
   }
   // Retrabalho: execuções do autor com o mesmo código que começaram depois do primeiro "não".
-  for (const r of Object.values(porCod)) {
-    const naos = revs.filter((x) => x.projeto === r.projeto && x.autor === r.autor && x.cod === r.cod && x.veredito === 'nao').map((x) => Date.parse(x.em));
-    if (!naos.length || !r.cod) continue;
-    const primeiroNao = Math.min(...naos);
-    de(r.autor).retrabalho += execs.filter((x) => x.agente === r.autor && x.cod === r.cod && x.projeto === r.projeto && Date.parse(x.inicio) > primeiroNao).length;
+  for (const x of execs) {
+    if (!x.cod) continue;
+    const p = primeiroNao[R.chaveRevisao({ projeto: x.projeto, autor: x.agente, cod: x.cod })];
+    if (p != null && Date.parse(x.inicio) > p) de(x.agente).retrabalho++;
   }
   for (const d of defs) de(d.agente).escaparam++;
   for (const a of Object.values(ag)) { a.erro_mediano = a._erros.length ? Math.round(R.quantil(a._erros, 0.5) * 10) / 10 : null; delete a._erros; }
