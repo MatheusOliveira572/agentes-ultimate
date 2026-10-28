@@ -103,6 +103,23 @@ function servir() {
   const marca = (f) => { try { const s = fs.statSync(f); return s.mtimeMs + ':' + s.size; } catch (e) { return ''; } };
   let marcaBusca = marca(BUSCA);
 
+  // Agentes agora: foto de quem está trabalhando (%, etapa, término previsto) e de quem acabou de terminar; vai a quem
+  // abre a página e de novo sempre que muda (progresso gravado, faixa, início ou fim de um agente).
+  const R = require('./registro');
+  const EXECS = path.join(R.pastaGlobal(), 'execucoes.jsonl');
+  let execs = { marca: null, lista: [] };
+  const execsAtuais = () => { const m = marca(EXECS); if (m !== execs.marca) execs = { marca: m, lista: R.execucoes() }; return execs.lista; };
+  let fotoAgentes = '[]';
+  const agentesAgora = () => { try { return JSON.stringify(R.agentesAgora(cwd, { execs: execsAtuais() })); } catch (e) { return fotoAgentes; } };
+  const msgAgentes = () => `data: {"tipo":"agentes","agora":${Date.now()},"lista":${fotoAgentes}}\n\n`;
+  fotoAgentes = agentesAgora();
+  setInterval(() => {
+    const nova = agentesAgora();
+    if (nova === fotoAgentes) return;
+    fotoAgentes = nova; ultimoUso = Date.now();
+    const l = msgAgentes(); for (const c of clientes) c.write(l);
+  }, 1000);
+
   // Envia as últimas 30 ações a quem acaba de abrir, e depois só as novas.
   function ultimas(n) {
     try { return fs.readFileSync(ATIV, 'utf8').trim().split('\n').slice(-n).filter(Boolean); } catch (e) { return []; }
@@ -141,9 +158,14 @@ function servir() {
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
       return res.end(JSON.stringify(atual || { nos: [], arestas: [] }));
     }
+    if (req.url === '/agentes') {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+      return res.end(fotoAgentes);
+    }
     if (req.url === '/eventos') {
       res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
       for (const l of ultimas(30)) res.write(`data: ${l}\n\n`);
+      res.write(msgAgentes());
       clientes.add(res); req.on('close', () => clientes.delete(res));
       return;
     }

@@ -97,7 +97,21 @@ button[aria-pressed="true"]{background:var(--tinta);color:var(--fundo);border-co
 main{position:relative;flex:1;min-height:0;overflow:hidden}
 canvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 .vidro{background:var(--vidro);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border:1px solid var(--borda);border-radius:14px;box-shadow:var(--sombra)}
-#info{position:absolute;right:16px;top:16px;width:min(340px,calc(100% - 32px));padding:12px 14px;display:none;font-size:13px;z-index:2}
+#direita{position:absolute;right:16px;top:16px;width:min(340px,calc(100% - 32px));max-height:calc(100% - 84px);display:flex;flex-direction:column;gap:10px;z-index:2;pointer-events:none}
+#direita>*{pointer-events:auto}
+#info{padding:12px 14px;display:none;font-size:13px;flex:none}
+#agentes{display:none;padding:12px 14px 4px;font-size:12.5px;overflow:auto;min-height:0}.vivo #agentes.tem{display:block}
+#agentes h2{font-size:12.5px;font-weight:650;margin:0 0 4px;display:flex;align-items:baseline;gap:8px}#agentes h2 .n{margin-left:auto;color:var(--suave);font-weight:500;font-size:12px}
+.ag{padding:10px 0 11px;border-top:1px solid var(--borda);animation:entra .35s ease-out;transition:opacity .6s}.ag:first-child{border-top:0}
+.ag .lin{display:flex;align-items:center;gap:8px;min-width:0}.ag .pt{width:9px;height:9px;border-radius:50%;flex:none}
+.ag b{font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ag .cod{color:var(--suave);font-size:11px;font-weight:500}
+.ag .pct{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:650;white-space:nowrap}
+.ag .trilho{height:6px;border-radius:999px;background:color-mix(in srgb,var(--suave) 18%,transparent);margin:8px 0 7px;overflow:hidden}
+.ag .enche{height:100%;border-radius:999px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.ag .trilho.sem .enche{width:30%!important;opacity:.55;animation:vai 1.8s ease-in-out infinite}
+.ag .etapa{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ag .fim{color:var(--suave);margin-top:2px;font-variant-numeric:tabular-nums}
+.ag .fim.atraso{color:var(--foco);font-weight:600}.ag.feito{opacity:.7}.ag.feito .pct{color:var(--usado)}.ag.chegou{animation:chega 1.2s ease-out}
+@keyframes vai{from{transform:translateX(-110%)}to{transform:translateX(340%)}}@keyframes chega{30%{background:color-mix(in srgb,var(--usado) 14%,transparent)}}
 #dica{position:absolute;left:0;top:0;max-width:300px;padding:10px 12px;font-size:12.5px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;z-index:2}
 #dica.ver{opacity:1;transform:none}
 .ct{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ct b{font-weight:650;word-break:break-all}
@@ -124,7 +138,7 @@ canvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 <div class="leg"><span><i style="background:var(--usado)"></i>usado no último pedido</span><span><i style="background:var(--ligado)"></i>ligado (1 salto)</span><span><i class="q" style="background:var(--memoria)"></i>memória</span><span><i style="background:var(--suave)"></i>arquivo</span><span><i class="l" style="background:var(--linha)"></i>cita</span><span><i class="l" style="background:var(--foco)"></i>trilha do trabalho</span></div>
 <div class="acoes"><button id="seguir" type="button" aria-pressed="false" title="A câmera acompanha o arquivo que está sendo tocado">Seguir</button><button id="enquadrar" type="button" title="Mostrar o mapa inteiro">Enquadrar</button></div></header>
 <main><canvas id="c" aria-label="Grafo do projeto"></canvas><div id="linha" class="vidro"><h2><i></i><span id="estado">Ao vivo</span></h2><ol id="eventos"><li class="vazio">Esperando o Claude trabalhar…</li></ol></div>
-<div id="info" class="vidro"></div><div id="dica" class="vidro" aria-hidden="true"></div><div id="aviso" class="vidro" role="status"></div><div id="pedido" class="vidro"></div><div id="sessao" class="vidro" aria-live="polite"></div></main>
+<div id="direita"><section id="agentes" class="vidro" aria-label="Agentes agora"><h2><span>Agentes agora</span><span class="n" id="agN"></span></h2><div id="agLista" aria-live="polite"></div></section><div id="info" class="vidro"></div></div><div id="dica" class="vidro" aria-hidden="true"></div><div id="aviso" class="vidro" role="status"></div><div id="pedido" class="vidro"></div><div id="sessao" class="vidro" aria-live="polite"></div></main>
 <script>
 const D=/*DADOS*/null;
 const AO_VIVO=location.protocol.indexOf('http')===0;
@@ -140,6 +154,8 @@ function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;r
 const corPasta=g=>CORES_PASTA[hash(g)%CORES_PASTA.length];
 const corAg={};function corDo(a){if(!corAg[a])corAg[a]=a==='principal'?CORES_AG[0]:CORES_AG[1+(Object.keys(corAg).filter(x=>x!=='principal').length%(CORES_AG.length-1))];return corAg[a];}
 const pl=(n,s,p)=>n+' '+(n===1?s:p);
+const nomeAg=a=>String(a||'principal').split(':').pop();
+const hm=ms=>{const d=new Date(ms);return d.getHours()+'h'+String(d.getMinutes()).padStart(2,'0');};
 const hora=em=>new Date(em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
 const nomeCurto=n=>n.t==='r'?n.d:n.id.split('/').pop();
 function grupo(n){if(n.t==='r')return '';const p=n.pasta||'';if(!p||p==='.')return '(raiz)';return p.split('/').slice(0,2).join('/');}
@@ -273,7 +289,7 @@ cx.setTransform(dpr,0,0,dpr,0,0);cx.globalAlpha=1;const ocup=[];
 const livre=(x,y,w,h)=>{if(x+w<0||y+h<0||x>W||y>H)return false;for(const o of ocup)if(x<o[0]+o[2]&&x+w>o[0]&&y<o[1]+o[3]&&y+h>o[1])return false;ocup.push([x,y,w,h]);return true;};
 const marcas=[];const pilha={};
 for(const nome in agentes){const a=agentes[nome];if(a.alvo==null)continue;const n=N[a.alvo];a.x+=(n.rx-a.x)*.12;a.y+=(n.ry-a.y)*.12;const s=tela(a.x,a.y);
-const pi=pilha[a.alvo]||0;pilha[a.alvo]=pi+1;const pz=a.pousado?Math.min(1,(T-a.pousoT)/600):0;cx.font='600 12px '+FONTE;const w=cx.measureText(a.nome).width+28,h=22;
+const pi=pilha[a.alvo]||0;pilha[a.alvo]=pi+1;const pz=a.pousado?Math.min(1,(T-a.pousoT)/600):0;cx.font='600 12px '+FONTE;const w=cx.measureText(a.nome).width+31,h=22;
 const x=s.x-w/2,y=s.y-14-h-pi*(h+5)+10*easeOut(pz);if(pz<1)ocup.push([x,y,w,h+6]);marcas.push({a:a,s:s,x:x,y:y,w:w,h:h,pz:pz,pi:pi});}
 const cand=[];for(let i=0;i<N.length;i++){const n=N[i];if(!ent(n,T))continue;let p=0;if(i===sel)p=100;else if(i===sobre)p=95;else if(n.vivo&&n.vivo.ate>ag)p=85;else if(n.u)p=n.u===2?70:75;else if(bate(n))p=60;
 else if(k>1.25&&n.g>=4)p=10+n.g;else if(k>.5&&n.g>=12)p=5+Math.min(4,n.g*.1);if(p)cand.push([p,i]);}cand.sort((a,b)=>b[0]-a[0]);
@@ -289,8 +305,11 @@ cx.lineWidth=3;cx.strokeStyle=rgba(C.fundo,.8);cx.strokeText(g.nome,s.x-w/2,s.y+
 for(const c of cand){if(c[0]>=60)continue;if(nr++>90)break;rotulo(c[1],false);}
 for(const m of marcas){const a=m.a;if(m.pz<1){cx.globalAlpha=1-m.pz;cx.shadowColor='rgba(0,0,0,.22)';cx.shadowBlur=10;cx.shadowOffsetY=2;cx.fillStyle=a.cor;caixa(m.x,m.y,m.w,m.h,11);cx.fill();
 if(m.pi===0){cx.beginPath();cx.moveTo(m.s.x-5,m.y+m.h-1);cx.lineTo(m.s.x,m.y+m.h+6);cx.lineTo(m.s.x+5,m.y+m.h-1);cx.fill();}cx.shadowColor='transparent';cx.shadowBlur=0;cx.shadowOffsetY=0;
-const pu=CALMO?1:.55+.45*Math.sin(T/260);cx.fillStyle='rgba(255,255,255,'+pu+')';cx.beginPath();cx.arc(m.x+12,m.y+m.h/2,3.2,0,6.2832);cx.fill();
-cx.font='600 12px '+FONTE;cx.fillStyle='#fff';cx.textBaseline='middle';cx.fillText(a.nome,m.x+20,m.y+m.h/2+.5);cx.textBaseline='alphabetic';}
+const pa=pctDe(a.nome),rx=m.x+12,ry=m.y+m.h/2;
+if(pa!=null){a.anel=a.anel==null?pa:a.anel+(pa-a.anel)*.08;cx.lineWidth=2.2;cx.lineCap='round';cx.strokeStyle='rgba(255,255,255,.32)';cx.beginPath();cx.arc(rx,ry,5.4,0,6.2832);cx.stroke();
+cx.strokeStyle='#fff';cx.beginPath();cx.arc(rx,ry,5.4,-1.5708,-1.5708+6.2832*Math.max(.03,Math.min(1,a.anel/100)));cx.stroke();cx.lineCap='butt';}
+else{const pu=CALMO?1:.55+.45*Math.sin(T/260);cx.fillStyle='rgba(255,255,255,'+pu+')';cx.beginPath();cx.arc(rx,ry,3.2,0,6.2832);cx.fill();}
+cx.font='600 12px '+FONTE;cx.fillStyle='#fff';cx.textBaseline='middle';cx.fillText(a.nome,m.x+22,m.y+m.h/2+.5);cx.textBaseline='alphabetic';}
 if(m.pz>0){cx.globalAlpha=m.pz*.9;cx.fillStyle=a.cor;cx.beginPath();cx.arc(m.s.x,m.s.y-11-m.pi*12,4,0,6.2832);cx.fill();cx.lineWidth=1.5;cx.strokeStyle=rgba(C.fundo,.9);cx.stroke();}}
 cx.globalAlpha=1;}
 let quadros=0;
@@ -300,7 +319,7 @@ requestAnimationFrame(laco);
 
 // ---- ao vivo: aberto pelo servidor local, a página se atualiza sozinha (sem F5) ----
 const sess={lidos:new Set(),editados:new Set(),criados:new Set(),ultimo:0,fim:false};const vistos=new Set();
-function agente(nome){let a=agentes[nome];if(!a)a=agentes[nome]={nome:nome,cor:corDo(nome),alvo:null,x:0,y:0,ultimo:0,pousado:false,pousoT:0,lido:null};return a;}
+function agente(nome){nome=nomeAg(nome);let a=agentes[nome];if(!a)a=agentes[nome]={nome:nome,cor:corDo(nome),alvo:null,x:0,y:0,ultimo:0,pousado:false,pousoT:0,lido:null};return a;}
 function lugarNovo(id,ref){if(ref!=null){const p=N[ref];return[p.x+(Math.random()-.5)*50,p.y+(Math.random()-.5)*50];}
 const gr=grupo({t:'a',pasta:id.split('/').slice(0,-1).join('/')||'.'});let x=0,y=0,c=0;for(const n of N)if(n.gr===gr){x+=n.x;y+=n.y;c++;}
 if(c)return[x/c+(Math.random()-.5)*40,y/c+(Math.random()-.5)*40];return[(Math.random()-.5)*120,(Math.random()-.5)*120];}
@@ -340,7 +359,34 @@ if(novos){calor=Math.max(calor,.35);if(!mexeu)setTimeout(()=>enquadrar(true),900
 function atualizaSessao(){const s=el('sessao');const ag=Date.now();const ativos=Object.values(agentes).filter(a=>!a.pousado&&ag-a.ultimo<180000).length;s.textContent='';
 const partes=[['Sessão',null],[sess.lidos.size,sess.lidos.size===1?'lido':'lidos'],[sess.editados.size,sess.editados.size===1?'editado':'editados'],[sess.criados.size,sess.criados.size===1?'criado':'criados'],[ativos,ativos===1?'agente ativo':'agentes ativos']];
 partes.forEach((p,i)=>{if(i){const sp=document.createElement('span');sp.className='sep';sp.textContent='·';s.append(sp);}if(p[1]===null){s.append(p[0]);return;}const b=document.createElement('b');b.textContent=p[0];s.append(b,' '+p[1]);});}
-function aoEvento(ev){if(ev.tipo==='busca')return aplicaBusca(ev);if(ev.tipo==='grafo')return atualizaGrafo();
+// ---- agentes agora: painel com %, etapa e término previsto de cada agente; aviso quando cada um termina ----
+let agLista=[];const agEstado={},agCaixa=new Map();
+function pctDe(nome){const a=agLista.find(x=>x.estado==='trabalhando'&&nomeAg(x.agente)===nome);return a&&a.pct!=null?a.pct:null;}
+function textoFim(a){if(a.estado==='terminou')return['terminou às '+hm(a.fim)+(a.minutos!=null?' · '+Math.round(a.minutos)+' min':''),false];
+if(a.passou!=null)return['passou da previsão ('+hm(a.ate)+') · +'+a.passou+' min',true];if(a.termina)return['termina por volta de '+hm(a.termina),false];return['sem previsão ainda',false];}
+function aplicaAgentes(ev){const lista=ev.lista||[];const fins=lista.filter(a=>agEstado[a.id]==='trabalhando'&&a.estado==='terminou');
+for(const k in agEstado)delete agEstado[k];for(const a of lista)agEstado[a.id]=a.estado;agLista=lista;
+for(const a of fins){const nome=nomeAg(a.agente);item(new Date(a.fim||Date.now()).toISOString(),nome,corDo(nome),'terminou'+(a.minutos!=null?' em '+Math.round(a.minutos)+' min':''));
+const m=agentes[nome];if(m&&!m.pousado&&!lista.some(x=>x.estado==='trabalhando'&&nomeAg(x.agente)===nome)){m.pousado=true;m.pousoT=agora();}}
+if(fins.length)aviso(fins.map(a=>nomeAg(a.agente)+' terminou'+(a.minutos!=null?' · '+Math.round(a.minutos)+' min':'')).join('   ·   '));
+desenhaAgentes(fins.map(a=>a.id));}
+function desenhaAgentes(chegaram){const box=el('agentes'),ls=el('agLista');const trab=agLista.filter(a=>a.estado==='trabalhando').length;
+box.classList.toggle('tem',agLista.length>0);el('agN').textContent=trab?trab+' trabalhando':'todos terminaram';
+const repetidos={};for(const a of agLista){const n=nomeAg(a.agente);repetidos[n]=(repetidos[n]||0)+1;}
+const ordem=agLista.slice().sort((x,y)=>(x.estado===y.estado?0:x.estado==='trabalhando'?-1:1)||x.inicio-y.inicio);const vivos=new Set();
+for(const a of ordem){vivos.add(a.id);let c=agCaixa.get(a.id);
+if(!c){c=document.createElement('div');c.className='ag';c.innerHTML='<div class="lin"><i class="pt"></i><b></b><span class="cod"></span><span class="pct"></span></div><div class="trilho"><div class="enche"></div></div><div class="etapa"></div><div class="fim"></div>';agCaixa.set(a.id,c);}
+ls.append(c);const nome=nomeAg(a.agente),cor=corDo(nome),feito=a.estado==='terminou';c.classList.toggle('feito',feito);
+if(chegaram&&chegaram.indexOf(a.id)>=0){c.classList.remove('chegou');void c.offsetWidth;c.classList.add('chegou');}
+c.querySelector('.pt').style.background=cor;c.querySelector('b').textContent=nome;c.querySelector('.cod').textContent=repetidos[nome]>1&&a.cod?a.cod:'';
+c.querySelector('.pct').textContent=feito?'pronto':a.pct!=null?a.pct+'%':'';
+const tr=c.querySelector('.trilho'),en=c.querySelector('.enche');tr.classList.toggle('sem',!feito&&a.pct==null);en.style.background=feito?C.usado:cor;en.style.width=(feito?100:a.pct||0)+'%';
+tr.setAttribute('role','progressbar');tr.setAttribute('aria-valuemin','0');tr.setAttribute('aria-valuemax','100');if(a.pct!=null)tr.setAttribute('aria-valuenow',String(feito?100:a.pct));else tr.removeAttribute('aria-valuenow');
+c.querySelector('.etapa').textContent=feito?'concluído':(a.etapa||'trabalhando')+(a.total?' · '+a.feito+'/'+a.total:'');
+const f=textoFim(a),fe=c.querySelector('.fim');fe.textContent=f[0];fe.classList.toggle('atraso',f[1]);
+fe.title=a.de&&a.ate?'faixa '+hm(a.de)+'–'+hm(a.ate)+(a.fonte==='registrada'?' (registrada pelo orquestrador)':' (pelas execuções parecidas)'):'';}
+for(const [id,c] of agCaixa)if(!vivos.has(id)){c.remove();agCaixa.delete(id);}}
+function aoEvento(ev){if(ev.tipo==='agentes')return aplicaAgentes(ev);if(ev.tipo==='busca')return aplicaBusca(ev);if(ev.tipo==='grafo')return atualizaGrafo();
 const chave=(ev.em||'')+'|'+(ev.tipo||'')+'|'+(ev.agente||'')+'|'+(ev.acao||'')+'|'+(ev.arquivo||ev.busca||'');if(vistos.has(chave))return;vistos.add(chave);
 const hist=Date.now()-(Date.parse(ev.em)||Date.now())>60000;if(ev.tipo==='fim')fim(ev,hist);else atividade(ev,hist);atualizaSessao();}
 if(AO_VIVO){document.body.classList.add('vivo');poeSeguir(true);atualizaSessao();setInterval(atualizaSessao,2000);

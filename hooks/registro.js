@@ -171,14 +171,14 @@ const execucoes = () => lerJsonl(path.join(pastaGlobal(), 'execucoes.jsonl'), 64
 // - faixa: a registrada pelo orquestrador; sem ela, início + [mediana, p75] das execuções parecidas;
 // - termina: pelo ritmo (início + decorrido ÷ progresso, quando já passou de 15%), senão o meio da faixa; arredonda
 //   para 5 min e nunca fica no passado; passou do fim da faixa → passou = minutos além dela.
-function previsao(cwd, { agente, cod, inicio, descricao, agora = Date.now(), execs }) {
+function previsao(cwd, { agente, cod, inicio, descricao, classe, agora = Date.now(), execs }) {
   inicio = inicio || agora;
   const prog = progressoPara(cwd, agente, cod, agora);
   let de = null, ate = null, fonte = null;
   const est = estimativaPara(cwd, agente, cod, inicio);
   if (est && Date.parse(est.ate)) { de = Date.parse(est.de) || null; ate = Date.parse(est.ate); fonte = 'registrada'; }
   if (!ate) {
-    const ref = referencia(execs || execucoes(), agente, classeDe(descricao));
+    const ref = referencia(execs || execucoes(), agente, classe || classeDe(descricao));
     if (ref.lista.length) {
       const m = ref.lista.map((x) => x.minutos);
       de = inicio + quantil(m, 0.5) * 60000; ate = inicio + Math.max(quantil(m, 0.5), quantil(m, 0.75)) * 60000; fonte = 'historico';
@@ -197,6 +197,31 @@ function previsao(cwd, { agente, cod, inicio, descricao, agora = Date.now(), exe
   return { prog, frac, de, ate, fonte, termina, passou, decorridoMin: Math.round(decorrido / 60000) };
 }
 
+// Agentes agora (painel do mapa ao vivo): quem começou e não terminou (até 12 h atrás) e quem terminou nos últimos
+// 10 min, com %, etapa (até 4 palavras), término previsto e faixa. Lê .claude/base/.agentes.jsonl.
+function agentesAgora(cwd, { agora = Date.now(), execs } = {}) {
+  const regs = lerJsonl(path.join(base(cwd), '.agentes.jsonl'));
+  const fins = new Map(regs.filter((r) => r.tipo === 'fim').map((r) => [r.id, r]));
+  const out = [];
+  for (const r of regs) {
+    if (r.tipo !== 'inicio' || out.some((x) => x.id === r.id)) continue;
+    const inicio = Date.parse(r.em);
+    const f = fins.get(r.id);
+    if (f) {
+      const fim = Date.parse(f.em);
+      if (agora - fim > 10 * 60000) continue;
+      out.push({ id: r.id, agente: r.agente, cod: r.cod || null, estado: 'terminou', inicio, fim, minutos: f.minutos, pct: 100 });
+      continue;
+    }
+    if (!(agora - inicio < 12 * 60 * 60000)) continue;
+    const p = previsao(cwd, { agente: r.agente, cod: r.cod, inicio, classe: r.classe, agora, execs: execs || [] });
+    out.push({ id: r.id, agente: r.agente, cod: r.cod || null, estado: 'trabalhando', inicio,
+      pct: p.frac == null ? null : Math.round(p.frac * 100), etapa: p.prog ? p.prog.agora.split(/\s+/).filter(Boolean).slice(0, 4).join(' ') : '',
+      feito: p.prog ? p.prog.feito : null, total: p.prog ? p.prog.total : null, termina: p.termina, de: p.de, ate: p.ate, passou: p.passou, fonte: p.fonte });
+  }
+  return out;
+}
+
 // Hora "14:10" ou "14h10" no dia de referência (local). Devolve ms ou null.
 function deHora(txt, ref = Date.now()) {
   const m = /^(\d{1,2})\s*[:h]\s*(\d{2})$/i.exec(String(txt || '').trim());
@@ -209,5 +234,5 @@ const hhmm = (ms) => { const d = new Date(ms); return `${d.getHours()}h${String(
 module.exports = {
   base, pastaGlobal, versaoPlugin, agenteCurto, codDe, classes, classeValida, classeDe, projetoHash, nomeCurto, permitida,
   lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, VALIDADE_PROGRESSO_MS,
-  quantil, referencia, execucoes, previsao,
+  quantil, referencia, execucoes, previsao, agentesAgora,
 };

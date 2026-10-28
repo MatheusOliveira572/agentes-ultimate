@@ -420,6 +420,48 @@ caso('placar refeito e gravado em placar.json', fs.existsSync(path.join(casa, '.
 re = placar([]);
 caso('placar em tabela legível', re.status === 0 && /\| dev-powerbi \|/.test(re.stdout) && /Taxa de captura do revisor: 87,5%/.test(re.stdout), re.stdout);
 
+// ---- 0.7.0 · "Agentes agora" no mapa ao vivo: cada agente com %, etapa, término previsto e aviso ao terminar ----
+const p8 = path.join(tmp, 'projeto8');
+const b8 = path.join(p8, '.claude', 'base');
+fs.mkdirSync(path.join(b8, '.progresso'), { recursive: true });
+const iso8 = (minAtras) => new Date(Date.now() - minAtras * 60000).toISOString();
+const ag8 = [
+  { em: iso8(30), tipo: 'inicio', id: 'g1', agente: 'dev-powerbi', cod: 'm1', classe: 'construcao' },
+  { em: iso8(12), tipo: 'inicio', id: 'g2', agente: 'designer-paineis', cod: 'm2', classe: 'spec' },
+  { em: iso8(50), tipo: 'inicio', id: 'g3', agente: 'revisor', cod: 'm3', classe: 'revisao' },
+  { em: iso8(2), tipo: 'fim', id: 'g3', agente: 'revisor', cod: 'm3', minutos: 48 },
+  { em: iso8(900), tipo: 'inicio', id: 'g0', agente: 'velho', cod: null, classe: 'outra' },
+];
+fs.writeFileSync(path.join(b8, '.agentes.jsonl'), ag8.map((x) => JSON.stringify(x)).join('\n') + '\n');
+fs.writeFileSync(path.join(b8, '.progresso', 'dev-powerbi-m1.json'), JSON.stringify({ feito: 3, total: 5, agora: 'lote final das telas extra' }));
+const hm8 = (minFrente) => new Date(Date.now() + minFrente * 60000).toTimeString().slice(0, 5);
+estimar(['registrar', '--agente', 'designer-paineis', '--cod', 'm2', '--de', hm8(20), '--ate', hm8(40)], p8);
+const R8 = require(path.join(RAIZ, 'hooks', 'registro.js'));
+const agora8 = R8.agentesAgora ? R8.agentesAgora(p8) : [];
+const q1 = agora8.find((x) => x.id === 'g1') || {}, q2 = agora8.find((x) => x.id === 'g2') || {}, q3 = agora8.find((x) => x.id === 'g3') || {};
+caso('agentes agora: cada agente com %, etapa em até 4 palavras e término pelo ritmo', q1.estado === 'trabalhando' && q1.pct === 60 && q1.etapa === 'lote final das telas' &&
+  q1.feito === 3 && q1.total === 5 && Math.abs(q1.termina - (Date.parse(ag8[0].em) + 50 * 60000)) <= 5 * 60000, JSON.stringify(q1));
+caso('agentes agora: sem progresso, término pela faixa registrada', q2.estado === 'trabalhando' && q2.fonte === 'registrada' && q2.termina >= Date.now() + 15 * 60000 &&
+  q2.termina <= Date.now() + 45 * 60000 && typeof q2.pct === 'number', JSON.stringify(q2));
+caso('agentes agora: quem terminou aparece com os minutos; início de 15 h atrás sem fim não conta', q3.estado === 'terminou' && q3.minutos === 48 && !agora8.some((x) => x.id === 'g0'), JSON.stringify(agora8));
+const testeAgentes = `
+const http=require('http'),fs=require('fs'),path=require('path'),{spawnSync}=require('child_process');
+const proj=process.argv[1],srv=process.argv[2];
+spawnSync(process.execPath,[srv,proj],{encoding:'utf8'});
+const est=JSON.parse(fs.readFileSync(path.join(proj,'.claude','base','.mapa-servidor.json'),'utf8'));
+const get=(p)=>new Promise(ok=>http.get({host:'127.0.0.1',port:est.porta,path:p},r=>{let b='';r.on('data',c=>b+=c);r.on('end',()=>ok({s:r.statusCode,b}));}).on('error',()=>ok({s:0,b:''})));
+(async()=>{const a=await get('/agentes');let lista=[];try{lista=JSON.parse(a.b);}catch(e){}
+let ms=-1,t1=0,inicial=false;const req=http.get({host:'127.0.0.1',port:est.porta,path:'/eventos'},r=>{r.on('data',c=>{const s=String(c);if(/"tipo":"agentes"/.test(s)&&/"g1"/.test(s))inicial=true;if(ms<0&&t1&&/"tipo":"agentes"/.test(s)&&/"g4"/.test(s))ms=Date.now()-t1;});});
+await new Promise(r=>setTimeout(r,800));t1=Date.now();
+fs.appendFileSync(path.join(proj,'.claude','base','.agentes.jsonl'),JSON.stringify({em:new Date().toISOString(),tipo:'inicio',id:'g4',agente:'redator',cod:'m4',classe:'texto'})+'\\n');
+while(ms<0&&Date.now()-t1<4000)await new Promise(r=>setTimeout(r,50));req.destroy();
+const p=await get('/');try{process.kill(est.pid);}catch(e){}
+console.log(JSON.stringify({n:lista.length,inicial,ms,painel:/Agentes agora/.test(p.b)}));})();`;
+const rg = spawnSync(process.execPath, ['-e', testeAgentes, p8, path.join(RAIZ, 'hooks', 'mapa-servidor.js')], { encoding: 'utf8', env, timeout: 30000 });
+let ag = {}; try { ag = JSON.parse((rg.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
+caso('mapa: /agentes entrega os agentes e a página tem o painel "Agentes agora"', ag.n === 3 && ag.painel === true, rg.stdout + rg.stderr);
+caso('mapa: quem abre recebe os agentes na hora e um agente novo chega em até 3 s', ag.inicial === true && ag.ms >= 0 && ag.ms <= 3000, rg.stdout + rg.stderr);
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
