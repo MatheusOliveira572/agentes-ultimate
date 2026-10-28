@@ -46,7 +46,17 @@ principal risco. Nunca devolva decisão em aberto. Decisão tomada vai para `PRO
 ## 5. Antes de dizer "pronto"
 - Só afirme o que foi rodado e lido nesta sessão. O que não foi verificado aparece como "não verificado".
 - Relato ao usuário: o que mudou para ele, o que precisa dele, e o próximo passo. Sem jargão interno.
-- Ao lançar um agente, dê a faixa de horário de término; quando passar da faixa, confira o agente.
+- **Ao lançar um agente:**
+  1. Termine a descrição da ferramenta Agent com um código novo do pedido, `[cod:xxxx]` (4 letras ou números). Ele
+     liga progresso, faixa, registro e placar, e separa dois agentes do mesmo tipo. Passe o mesmo código no pedido.
+  2. Calcule a faixa por comando, nunca de cabeça, e registre:
+     `node "${CLAUDE_PLUGIN_ROOT}/scripts/estimar.js" faixa --agente <nome> --classe <tipo> --cod xxxx --registrar`
+     (acrescente `--estimado <min>` com a sua conta de baixo para cima: o comando corrige pelo fator real ÷ estimado).
+     Tipos: spec, construcao, correcao, revisao, pesquisa, regras, dados, texto, plano, curadoria.
+  3. Diga a faixa ao usuário com a base: "deve terminar entre 14h10 e 14h50 (base: 7 execuções parecidas do
+     dev-powerbi, fator 1,4)". Faixa, nunca um horário único. Nunca escreva `.claude/base/.estimativas.jsonl` à mão.
+  4. Passou da faixa: confira o agente e diga a nova faixa. O mapa ao vivo e a barra dos agentes mostram a mesma conta.
+  5. Ao chamar o revisor, diga no pedido o autor e o código do trabalho revisado (`autor=<agente> cod=<código>`).
 
 ## 6. Segurança
 - Publicar, enviar, apagar, push, gastar dinheiro: só com aprovação explícita do usuário naquela hora.
