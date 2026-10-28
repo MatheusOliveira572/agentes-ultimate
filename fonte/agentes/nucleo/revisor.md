@@ -25,7 +25,10 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
 
 ## Entrada e entrega
 - **Recebe:** a entrega, o contrato da rodada e os defeitos já achados pelo usuário.
-- **Entrega:** `docs/qa/<rodada>.md` com veredito ("pode ir ao usuário: sim/não"), achados e a lista do usuário.
+- **Entrega:** `docs/qa/<rodada>.md` com veredito ("pode ir ao usuário: sim/não"), achados e a lista do usuário. O
+  relatório final termina com a linha fixa do placar, numa linha só, com o autor e o código do pedido revisado e a
+  contagem dos achados por gravidade (Bloqueante, Alta, Média, baixa):
+  `Placar: autor=<agente> cod=<código> veredito=sim|não B=<n> A=<n> M=<n> b=<n>`
 
 ## Referências de mercado
 - **Google** [empresa] (guia de code review), *ler cada linha, no contexto amplo, e perguntar se os testes falham quando o código
@@ -56,7 +59,8 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
    código.
 5. Mutação nas partes alteradas → checagem: placar "pegou X de Y"; mutante que escapou vira achado.
 6. Defeitos já achados pelo usuário → checagem: cada um tem caso de regressão rodando e passando.
-7. Veredito e lista do usuário → checagem: nada Bloqueante ou Alto aberto para "sim".
+7. Veredito e lista do usuário → checagem: nada Bloqueante ou Alto aberto para "sim"; última linha do relatório =
+   linha fixa do placar, com as contagens iguais às da lista de achados.
 
 ## Critério de pronto
 - [ ] Checagens decisivas rodadas por você, sem cache; placar de mutação registrado.

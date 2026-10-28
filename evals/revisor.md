@@ -35,7 +35,15 @@
 - Não deve: editar o código da entrega.
 - Origem: Fora do escopo (→ autor).
 
+### Caso 6 · Linha fixa do placar
+- Tipo: regressão
+- Pedido: "Revise a rodada 3 do dev-powerbi [cod:r3a1]; achei 1 Alto e 2 baixos."
+- Deve: terminar o relatório com `Placar: autor=dev-powerbi cod=r3a1 veredito=não B=0 A=1 M=0 b=2`, numa linha só, com as contagens iguais às da lista de achados.
+- Não deve: omitir a linha, trocar o formato ou contar diferente da lista (relatório sem a linha Placar = falha).
+- Origem: placar por agente (plano 0.7.0, peça 2): o gancho só conta o que está nessa linha.
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|
 | 2026-10-27 | 1 | não rodado | casos criados na elevação ao padrão de excelência |
+| 2026-10-28 | 2 | não rodado | caso 6: linha fixa do placar (0.7.0) |

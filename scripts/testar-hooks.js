@@ -381,6 +381,45 @@ caso('settings.json do plugin liga a barra pelo lançador fixo', cfgPlugin.subag
 const ses = JSON.parse(fs.readFileSync(path.join(RAIZ, 'hooks', 'hooks.json'), 'utf8')).hooks.SessionStart[0].hooks.map((h) => h.command).join(' ');
 caso('o início de sessão regrava o lançador (a pasta do plugin muda a cada versão)', /barra\.js" --instalar/.test(ses), ses);
 
+// ---- 0.7.0 · placar: linha fixa do revisor, defeitos que escaparam ao usuário e números por agente ----
+const revArq = path.join(casa, '.claude', 'agentes-ultimate', 'revisoes.jsonl');
+const estadoArq = path.join(casa, '.claude', 'agentes-ultimate', 'estado.json');
+const revisar = (id, msgFinal, tr) => {
+  exe({ hook_event_name: 'SubagentStart', agent_id: id, agent_type: 'agentes-ultimate:revisor' });
+  exe({ hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'agentes-ultimate:revisor', agent_transcript_path: tr || transcricao(id + '.jsonl', '2026-10-28T15:00:00.000Z', '2026-10-28T15:20:00.000Z'), last_assistant_message: msgFinal });
+};
+revisar('v1', 'Veredito: não pode ir.\nPlacar: autor=agentes-ultimate:dev-powerbi cod=ab12 veredito=não B=1 A=2 M=0 b=3');
+let rv = lerJsonl(revArq);
+caso('placar: a linha fixa do revisor vira registro com as contagens', rv.length === 1 && rv[0].autor === 'dev-powerbi' && rv[0].cod === 'ab12' && rv[0].veredito === 'nao' &&
+  rv[0].B === 1 && rv[0].A === 2 && rv[0].M === 0 && rv[0].b === 3 && rv[0].primeira === true, JSON.stringify(rv));
+// a segunda revisão do mesmo código vem pelo fim da transcrição (relatório entregue pelo SubagentHandback)
+const trH = transcricao('v2.jsonl', '2026-10-28T16:00:00.000Z', '2026-10-28T16:10:00.000Z');
+fs.appendFileSync(trH, JSON.stringify({ type: 'assistant', timestamp: '2026-10-28T16:10:01.000Z', message: { content: [{ type: 'tool_use', name: 'SubagentHandback',
+  input: { message: 'Pode ir.\nPlacar: autor=dev-powerbi cod=ab12 veredito=sim B=0 A=0 M=1 b=0' } }] } }) + '\n');
+revisar('v2', '', trH);
+rv = lerJsonl(revArq);
+caso('placar: revisão repetida do mesmo código não conta como "de primeira" (lida pelo fim da transcrição)', rv.length === 2 && rv[1].veredito === 'sim' && rv[1].primeira === false && rv[1].M === 1, JSON.stringify(rv));
+const lerEstado = () => { try { return JSON.parse(fs.readFileSync(estadoArq, 'utf8')); } catch (e) { return {}; } };
+const semAntes = lerEstado().revisor_sem_placar || 0; // o revisor do caso de 40 MB também terminou sem a linha
+revisar('v3', 'Revisei e está tudo certo.');
+const estado = lerEstado();
+caso('placar: relatório do revisor sem a linha Placar não grava e deixa aviso', lerJsonl(revArq).length === 2 && estado.revisor_sem_placar === semAntes + 1, JSON.stringify(estado));
+const placar = (argv, cwd = p7) => spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), ...argv], { cwd, env, encoding: 'utf8' });
+re = placar(['defeito', '--agente', 'dev-powerbi', '--gravidade', 'Alta', '--texto', 'total da página não bate por R$ 2 mi']);
+const dfTxt = fs.existsSync(path.join(p7, '.claude', 'base', 'DEFEITOS-USUARIO.md')) ? fs.readFileSync(path.join(p7, '.claude', 'base', 'DEFEITOS-USUARIO.md'), 'utf8') : '';
+const dfGlob = fs.existsSync(path.join(casa, '.claude', 'agentes-ultimate', 'defeitos.jsonl')) ? fs.readFileSync(path.join(casa, '.claude', 'agentes-ultimate', 'defeitos.jsonl'), 'utf8') : '';
+caso('defeito do usuário: texto só no projeto, contagem no global', re.status === 0 && /total da página não bate/.test(dfTxt) && /dev-powerbi/.test(dfTxt) &&
+  /"agente":"dev-powerbi"/.test(dfGlob) && /"gravidade":"A"/.test(dfGlob) && !/R\$|página/.test(dfGlob), `${re.stderr} ${dfGlob}`);
+re = placar(['--json']);
+let pl = {}; try { pl = JSON.parse(re.stdout); } catch (e) { /* falhou */ }
+const dev = (pl.agentes || {})['dev-powerbi'] || {};
+caso('placar: de primeira, defeitos por gravidade, escapados, retrabalho e taxa de captura', dev.revisados === 1 && dev.de_primeira === 0 && dev.B === 1 && dev.A === 2 && dev.M === 1 &&
+  dev.b === 3 && dev.escaparam === 1 && pl.captura && pl.captura.pegos === 7 && pl.captura.usuario === 1 && pl.captura.taxa === 87.5, re.stdout + re.stderr);
+caso('placar: acerto da estimativa pela faixa registrada', dev.com_faixa === 1 && dev.dentro_faixa === 0 && typeof dev.erro_mediano === 'number', JSON.stringify(dev));
+caso('placar refeito e gravado em placar.json', fs.existsSync(path.join(casa, '.claude', 'agentes-ultimate', 'placar.json')), 'sem placar.json');
+re = placar([]);
+caso('placar em tabela legível', re.status === 0 && /\| dev-powerbi \|/.test(re.stdout) && /Taxa de captura do revisor: 87,5%/.test(re.stdout), re.stdout);
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
