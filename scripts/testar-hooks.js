@@ -276,11 +276,14 @@ function transcricao(nome, ini, fim, mb = 0) {
   fs.appendFileSync(f, linhaTr(fim));
   return f;
 }
-let re = estimar(['registrar', '--agente', 'agentes-ultimate:dev-powerbi', '--classe', 'construção', '--cod', 'ab12', '--de', '14:10', '--ate', '14h50', '--estimado', '40']);
+// faixa relativa a agora (hora fixa como "14:10" faz o caso depender da hora em que a bateria roda)
+const dDe7 = new Date(Date.now() + 20 * 60000), dAte7 = new Date(Date.now() + 60 * 60000);
+const hm7 = (d, sep) => `${String(d.getHours()).padStart(2, '0')}${sep}${String(d.getMinutes()).padStart(2, '0')}`;
+let re = estimar(['registrar', '--agente', 'agentes-ultimate:dev-powerbi', '--classe', 'construção', '--cod', 'ab12', '--de', hm7(dDe7, ':'), '--ate', hm7(dAte7, 'h'), '--estimado', '40']);
 const est7 = lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl'));
 const de7 = est7[0] ? new Date(est7[0].de) : null;
 caso('estimar registrar grava a faixa em UTF-8 (classe com acento vira "construcao")', re.status === 0 && est7.length === 1 && est7[0].agente === 'dev-powerbi' &&
-  est7[0].classe === 'construcao' && est7[0].cod === 'ab12' && est7[0].estimado_min === 40 && de7 && de7.getHours() === 14 && de7.getMinutes() === 10,
+  est7[0].classe === 'construcao' && est7[0].cod === 'ab12' && est7[0].estimado_min === 40 && de7 && Math.abs(de7 - dDe7) < 60000,
   `status ${re.status} ${re.stderr} ${JSON.stringify(est7)}`);
 re = estimar(['registrar', '--agente', 'dev-powerbi', '--de', '14:10']);
 caso('estimar registrar recusa faixa incompleta', re.status !== 0 && lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl')).length === 1, `status ${re.status}`);
