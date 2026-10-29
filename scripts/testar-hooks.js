@@ -785,6 +785,14 @@ exe12({ hook_event_name: 'SubagentStart', agent_id: 'cx2', agent_type: 'agentes-
 const ag12b = (registro().agentesAgora(p12, { resumo: null }) || []).find((x) => x.id === 'cx2') || {};
 caso('faixa: a faixa registrada logo antes desta execução vale', ag12b.fonte === 'registrada' && ag12b.passou == null, JSON.stringify(ag12b));
 
+// ---- b-8 · abrir outra sessão não tira do painel um agente vivo dentro da faixa ----
+const p13 = path.join(tmp, 'projeto13'); const b13 = path.join(p13, '.claude', 'base'); fs.mkdirSync(b13, { recursive: true });
+fs.writeFileSync(path.join(b13, '.agentes.jsonl'), JSON.stringify({ em: h12(-35), tipo: 'inicio', id: 'v1', agente: 'redator', cod: 'vv01', classe: 'texto', sessao: 'S1' }) + '\n');
+fs.writeFileSync(path.join(b13, '.estimativas.jsonl'), JSON.stringify({ em: h12(-36), agente: 'redator', classe: 'texto', cod: 'vv01', de: h12(20), ate: h12(40), estimado_min: 60 }) + '\n');
+hook('execucoes.js', { cwd: p13, hook_event_name: 'SessionStart', session_id: 'S2', source: 'startup' });
+const v13 = (registro().agentesAgora(p13, { resumo: null }) || []).find((x) => x.id === 'v1') || {};
+caso('início de outra sessão mantém o agente de 35 min sem progresso que ainda está dentro da faixa', v13.estado === 'trabalhando', JSON.stringify(v13));
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

@@ -40,14 +40,19 @@ function tratar(d) {
     return;
   }
 
-  // Início de sessão: agente de outra sessão sem fim e sem sinal há 30 min sai do painel ("abandonado"). Se ele ainda
-  // terminar, o SubagentStop registra normalmente (só o "fim" evita a repetição).
+  // Início de sessão: agente de outra sessão, sem fim e já fora do prazo do painel, sai dele ("abandonado"). Se ele
+  // ainda terminar, o SubagentStop registra normalmente (só o "fim" evita a repetição).
   if (ev === 'SessionStart') {
     const regs = R.lerJsonl(arq);
     const fechados = new Set(regs.filter((r) => r.tipo === 'fim' || r.tipo === 'abandonado').map((r) => r.id));
+    let _resumo; const resumo = () => (_resumo === undefined ? (_resumo = R.resumoExecucoes(64 * 1024)) : _resumo);
     for (const r of regs) {
       if (r.tipo !== 'inicio' || fechados.has(r.id) || (d.session_id && r.sessao === d.session_id)) continue;
-      if (agora - R.ultimoSinal(cwd, r.agente, R.ligacao(regs, r.id).cod, Date.parse(r.em)) < R.PRAZO_FOLGA) continue;
+      // o mesmo prazo do painel (fim da faixa + 30 min sem sinal; sem faixa, início + 3 h): agente vivo de outra
+      // sessão aberta ao mesmo tempo, ainda dentro da faixa, fica
+      const lig = R.ligacao(regs, r.id);
+      const p = R.previsao(cwd, { agente: r.agente, cod: lig.cod, inicio: Date.parse(r.em), classe: lig.classe, agora, resumo: resumo() });
+      if (R.situacao(cwd, r, p, lig.cod, agora).estado === 'trabalhando') continue;
       R.acrescentar(arq, { em: iso(agora), tipo: 'abandonado', id: r.id, agente: r.agente });
       fechados.add(r.id);
     }
