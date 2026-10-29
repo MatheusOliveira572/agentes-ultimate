@@ -601,7 +601,10 @@ fs.writeFileSync(path.join(b9, '.agentes.jsonl'), [
   { em: iso9(-240), tipo: 'inicio', id: 'h3', agente: 'analista-fpa', cod: 's3', classe: 'regras', sessao: 'S1' },     // sem notícia há mais de 2 h
   { em: iso9(-200), tipo: 'inicio', id: 'h4', agente: 'pesquisador', cod: 's4', classe: 'pesquisa', sessao: 'S1' },    // sem faixa, 3 h 20 sem sinal
 ].map((x) => JSON.stringify(x)).join('\n') + '\n');
-for (const [ag9, c, de, ate] of [['dev-powerbi', 's1', -70, -40], ['redator', 's2', -70, -40], ['analista-fpa', 's3', -220, -190]]) estimar(['registrar', '--agente', ag9, '--cod', c, '--de', hm9(de), '--ate', hm9(ate)], p9);
+// faixas registradas na hora em que cada agente começou (a faixa só vale perto do início da execução: M-7)
+for (const [ag9, c, ini, de, ate] of [['dev-powerbi', 's1', -90, -70, -40], ['redator', 's2', -90, -70, -40], ['analista-fpa', 's3', -240, -220, -190]]) {
+  fs.appendFileSync(path.join(b9, '.estimativas.jsonl'), JSON.stringify({ em: iso9(ini), agente: ag9, classe: 'outra', cod: c, de: iso9(de), ate: iso9(ate), estimado_min: null }) + '\n');
+}
 fs.writeFileSync(path.join(b9, '.progresso', 'redator-s2.json'), JSON.stringify({ feito: 2, total: 3, agora: 'revisão final' }));
 const R9 = registro();
 let ag9 = R9.agentesAgora(p9, { resumo: null });
@@ -760,6 +763,27 @@ caso('SubagentStop repetido em paralelo (10 vezes): 1 execução e 1 linha Placa
 const nRevB6 = lerJsonl(revArq).length;
 hook('execucoes.js', { cwd: p7, hook_event_name: 'SubagentStop', agent_id: 'b6', agent_type: 'revisor', last_assistant_message: 'Placar: autor=dev cod=abcdefghijklmnopqrstuvwxyz veredito=sim B=0 A=0 M=0 b=0' });
 caso('linha Placar com código de mais de 16 caracteres não é aceita', lerJsonl(revArq).length === nRevB6, 'aceitou');
+
+// ---- M-7 · a correção que reusa o código não herda a faixa antiga da construção (nem estraga o fator) ----
+const p12 = path.join(tmp, 'projeto12'); const b12 = path.join(p12, '.claude', 'base'); fs.mkdirSync(b12, { recursive: true });
+const h12 = (min) => new Date(Date.now() + min * 60000).toISOString();
+// construção registrada há 6 h (faixa de 2 h, estimado 120 min); a correção começa agora, sem faixa nova
+fs.writeFileSync(path.join(b12, '.estimativas.jsonl'), JSON.stringify({ em: h12(-360), agente: 'dev-powerbi', classe: 'construcao', cod: 'cx01', de: h12(-360), ate: h12(-240), estimado_min: 120 }) + '\n');
+const exe12 = (d) => hook('execucoes.js', { cwd: p12, ...d });
+exe12({ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_use_id: 'tc1', tool_input: { description: 'corrija a medida [cod:cx01]', subagent_type: 'agentes-ultimate:dev-powerbi' } });
+exe12({ hook_event_name: 'SubagentStart', agent_id: 'cx1', agent_type: 'agentes-ultimate:dev-powerbi' });
+const ag12 = (registro().agentesAgora(p12, { resumo: null }) || []).find((x) => x.id === 'cx1') || {};
+caso('faixa: a correção com o código da construção não herda a faixa antiga (nada de "passou da previsão" no início)', ag12.estado === 'trabalhando' && ag12.passou == null && ag12.fonte !== 'registrada', JSON.stringify(ag12));
+const nowIso = new Date().toISOString(); const tr12 = transcricao('cx1.jsonl', nowIso, new Date(Date.now() + 20 * 60000).toISOString());
+exe12({ hook_event_name: 'SubagentStop', agent_id: 'cx1', agent_type: 'agentes-ultimate:dev-powerbi', agent_transcript_path: tr12 });
+const ex12 = lerJsonl(execArq).find((x) => x.id === 'cx1') || {};
+caso('faixa: a correção sem faixa própria fica fora do fator (fonte "sem", sem estimado)', ex12.fonte_estimativa === 'sem' && ex12.estimado_min == null && ex12.faixa_ate == null && ex12.cod === 'cx01', JSON.stringify(ex12));
+// e a faixa registrada para esta execução (logo antes de começar) continua valendo
+fs.appendFileSync(path.join(b12, '.estimativas.jsonl'), JSON.stringify({ em: h12(-1), agente: 'dev-powerbi', classe: 'correcao', cod: 'cx01', de: h12(20), ate: h12(40), estimado_min: 30 }) + '\n');
+exe12({ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_use_id: 'tc2', tool_input: { description: 'corrija de novo [cod:cx01]', subagent_type: 'agentes-ultimate:dev-powerbi' } });
+exe12({ hook_event_name: 'SubagentStart', agent_id: 'cx2', agent_type: 'agentes-ultimate:dev-powerbi' });
+const ag12b = (registro().agentesAgora(p12, { resumo: null }) || []).find((x) => x.id === 'cx2') || {};
+caso('faixa: a faixa registrada logo antes desta execução vale', ag12b.fonte === 'registrada' && ag12b.passou == null, JSON.stringify(ag12b));
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');

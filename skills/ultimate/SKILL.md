@@ -51,7 +51,8 @@ principal risco. Nunca devolva decisão em aberto. Decisão tomada vai para `PRO
      liga progresso, faixa, registro e placar, e separa dois agentes do mesmo tipo. Passe o mesmo código no pedido.
      - Trabalho novo → código novo.
      - Correção do mesmo trabalho (depois de um "não" do revisor ou de um defeito) → **reusa** o código do autor. É
-       assim que o placar conta o retrabalho.
+       assim que o placar conta o retrabalho. Registre uma faixa nova para a correção: a da construção não vale para
+       ela (sem faixa nova, a correção usa as execuções parecidas e fica fora do fator de calibração).
      - O revisor recebe o código do trabalho revisado como `[revisa:xxxx]` (não `[cod:]`) e, se tiver faixa própria,
        um código novo dele: `revise a rodada 3 [revisa:ab12] [cod:rv07]`. Assim ele não herda a faixa nem o progresso
        do autor. O código só é lido da descrição.

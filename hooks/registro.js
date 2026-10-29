@@ -123,15 +123,22 @@ function ligacao(regs, id) {
   return { cod: i.cod || null, classe: i.classe || 'outra' };
 }
 
-// Faixa registrada para um agente: pelo código do pedido; sem código, a mais recente do agente até 15 min antes do início.
+// Faixa registrada para ESTA execução de um agente: do mesmo agente, pelo código do trabalho, e registrada perto do
+// início dela (de 15 min antes até 3 h depois). A correção reusa o código da construção: sem esse limite, herdava a
+// faixa antiga ("passou da previsão" no início) e entrava no fator com um estimado que não era dela. Sem código: a
+// mais recente do agente até 15 min antes do início. Sem faixa própria, a previsão vem da classe de referência e a
+// execução fica fora do fator (fonte "sem").
+const ANTES_DO_INICIO = 15 * 60 * 1000, DEPOIS_DO_INICIO = 3 * 60 * 60 * 1000;
 function estimativaPara(cwd, agente, cod, inicio) {
   const lista = lerJsonl(path.join(base(cwd), '.estimativas.jsonl'));
+  const ini = inicio || Date.now();
+  const perto = (e) => { const t = Date.parse(e.em); return t >= ini - ANTES_DO_INICIO && t <= ini + DEPOIS_DO_INICIO; };
   for (let i = lista.length - 1; i >= 0; i--) {
     const e = lista[i];
-    if (cod && e.cod === cod && e.agente === agente) return e; // a faixa é do agente que a recebeu
+    if (cod && e.cod === cod && e.agente === agente && perto(e)) return e; // a faixa é do agente e desta execução
   }
   if (cod) return null;
-  const limite = (inicio || Date.now()) - 15 * 60 * 1000;
+  const limite = ini - ANTES_DO_INICIO;
   for (let i = lista.length - 1; i >= 0; i--) {
     const e = lista[i];
     if (e.agente === agente && !e.cod && Date.parse(e.em) >= limite) return e;

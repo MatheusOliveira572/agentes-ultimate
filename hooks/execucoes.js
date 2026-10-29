@@ -89,7 +89,8 @@ function tratar(d) {
     const fim = Math.max(inicio, pontas.fim || agora);
     const minutos = Math.round((fim - inicio) / 6000) / 10;
     const cod = meta ? R.codDe(meta.description) : lig.cod;
-    const est = R.estimativaPara(cwd, agente, cod, inicio);
+    // a janela da faixa usa a hora do início anotada pelo gancho (mesmo relógio do registro da faixa)
+    const est = R.estimativaPara(cwd, agente, cod, Date.parse(ini.em) || inicio);
     R.acrescentar(arq, { em: iso(agora), tipo: 'fim', id, agente, cod, minutos });
     const linha = {
       id, agente, classe: est ? R.classeValida(est.classe) : (lig.classe || 'outra'), projeto: R.projetoHash(cwd),
