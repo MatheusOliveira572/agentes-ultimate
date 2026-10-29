@@ -1,7 +1,8 @@
 # Revisão independente · agentes-ultimate 0.7.0
 
-> **Situação atual (2ª rodada, 2026-10-28 23h05): pode publicar: sim.** 0 Bloqueante, 0 Alto, 1 Médio novo (M-7), 5
-> Baixos. Ver a seção "2ª rodada" no fim. A 1ª rodada fica abaixo como histórico.
+> **Situação atual (3ª rodada, 2026-10-28 23h50): pode publicar: sim.** 0 Bloqueante, 0 Alto, 1 Médio novo (M-8,
+> faixa por "HH:MM" que passa da meia-noite; recomendado corrigir antes), 3 Baixos. Ver a seção "3ª rodada" no fim.
+> As rodadas anteriores ficam abaixo como histórico.
 
 Revisor, 2026-10-28 (17h27–18h05). Escopo: commits `85899dd`..`b3764eb` sobre a 0.6.0 (`0cec368`), contra
 `docs/plano-0.7.md` e as decisões do usuário de 28/10. Só relato; nada foi corrigido.
@@ -354,3 +355,73 @@ Diffs de `7857771..HEAD` em `hooks/execucoes.js`, `hooks/registro.js`, `hooks/ba
 `docs/provas/0.7.0-painel/LEIA.md` e as imagens `painel-1` e `painel-4`.
 
 Placar: autor=engenheiro-software cod=v070 veredito=sim B=0 A=0 M=1 b=5 ids=M-7,b-8,b-9,b-10,b-11,b-12
+
+---
+
+# 3ª rodada · conferência final (`dfb2a8d`..`7380ce0`; `b007fa7` é só texto da skill)
+
+Revisor, 2026-10-28 (23h10–23h50).
+
+## Veredito final
+
+**Pode publicar: sim.** Não há Bloqueante nem Alto. O M-7 e os Baixos b-8 a b-12 estão fechados, e a regra
+`modelo_por_tarefa` está certa. Achei 1 Médio novo, **M-8**: a faixa registrada por "HH:MM" que passa da meia-noite
+cai no dia errado. Ele faz a bateria falhar 2 casos se rodada entre ~23h20 e 0h. **Recomendo corrigir antes de
+publicar** (é pequeno) ou, no mínimo, não rodar a conferência final nessa janela.
+
+## Checagens
+
+| Checagem | Resultado |
+|---|---|
+| `testar-hooks.js` às ~23h15 | **136 de 136 ok** |
+| `testar-hooks.js` às 23h46 (mesmo código) | **134 de 136**: falham "término pela faixa registrada" e "% estimado com ~" (M-8) |
+| `validar.js` | 0 erro, 0 aviso |
+| `claude plugin validate` | passou |
+
+## O que foi conferido
+
+| Item | Resultado |
+|---|---|
+| M-7, cenário da 2ª rodada | **fechado**. Com a faixa da construção registrada 180 ou 20 min antes da correção: barra sem faixa herdada, registro com fonte "sem", `estimado_min` vazio, nenhum fator novo. Resto na borda: b-13 |
+| b-8, 2ª sessão | **fechado**. O agente de 35 min, dentro da faixa, continua "trabalhando" depois do início da sessão S2 |
+| b-9 e b-10 | **fechados**. O texto do caso foi corrigido; M4 e M2b agora são pegos (abaixo) |
+| b-11, nomes próprios | **fechado em parte, e documentado no README**. "Odebrecht", "CCR", "Metrô Bahia" no meio da frase saem. Ficam o nome no começo de frase ("Odebrecht pediu…", "… reunião. Matheus aprovou.") e nomes em minúscula ("joão silva", "motiva"): b-14 |
+| b-12 | **fechado**. O registro da revisão não tem mais o campo `primeira` |
+| `modelo_por_tarefa` | **certo** nos 6 casos que montei. Usuário true sem chave no projeto → ativa; usuário true e projeto `false` → **desliga**; usuário false e projeto true → ativa; nenhum → desliga; usuário `"true"` (texto) → desliga; projeto `"false"` (texto) → vale o usuário (b-15) |
+
+## Mutação da 3ª rodada: pegou 7 de 7
+
+Um mutante por correção, cada um numa cópia limpa do `HEAD`:
+
+- M7: faixa sem a janela da execução;
+- b8: o início de sessão volta a tirar o agente vivo;
+- M4: término sem o teto da faixa;
+- M2b: a trava deixa as duas paradas seguirem;
+- b11: os termos voltam com nomes próprios;
+- MT: o projeto `false` deixa de vencer o usuário `true`;
+- b12: o campo `primeira` volta.
+
+Todos foram pegos pelo caso próprio. (Os 2 casos do M-8 aparecem falhando em todos os mutantes porque a rodada
+passou das 23h20; não contam como captura.)
+
+## Achados novos
+
+**M-8 · Médio · A faixa por "HH:MM" que passa da meia-noite cai no dia errado.** Dono: engenheiro-software.
+- `R.deHora` monta a hora sempre no dia de hoje.
+- Provado às 23h47 do dia 28: `estimar.js registrar --de 00:10 --ate 00:40` gravou de 28/10 00h10 até 28/10 00h40,
+  23h37 **no passado** (devia ser dia 29). A barra e o painel mostram "passou da previsão · +1401 min" desde o início.
+- Os casos de teste montam a faixa assim (agora + 20 a 40 min), então a bateria falha entre ~23h20 e 0h. Quem
+  publica à noite vê 2 falhas que não são do código revisado.
+- O caminho principal da skill (`faixa --registrar`, que calcula a partir do início) não sofre isso.
+- Sugestão: hora mais de ~12 h no passado vai para o dia seguinte; caso de regressão com o relógio fixado em 23h50.
+
+**Baixos:**
+- **b-13 · Borda do M-7:** faixa do mesmo agente e código registrada menos de 15 min antes do início é herdada
+  mesmo já vencida (provado: registrada 14 min antes, "passou da previsão" e fator 0,17). Sugestão: ignorar faixa
+  cujo fim é anterior ao início.
+- **b-14 · Resto do b-11, documentado:** nome em começo de frase ou em minúscula continua nos termos. O
+  `termos_privados` do `config.json` resolveria.
+- **b-15 · `modelo_por_tarefa` como texto:** `"false"` no projeto não desliga (vale o usuário). É de propósito (só
+  booleano), mas uma linha no README evita surpresa.
+
+Placar: autor=engenheiro-software cod=v070 veredito=sim B=0 A=0 M=1 b=3 ids=M-8,b-13,b-14,b-15
