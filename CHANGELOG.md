@@ -91,6 +91,11 @@ A versão continua 0.7.0 (não tinha sido publicada). Um commit por item.
   - b-6: código da linha Placar limitado a 16 caracteres;
   - b-7: prova dos casos "falhando antes" em `docs/provas/0.7.0-casos-antes.md` (69 de 73 casos novos falham na
     0.6.0; os 4 que passam são negativos).
+- **Prova visual** (`docs/provas/0.7.0-painel/`, Edge sem interface, 0 erro de JavaScript): achou e corrigiu duas
+  coisas.
+  - O card "sem notícia" mostrava a barra estimada perto de 99% (parecia "quase pronto") e a etapa "trabalhando".
+    Agora mostra só o progresso informado e "nenhuma etapa informada" ou "última etapa: …".
+  - Ao trocar o tema com a página aberta, o painel ficava com as cores do tema anterior. Agora se redesenha.
 - Fica para depois: sal no código anônimo do projeto (b-6; tudo é local hoje) e retrabalho pelas correções "era com"
   (b-7; o registro não guarda qual agente estava errado).
 - Testes dos ganchos: 125 casos, todos passando.
