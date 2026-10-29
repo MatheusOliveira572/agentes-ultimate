@@ -121,6 +121,18 @@ A versão continua 0.7.0 (não tinha sido publicada). Um commit por item.
   `effort` pela tabela da skill `ultimate` §1b. README com a seção Configuração.
 - Testes dos ganchos: 136 casos, todos passando.
 
+### Correções da 3ª rodada da revisão (pode publicar = sim; antes do push)
+- **M-8 · hora perto da meia-noite:** uma hora "HH:MM" perto da meia-noite caía no dia errado (às 23h47, "00:10"
+  virava 0h10 de hoje, no passado).
+  - Agora a hora vai para o dia que fica a até 12 h de agora, e o `--ate` menor que o `--de` passa a meia-noite.
+  - `AGENTES_ULTIMATE_AGORA` fixa o relógio nos testes (23h50 e 0h10).
+  - A bateria não depende mais da hora em que roda: rodada às 23h55, todos passam.
+- **b-13:** a faixa que terminou antes do início da execução não vale mais, mesmo registrada há menos de 15 min.
+  - Um caso antigo usava a hora fixa "14:10" e, à noite, caía nessa regra. Agora usa horas relativas a agora.
+  - O commit do b-13 (`778a7ca`) saiu com essas 3 falhas; elas foram corrigidas no seguinte (`358872c`).
+- **b-15:** `modelo_por_tarefa` aceita `"true"`/`"false"` em texto.
+- Testes dos ganchos: 141 casos, todos passando.
+
 ## 0.6.0 · 2026-10-28
 - **Mapa sem F5:** o servidor avisa a página quando o último pedido muda (`tipo:"busca"`: destaques, caixa "Último
   pedido" e arquivo citado que ainda não estava no desenho) e quando o grafo refeito muda (`tipo:"grafo"`: a página
