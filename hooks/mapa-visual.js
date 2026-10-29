@@ -146,7 +146,7 @@ const CALMO=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const el=id=>document.getElementById(id);
 const C={};
 function lerCores(){const s=getComputedStyle(document.documentElement);['fundo','fundo2','tinta','suave','linha','usado','ligado','memoria','foco'].forEach(k=>{C[k]=s.getPropertyValue('--'+k).trim();});C.escuro=matchMedia('(prefers-color-scheme: dark)').matches;}
-lerCores();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',lerCores);}catch(e){}
+lerCores();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{lerCores();desenhaAgentes();});}catch(e){}
 function rgba(h,a){h=h.replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')';}
 const CORES_PASTA=['#4c6ef5','#0ca678','#e8590c','#ae3ec9','#1098ad','#f59f00','#d6336c','#74b816','#7048e8','#15aabf'];
 const CORES_AG=['#1d4ed8','#be185d','#0e7490','#a16207','#6d28d9','#15803d','#c2410c','#4338ca'];
@@ -383,10 +383,12 @@ c.querySelector('.pt').style.background=cor;c.querySelector('b').textContent=nom
 const est=!feito&&!parado&&a.estimado&&a.pct!=null;
 c.querySelector('.pct').textContent=feito?'pronto':parado?'sem notícia':a.pct!=null?(est?'~'+a.pct+'% (estimado)':a.pct+'%'):'';
 c.querySelector('.pct').title=est?'O agente ainda não informou o progresso: o % é o tempo passado sobre a faixa prevista.':'';
-const tr=c.querySelector('.trilho'),en=c.querySelector('.enche');tr.classList.toggle('sem',!feito&&a.pct==null);tr.classList.toggle('estimado',est);
-en.style.background=feito?C.usado:est?'repeating-linear-gradient(90deg,'+cor+' 0 7px,transparent 7px 11px)':cor;en.style.width=(feito?100:a.pct||0)+'%';
-tr.setAttribute('role','progressbar');tr.setAttribute('aria-valuemin','0');tr.setAttribute('aria-valuemax','100');if(a.pct!=null)tr.setAttribute('aria-valuenow',String(feito?100:a.pct));else tr.removeAttribute('aria-valuenow');
-c.querySelector('.etapa').textContent=feito?'concluído':(a.etapa||'trabalhando')+(a.total?' · '+a.feito+'/'+a.total:'');
+const tr=c.querySelector('.trilho'),en=c.querySelector('.enche');tr.classList.toggle('sem',!feito&&!parado&&a.pct==null);tr.classList.toggle('estimado',est);
+// sem notícia: só o progresso que o agente informou (o estimado pelo tempo encostaria em 99% e pareceria "quase pronto")
+const larg=feito?100:parado?(!a.estimado&&a.pct!=null?a.pct:0):(a.pct||0);
+en.style.background=feito?C.usado:est?'repeating-linear-gradient(90deg,'+cor+' 0 7px,transparent 7px 11px)':cor;en.style.width=larg+'%';
+tr.setAttribute('role','progressbar');tr.setAttribute('aria-valuemin','0');tr.setAttribute('aria-valuemax','100');if(feito||(a.pct!=null&&!(parado&&a.estimado)))tr.setAttribute('aria-valuenow',String(larg));else tr.removeAttribute('aria-valuenow');
+c.querySelector('.etapa').textContent=feito?'concluído':(parado?(a.etapa?'última etapa: '+a.etapa:'nenhuma etapa informada'):(a.etapa||'trabalhando'))+(a.total?' · '+a.feito+'/'+a.total:'');
 const f=textoFim(a),fe=c.querySelector('.fim');fe.textContent=f[0];fe.classList.toggle('atraso',f[1]);
 fe.title=a.de&&a.ate?'faixa '+hm(a.de)+'–'+hm(a.ate)+(a.fonte==='registrada'?' (registrada pelo orquestrador)':' (pelas execuções parecidas)'):'';}
 for(const [id,c] of agCaixa)if(!vivos.has(id)){c.remove();agCaixa.delete(id);}}
