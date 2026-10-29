@@ -173,8 +173,10 @@ cria memória na sua pasta de usuário nem na raiz do disco.
 ## Privacidade e segurança
 
 - Nada sai do seu computador por causa do plugin: os ganchos só leem o pedido e a pasta, localmente.
-- O último pedido e as correções `era com…` ficam em `~/.claude/agentes-ultimate/` só como termos (palavras de
-  assunto, sem valores, números, caminhos nem e-mails) e o agente; nunca o texto do pedido.
+- O último pedido e as correções `era com…` ficam em `~/.claude/agentes-ultimate/` só como termos e o agente; nunca
+  o texto do pedido. Os termos são palavras de assunto, sem valores, números, caminhos e e-mails, e sem as palavras
+  com inicial maiúscula fora do começo da frase (prováveis nomes de pessoa, empresa ou cliente). Um nome escrito em
+  minúscula ou no começo da frase ainda pode ficar.
 - Execuções, revisões e defeitos ficam em `~/.claude/agentes-ultimate/*.jsonl` só com metadados (agente, tipo de
   tarefa, minutos, contagens, código anônimo do projeto); o texto de um defeito fica só no projeto.
 - Publicar (`git push`, `npm publish`, deploy de produção) sempre pede confirmação.

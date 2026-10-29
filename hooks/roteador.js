@@ -24,14 +24,26 @@ function palavras(texto) {
 }
 
 // O que vai para a pasta do usuário (último pedido e exemplos do "era com"): só os termos que o aprendizado compara,
-// sem caminhos, endereços, e-mails, valores nem palavras com número. Nunca o texto do pedido.
+// sem caminhos, endereços, e-mails, valores, palavras com número nem prováveis nomes próprios. Nunca o texto do pedido.
 function termos(pedido) {
-  const limpo = normalizar(pedido)
+  const limpo = normalizar(semNomesProprios(pedido))
     .replace(/https?:\/\/\S+/g, ' ')
     .replace(/\S+@\S+/g, ' ')
     .replace(/(?:[a-z]:|\\\\[^\s\\]+)[\\/][^\s"'<>|]*/g, ' ')
     .replace(/(?:~|\.{1,2})?\/?[^\s"'<>|/\\]+(?:[\\/][^\s"'<>|/\\]+)+/g, ' ');
   return [...palavras(limpo)].filter((w) => !/\d/.test(w)).sort().slice(0, 60);
+}
+// Palavra com inicial maiúscula fora do começo da frase é provável nome próprio (pessoa, empresa, cliente): sai.
+function semNomesProprios(texto) {
+  const out = [];
+  let comeco = true;
+  for (const tok of String(texto || '').split(/\s+/)) {
+    if (!tok) continue;
+    const letra = tok.replace(/^[^\p{L}\p{N}]+/u, '');
+    if (comeco || !/^\p{Lu}/u.test(letra)) out.push(tok);
+    comeco = /[.!?:;]["')\]]*$/.test(tok);
+  }
+  return out.join(' ');
 }
 
 function lerJson(arq, padrao) {
