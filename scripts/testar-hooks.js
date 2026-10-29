@@ -813,6 +813,21 @@ const nEx14 = lerJsonl(execArq).length;
 hook('execucoes.js', { cwd: p14, hook_event_name: 'SubagentStop', agent_id: 'u1', agent_type: 'dev-powerbi' });
 caso('trava do fim: com a trava já criada pela outra chamada, esta não registra de novo', lerJsonl(execArq).length === nEx14, `${lerJsonl(execArq).length - nEx14} linha(s) a mais`);
 
+// ---- modelo e esforço por tarefa (skill ultimate §1b): só com o aceite; o projeto vence o usuário ----
+const pMod = path.join(tmp, 'projeto-modelo'); fs.mkdirSync(path.join(pMod, '.claude', 'base'), { recursive: true });
+const cfgUsuMod = path.join(casa, '.claude', 'agentes-ultimate', 'config.json');
+const politica = () => /Política de modelo e esforço ATIVA/.test(ctx(rot('monte o painel de custos por centro de custo no power bi', pMod)));
+if (fs.existsSync(cfgUsuMod)) fs.rmSync(cfgUsuMod);
+const semConfig = politica();
+fs.writeFileSync(cfgUsuMod, JSON.stringify({ modelo_por_tarefa: true }));
+const usuarioLiga = politica();
+fs.writeFileSync(path.join(pMod, '.claude', 'base', 'config.json'), JSON.stringify({ modelo_por_tarefa: false }));
+const projetoDesliga = politica();
+fs.rmSync(cfgUsuMod);
+caso('modelo por tarefa: sem configuração, a linha da política não aparece', semConfig === false, String(semConfig));
+caso('modelo por tarefa: o usuário com true liga a política no contexto', usuarioLiga === true, String(usuarioLiga));
+caso('modelo por tarefa: o projeto com false desliga, mesmo com o usuário em true', projetoDesliga === false, String(projetoDesliga));
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

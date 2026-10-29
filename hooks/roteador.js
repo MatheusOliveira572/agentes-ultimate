@@ -219,6 +219,10 @@ function main(d) {
       : 'DELEGUE: este pedido é trabalho de especialista. Você é o orquestrador: chame os agentes indicados com a ferramenta Agent (passe o contexto e o "já feito" abaixo), combine o resultado, chame o revisor antes de entregar e fale com o usuário. Não faça você mesmo a análise, o código ou o documento. Siga a skill `ultimate`. Só responda sem agentes se for uma pergunta de uma linha.',
     'Na 1ª linha da resposta, diga quais agentes vai usar; o usuário corrige com "era com <agente>".',
   ];
+  // Modelo e esforço por tarefa (skill ultimate §1b): só com o aceite do usuário. O projeto vence, inclusive com false.
+  const usuCfg = lerJson(path.join(globalDir, 'config.json'), {});
+  const modeloPorTarefa = typeof projetoCfg.modelo_por_tarefa === 'boolean' ? projetoCfg.modelo_por_tarefa : usuCfg.modelo_por_tarefa === true;
+  if (modeloPorTarefa) ctx.push('Política de modelo e esforço ATIVA: ao chamar cada agente, passe `model` e `effort` pela tabela da skill `ultimate` §1b (revisão nunca abaixo de opus/high).');
   const antes = pastaPermitida(cwd) ? jaFeito(cwd, pedido) : [];
   if (antes.length) {
     ctx.push('Já existe trabalho relacionado neste projeto (comece daqui, não do zero; "ligado" = citado por/cita um arquivo do assunto):\n- ' + antes.join('\n- '));

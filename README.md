@@ -165,6 +165,13 @@ com o porquê), histórico e contexto consolidado.
 Detalhes em [docs/como-funciona.md](docs/como-funciona.md). Para criar um pacote seu (ex.: jurídico, marketing), veja
 [docs/criar-pacote.md](docs/criar-pacote.md).
 
+## Configuração
+
+- `"modelo_por_tarefa": true` em `~/.claude/agentes-ultimate/config.json` (todos os projetos) ou em
+  `.claude/base/config.json` (o projeto vence, inclusive com `false`): o orquestrador passa a escolher modelo e esforço
+  de cada agente pela tarefa, pela tabela da skill `ultimate` §1b (revisão nunca abaixo de opus/high). Sem a chave,
+  nada muda.
+
 ## Desligar num projeto
 
 Crie o arquivo `.claude/base/desligado` na pasta do projeto, ou defina `AGENTES_ULTIMATE_SEM_PASTA=1`. A base nunca
