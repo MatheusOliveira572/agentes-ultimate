@@ -234,11 +234,9 @@ function resumoExecucoes(maxNovo = Infinity) {
     for (const k of chaves) { poe(e.min, k, x.minutos); if (x.estimado_min > 0) poe(e.fat, k, x.minutos / x.estimado_min); }
   }, maxNovo);
 }
-// Revisões por chave (projeto|autor|código): a primeira revisão de cada trabalho é a que conta "de primeira".
+// Revisões por chave (projeto|autor|código): a primeira revisão de cada trabalho é a que conta "de primeira" (o placar
+// calcula; o gancho só grava a linha).
 const chaveRevisao = (r) => `${r.projeto}|${r.autor}|${r.cod}`;
-function indiceRevisoes(maxNovo = Infinity) {
-  return indice('revisoes', () => ({ chaves: {} }), (e, r) => { if (r && r.autor) { const k = chaveRevisao(r); if (!e.chaves[k]) e.chaves[k] = r.veredito === 'sim' ? 's' : 'n'; } }, maxNovo);
-}
 // Classe de referência pelo resumo (mesma cascata da função referencia): { nivel, valores }.
 function referenciaResumo(resumo, agente, classe, tipo = 'min', minimo = 3) {
   const m = (resumo && resumo[tipo]) || {};
@@ -347,5 +345,5 @@ const hhmm = (ms) => { const d = new Date(ms); return `${d.getHours()}h${String(
 module.exports = {
   base, pastaGlobal, versaoPlugin, agenteCurto, codDe, classes, classeValida, classeDe, projetoHash, nomeCurto, permitida,
   lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, VALIDADE_PROGRESSO_MS,
-  quantil, execucoes, previsao, agentesAgora, indice, resumoExecucoes, referenciaResumo, chaveRevisao, indiceRevisoes, metaAgente, ligacao, ultimoSinal, PRAZO_FOLGA, situacao,
+  quantil, execucoes, previsao, agentesAgora, indice, resumoExecucoes, referenciaResumo, chaveRevisao, metaAgente, ligacao, ultimoSinal, PRAZO_FOLGA, situacao,
 };

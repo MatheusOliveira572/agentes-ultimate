@@ -138,10 +138,8 @@ function placarDoRevisor(cwd, agente, id, msg, cauda) {
     veredito: /^sim$/i.test(m[3]) ? 'sim' : 'nao', B: +m[4], A: +m[5], M: +m[6], b: +m[7] };
   const ids = String(m[8] || '').split(',').map((x) => x.trim()).filter((x) => x && x.length <= 12).slice(0, 60);
   if (ids.length) rev.ids = ids;
-  const ja = R.indiceRevisoes(256 * 1024); // índice por chave, lido só no trecho novo
-  rev.primeira = ja ? !ja.chaves[R.chaveRevisao(rev)] : null; // índice frio e histórico grande: o placar decide depois
+  // "de primeira" não é gravado aqui: o placar calcula pela ordem das revisões de cada trabalho (uma fonte só)
   R.acrescentar(path.join(dir, 'revisoes.jsonl'), rev, 64 * 1024 * 1024);
-  R.indiceRevisoes(64 * 1024);
 }
 
 // Trava do fim de um agente: criar o arquivo com "wx" é atômico, então só uma das chamadas repetidas segue. Travas de

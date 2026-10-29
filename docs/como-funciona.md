@@ -76,7 +76,7 @@ defeito que você achou ─► regra automática no verificador do projeto (prov
 | Progresso | o próprio agente, ao fim de cada etapa (passo 10 do protocolo) | `.claude/base/.progresso/<agente>-<código>.json` |
 | Barra por agente | `hooks/barra.js` pelo `settings.json` do plugin → `~/.claude/agentes-ultimate/barra.js` | — |
 | Placar | linha fixa do revisor lida no `SubagentStop` (só grava a linha); `scripts/placar.js` refaz o placar quando a skill pede | `revisoes.jsonl`, `defeitos.jsonl`, `placar.json`, `estado.json` |
-| Índices | ganchos e leitores, só pelo trecho novo dos `.jsonl` | `.indice-execucoes.json` (minutos e fator por chave), `.indice-revisoes.json` (primeira revisão por trabalho) |
+| Índice | ganchos e leitores, só pelo trecho novo do `.jsonl` | `.indice-execucoes.json` (minutos e fator por chave, para a faixa e a barra); "de primeira" é calculado só pelo placar |
 | Agentes agora | `hooks/mapa-servidor.js` (`/agentes` e evento `agentes`) | — |
 
 O código do trabalho (`[cod:xxxx]` no fim da descrição do agente) liga as peças:

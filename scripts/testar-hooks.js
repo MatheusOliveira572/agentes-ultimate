@@ -408,14 +408,15 @@ const revisar = (id, msgFinal, tr) => {
 revisar('v1', 'Veredito: não pode ir.\nPlacar: autor=agentes-ultimate:dev-powerbi cod=ab12 veredito=não B=1 A=2 M=0 b=3');
 let rv = lerJsonl(revArq);
 caso('placar: a linha fixa do revisor vira registro com as contagens', rv.length === 1 && rv[0].autor === 'dev-powerbi' && rv[0].cod === 'ab12' && rv[0].veredito === 'nao' &&
-  rv[0].B === 1 && rv[0].A === 2 && rv[0].M === 0 && rv[0].b === 3 && rv[0].primeira === true, JSON.stringify(rv));
+  rv[0].B === 1 && rv[0].A === 2 && rv[0].M === 0 && rv[0].b === 3, JSON.stringify(rv));
+caso('registro da revisão sem o campo "primeira" (uma fonte só: o placar calcula "de primeira")', rv.length === 1 && !('primeira' in rv[0]), JSON.stringify(rv));
 // a segunda revisão do mesmo código vem pelo fim da transcrição (relatório entregue pelo SubagentHandback)
 const trH = transcricao('v2.jsonl', '2026-10-28T16:00:00.000Z', '2026-10-28T16:10:00.000Z');
 fs.appendFileSync(trH, JSON.stringify({ type: 'assistant', timestamp: '2026-10-28T16:10:01.000Z', message: { content: [{ type: 'tool_use', name: 'SubagentHandback',
   input: { message: 'Pode ir.\nPlacar: autor=dev-powerbi cod=ab12 veredito=sim B=0 A=0 M=1 b=0' } }] } }) + '\n');
 revisar('v2', '', trH);
 rv = lerJsonl(revArq);
-caso('placar: revisão repetida do mesmo código não conta como "de primeira" (lida pelo fim da transcrição)', rv.length === 2 && rv[1].veredito === 'sim' && rv[1].primeira === false && rv[1].M === 1, JSON.stringify(rv));
+caso('placar: a 2ª revisão do mesmo código é lida pelo fim da transcrição (o "de primeira" dela é conferido no placar abaixo)', rv.length === 2 && rv[1].veredito === 'sim' && rv[1].M === 1, JSON.stringify(rv));
 const lerEstado = () => { try { return JSON.parse(fs.readFileSync(estadoArq, 'utf8')); } catch (e) { return {}; } };
 const semAntes = lerEstado().revisor_sem_placar || 0; // o revisor do caso de 40 MB também terminou sem a linha
 revisar('v3', 'Revisei e está tudo certo.');
@@ -704,8 +705,9 @@ const pC2 = path.join(tmp, 'projeto-c2'); fs.mkdirSync(path.join(pC2, '.claude',
 for (const [id, c, v] of [['c2a', 'w1', 'não'], ['c2b', 'w2', 'sim']]) {
   hook('execucoes.js', { cwd: pC2, hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'revisor', last_assistant_message: `Placar: autor=dev cod=${c} veredito=${v} B=0 A=0 M=0 b=0` });
 }
-const rvC2 = lerJsonl(revArq).filter((x) => x.id === 'c2a' || x.id === 'c2b');
-caso('de primeira no registro: a 1ª revisão de outro código do mesmo autor é "de primeira"', rvC2.length === 2 && rvC2[0].primeira === true && rvC2[1].primeira === true, JSON.stringify(rvC2));
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json', '--projeto'], { cwd: pC2, env, encoding: 'utf8' });
+let devC2 = {}; try { devC2 = JSON.parse(re.stdout).agentes.dev || {}; } catch (e) { /* falhou */ }
+caso('de primeira pelo gancho até o placar: a 1ª revisão de outro código do mesmo autor conta (1 de 2)', devC2.revisados === 2 && devC2.de_primeira === 1, re.stdout + re.stderr);
 
 // ---- M-6 · a 2ª revisão do mesmo trabalho não soma de novo o achado que continua aberto ----
 const pM6 = path.join(tmp, 'projeto-m6'); fs.mkdirSync(path.join(pM6, '.claude', 'base'), { recursive: true });
