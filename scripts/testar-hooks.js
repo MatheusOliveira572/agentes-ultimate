@@ -845,6 +845,13 @@ caso('hora perto da meia-noite: às 23h50, "00:10–00:40" é amanhã (+20 e +50
 caso('hora perto da meia-noite: às 23h50, "23:30–00:30" atravessa a meia-noite (-20 e +40 min)', min(m2.de, a2350) === -20 && min(m2.ate, a2350) === 40, JSON.stringify(m2));
 caso('hora perto da meia-noite: às 0h10, "23:40–23:55" é de ontem (-30 e -15 min)', min(m3.de, a0010) === -30 && min(m3.ate, a0010) === -15, JSON.stringify(m3));
 
+// ---- b-13 · faixa que já terminou antes do início da execução não vale (mesmo registrada há menos de 15 min) ----
+const p16 = path.join(tmp, 'projeto16'); const b16 = path.join(p16, '.claude', 'base'); fs.mkdirSync(b16, { recursive: true });
+fs.writeFileSync(path.join(b16, '.estimativas.jsonl'), JSON.stringify({ em: h12(-14), agente: 'dev-powerbi', classe: 'correcao', cod: 'vz01', de: h12(-10), ate: h12(-5), estimado_min: 5 }) + '\n');
+fs.writeFileSync(path.join(b16, '.agentes.jsonl'), JSON.stringify({ em: h12(0), tipo: 'inicio', id: 'z1', agente: 'dev-powerbi', cod: 'vz01', classe: 'correcao' }) + '\n');
+const z16 = (registro().agentesAgora(p16, { resumo: null }) || []).find((x) => x.id === 'z1') || {};
+caso('faixa vencida antes do início não vale (nada de "passou da previsão" no início)', z16.estado === 'trabalhando' && z16.fonte !== 'registrada' && z16.passou == null, JSON.stringify(z16));
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

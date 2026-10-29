@@ -132,7 +132,8 @@ const ANTES_DO_INICIO = 15 * 60 * 1000, DEPOIS_DO_INICIO = 3 * 60 * 60 * 1000;
 function estimativaPara(cwd, agente, cod, inicio) {
   const lista = lerJsonl(path.join(base(cwd), '.estimativas.jsonl'));
   const ini = inicio || Date.now();
-  const perto = (e) => { const t = Date.parse(e.em); return t >= ini - ANTES_DO_INICIO && t <= ini + DEPOIS_DO_INICIO; };
+  // perto do início desta execução e ainda não vencida quando ela começou
+  const perto = (e) => { const t = Date.parse(e.em); return t >= ini - ANTES_DO_INICIO && t <= ini + DEPOIS_DO_INICIO && !(Date.parse(e.ate) < ini); };
   for (let i = lista.length - 1; i >= 0; i--) {
     const e = lista[i];
     if (cod && e.cod === cod && e.agente === agente && perto(e)) return e; // a faixa é do agente e desta execução
@@ -141,7 +142,7 @@ function estimativaPara(cwd, agente, cod, inicio) {
   const limite = ini - ANTES_DO_INICIO;
   for (let i = lista.length - 1; i >= 0; i--) {
     const e = lista[i];
-    if (e.agente === agente && !e.cod && Date.parse(e.em) >= limite) return e;
+    if (e.agente === agente && !e.cod && Date.parse(e.em) >= limite && !(Date.parse(e.ate) < ini)) return e;
   }
   return null;
 }
