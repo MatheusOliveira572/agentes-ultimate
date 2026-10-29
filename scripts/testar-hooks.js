@@ -574,7 +574,9 @@ const casaPar = path.join(tmp, 'casa-paralelo'); fs.mkdirSync(casaPar);
 const rp = spawnSync(process.execPath, ['-e', testeParalelo, path.join(RAIZ, 'hooks', 'execucoes.js'), RAIZ, casaPar], { encoding: 'utf8', timeout: 240000 });
 let par = {}; try { par = JSON.parse((rp.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
 caso('código certo: 20 rodadas com dois agentes do mesmo tipo em paralelo (inícios a 5 ms), no painel e no registro', par.n === 40 && par.erros && par.erros.length === 0, rp.stdout + rp.stderr);
-// agente em primeiro plano: sem PostToolUse até o fim; o código vem do .meta.json ao lado da transcrição
+// agente em primeiro plano: sem PostToolUse até o fim; o código vem do .meta.json ao lado da transcrição. No Claude Code
+// 2.1.302 o .meta.json ainda não existe no SubagentStart (sonda do revisor, b-9): no início vale o palpite pela ordem dos
+// pedidos, e o registro do fim usa o .meta.json. O caso do início cobre o caminho para quando ele já existir.
 const pMeta = path.join(tmp, 'projeto-meta'); fs.mkdirSync(path.join(pMeta, '.claude', 'base'), { recursive: true });
 const dMeta = path.join(tmp, 'sessao-meta', 'subagents'); fs.mkdirSync(dMeta, { recursive: true });
 const exeM = (d) => hook('execucoes.js', { cwd: pMeta, transcript_path: path.join(tmp, 'sessao-meta.jsonl'), ...d });
@@ -585,7 +587,7 @@ for (const [id, c, t] of [['fg2', 'fb02', 'tf2'], ['fg1', 'fa01', 'tf1']]) {
   exeM({ hook_event_name: 'SubagentStart', agent_id: id, agent_type: 'analista-fpa' });
 }
 const agM = registro().agentesAgora(pMeta);
-caso('código certo em primeiro plano já no início, pelo .meta.json do agente', (agM.find((x) => x.id === 'fg1') || {}).cod === 'fa01' && (agM.find((x) => x.id === 'fg2') || {}).cod === 'fb02', JSON.stringify(agM));
+caso('código certo em primeiro plano no início, se o .meta.json do agente já existir', (agM.find((x) => x.id === 'fg1') || {}).cod === 'fa01' && (agM.find((x) => x.id === 'fg2') || {}).cod === 'fb02', JSON.stringify(agM));
 for (const id of ['fg2', 'fg1']) exeM({ hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'analista-fpa', agent_transcript_path: path.join(dMeta, `agent-${id}.jsonl`) });
 const exM = lerJsonl(execArq).filter((x) => /^fg/.test(x.id));
 caso('código certo em primeiro plano no registro, pelo .meta.json do agente', exM.length === 2 && exM.find((x) => x.id === 'fg1').cod === 'fa01' && exM.find((x) => x.id === 'fg2').cod === 'fb02', JSON.stringify(exM));
@@ -792,6 +794,19 @@ fs.writeFileSync(path.join(b13, '.estimativas.jsonl'), JSON.stringify({ em: h12(
 hook('execucoes.js', { cwd: p13, hook_event_name: 'SessionStart', session_id: 'S2', source: 'startup' });
 const v13 = (registro().agentesAgora(p13, { resumo: null }) || []).find((x) => x.id === 'v1') || {};
 caso('início de outra sessão mantém o agente de 35 min sem progresso que ainda está dentro da faixa', v13.estado === 'trabalhando', JSON.stringify(v13));
+
+// ---- b-10 · teto do término pela faixa (mutante M4) e trava do fim sem depender de corrida (mutante M2b) ----
+const p14 = path.join(tmp, 'projeto14'); const b14 = path.join(p14, '.claude', 'base'); fs.mkdirSync(path.join(b14, '.progresso'), { recursive: true });
+fs.writeFileSync(path.join(b14, '.agentes.jsonl'), JSON.stringify({ em: h12(-20), tipo: 'inicio', id: 't1', agente: 'dev-powerbi', cod: 'tt01', classe: 'construcao' }) + '\n');
+fs.writeFileSync(path.join(b14, '.estimativas.jsonl'), JSON.stringify({ em: h12(-21), agente: 'dev-powerbi', classe: 'construcao', cod: 'tt01', de: h12(5), ate: h12(20), estimado_min: 40 }) + '\n');
+fs.writeFileSync(path.join(b14, '.progresso', 'dev-powerbi-tt01.json'), JSON.stringify({ feito: 1, total: 6, agora: 'modelo' })); // 17%: o ritmo daria 2 h
+const t14 = (registro().agentesAgora(p14, { resumo: null }) || []).find((x) => x.id === 't1') || {};
+caso('término pelo ritmo (acima de 15%) não passa do fim da faixa', t14.estimado === false && t14.termina != null && t14.termina <= t14.ate && t14.ate - Date.now() < 25 * 60000, JSON.stringify(t14));
+fs.mkdirSync(path.join(b14, '.fins'), { recursive: true });
+fs.writeFileSync(path.join(b14, '.fins', 'u1'), ''); // a outra chamada do mesmo SubagentStop está no meio (já criou a trava)
+const nEx14 = lerJsonl(execArq).length;
+hook('execucoes.js', { cwd: p14, hook_event_name: 'SubagentStop', agent_id: 'u1', agent_type: 'dev-powerbi' });
+caso('trava do fim: com a trava já criada pela outra chamada, esta não registra de novo', lerJsonl(execArq).length === nEx14, `${lerJsonl(execArq).length - nEx14} linha(s) a mais`);
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');

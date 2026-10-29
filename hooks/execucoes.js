@@ -67,7 +67,8 @@ function tratar(d) {
     const regs = R.lerJsonl(arq);
     if (regs.some((r) => r.tipo === 'inicio' && r.id === id)) return; // retomada do mesmo agente
     // Código, em ordem de certeza: o .meta.json do agente (descrição e tool_use_id dele), o par do PostToolUse, e só
-    // então o pedido mais antigo do mesmo tipo (palpite, marcado provisório).
+    // então o pedido mais antigo do mesmo tipo (palpite, marcado provisório). Na 2.1.302 o .meta.json ainda não existe
+    // aqui (só no fim), então em primeiro plano vale o palpite até o PostToolUse ou o SubagentStop corrigirem.
     const meta = R.metaAgente(d.transcript_path, id);
     const lancado = regs.find((r) => r.tipo === 'lancado' && r.id === id);
     let fonte = null, provisorio = false;
