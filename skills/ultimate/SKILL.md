@@ -26,6 +26,21 @@ também não começar do zero.
 - Pergunte ao usuário só o que muda o resultado e não dá para descobrir lendo o projeto. Para o resto, escolha o padrão
   sensato e diga qual escolheu.
 
+## 1b. Modelo e esforço por tarefa
+Ao chamar um agente, escolha o `model` e o `effort` da ferramenta Agent pela tarefa, quando o usuário tiver aceitado
+esta política (no `CLAUDE.md` ou em `.claude/base/config.json` → `"modelo_por_tarefa": true`). Sem esse aceite, use o
+padrão do agente e não passe `effort`.
+
+| Tipo de tarefa | Modelo | Esforço |
+|---|---|---|
+| Construir, revisar, dar parecer técnico ou de regra | opus | high |
+| Rodada grande ou difícil (causa raiz que já falhou, arquitetura, revisão final) | opus | xhigh |
+| Decidir, planejar, especificar, desenhar | opus | medium |
+| Pesquisar, resumir, escrever texto simples, organizar | sonnet | medium |
+| Mecânico (renomear, listar, conferir formato, índice) | haiku | low |
+
+Revisão nunca desce de nível; trabalho de modelo menor reprovado volta com opus; na dúvida, o nível mais alto.
+
 ## 2. Memória do projeto (`.claude/base/`)
 - `PROJETO.md` é seu: objetivo, decisões (data, decisão, motivo), restrições, estado e "retomar aqui". Atualize ao fim
   de cada entrega relevante. Se o projeto tem `CLAUDE.md`, as decisões também vão lá.
