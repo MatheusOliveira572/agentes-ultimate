@@ -221,7 +221,9 @@ function main(d) {
   ];
   // Modelo e esforço por tarefa (skill ultimate §1b): só com o aceite do usuário. O projeto vence, inclusive com false.
   const usuCfg = lerJson(path.join(globalDir, 'config.json'), {});
-  const modeloPorTarefa = typeof projetoCfg.modelo_por_tarefa === 'boolean' ? projetoCfg.modelo_por_tarefa : usuCfg.modelo_por_tarefa === true;
+  const sim = (v) => (v === true || v === 'true' ? true : v === false || v === 'false' ? false : undefined); // aceita "true"/"false" em texto
+  const doProjetoModelo = sim(projetoCfg.modelo_por_tarefa);
+  const modeloPorTarefa = doProjetoModelo !== undefined ? doProjetoModelo : sim(usuCfg.modelo_por_tarefa) === true;
   if (modeloPorTarefa) ctx.push('Política de modelo e esforço ATIVA: ao chamar cada agente, passe `model` e `effort` pela tabela da skill `ultimate` §1b (revisão nunca abaixo de opus/high).');
   const antes = pastaPermitida(cwd) ? jaFeito(cwd, pedido) : [];
   if (antes.length) {

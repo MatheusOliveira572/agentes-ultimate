@@ -169,8 +169,8 @@ Detalhes em [docs/como-funciona.md](docs/como-funciona.md). Para criar um pacote
 
 - `"modelo_por_tarefa": true` em `~/.claude/agentes-ultimate/config.json` (todos os projetos) ou em
   `.claude/base/config.json` (o projeto vence, inclusive com `false`): o orquestrador passa a escolher modelo e esforço
-  de cada agente pela tarefa, pela tabela da skill `ultimate` §1b (revisão nunca abaixo de opus/high). Sem a chave,
-  nada muda.
+  de cada agente pela tarefa, pela tabela da skill `ultimate` §1b (revisão nunca abaixo de opus/high). Vale também
+  `"true"`/`"false"` em texto. Sem a chave, nada muda.
 
 ## Desligar num projeto
 

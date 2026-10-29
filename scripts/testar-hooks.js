@@ -832,6 +832,14 @@ fs.rmSync(cfgUsuMod);
 caso('modelo por tarefa: sem configuração, a linha da política não aparece', semConfig === false, String(semConfig));
 caso('modelo por tarefa: o usuário com true liga a política no contexto', usuarioLiga === true, String(usuarioLiga));
 caso('modelo por tarefa: o projeto com false desliga, mesmo com o usuário em true', projetoDesliga === false, String(projetoDesliga));
+// b-15: "true"/"false" em texto valem como booleano
+fs.writeFileSync(path.join(pMod, '.claude', 'base', 'config.json'), JSON.stringify({}));
+fs.writeFileSync(cfgUsuMod, JSON.stringify({ modelo_por_tarefa: 'true' }));
+const textoLiga = politica();
+fs.writeFileSync(path.join(pMod, '.claude', 'base', 'config.json'), JSON.stringify({ modelo_por_tarefa: 'false' }));
+const textoDesliga = politica();
+fs.rmSync(cfgUsuMod);
+caso('modelo por tarefa: "true" em texto liga e "false" em texto no projeto desliga', textoLiga === true && textoDesliga === false, `${textoLiga} ${textoDesliga}`);
 
 // ---- M-8 · hora "HH:MM" perto da meia-noite cai no dia certo (relógio fixado; não depende da hora real) ----
 const p15 = path.join(tmp, 'projeto15'); fs.mkdirSync(path.join(p15, '.claude', 'base'), { recursive: true });
