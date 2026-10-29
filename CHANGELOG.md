@@ -100,6 +100,27 @@ A versão continua 0.7.0 (não tinha sido publicada). Um commit por item.
   (b-7; o registro não guarda qual agente estava errado).
 - Testes dos ganchos: 125 casos, todos passando.
 
+### Correções da 2ª rodada da revisão (pode publicar = sim; antes do push)
+- **M-7 · faixa da construção herdada pela correção:** a correção que reusa o código herdava a faixa da construção
+  ("passou da previsão · +398 min" já no início, fator 0,17 no histórico). Agora a faixa com código só vale se é do
+  mesmo agente e foi registrada perto do início desta execução (de 15 min antes até 3 h depois). Sem faixa própria,
+  a previsão vem da classe de referência, e a execução fica fora do fator (fonte "sem"). A skill `ultimate` manda
+  registrar faixa nova na correção.
+- **b-8:** abrir outra sessão no mesmo projeto não tira mais do painel um agente vivo dentro da faixa: usa o mesmo
+  prazo do painel.
+- **b-9:** texto do caso e do comentário. Na 2.1.302 o `.meta.json` do agente só existe no fim; no início, vale o
+  palpite até o `PostToolUse` ou o `SubagentStop`.
+- **b-10:** casos que pegam os mutantes M4 (teto do término pela faixa, com progresso acima de 15%) e M2b (trava do
+  fim testada sem depender de corrida).
+- **b-11:** os termos guardados descartam palavras com inicial maiúscula fora do começo da frase (prováveis nomes de
+  pessoa, empresa ou cliente).
+- **b-12:** sai o campo `primeira` do registro das revisões. Ele ficava nulo com histórico grande e era uma 2ª fonte
+  para a regra que o placar calcula.
+- **Modelo e esforço por tarefa:** o roteador lê `"modelo_por_tarefa"` no `config.json` do usuário e no do projeto.
+  O projeto vence, inclusive com `false`. Ligada, a política põe no contexto a linha que manda passar `model` e
+  `effort` pela tabela da skill `ultimate` §1b. README com a seção Configuração.
+- Testes dos ganchos: 136 casos, todos passando.
+
 ## 0.6.0 · 2026-10-28
 - **Mapa sem F5:** o servidor avisa a página quando o último pedido muda (`tipo:"busca"`: destaques, caixa "Último
   pedido" e arquivo citado que ainda não estava no desenho) e quando o grafo refeito muda (`tipo:"grafo"`: a página
