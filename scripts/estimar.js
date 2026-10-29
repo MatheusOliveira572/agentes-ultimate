@@ -35,7 +35,7 @@ function registrar(o) {
   const cod = o.cod && o.cod !== true ? R.codDe(`[cod:${o.cod}]`) : null;
   if (o.cod && !cod) falha('--cod: 2 a 16 letras ou números (ex.: ab12)');
   codigoDeOutro(cwd, agente, cod);
-  const linha = { em: new Date().toISOString(), agente, classe: R.classeValida(o.classe === true ? '' : o.classe), cod,
+  const linha = { em: new Date(R.agora()).toISOString(), agente, classe: R.classeValida(o.classe === true ? '' : o.classe), cod,
     de: new Date(de).toISOString(), ate: new Date(ate).toISOString(), estimado_min: estimado };
   R.acrescentar(path.join(R.base(cwd), '.estimativas.jsonl'), linha);
   console.log(`faixa registrada: ${agente} · ${R.hhmm(de)}–${R.hhmm(ate)}${cod ? ' · cod ' + cod : ''} · classe ${linha.classe}`);
@@ -88,7 +88,7 @@ function faixa(o) {
   const classe = o.classe && o.classe !== true ? R.classeValida(o.classe) : null;
   const estimado = o.estimado != null && o.estimado !== true ? Number(String(o.estimado).replace(',', '.')) : null;
   if (estimado != null && !(estimado > 0)) falha('--estimado em minutos, maior que zero');
-  const inicio = o.inicio && o.inicio !== true ? R.deHora(o.inicio) : Date.now();
+  const inicio = o.inicio && o.inicio !== true ? R.deHora(o.inicio) : R.agora();
   if (inicio == null) falha('--inicio HH:MM');
   const resumo = R.resumoExecucoes();
   const ref = R.referenciaResumo(resumo, agente, classe);
@@ -123,7 +123,7 @@ function faixa(o) {
     const cod = o.cod && o.cod !== true ? R.codDe(`[cod:${o.cod}]`) : null;
     if (o.cod && !cod) falha('--cod: 2 a 16 letras ou números (ex.: ab12)');
     codigoDeOutro(path.resolve(o.pasta || process.cwd()), agente, cod);
-    R.acrescentar(path.join(R.base(path.resolve(o.pasta || process.cwd())), '.estimativas.jsonl'), { em: new Date().toISOString(), agente,
+    R.acrescentar(path.join(R.base(path.resolve(o.pasta || process.cwd())), '.estimativas.jsonl'), { em: new Date(R.agora()).toISOString(), agente,
       classe: classe || 'outra', cod, de: res.de, ate: res.ate, estimado_min: estimado, base: `${res.nivel} n=${res.n}` });
     res.registrada = true;
   }

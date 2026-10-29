@@ -333,17 +333,24 @@ function agentesAgora(cwd, { agora = Date.now(), resumo = null } = {}) {
   return out;
 }
 
-// Hora "14:10" ou "14h10" no dia de referência (local). Devolve ms ou null.
-function deHora(txt, ref = Date.now()) {
+// Agora. AGENTES_ULTIMATE_AGORA (data ISO) fixa o relógio dos scripts para testes de borda (meia-noite).
+function agora() { const a = Date.parse(process.env.AGENTES_ULTIMATE_AGORA || ''); return isNaN(a) ? Date.now() : a; }
+// Hora "14:10" ou "14h10" no dia que fica a até 12 h da referência (às 23h50, "00:10" é amanhã; à 0h10, "23:40" é
+// ontem). Devolve ms ou null.
+const DIA = 24 * 60 * 60 * 1000;
+function deHora(txt, ref = agora()) {
   const m = /^(\d{1,2})\s*[:h]\s*(\d{2})$/i.exec(String(txt || '').trim());
   if (!m || +m[1] > 23 || +m[2] > 59) return null;
   const d = new Date(ref); d.setHours(+m[1], +m[2], 0, 0);
-  return d.getTime();
+  let t = d.getTime();
+  if (t - ref > DIA / 2) t -= DIA;
+  else if (ref - t > DIA / 2) t += DIA;
+  return t;
 }
 const hhmm = (ms) => { const d = new Date(ms); return `${d.getHours()}h${String(d.getMinutes()).padStart(2, '0')}`; };
 
 module.exports = {
   base, pastaGlobal, versaoPlugin, agenteCurto, codDe, classes, classeValida, classeDe, projetoHash, nomeCurto, permitida,
-  lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, VALIDADE_PROGRESSO_MS,
+  lerJsonl, acrescentar, pontasTranscricao, estimativaPara, progressoPara, deHora, hhmm, agora, VALIDADE_PROGRESSO_MS,
   quantil, execucoes, previsao, agentesAgora, indice, resumoExecucoes, referenciaResumo, chaveRevisao, metaAgente, ligacao, ultimoSinal, PRAZO_FOLGA, situacao,
 };

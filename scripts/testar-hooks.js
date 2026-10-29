@@ -830,6 +830,21 @@ caso('modelo por tarefa: sem configuração, a linha da política não aparece',
 caso('modelo por tarefa: o usuário com true liga a política no contexto', usuarioLiga === true, String(usuarioLiga));
 caso('modelo por tarefa: o projeto com false desliga, mesmo com o usuário em true', projetoDesliga === false, String(projetoDesliga));
 
+// ---- M-8 · hora "HH:MM" perto da meia-noite cai no dia certo (relógio fixado; não depende da hora real) ----
+const p15 = path.join(tmp, 'projeto15'); fs.mkdirSync(path.join(p15, '.claude', 'base'), { recursive: true });
+const relogio = (h, m) => { const d = new Date(); d.setHours(h, m, 0, 0); return d; };
+const reg15 = (agoraFix, de, ate, cod) => { spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'registrar', '--agente', 'redator', '--cod', cod, '--de', de, '--ate', ate],
+  { cwd: p15, env: { ...env, AGENTES_ULTIMATE_AGORA: agoraFix.toISOString() }, encoding: 'utf8' });
+  return lerJsonl(path.join(p15, '.claude', 'base', '.estimativas.jsonl')).find((x) => x.cod === cod) || {}; };
+const min = (a, b) => Math.round((Date.parse(a) - b.getTime()) / 60000);
+const a2350 = relogio(23, 50), a0010 = relogio(0, 10);
+const m1 = reg15(a2350, '00:10', '00:40', 'mn01'); // depois da meia-noite: amanhã
+const m2 = reg15(a2350, '23:30', '00:30', 'mn02'); // atravessa a meia-noite
+const m3 = reg15(a0010, '23:40', '23:55', 'mn03'); // logo depois da meia-noite, faixa de ontem
+caso('hora perto da meia-noite: às 23h50, "00:10–00:40" é amanhã (+20 e +50 min)', min(m1.de, a2350) === 20 && min(m1.ate, a2350) === 50, JSON.stringify(m1));
+caso('hora perto da meia-noite: às 23h50, "23:30–00:30" atravessa a meia-noite (-20 e +40 min)', min(m2.de, a2350) === -20 && min(m2.ate, a2350) === 40, JSON.stringify(m2));
+caso('hora perto da meia-noite: às 0h10, "23:40–23:55" é de ontem (-30 e -15 min)', min(m3.de, a0010) === -30 && min(m3.ate, a0010) === -15, JSON.stringify(m3));
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
