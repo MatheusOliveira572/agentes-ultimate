@@ -108,6 +108,18 @@ visto falhando antes.
   - checklist, bloco A: A-1 contraste em tudo e em todos os estados, A-2 texto alternativo e resumo, A-3 só com o
     teclado, A-4 teste com quem usa tecnologia assistiva; LBI art. 63 [conferir] e a [HIPÓTESE] do art. 34 para
     ferramenta interna.
+- **G8 · honestidade do que se afirma:**
+  - `estrategista-marketing`: alegação objetiva com evidência datada (sem evidência, sai) e depoimento só de cliente
+    real, com incentivo declarado; caso 7 no eval;
+  - `analista-compliance`: selo ou certificação sem relatório vigente, com escopo e período, é alegação falsa; caso 6;
+  - `designer-paineis`: "atualizado em" vem da carga real, nunca texto fixo; caso 7;
+  - `advogado-contratos`: a lista de risco ganha uso de marca e publicidade (logo com permissão escrita) e nível de
+    serviço medível; caso 6;
+  - `redator` e `designer-documentos` (decisão D-4, opção b): conteúdo feito com IA para terceiros leva rótulo quando
+    alguém puder ser enganado; caso 5 em cada eval;
+  - checklist, bloco H: H-1 a H-7 (alegação, "atualizado em", disponibilidade, depoimentos, selos, logos, rótulo de IA),
+    com CDC e Lei 9.279 [conferir] e a [HIPÓTESE] do PL 2338/2023;
+  - Papel e Fora do escopo de marketing e compliance condensados para caber nas 90 linhas.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

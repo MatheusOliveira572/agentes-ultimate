@@ -1029,6 +1029,20 @@ caso('0.8.0 G7 eval do designer: contraste de não texto, estados e teclado', /1
 const itA7 = secaoV8(skV8('itens.md'), 'A · ');
 caso('0.8.0 G7 checklist A: contraste, texto alternativo, teclado e teste com tecnologia assistiva', ['A-1 ·', 'A-2 ·', 'A-3 ·', 'A-4 ·'].every((s) => itA7.includes(s)) && /l13146\.htm/.test(itA7) && /\[conferir\]/.test(itA7), 'falta item');
 
+// G8 · honestidade do que se afirma
+const mkC8 = secaoV8(agV8('estrategista-marketing'), 'Critério de pronto'), mkE8 = secaoV8(agV8('estrategista-marketing'), 'Erros conhecidos');
+caso('0.8.0 G8 marketing: alegação objetiva com evidência datada; sem evidência, sai', /evidência datada/.test(mkC8) && /sai/.test(mkC8), 'falta no Critério de pronto');
+caso('0.8.0 G8 marketing: depoimento só com origem real e incentivo declarado', /depoimento/i.test(mkE8) && /incentivo/.test(mkE8), 'falta em Erros conhecidos');
+caso('0.8.0 G8 compliance: selo ou certificação sem relatório vigente e escopo', /selo/i.test(secaoV8(agV8('analista-compliance'), 'Erros conhecidos')) && /vigente/.test(secaoV8(agV8('analista-compliance'), 'Erros conhecidos')), 'falta em Erros conhecidos');
+caso('0.8.0 G8 designer: "atualizado em" vem da carga real, nunca texto fixo', /atualizado em/i.test(secaoV8(agV8('designer-paineis'), 'Critério de pronto')) && /carga real/.test(secaoV8(agV8('designer-paineis'), 'Critério de pronto')), 'falta no Critério de pronto');
+caso('0.8.0 G8 contratos: uso de marca e publicidade (logo com permissão escrita) e nível de serviço medível na lista de risco', /uso de marca e publicidade/.test(secaoV8(agV8('advogado-contratos'), 'Método de trabalho')) && /nível de serviço medível/.test(secaoV8(agV8('advogado-contratos'), 'Método de trabalho')), 'falta no Método');
+caso('0.8.0 G8 redator e designer de documentos: rotular o conteúdo feito com IA quando alguém puder ser enganado', /feito com IA/.test(agV8('redator')) && /enganad/.test(agV8('redator')) && /feito com IA/.test(agV8('designer-documentos')), 'falta');
+caso('0.8.0 G8 evals: marketing, compliance, contratos, redator, designer de documentos e de painéis', /evidência datada/.test(evV8('estrategista-marketing')) && /selo/i.test(evV8('analista-compliance')) && /logo/.test(evV8('advogado-contratos')) &&
+  /IA/.test(evV8('redator')) && /IA/.test(evV8('designer-documentos')) && /atualizado em/i.test(evV8('designer-paineis')), 'falta caso');
+caso('0.8.0 G8 agentes alterados dentro de 90 linhas', agV8('estrategista-marketing').slice(0, agV8('estrategista-marketing').indexOf('## Protocolo comum')).split('\n').length <= 90 && agV8('analista-compliance').slice(0, agV8('analista-compliance').indexOf('## Protocolo comum')).split('\n').length <= 90 && agV8('advogado-contratos').slice(0, agV8('advogado-contratos').indexOf('## Protocolo comum')).split('\n').length <= 90, 'passou de 90 linhas');
+const itH8 = secaoV8(skV8('itens.md'), 'H · ');
+caso('0.8.0 G8 checklist H: alegação, "atualizado em", disponibilidade, depoimentos, selos, logos e rótulo de IA', Array.from({ length: 7 }, (_, i) => 'H-' + (i + 1) + ' ·').every((s) => itH8.includes(s)) && /l8078compilado\.htm/.test(itH8), 'falta item');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

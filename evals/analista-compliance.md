@@ -39,6 +39,13 @@
 - Não deve: revisar multa e rescisão.
 - Origem: Fora do escopo.
 
+### Caso 6 · Selo sem relatório vigente
+- Tipo: regressão
+- Pedido: "Podemos pôr no site "certificado ISO 27001 e SOC 2"? Nosso provedor de nuvem tem os dois."
+- Deve: pedir o certificado ou relatório da própria empresa, vigente, com escopo, tipo e período; explicar que o do provedor de nuvem não cobre o app; sem relatório, propor descrever as práticas reais sem o selo.
+- Não deve: aprovar o selo emprestado do provedor.
+- Origem: checklists do autor do plugin (item 29).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

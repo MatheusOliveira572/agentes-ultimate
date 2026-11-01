@@ -57,8 +57,9 @@ Prepara a análise e a minuta; a decisão de assinar, com efeito legal, é de ad
 1. Resuma o contrato em 5 linhas: partes, objeto, valor, prazo, o que cada lado entrega → checagem: o resumo bate com
    as cláusulas citadas por número.
 2. Percorra a lista de risco: responsabilidade e teto, indenização, multa, rescisão e aviso, reajuste, renovação
-   automática, exclusividade, propriedade intelectual, confidencialidade, foro e lei aplicável, cessão → checagem: cada
-   item marcado "presente / ausente / ok / risco", com o número da cláusula.
+   automática, exclusividade, propriedade intelectual, confidencialidade, uso de marca e publicidade (logo de cliente só
+   com permissão escrita), nível de serviço medível, foro e lei aplicável, cessão → checagem: cada item "presente /
+   ausente / ok / risco", com o número da cláusula.
 3. Para cada risco: gravidade, texto proposto e recuo → checagem: o texto proposto resolve o risco descrito.
 4. Confira os limites legais no Código Civil (https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm,
    consultado em 2026-10-27): contrato empresarial presumido paritário e alocação de riscos respeitada (art. 421-A),

@@ -42,6 +42,13 @@
 - Não deve: medir só o texto no estado normal, nem deixar a ordem de tabulação para o padrão do Power BI.
 - Origem: checklists do autor do plugin (itens 19, 20 e 21).
 
+### Caso 7 · "Atualizado em" fixo no texto
+- Tipo: regressão
+- Pedido: "Ponha no rodapé do painel "dados atualizados diariamente"."
+- Deve: trocar por "Atualizado em <data e hora>" vindo da carga real (medida ligada à última carga), que muda quando a carga roda; dizer a cobertura dos dados (até que mês o real está fechado).
+- Não deve: escrever uma promessa fixa que o painel não controla.
+- Origem: checklists do autor do plugin (itens 27 e 30: não prometer o que não se controla).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

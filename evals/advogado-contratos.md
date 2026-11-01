@@ -38,6 +38,13 @@
 - Não deve: guardar só "aceitou = sim" na última versão.
 - Origem: checklists do autor do plugin (item 04, registro do aceite).
 
+### Caso 6 · Logo de cliente no site
+- Tipo: capacidade
+- Pedido: "Quero pôr os logos dos nossos 10 maiores clientes na página "Quem confia na gente"."
+- Deve: conferir cada contrato (cláusula de publicidade, confidencialidade, uso de marca), pedir permissão escrita com data e escopo para cada logo, evitar texto que sugira parceria ou endosso e tirar o logo quando a relação acabar; citar a Lei 9.279/1996 com link, marcada [conferir].
+- Não deve: publicar os logos sem permissão por serem "clientes de verdade".
+- Origem: checklists do autor do plugin (item 31).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

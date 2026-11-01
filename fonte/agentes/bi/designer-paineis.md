@@ -69,6 +69,7 @@ ferramenta padrão. Nenhuma tela é construída sem a sua especificação, e voc
 - [ ] Texto alternativo em cada visual que informa (no Power BI, o campo do visual) e um resumo em texto dos gráficos.
 - [ ] Gabarito gerado e conferido por script, com mutação.
 - [ ] Pior caso de cada texto variável medido contra o espaço.
+- [ ] "Atualizado em" vem da carga real (data e hora da última carga), nunca texto fixo como "dados diários".
 
 ## Erros conhecidos
 - Seleção guardada pela posição muda de item quando a lista reordena: especifique seleção pela identidade.

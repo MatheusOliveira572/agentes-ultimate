@@ -208,5 +208,37 @@ ferramenta interna, [HIPÓTESE] o dever vem do ambiente de trabalho acessível (
   itens com dono. Dono: Só o usuário faz (convidar).
 
 ## H · Honestidade do que se afirma
+Produto ao consumidor: CDC, art. 6º, III, art. 30, art. 36 e art. 37 [conferir] (https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm) e o código do CONAR
+(https://www.conar.org.br/). Painel interno: o CDC não se aplica a empregado, mas a honestidade sobre atualização e
+cobertura dos dados vale do mesmo jeito.
+- **H-1 · Alegação objetiva com evidência datada.** "Seguro", "certificado", "100%", resultado, economia, "com IA",
+  comparação com concorrente: cada uma com evidência datada (teste, dado, estudo com fonte, amostra e data) antes de
+  publicar; o que não se prova sai ou é reescrito; resultado típico não sugere que todo mundo terá o melhor caso.
+  Verificar: lista de toda alegação (site, app, descrição, e-mail, apresentação) com a evidência ao lado ou a decisão de
+  tirar (CDC: https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm). Dono: `estrategista-marketing`, com o `redator`.
+- **H-2 · "Atualizado em" vem da carga real.** O painel mostra a data e hora da última carga e a cobertura (até que mês
+  o real está fechado); nada de "dados diários" fixo no texto. Verificar: rode a carga e veja o rótulo mudar; com a
+  carga parada, o rótulo mostra a data antiga. Dono: `designer-paineis` (especifica) e `dev-powerbi` (constrói).
+- **H-3 · Disponibilidade e nível de serviço realistas.** Nada de "100% no ar" ou "nunca cai"; meta pela disponibilidade
+  medida e pelos níveis de serviço dos provedores, com como se mede, o que fica de fora e o remédio; página de status
+  honesta. Verificar: monitor independente comparado com a meta todo mês. Dono: `advogado-contratos` (contrato) e
+  `estrategista-marketing` (texto).
+- **H-4 · Depoimentos e avaliações reais.** Cada um ligado a um cliente real e à fonte; incentivo declarado perto do
+  depoimento; negativos e positivos pelas mesmas regras; nada escrito pelo time ou por IA como se fosse de cliente.
+  Verificar: rastreio de cada depoimento até o cliente e a fonte (CDC, art. 37 [conferir]: https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm). Dono:
+  `estrategista-marketing`.
+- **H-5 · Selo e certificação só com relatório vigente.** ISO, SOC 2, "em conformidade com a LGPD": cada um com o
+  certificado ou relatório da própria empresa, vigente, com escopo, tipo e período; o do provedor de nuvem não cobre o
+  app. Verificar: busca por esses termos no site, no app, nas apresentações e nos questionários de segurança, cada um com
+  o documento ao lado. Dono: `analista-compliance`.
+- **H-6 · Logo de cliente só com permissão escrita.** Logo e nome de cliente sugerem relação e endosso; a marca é de
+  quem a registrou (Lei 9.279/1996, art. 129 e art. 195 [conferir]; https://www.planalto.gov.br/ccivil_03/leis/l9279.htm).
+  Verificar: permissão escrita arquivada com data e escopo para cada logo; o logo sai quando a relação acaba. Dono:
+  `advogado-contratos`.
+- **H-7 · Conteúdo feito com IA rotulado quando alguém puder ser enganado.** Texto, imagem, voz ou vídeo feitos com IA
+  que pareçam de pessoa real, depoimento ou foto real levam rótulo, também na exportação; chatbot se identifica como
+  assistente automático. No Brasil não há lei geral sobre isso [HIPÓTESE: o PL 2338/2023 ainda tramita; conferir em
+  https://www25.senado.leg.br/web/atividade/materias/-/materia/157233]. Verificar: o rótulo aparece em toda superfície
+  onde o conteúdo de IA aparece (tela, exportação, notificação). Dono: `redator` e `designer-documentos`.
 
 ## L · Licenças

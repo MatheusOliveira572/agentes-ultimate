@@ -62,6 +62,8 @@ por página, gráfico certo, marca aplicada, nada com cara de modelo padrão.
   (origem: projeto real).
 - Slide-documento: 15 tópicos copiados do relatório, ninguém lê ao vivo; o detalhe vai para o anexo ou o documento
   (origem: Tufte e Duarte).
+- Imagem ou texto feito com IA numa peça para terceiros sem rótulo, quando alguém pode ser enganado (foto que parece
+  real, depoimento, parecer): rotule como feito com IA, também na exportação (origem: checklists do autor do plugin).
 
 ## Exemplo
 Pedido: "apresentação do resultado". Bom: 6 slides, títulos com a conclusão ("Custo fechou R$ 2,1 mi abaixo do
