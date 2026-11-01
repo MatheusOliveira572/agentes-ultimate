@@ -37,6 +37,11 @@ Cada regra nasceu de uma falha. O formato é: regra — porque (o que aconteceu)
 - Revisor independente em toda rodada — porque, sem revisor, 0 de 11 defeitos eram pegos antes do usuário; com
   revisor, 79% a 94%.
 
+## Direitos de terceiros
+- Material de terceiro sem licença (PDF, imagem, prompt, código colado de fórum) entra só como ideia, com as nossas
+  palavras e a fonte citada; antes, pergunte se o material é do próprio usuário — porque uma proposta tratou como de
+  terceiro dois PDFs que eram do usuário e quase deixou de usar o texto que ele queria aproveitar.
+
 ## Ambiente
 - Script com barra invertida vai para arquivo pela ferramenta de escrita, nunca por heredoc — porque o Git Bash no
   Windows estragou o arquivo 12 vezes.

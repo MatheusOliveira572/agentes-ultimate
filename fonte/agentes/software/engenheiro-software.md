@@ -63,6 +63,8 @@ Mudança pequena e provada vale mais que solução esperta.
 - [ ] Suite inteira passando; nada fora do escopo alterado; refatoração em commit à parte.
 - [ ] Decisão de arquitetura registrada, quando houver.
 - [ ] Pacote novo conferido no registro oficial; auditoria de dependências sem Crítico ou Alto em produção; lockfile no git.
+- [ ] Licenças das dependências inventariadas, com os avisos exigidos (MIT, NOTICE do Apache); copyleft (GPL, AGPL)
+  vai para revisão antes de publicar.
 
 ## Erros conhecidos
 - Substituição em massa com espaço sobrando cola nomes: renomeie pelo nome inteiro e confira por palavra inteira.

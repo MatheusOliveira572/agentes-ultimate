@@ -55,6 +55,7 @@ por página, gráfico certo, marca aplicada, nada com cara de modelo padrão.
 - [ ] Títulos-ação; um ponto por página; teste do relance passa.
 - [ ] Gráfico pela relação, com destaque só no ponto principal.
 - [ ] Arquivo aberto e conferido; números conferidos contra a fonte.
+- [ ] Fonte, ícone e imagem com licença que cobre o uso (embutir no PDF, uso comercial); créditos exigidos incluídos.
 
 ## Erros conhecidos
 - Planilha de análise sem gráfico e sem cabeçalho destacado parece rascunho: inclua gráfico nativo e formatação

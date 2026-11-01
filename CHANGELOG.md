@@ -23,6 +23,20 @@ falhando antes.
     site ou sistema, a lembrança do `/checklist-lancamento` antes de publicar;
   - casos: cada tema com os 3 pedidos contra o roteador real; os 2 pedidos amplos de ponta a ponta ("redesenhe meu app
     com visual premium", "crie um site institucional bonito") ficam pendentes até o conteúdo de design (lote 3).
+- **B1 · `engenheiro-software` e `testador-qa`** (~114 KB, 29 arquivos em `conhecimento/engenharia/`, `conhecimento/plataformas/` e
+  `conhecimento/metodo/fonte-oficial-da-versao.md`):
+  - de addyosmani/agent-skills (MIT): fatias, TDD, padrões de teste, depuração, teste no navegador, API, interface web,
+    simplificar, git, CI, migração, observabilidade, desempenho (servidor e web), régua de qualidade, fonte oficial da versão;
+  - do original affaan-m/ECC (MIT): erro de build, ponta a ponta, verificação em 6 fases, código morto, arquitetura,
+    padrões de código, backend; de emilkowalski/skills (MIT): bibliotecas de interface, web no celular, Swift; de
+    pbakaus/impeccable (Apache-2.0, que destilou de ehmo/platform-design-skills, MIT): iOS e Android; context7 (MIT):
+    regra de consulta da documentação; auditoria de app Apple em texto nosso a partir da HIG;
+  - ferramentas: `modelos/quality-gate.mjs` (portão sobre o JSON do Semgrep e do axe; sai 1 com achado bloqueante, 2 com
+    relatório incompleto) e `scripts/gerenciador-pacotes.js` (npm, pnpm, yarn ou bun pelo packageManager ou lockfile);
+  - os dois agentes ganham a seção "Referências sob demanda" (8 linhas cada) e 2 casos de eval; prova num `claude -p`
+    real: o `engenheiro-software` do plugin abriu `conhecimento/engenharia/erro-de-build.md` e respondeu por ele;
+  - nas referências, a raiz do plugin se escreve `<plugin>/` (lá a variável não é trocada) e o `validar.js` confere esses
+    caminhos também; tema de referência conta como assunto ("o build quebrou" deixa de ser pergunta trivial).
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
@@ -120,6 +134,15 @@ visto falhando antes.
   - checklist, bloco H: H-1 a H-7 (alegação, "atualizado em", disponibilidade, depoimentos, selos, logos, rótulo de IA),
     com CDC e Lei 9.279 [conferir] e a [HIPÓTESE] do PL 2338/2023;
   - Papel e Fora do escopo de marketing e compliance condensados para caber nas 90 linhas.
+- **G9 · licenças e propriedade intelectual:**
+  - protocolo comum, passo 6: material de terceiro sem licença (texto, imagem, prompt) entra só como ideia, com as nossas
+    palavras e a fonte citada; nunca copiado (decisão do orquestrador: no protocolo, para valer nos 30 agentes);
+  - `pesquisador`: o mesmo nos erros conhecidos, com a Lei 9.610 [conferir]; caso 5 no eval (perguntar antes se o
+    material é do usuário: os PDFs desta versão eram dele); regra nova em `skills/ultimate/regras-gerais.md`;
+  - `designer-paineis` e `designer-documentos`: fonte, ícone e imagem com licença que cobre o uso;
+  - `engenheiro-software`: inventário de licenças das dependências com os avisos (MIT, NOTICE do Apache); copyleft vai
+    para revisão; caso 10 no eval;
+  - checklist, bloco L: L-1 recursos visuais, L-2 dependências, L-3 material de terceiro.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

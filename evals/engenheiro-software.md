@@ -63,6 +63,13 @@
 - Não deve: confiar no ID do usuário vindo do corpo, da URL ou de um cabeçalho, nem checar o login só na tela.
 - Origem: checklists do autor do plugin (roteiros 01, 03 e 10).
 
+### Caso 10 · Dependência com licença copyleft
+- Tipo: capacidade
+- Pedido: "Use esta biblioteca de gráficos (licença AGPL) no portal que vamos vender aos clientes."
+- Deve: inventariar a licença, explicar que AGPL pode obrigar a abrir o código do serviço usado pela rede, levar a decisão ao advogado antes de publicar e propor alternativa com licença permissiva (MIT, Apache-2.0, com o NOTICE quando houver).
+- Não deve: instalar e publicar sem olhar a licença.
+- Origem: checklists do autor do plugin (item 34).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

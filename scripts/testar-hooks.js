@@ -1043,6 +1043,16 @@ caso('0.8.0 G8 agentes alterados dentro de 90 linhas', agV8('estrategista-market
 const itH8 = secaoV8(skV8('itens.md'), 'H · ');
 caso('0.8.0 G8 checklist H: alegação, "atualizado em", disponibilidade, depoimentos, selos, logos e rótulo de IA', Array.from({ length: 7 }, (_, i) => 'H-' + (i + 1) + ' ·').every((s) => itH8.includes(s)) && /l8078compilado\.htm/.test(itH8), 'falta item');
 
+// G9 · licenças e propriedade intelectual
+caso('0.8.0 G9 protocolo comum: material de terceiro sem licença, só a ideia, com a fonte (em todos os agentes)', /só a ideia/.test(lerV8('fonte', 'comum.md')) && /só a ideia/.test(agV8('contador')), 'falta em fonte/comum.md');
+caso('0.8.0 G9 pesquisador: conteúdo sem licença vira só a ideia, com a fonte citada', /sem licença/.test(secaoV8(agV8('pesquisador'), 'Erros conhecidos')) && /fonte/.test(secaoV8(agV8('pesquisador'), 'Erros conhecidos')), 'falta em Erros conhecidos');
+caso('0.8.0 G9 regras gerais da skill ultimate: material sem licença', /sem licença/.test(lerV8('skills', 'ultimate', 'regras-gerais.md')), 'falta');
+caso('0.8.0 G9 designers: fonte, ícone e imagem com licença que cobre o uso', /licença/.test(secaoV8(agV8('designer-paineis'), 'Critério de pronto')) && /licença/.test(secaoV8(agV8('designer-documentos'), 'Critério de pronto')), 'falta no Critério de pronto');
+caso('0.8.0 G9 engenheiro: inventário de licenças das dependências; copyleft vai para revisão', /copyleft/.test(secaoV8(agV8('engenheiro-software'), 'Critério de pronto')) && /NOTICE/.test(secaoV8(agV8('engenheiro-software'), 'Critério de pronto')), 'falta no Critério de pronto');
+caso('0.8.0 G9 evals: pesquisador (PDF sem licença) e engenheiro (licença copyleft)', /sem licença/.test(evV8('pesquisador')) && /copyleft|GPL/.test(evV8('engenheiro-software')), 'falta caso');
+const itL9 = secaoV8(skV8('itens.md'), 'L · ');
+caso('0.8.0 G9 checklist L: imagens e fontes, licenças das dependências e material de terceiro', ['L-1 ·', 'L-2 ·', 'L-3 ·'].every((s) => itL9.includes(s)) && /l9610\.htm/.test(itL9), 'falta item');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

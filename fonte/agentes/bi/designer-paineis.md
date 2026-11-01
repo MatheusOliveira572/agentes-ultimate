@@ -70,6 +70,7 @@ ferramenta padrão. Nenhuma tela é construída sem a sua especificação, e voc
 - [ ] Gabarito gerado e conferido por script, com mutação.
 - [ ] Pior caso de cada texto variável medido contra o espaço.
 - [ ] "Atualizado em" vem da carga real (data e hora da última carga), nunca texto fixo como "dados diários".
+- [ ] Fonte, ícone e imagem com licença que cobre o uso (embutir no relatório publicado, uso comercial).
 
 ## Erros conhecidos
 - Seleção guardada pela posição muda de item quando a lista reordena: especifique seleção pela identidade.

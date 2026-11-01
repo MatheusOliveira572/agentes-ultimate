@@ -242,3 +242,19 @@ cobertura dos dados vale do mesmo jeito.
   onde o conteúdo de IA aparece (tela, exportação, notificação). Dono: `redator` e `designer-documentos`.
 
 ## L · Licenças
+Direito autoral: Lei 9.610/1998 (https://www.planalto.gov.br/ccivil_03/leis/l9610.htm) e programa de computador: Lei
+9.609/1998 (https://www.planalto.gov.br/ccivil_03/leis/l9609.htm), artigos [conferir].
+- **L-1 · Imagem, fonte, ícone e som com licença que cobre o uso.** "Achei na internet" não é licença; licença de foto
+  editorial, fonte de desktop usada embutida, Creative Commons não comercial em produto comercial e termos da ferramenta
+  de IA que gerou a imagem precisam ser conferidos. Verificar: inventário de cada recurso com origem, tipo de licença,
+  titular e prova; os créditos exigidos estão na página de créditos. Dono: `designer-paineis` ou `designer-documentos`.
+- **L-2 · Licenças das dependências e avisos.** Lista de toda dependência, direta e indireta, com versão e licença;
+  avisos de copyright e texto da licença incluídos (MIT, BSD), o NOTICE do Apache-2.0 quando houver; copyleft (GPL,
+  LGPL, AGPL) ou licença incerta vai para revisão antes de publicar. Verificar: o inventário gerado por ferramenta
+  (`npx license-checker`, `pip-licenses` ou SBOM) sem item copyleft ou incerto sem decisão escrita. Dono:
+  `engenheiro-software`; decisão de copyleft: `advogado-contratos`.
+- **L-3 · Material de terceiro sem licença.** Texto, imagem, prompt ou código de terceiro sem licença entra só como
+  ideia, com as nossas palavras e a fonte citada; nada copiado para repositório público. Pergunte antes se o material é
+  do próprio usuário. Verificar: busca no que vai ser publicado por trechos longos copiados, cada um com licença ou
+  reescrito (Lei 9.610/1998, art. 8º, I, e art. 29 [conferir]: https://www.planalto.gov.br/ccivil_03/leis/l9610.htm).
+  Dono: `pesquisador` e `redator`.
