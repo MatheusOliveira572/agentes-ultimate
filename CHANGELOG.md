@@ -161,6 +161,9 @@ visto falhando antes.
   link oficial (gov.br) na mesma linha ou nas 2 seguintes vira aviso; citar de novo, no mesmo arquivo, uma norma já
   linkada não pede outro link. As normas citadas hoje passam (0 aviso). O doc pedia "na linha ou na seguinte"; ficaram 2
   linhas porque duas citações antigas (compliance e comprador) quebram a linha antes do link.
+- **Backup (D-i):** `engenheiro-dados` só dá por pronto, com banco próprio, o backup provado por restauração num
+  ambiente separado (com `RESTORE.md`); caso 6 no eval; checklist S-13 e extra B3.
+- `engenheiro-software` condensado para voltar às 90 linhas depois da seção de referências da parte B.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

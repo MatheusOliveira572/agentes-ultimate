@@ -1067,6 +1067,11 @@ const vDeOk = validarCopia({ 'fonte/agentes/nucleo/redator.md': agFalso.replace(
 caso('0.8.0 D-e validar: com o link oficial na mesma linha, não há aviso', !/AVISO[^\n]*Decreto 99\.999/.test(vDeOk.out), vDeOk.out.slice(-400));
 caso('0.8.0 D-e validar: as normas que o plugin cita hoje têm link (0 aviso de norma)', !/AVISO[^\n]*sem link oficial/.test(validarCopia({}).out), 'há norma sem link em fonte/');
 
+// D-i · backup que se restaura de verdade
+caso('0.8.0 D-i engenheiro de dados: com banco próprio, backup provado por restauração em ambiente separado', /restaura/.test(secaoV8(agV8('engenheiro-dados'), 'Critério de pronto')) && /ambiente separado/.test(secaoV8(agV8('engenheiro-dados'), 'Critério de pronto')), 'falta no Critério de pronto');
+caso('0.8.0 D-i eval do engenheiro de dados: backup sem teste de restauração', /restaura/.test(evV8('engenheiro-dados')), 'falta');
+caso('0.8.0 D-i checklist S-13 e roteiro B3 (restaurar o backup)', /S-13 ·[^\n]*(\n\s+[^\n]*)*Verificar:/.test(skV8('itens.md')) && /## B3/.test(skV8('referencias', 'seguranca-extras.md')), 'falta');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

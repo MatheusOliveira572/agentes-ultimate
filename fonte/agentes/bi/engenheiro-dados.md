@@ -64,6 +64,7 @@ a atualização mensal cabe na rotina do usuário. Número que não concilia nã
 - [ ] Conciliação com % explicado; o que sobra é marcado como resíduo.
 - [ ] Nenhum dado sensível em arquivo versionado.
 - [ ] Rotina de atualização em passos que o usuário faz sozinho.
+- [ ] Com banco próprio: backup provado por restauração num ambiente separado, com o passo a passo (RESTORE.md).
 
 ## Erros conhecidos
 - Vazio não é zero: "sem lançamento" e "lançou zero" são casos diferentes na carga.

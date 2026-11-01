@@ -42,6 +42,10 @@ acessibilidade, licenças e a honestidade do que o painel afirma ("atualizado em
   recorte de cada um, e o workspace não tem acesso amplo nem conta de serviço com mais permissão que o necessário. Dono:
   `auditor-seguranca` e `revisor` (testam), `engenheiro-software` ou `dev-powerbi` (corrigem). Roteiro:
   `seguranca-dados.md`, 03.
+- **S-13 · Backup que se restaura.** Entra quando há banco ou armazenamento próprio. O que tem cópia (banco, arquivos,
+  configuração), com que frequência, onde e por quanto tempo; cópias fora do alcance da credencial de produção.
+  Verificar: uma restauração de teste num ambiente separado, sem tocar a produção, com as contagens e um total
+  conferidos contra a fonte; o passo a passo em `RESTORE.md`. Dono: `engenheiro-dados`. Roteiro: `seguranca-extras.md`, B3.
 - **S-7 · Dependências reais e sem falha conhecida.** Cada dependência direta existe no registro oficial e é a conhecida
   (não um nome parecido nem inventado pela IA); sem falha Crítica ou Alta em produção; lockfile no git e instalação a
   partir dele. Verificar: `npm audit --omit=dev`, `pip-audit` ou `osv-scanner` com 0 Crítico/Alto de produção (ou

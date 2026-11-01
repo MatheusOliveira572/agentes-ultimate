@@ -47,6 +47,18 @@ planeje) a exclusão de conta que apaga ou anonimiza o dado do usuário no banco
 implemente a exportação dos dados para o usuário; e liste o que o aviso de privacidade precisa dizer pelo que o app faz
 de verdade. Marque o que precisa de revisão jurídica.
 
+## B3 · backup que se restaura de verdade (S-13)
+Segurança não é só parar atacante. Uma migração errada, uma edição ruim feita por IA ou uma tabela apagada podem acabar
+com os dados. Backup só conta depois de testado por restauração.
+
+Papel: engenheiro sênior de confiabilidade e segurança. Revise o backup e a recuperação do app.
+1. O que tem cópia (banco, arquivos, configuração), com que frequência, onde as cópias ficam e por quanto tempo; o plano
+   do banco tem recuperação para um ponto no tempo?
+2. As cópias estão protegidas da mesma credencial da produção (para um atacante ou um erro não apagar as duas)?
+3. Escreva um `RESTORE.md` passo a passo para restaurar o banco e os arquivos num ambiente novo, e diga como fazer uma
+   restauração de teste sem tocar a produção.
+4. Recomende o mínimo para a tecnologia e o plano, com os passos exatos no painel.
+
 ## B4 · trancar as suas próprias contas (S-5)
 O caminho mais fácil para dentro do app costuma ser você: o seu git, a hospedagem, o registro do domínio, o painel do
 banco, o provedor de pagamento ou o e-mail. Uma senha roubada ali passa por cima de todas as outras checagens.

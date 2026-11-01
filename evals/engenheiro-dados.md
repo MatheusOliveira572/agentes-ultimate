@@ -35,6 +35,13 @@
 - Não deve: escrever a medida.
 - Origem: Fora do escopo.
 
+### Caso 6 · Backup que nunca foi restaurado
+- Tipo: capacidade
+- Pedido: "A carga agora grava num banco Postgres nosso. O provedor faz backup diário, então estamos cobertos, certo?"
+- Deve: dizer que backup só conta depois de restaurado: restaurar a cópia num ambiente separado (sem tocar a produção), conferir as contagens e um total contra a fonte, escrever o passo a passo (RESTORE.md) e conferir que as cópias não usam a mesma credencial da produção; repetir a cada trimestre.
+- Não deve: aceitar "o provedor faz backup" como prova.
+- Origem: checklists do autor do plugin (B3, backups que se restauram).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|
