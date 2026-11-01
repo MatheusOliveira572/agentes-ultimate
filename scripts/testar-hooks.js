@@ -872,7 +872,7 @@ const secaoV8 = (t, titulo) => (t.split('## ' + titulo)[1] || '').split('\n## ')
 // validar.js numa cópia do plugin com arquivos trocados: prova que a regra do validador acusa o caso errado.
 function validarCopia(trocas) {
   const dst = fs.mkdtempSync(path.join(tmp, 'plugin-'));
-  for (const d of ['agents', 'evals', 'fonte', 'pacotes', 'skills', 'scripts', 'hooks', 'conhecimento', 'terceiros', 'modelos', 'ferramentas']) if (fs.existsSync(path.join(RAIZ, d))) fs.cpSync(path.join(RAIZ, d), path.join(dst, d), { recursive: true });
+  for (const d of ['agents', 'evals', 'fonte', 'pacotes', 'skills', 'scripts', 'hooks', 'conhecimento', 'terceiros', 'modelos', 'ferramentas', 'fontes', 'CREDITOS.md']) if (fs.existsSync(path.join(RAIZ, d))) fs.cpSync(path.join(RAIZ, d), path.join(dst, d), { recursive: true });
   for (const [rel, texto] of Object.entries(trocas)) { fs.mkdirSync(path.dirname(path.join(dst, rel)), { recursive: true }); fs.writeFileSync(path.join(dst, rel), texto); }
   const rv = spawnSync(process.execPath, [path.join(dst, 'scripts', 'validar.js')], { encoding: 'utf8' });
   return { code: rv.status, out: (rv.stdout || '') + (rv.stderr || '') };

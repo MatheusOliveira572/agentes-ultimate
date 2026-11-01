@@ -37,6 +37,17 @@ falhando antes.
     real: o `engenheiro-software` do plugin abriu `conhecimento/engenharia/erro-de-build.md` e respondeu por ele;
   - nas referências, a raiz do plugin se escreve `<plugin>/` (lá a variável não é trocada) e o `validar.js` confere esses
     caminhos também; tema de referência conta como assunto ("o build quebrou" deixa de ser pergunta trivial).
+- **Vigia das fontes:**
+  - registro `fontes/fontes.json`: cada fonte com repo, licença, branch, pasta em `terceiros/`, commit usado, último
+    conferido e a lista origem → destino (refeita pelo `gerar-agentes.js` a partir das linhas de crédito); o `validar.js`
+    falha se `terceiros/`, o `CREDITOS.md` ou uma linha de crédito citar fonte fora do registro;
+  - gancho `hooks/vigia-fontes.js` no início de sessão: 1 vez por semana, em segundo plano, só metadados da API do GitHub
+    (commits desde o conferido, releases, CHANGELOG, arquivos que usamos, licença); sem rede ou com limite da API,
+    silêncio; nunca baixa nem aplica nada; com novidade grava `fontes/novidades.md` (fora do git) e mostra "N fontes com
+    novidades: rode /atualizar-fontes"; licença que vira não permissiva dá alerta forte. Desligar:
+    `AGENTES_ULTIMATE_SEM_VIGIA=1`;
+  - skill `/atualizar-fontes` (só o usuário): pesquisador separa correção, melhoria e função nova e confere a licença,
+    proposta em `PROPOSTAS.md`, o engenheiro aplica só o aprovado, o revisor confere e o registro ganha o novo commit.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

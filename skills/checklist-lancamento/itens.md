@@ -230,7 +230,8 @@ cobertura dos dados vale do mesmo jeito.
 - **H-5 · Selo e certificação só com relatório vigente.** ISO, SOC 2, "em conformidade com a LGPD": cada um com o
   certificado ou relatório da própria empresa, vigente, com escopo, tipo e período; o do provedor de nuvem não cobre o
   app. Verificar: busca por esses termos no site, no app, nas apresentações e nos questionários de segurança, cada um com
-  o documento ao lado. Dono: `analista-compliance`.
+  o documento ao lado; "em conformidade com a LGPD" só com o inventário e o parecer do `especialista-lgpd` (LGPD:
+  https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Dono: `analista-compliance`.
 - **H-6 · Logo de cliente só com permissão escrita.** Logo e nome de cliente sugerem relação e endosso; a marca é de
   quem a registrou (Lei 9.279/1996, art. 129 e art. 195 [conferir]; https://www.planalto.gov.br/ccivil_03/leis/l9279.htm).
   Verificar: permissão escrita arquivada com data e escopo para cada logo; o logo sai quando a relação acaba. Dono:

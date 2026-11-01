@@ -174,6 +174,33 @@ if (fs.existsSync(path.join(RAIZ, 'conhecimento'))) {
   try { atual = fs.readFileSync(path.join(RAIZ, 'conhecimento', 'indice.json'), 'utf8'); } catch (e) { /* falta */ }
   if (atual.replace(/\r\n/g, '\n') !== ind.texto(referencias)) erros.push('conhecimento/indice.json desatualizado ou ausente: rode node scripts/gerar-agentes.js');
 }
+// Registro das fontes (fontes/fontes.json): toda fonte citada em terceiros/, no CREDITOS.md ou numa linha de crédito
+// está no registro; a lista origem → destino do registro está em dia com as linhas de crédito.
+{
+  const fr = require(path.join(RAIZ, 'scripts', 'fontes-registro.js'));
+  const reg = fr.ler(RAIZ);
+  const usosF = fr.usos(RAIZ);
+  const temTerceiros = pastasTerceiros.size > 0;
+  if (!reg) { if (temTerceiros || Object.keys(usosF).length) erros.push('fontes/fontes.json ausente ou inválido: toda fonte de terceiros entra no registro'); } else {
+    const porRepo = new Map(reg.fontes.map((f) => [f.repo, f]));
+    for (const f of reg.fontes) {
+      if (!/^[\w.-]+\/[\w.-]+$/.test(f.repo || '')) erros.push(`fontes/fontes.json: fonte sem "repo" dono/nome`);
+      for (const c of ['commit_usado', 'ultimo_conferido']) if (!/^[0-9a-f]{40}$/.test(f[c] || '')) erros.push(`fontes/fontes.json: ${f.repo} sem "${c}" (40 hex)`);
+      if (!('licenca' in f) || !f.branch) erros.push(`fontes/fontes.json: ${f.repo} sem "licenca" ou "branch"`);
+    }
+    for (const repo of Object.keys(usosF)) if (!porRepo.has(repo)) erros.push(`linha de crédito cita ${repo}, que não está em fontes/fontes.json (fonte nova entra no registro antes)`);
+    for (const p of pastasTerceiros) if (!reg.fontes.some((f) => f.pasta === p)) erros.push(`terceiros/${p}/ não corresponde a nenhuma fonte de fontes/fontes.json`);
+    let cred = '';
+    try { cred = fs.readFileSync(path.join(RAIZ, 'CREDITOS.md'), 'utf8'); } catch (e) { /* sem CREDITOS */ }
+    for (const m of cred.matchAll(/^\| ([\w.-]+\/[\w.-]+) \| ([0-9a-f]{40}) \|/gm)) {
+      const f = porRepo.get(m[1]);
+      if (!f) erros.push(`CREDITOS.md cita ${m[1]}, que não está em fontes/fontes.json`);
+      else if (f.commit_usado !== m[2]) erros.push(`CREDITOS.md: commit de ${m[1]} difere do commit_usado do registro`);
+    }
+    const sinc = fr.sincronizado(RAIZ);
+    if (fr.texto(sinc) !== fs.readFileSync(fr.ARQ(RAIZ), 'utf8').replace(/\r\n/g, '\n')) erros.push('fontes/fontes.json: lista "arquivos" fora de dia com as linhas de crédito (rode node scripts/gerar-agentes.js)');
+  }
+}
 for (const f of arquivosRef) {
   const r = rel(f);
   if (/(^|\/)INDICE\.md$|^conhecimento\/LEIA-ME\.md$/.test(r)) continue;

@@ -79,6 +79,63 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   g1 = rodaGP(pastaGP({}));
   caso('0.8.0 B1 gerenciador-pacotes: sem sinal → sai 1 e manda perguntar', g1.code === 1 && /Pergunte ao usuário/.test(g1.out), g1.out);
 
+  // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
+  v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });
+  caso('0.8.0 B fontes: linha de crédito que cita fonte fora de fontes/fontes.json é erro', v.code === 1 && /cita fulano\/projeto-x, que não está em fontes\/fontes\.json/.test(v.out), v.out.slice(-300));
+  v = validarCopia({ 'terceiros/sem-registro/LICENSE': 'MIT License\n' });
+  caso('0.8.0 B fontes: pasta em terceiros/ sem fonte no registro é erro', v.code === 1 && /terceiros\/sem-registro\/ não corresponde/.test(v.out), v.out.slice(-300));
+  v = validarCopia({ 'CREDITOS.md': ler('CREDITOS.md') + '| fulano/outro | ' + 'a'.repeat(40) + ' | MIT | x | y |\n' });
+  caso('0.8.0 B fontes: CREDITOS.md citando fonte fora do registro é erro', v.code === 1 && /CREDITOS\.md cita fulano\/outro/.test(v.out), v.out.slice(-300));
+  caso('0.8.0 B fontes: registro com a lista origem → destino de cada arquivo adaptado (ex.: ECC build-error-resolver → erro-de-build.md)',
+    /"origem": "agents\/build-error-resolver\.md",\s*"destino": "conhecimento\/engenharia\/erro-de-build\.md"/.test(ler('fontes', 'fontes.json')), 'falta no registro');
+  // Gancho numa cópia do plugin (grava fontes/novidades.md lá, nunca no repositório), com a API simulada.
+  const plugV = path.join(tmp, 'plugin-vigia'); fs.mkdirSync(path.join(plugV, 'hooks'), { recursive: true }); fs.mkdirSync(path.join(plugV, 'fontes'), { recursive: true });
+  const casaV = path.join(tmp, 'casa-vigia'); fs.mkdirSync(casaV, { recursive: true });
+  if (existe('hooks', 'vigia-fontes.js')) fs.copyFileSync(path.join(RAIZ, 'hooks', 'vigia-fontes.js'), path.join(plugV, 'hooks', 'vigia-fontes.js'));
+  const regV = { fontes: [{ repo: 'dono/proj', licenca: 'MIT', branch: 'main', pasta: 'dono-proj', commit_usado: 'a'.repeat(40), ultimo_conferido: 'a'.repeat(40), conferido_em: '2026-10-01', vigiar: true, arquivos: [{ origem: 'skills/x/SKILL.md', destino: 'conhecimento/x.md' }] }] };
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regV));
+  const simular = (tabela) => { const f = path.join(tmp, 'api-' + Math.random().toString(36).slice(2) + '.json'); fs.writeFileSync(f, JSON.stringify(tabela)); return f; };
+  const novV = path.join(plugV, 'fontes', 'novidades.md');
+  const rodaV = (args, sim, estado) => {
+    if (estado !== undefined) { fs.mkdirSync(path.join(casaV, '.claude', 'agentes-ultimate'), { recursive: true }); fs.writeFileSync(path.join(casaV, '.claude', 'agentes-ultimate', 'vigia-fontes.json'), JSON.stringify(estado)); }
+    const r = spawnSync(process.execPath, [path.join(plugV, 'hooks', 'vigia-fontes.js'), ...args], { encoding: 'utf8', env: { ...process.env, HOME: casaV, USERPROFILE: casaV, AGENTES_ULTIMATE_VIGIA_SIMULAR: sim || '' } });
+    return { code: r.status, out: r.stdout || '' };
+  };
+  const apiMudou = (licenca) => simular({
+    '/repos/dono/proj': { status: 200, body: { license: { spdx_id: licenca }, default_branch: 'main' } },
+    [`/repos/dono/proj/compare/${'a'.repeat(40)}...main`]: { status: 200, body: { ahead_by: 3, commits: [{ commit: { message: 'corrige a regra de contraste' } }], files: [{ filename: 'skills/x/SKILL.md' }, { filename: 'CHANGELOG.md' }] } },
+    '/repos/dono/proj/releases?per_page=5': { status: 200, body: [{ tag_name: 'v2.0.0', published_at: '2026-10-20T00:00:00Z' }] },
+  });
+  fs.rmSync(novV, { force: true });
+  let rv = rodaV(['--agora'], apiMudou('MIT'), {});
+  const nv = fs.existsSync(novV) ? fs.readFileSync(novV, 'utf8') : '';
+  caso('0.8.0 B vigia: mudança detectada (API simulada) → novidades.md com commits, release, CHANGELOG e o arquivo nosso afetado',
+    rv.code === 0 && /3 commit\(s\) novo/.test(nv) && /v2\.0\.0/.test(nv) && /CHANGELOG mudou/.test(nv) && /skills\/x\/SKILL\.md → conhecimento\/x\.md/.test(nv), nv.slice(0, 300) || 'sem novidades.md');
+  rv = rodaV([], '', { ultimaConferencia: new Date().toISOString(), ultimaTentativa: new Date().toISOString() });
+  caso('0.8.0 B vigia: início de sessão mostra "1 fonte com novidades: rode /atualizar-fontes"', /1 fonte com novidades: rode \/atualizar-fontes/.test(rv.out), rv.out);
+  fs.rmSync(novV, { force: true });
+  rv = rodaV(['--agora'], simular({ '*': { erro: 'ENOTFOUND' } }), {});
+  caso('0.8.0 B vigia: sem rede → silêncio (sai 0, nada escrito, nada na tela)', rv.code === 0 && !rv.out && !fs.existsSync(novV), rv.out);
+  rv = rodaV(['--agora'], simular({ '/repos/dono/proj': { status: 403, body: { message: 'API rate limit exceeded' } } }), {});
+  caso('0.8.0 B vigia: limite da API → silêncio', rv.code === 0 && !rv.out && !fs.existsSync(novV), rv.out);
+  rv = rodaV(['--agora'], apiMudou('GPL-3.0'), {});
+  const nl = fs.existsSync(novV) ? fs.readFileSync(novV, 'utf8') : '';
+  const sl = rodaV([], '', { ultimaConferencia: new Date().toISOString(), ultimaTentativa: new Date().toISOString() });
+  caso('0.8.0 B vigia: licença mudou para restritiva → alerta forte no arquivo e na linha do início de sessão',
+    /ATENÇÃO: a licença mudou de MIT para GPL-3\.0/.test(nl) && /não traga nada novo/i.test(nl) && /ATENÇÃO: licença mudou/.test(sl.out), nl.slice(0, 300) + ' | ' + sl.out);
+  // 1 vez por semana: conferido há 2 dias → o início de sessão não dispara a conferência; há 8 dias → dispara (em 2º plano).
+  const esperar = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+  const esperarArquivo = (f, ms) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (fs.existsSync(f)) return true; esperar(100); } return fs.existsSync(f); };
+  fs.rmSync(novV, { force: true });
+  const dias = (n) => new Date(Date.now() - n * 864e5).toISOString();
+  rodaV([], apiMudou('MIT'), { ultimaConferencia: dias(2), ultimaTentativa: dias(2) });
+  const naoRodou = !esperarArquivo(novV, 2500);
+  rodaV([], apiMudou('MIT'), { ultimaConferencia: dias(8), ultimaTentativa: dias(8) });
+  const rodou = esperarArquivo(novV, 8000);
+  caso('0.8.0 B vigia: controle de 1 vez por semana (2 dias → não confere; 8 dias → confere em segundo plano)', naoRodou && rodou, `2 dias: ${naoRodou ? 'não rodou' : 'rodou'}; 8 dias: ${rodou ? 'rodou' : 'não rodou'}`);
+  caso('0.8.0 B vigia: gancho registrado no SessionStart e skill /atualizar-fontes só do usuário',
+    /vigia-fontes\.js/.test(ler('hooks', 'hooks.json')) && /^disable-model-invocation: true/m.test(ler('skills', 'atualizar-fontes', 'SKILL.md')) && /pesquisador/.test(ler('skills', 'atualizar-fontes', 'SKILL.md')), 'falta');
+
   // ---- Índice de referências e acionamento pelo roteador ----
   const projRef = path.join(tmp, 'projeto-refs'); fs.mkdirSync(path.join(projRef, '.claude', 'base'), { recursive: true });
   fs.writeFileSync(path.join(projRef, '.claude', 'base', 'desligado'), ''); // sem memória nem grafo: só o roteamento

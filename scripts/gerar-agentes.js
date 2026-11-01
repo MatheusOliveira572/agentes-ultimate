@@ -32,3 +32,11 @@ if (fs.existsSync(path.join(RAIZ, 'conhecimento'))) {
   fs.writeFileSync(path.join(RAIZ, 'conhecimento', 'indice.json'), indice.texto(referencias));
   console.log(`conhecimento/indice.json: ${referencias.length} referência(s)${problemas.length ? `, ${problemas.length} problema(s) (veja o validar.js)` : ''}`);
 }
+
+// Registro das fontes (0.8.0): a lista origem → destino de fontes/fontes.json sai das linhas de crédito.
+const fontesReg = require('./fontes-registro');
+const regSinc = fontesReg.sincronizado(RAIZ);
+if (regSinc) {
+  fs.writeFileSync(fontesReg.ARQ(RAIZ), fontesReg.texto(regSinc));
+  console.log(`fontes/fontes.json: ${regSinc.fontes.length} fonte(s), ${regSinc.fontes.reduce((n, f) => n + f.arquivos.length, 0)} arquivo(s) de origem ligados`);
+}

@@ -1,5 +1,5 @@
 {
-  "description": "agentes-ultimate: escolha automática dos agentes a cada pedido, travas de segurança, mapa ao vivo e registro de cada execução de agente.",
+  "description": "agentes-ultimate: escolha automática dos agentes a cada pedido, travas de segurança, mapa ao vivo e registro de cada execução de agente; vigia semanal das fontes de terceiros.",
   "hooks": {
     "SessionStart": [
       {
@@ -22,6 +22,11 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/execucoes.js\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/vigia-fontes.js\"",
             "timeout": 5
           }
         ]

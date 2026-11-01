@@ -1,0 +1,278 @@
+{
+  "_como_usar": "Registro de toda fonte de terceiros que o plugin referencia. Fonte nova entra aqui antes de qualquer arquivo citá-la (o validar.js cobra). repo, licenca, branch, pasta, commit_usado e ultimo_conferido são escritos à mão (skill /atualizar-fontes); 'arquivos' é refeito pelo gerar-agentes.js a partir das linhas de crédito. O gancho hooks/vigia-fontes.js confere 1 vez por semana, só metadados pela API do GitHub.",
+  "fontes": [
+    {
+      "repo": "emilkowalski/skills",
+      "licenca": "MIT",
+      "branch": "main",
+      "pasta": "emilkowalski-skills",
+      "commit_usado": "a81dbca07f2217b7103e510c0f13f8d5b017afc9",
+      "ultimo_conferido": "a81dbca07f2217b7103e510c0f13f8d5b017afc9",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "arquivos": [
+        {
+          "origem": "skills/pick-ui-library/SKILL.md",
+          "destino": "conhecimento/engenharia/bibliotecas-interface.md"
+        },
+        {
+          "origem": "skills/write-swift/SKILL.md",
+          "destino": "conhecimento/plataformas/swift.md"
+        },
+        {
+          "origem": "skills/mobile-native/SKILL.md",
+          "destino": "conhecimento/plataformas/web-no-celular.md"
+        }
+      ]
+    },
+    {
+      "repo": "jakubkrehel/skills",
+      "licenca": "MIT",
+      "branch": "main",
+      "pasta": "jakubkrehel-skills",
+      "commit_usado": "592aedc44d7d5b3e29740984252902f3e5402a1c",
+      "ultimo_conferido": "592aedc44d7d5b3e29740984252902f3e5402a1c",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "arquivos": []
+    },
+    {
+      "repo": "addyosmani/agent-skills",
+      "licenca": "MIT",
+      "branch": "main",
+      "pasta": "addyosmani-agent-skills",
+      "commit_usado": "301b02b12bff98e4688e6984af6556802322bbde",
+      "ultimo_conferido": "301b02b12bff98e4688e6984af6556802322bbde",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "arquivos": [
+        {
+          "origem": "skills/api-and-interface-design/SKILL.md",
+          "destino": "conhecimento/engenharia/api.md"
+        },
+        {
+          "origem": "skills/ci-cd-and-automation/SKILL.md",
+          "destino": "conhecimento/engenharia/ci.md"
+        },
+        {
+          "origem": "skills/debugging-and-error-recovery/SKILL.md",
+          "destino": "conhecimento/engenharia/depurar.md"
+        },
+        {
+          "origem": "references/performance-checklist.md",
+          "destino": "conhecimento/engenharia/desempenho-web.md"
+        },
+        {
+          "origem": "skills/performance-optimization/SKILL.md",
+          "destino": "conhecimento/engenharia/desempenho-web.md"
+        },
+        {
+          "origem": "references/performance-checklist.md",
+          "destino": "conhecimento/engenharia/desempenho.md"
+        },
+        {
+          "origem": "skills/performance-optimization/SKILL.md",
+          "destino": "conhecimento/engenharia/desempenho.md"
+        },
+        {
+          "origem": "skills/git-workflow-and-versioning/SKILL.md",
+          "destino": "conhecimento/engenharia/git.md"
+        },
+        {
+          "origem": "skills/incremental-implementation/SKILL.md",
+          "destino": "conhecimento/engenharia/incremental.md"
+        },
+        {
+          "origem": "skills/frontend-ui-engineering/SKILL.md",
+          "destino": "conhecimento/engenharia/interface-web.md"
+        },
+        {
+          "origem": "skills/deprecation-and-migration/SKILL.md",
+          "destino": "conhecimento/engenharia/migracao.md"
+        },
+        {
+          "origem": "references/observability-checklist.md",
+          "destino": "conhecimento/engenharia/observabilidade.md"
+        },
+        {
+          "origem": "skills/observability-and-instrumentation/SKILL.md",
+          "destino": "conhecimento/engenharia/observabilidade.md"
+        },
+        {
+          "origem": "references/testing-patterns.md",
+          "destino": "conhecimento/engenharia/padroes-de-teste.md"
+        },
+        {
+          "origem": "skills/test-driven-development/SKILL.md",
+          "destino": "conhecimento/engenharia/padroes-de-teste.md"
+        },
+        {
+          "origem": "references/floor-guard.md",
+          "destino": "conhecimento/engenharia/restricoes.md"
+        },
+        {
+          "origem": "skills/constraint-driven-development/SKILL.md",
+          "destino": "conhecimento/engenharia/restricoes.md"
+        },
+        {
+          "origem": "skills/code-simplification/SKILL.md",
+          "destino": "conhecimento/engenharia/simplificar.md"
+        },
+        {
+          "origem": "skills/test-driven-development/SKILL.md",
+          "destino": "conhecimento/engenharia/tdd.md"
+        },
+        {
+          "origem": "skills/browser-testing-with-devtools/SKILL.md",
+          "destino": "conhecimento/engenharia/teste-no-navegador.md"
+        },
+        {
+          "origem": "skills/source-driven-development/SKILL.md",
+          "destino": "conhecimento/metodo/fonte-oficial-da-versao.md"
+        },
+        {
+          "origem": "skills/constraint-driven-development/scripts/quality-gate.mjs",
+          "destino": "modelos/quality-gate.mjs"
+        }
+      ]
+    },
+    {
+      "repo": "upstash/context7",
+      "licenca": "MIT",
+      "branch": "master",
+      "pasta": "upstash-context7",
+      "commit_usado": "7836c583918374fbecffacf866afb7594b919466",
+      "ultimo_conferido": "7836c583918374fbecffacf866afb7594b919466",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "arquivos": [
+        {
+          "origem": "skills/find-docs/SKILL.md",
+          "destino": "conhecimento/metodo/fonte-oficial-da-versao.md"
+        }
+      ]
+    },
+    {
+      "repo": "serafimcloud/21st",
+      "licenca": "MIT",
+      "branch": "main",
+      "pasta": "serafimcloud-21st",
+      "commit_usado": "b96d84dcf748d5e56f2f72f2bab9a4f7f33574cf",
+      "ultimo_conferido": "b96d84dcf748d5e56f2f72f2bab9a4f7f33574cf",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "arquivos": []
+    },
+    {
+      "repo": "usestrix/strix",
+      "licenca": "Apache-2.0",
+      "branch": "main",
+      "pasta": "usestrix-strix",
+      "commit_usado": "6b7ae2ebe4d47037a927aade23265ff4e4f27e84",
+      "ultimo_conferido": "6b7ae2ebe4d47037a927aade23265ff4e4f27e84",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "arquivos": []
+    },
+    {
+      "repo": "affaan-m/ECC",
+      "licenca": "MIT",
+      "branch": "main",
+      "pasta": "affaan-m-ECC",
+      "commit_usado": "b38be6a7f6350964d59328b52f0624e1d1d552d1",
+      "ultimo_conferido": "b38be6a7f6350964d59328b52f0624e1d1d552d1",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "arquivos": [
+        {
+          "origem": "agents/architect.md",
+          "destino": "conhecimento/engenharia/arquitetura.md"
+        },
+        {
+          "origem": "skills/backend-patterns/SKILL.md",
+          "destino": "conhecimento/engenharia/backend.md"
+        },
+        {
+          "origem": "agents/refactor-cleaner.md",
+          "destino": "conhecimento/engenharia/codigo-morto.md"
+        },
+        {
+          "origem": "agents/e2e-runner.md",
+          "destino": "conhecimento/engenharia/e2e.md"
+        },
+        {
+          "origem": "agents/build-error-resolver.md",
+          "destino": "conhecimento/engenharia/erro-de-build.md"
+        },
+        {
+          "origem": "rules/common/coding-style.md",
+          "destino": "conhecimento/engenharia/padroes-codigo.md"
+        },
+        {
+          "origem": "rules/common/patterns.md",
+          "destino": "conhecimento/engenharia/padroes-codigo.md"
+        },
+        {
+          "origem": "skills/coding-standards/SKILL.md",
+          "destino": "conhecimento/engenharia/padroes-codigo.md"
+        },
+        {
+          "origem": "agents/tdd-guide.md",
+          "destino": "conhecimento/engenharia/tdd.md"
+        },
+        {
+          "origem": "skills/verification-loop/SKILL.md",
+          "destino": "conhecimento/engenharia/verificacao.md"
+        },
+        {
+          "origem": "scripts/lib/package-manager.js",
+          "destino": "scripts/gerenciador-pacotes.js"
+        }
+      ]
+    },
+    {
+      "repo": "pbakaus/impeccable",
+      "licenca": "Apache-2.0",
+      "branch": "main",
+      "pasta": "pbakaus-impeccable",
+      "commit_usado": "e89e3ada3e875a89ac2c5d33d11e65ebef6fe285",
+      "ultimo_conferido": "e89e3ada3e875a89ac2c5d33d11e65ebef6fe285",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "arquivos": [
+        {
+          "origem": "skill/reference/android.md",
+          "destino": "conhecimento/plataformas/android.md"
+        },
+        {
+          "origem": "skill/reference/ios.md",
+          "destino": "conhecimento/plataformas/ios.md"
+        }
+      ]
+    },
+    {
+      "repo": "ehmo/platform-design-skills",
+      "licenca": "MIT",
+      "branch": "main",
+      "pasta": "ehmo-platform-design-skills",
+      "commit_usado": "dc2be825d8b439caea78e9eaa8fb3ac23b0ff3e9",
+      "ultimo_conferido": "dc2be825d8b439caea78e9eaa8fb3ac23b0ff3e9",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "uso": "indireto, pelo impeccable (ios.md, android.md)",
+      "arquivos": []
+    },
+    {
+      "repo": "dickwu/apple-design-skill",
+      "licenca": null,
+      "branch": "main",
+      "pasta": null,
+      "commit_usado": "ff4ebddf0488598723a82bfdce1afb04de0b1c44",
+      "ultimo_conferido": "ff4ebddf0488598723a82bfdce1afb04de0b1c44",
+      "conferido_em": "2026-11-01",
+      "vigiar": true,
+      "uso": "só a lista do que cobrir; texto nosso a partir da HIG pública; nada copiado",
+      "arquivos": []
+    }
+  ]
+}
