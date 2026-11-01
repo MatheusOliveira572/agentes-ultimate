@@ -60,6 +60,14 @@ acessibilidade, licenças e a honestidade do que o painel afirma ("atualizado em
   protegidos; sem source map público; versões de pré-visualização protegidas. Verificar: provoque no endereço de produção
   um 404, um 500 e um erro de validação e confira que nenhum mostra pilha, caminho, consulta ou versão. Dono:
   `engenheiro-software`. Roteiro: `seguranca-publicacao.md`, 20.
+- **S-12 · Log de segurança, sem segredo.** Login certo e errado, permissão negada, ação de administração, troca de
+  papel, limite atingido e evento de pagamento ficam registrados com hora UTC, ID do usuário (não o perfil), IP, ID da
+  requisição e resultado; senha, token, cookie e chave nunca entram no log; alerta para força bruta e pico de erros.
+  App público com fins econômicos: o Marco Civil (art. 15 [conferir]) manda guardar os registros de acesso por 6 meses
+  (https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2014/lei/l12965.htm); ferramenta interna [HIPÓTESE] não se
+  enquadra, confirme com o jurídico. Verificar: erre o login 5 vezes e ache os eventos no log em até 2 min, com hora,
+  conta e IP; procure no log por `password`, `token`, `authorization`: 0 achado. Dono: `engenheiro-software`.
+  Roteiro: `seguranca-revisao.md`, 08.
 
 ## S-web · App com servidor próprio (login próprio ou entrada de fora)
 

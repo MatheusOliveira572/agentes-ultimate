@@ -979,6 +979,12 @@ caso('0.8.0 G3 roteiros 20 (depuração em produção) e 23 (arquivos expostos)'
 // ==== 0.8.0 parte B · referências sob demanda (casos em scripts/testar-referencias.js; numa versão antiga, sem o arquivo, o caso falha) ====
 try { require('./testar-referencias.js')({ caso, validarCopia, tmp, RAIZ, hook, rot, msg, ctx, env, proj }); } catch (e) { caso('0.8.0 parte B: scripts/testar-referencias.js carrega e roda', false, e.message); }
 
+// G4 · logs sem segredo e rastreáveis
+caso('0.8.0 G4 engenheiro: log sem senha, token nem dado pessoal desnecessário; registra o ID, não o perfil', /log/i.test(secaoV8(agV8('engenheiro-software'), 'Erros conhecidos')) && /o ID, não o perfil/.test(secaoV8(agV8('engenheiro-software'), 'Erros conhecidos')), 'falta em Erros conhecidos');
+caso('0.8.0 G4 eval do engenheiro: log e erro ao usuário', /o ID|IDs/.test(evV8('engenheiro-software')) && /código de referência/.test(evV8('engenheiro-software')), 'falta');
+caso('0.8.0 G4 checklist S-12: log de segurança sem segredo, com o Marco Civil marcado [conferir] e o link oficial', /S-12 ·[^\n]*(\n\s+[^\n]*)*Marco Civil[^\n]*(\n\s+[^\n]*)*\[conferir\]/.test(skV8('itens.md')) && /planalto\.gov\.br[^\s]*l12965/.test(skV8('itens.md')), 'falta item');
+caso('0.8.0 G4 roteiro 08 (log e monitoramento)', /Roteiro 08/.test(skV8('referencias', 'seguranca-revisao.md')), 'falta roteiro');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

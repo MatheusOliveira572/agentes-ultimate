@@ -3,6 +3,37 @@
 Adaptado dos checklists do autor do plugin ("Pre-launch Security Toolkit", 2026). Antes, leia
 `seguranca-contexto.md` (contexto do projeto, modo de trabalhar e "terminar com").
 
+## Roteiro 08 · registrar e monitorar atividade suspeita (S-12)
+O log é a câmera de segurança: um registro dos eventos que importam (logins, falhas, permissão negada, ações de
+administração, eventos de pagamento) e alertas quando o padrão parece errado. Tão importante quanto: o log não pode ter
+segredo nem senha, ou vira um vazamento à parte.
+**Autoteste de 2 min:** erre o login 5 vezes. Dá para achar esses eventos no log em 2 minutos, com hora, conta e IP?
+Alguém seria avisado? Se não, há log mas não há monitoramento. Procure no log por `password`, `token` e
+`authorization`: tem de estar mascarado.
+
+Papel: engenheiro sênior de segurança. Acrescente log de segurança e alertas básicos, sem registrar nada sensível.
+- **Auditar:** (1) o log de hoje: o que registra, para onde vai (console da hospedagem, Sentry, Datadog, Axiom…), por
+  quanto tempo fica e quem lê; (2) se alguma linha de log ou relatório de erro tem senha, token, ID de sessão, chave de
+  API, link de redefinição, número de cartão inteiro ou corpo inteiro de requisição com dado pessoal.
+- **Corrigir:**
+  1. Log estruturado (JSON) de eventos de segurança por uma função pequena (ex.: `logEventoSeguranca(evento, detalhes)`):
+     login certo e errado, saída, cadastro, troca e redefinição de senha (pedida e concluída), troca de e-mail, mudança de
+     MFA, permissão negada (401/403), ações de administração e troca de papel, limite atingido (429), eventos de
+     pagamento e de webhook (inclusive assinatura que falhou), uploads, criação de chave de API e erros 5xx inesperados.
+  2. Cada evento com hora UTC, nome, ID do usuário (se conhecido), IP, navegador, ID da requisição e resultado. O ID da
+     requisição aparece na resposta de erro, para o relato do usuário achar a linha do log.
+  3. Valores sensíveis mascarados em todo lugar (senha, token, cookie, cabeçalho de autorização, chave, cartão) e no
+     rastreio de erros também; quebras de linha tiradas do que o usuário digitou, contra injeção no log.
+  4. Alertas (ou o passo exato no provedor): mais de 10 logins errados por conta ou IP em 5 minutos; pico de
+     401/403/429/5xx; administrador novo ou troca de papel; falha de assinatura de webhook.
+  5. Prazo de guarda recomendado e acesso ao log só do time.
+- **Entregar:** `SECURITY_RUNBOOK.md` de uma página: onde ficam os logs, como achar a atividade de um usuário, o que
+  cada alerta significa e as 3 primeiras coisas a fazer quando um dispara.
+**Feito quando:** eventos de segurança registrados com hora, usuário, IP e ID da requisição; nenhum segredo nem senha no
+log ou no relatório de erro; alertas para força bruta, pico de erro e mudança de administrador; o roteiro de uma página existe.
+**Cuidado:** log com dado pessoal demais vira problema de privacidade: registre IDs, não perfis inteiros. Log de console
+de função serverless some rápido em algumas hospedagens: mande para um serviço de log com prazo de guarda.
+
 ## Revisão completa (roteiro 26)
 Uma passada no app inteiro, como um atacante veria. Pega o que os itens isolados não pegam, principalmente falha de
 regra de negócio do próprio app (reusar teste grátis, entrar no time de outro, pular uma etapa do fluxo).

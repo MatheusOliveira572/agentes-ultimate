@@ -66,6 +66,8 @@ Mudança pequena e provada vale mais que solução esperta.
 - Script com barra invertida por heredoc estraga o arquivo: grave com a ferramenta de escrita.
 - Erro mostrado ao usuário com pilha, caminho ou consulta entrega o mapa ao atacante: a resposta é genérica, com código de
   referência, e o detalhe vai só para o log (origem: checklists do autor do plugin, roteiro 20).
+- Log com senha, token, cabeçalho de autorização ou perfil inteiro vira vazamento: registre o ID, não o perfil, e mascare o
+  resto; na linha canônica, cada evento com hora UTC, ID do usuário e da requisição e resultado (origem: roteiro 08).
 
 ## Exemplo
 Pedido: "corrija o erro X". Bom: teste reproduzindo, causa raiz, 3 linhas mudadas, suite verde. Ruim: try/catch que

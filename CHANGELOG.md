@@ -63,6 +63,11 @@ visto falhando antes.
   - `engenheiro-software`: erro ao usuário é genérico, com código de referência, e o detalhe vai só para o log;
   - `especialista-lgpd`: o inventário inclui os serviços de terceiros que recebem dado, conferidos no tráfego real;
   - checklist: S-9 nada privado no que vai ao ar (com os pontos do Power BI) e S-11 erro sem detalhe; roteiros 20 e 23.
+- **G4 · logs sem segredo e rastreáveis:**
+  - `engenheiro-software`: log sem senha, token nem perfil inteiro (registra o ID, não o perfil), com hora UTC, ID do
+    usuário e da requisição e resultado; caso 8 no eval (log e erro ao usuário);
+  - checklist: S-12 log de segurança, com a guarda de 6 meses do Marco Civil (art. 15 [conferir]) para app público com
+    fins econômicos e a [HIPÓTESE] de que ferramenta interna não se enquadra; roteiro 08.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**
