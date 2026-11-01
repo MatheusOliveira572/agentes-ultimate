@@ -12,6 +12,34 @@ entra. Entram segredos, quem acessa o quê (workspace, link de compartilhamento,
 acessibilidade, licenças e a honestidade do que o painel afirma ("atualizado em", cobertura dos dados).
 
 ## S · Segredos, acesso, dependências, exposição e contas
+- **S-1 · Segredo fora do código e do que é entregue.** Toda chave secreta fica só no servidor ou no cofre da
+  plataforma: nada em código do navegador, no PBIP, em script, em planilha ou em documento; cite pelo nome da variável.
+  Verificar: gere a versão de produção e procure no que sai (pasta do build, pacote, PBIP) por `sk_`, `sk-`, `AKIA`,
+  `ghp_`, `service_role`, `Bearer`, `password`, `secret`: 0 achado; a trava de commit do plugin está ativa. Dono:
+  `auditor-seguranca` (varre) e `engenheiro-software` (move para o servidor). Roteiro: `seguranca-segredos.md`, 02.
+- **S-2 · Variáveis de ambiente.** Nenhum segredo com prefixo público (`NEXT_PUBLIC_`, `VITE_`, `REACT_APP_`,
+  `EXPO_PUBLIC_`, `PUBLIC_`); `.env` fora do git e `.env.example` só com marcadores; sem valor padrão inseguro;
+  chaves e bancos separados para desenvolvimento e produção. Verificar: `git ls-files | grep -i env` só mostra
+  `.env.example`; a busca por `|| "` e `?? "` junto de nome de segredo dá 0; o app falha na partida se faltar variável.
+  Dono: `engenheiro-software`. Roteiro: `seguranca-segredos.md`, 11.
+- **S-3 · Histórico inteiro sem segredo.** Vale para todo repositório que outra pessoa vê, e obrigatório antes de
+  torná-lo público. Verificar: gitleaks ou TruffleHog no histórico com todas as branches e tags (ou `git log --all -p`
+  com os padrões), valores mascarados, 0 achado ou cada achado na lista de troca (S-4); repositório público começa
+  limpo. Dono: `auditor-seguranca`; ligar a varredura de segredos e a proteção de envio do GitHub: Só o usuário faz.
+  Roteiro: `seguranca-segredos.md`, 24.
+- **S-4 · Segredo exposto é trocado na ordem certa.** Exposto em código, histórico, log, print, chat ou chamado conta
+  como roubado. Ordem: criar o novo (mínimo de permissão, restrição de origem, limite de gasto), pôr no ar em todo lugar
+  que o usa, revogar o antigo, provar que o antigo falha e conferir o uso no período exposto. Reescrever o histórico vem
+  depois, se vier. Verificar: chamada só de leitura com a chave antiga devolve 401/403 e o app funciona com a nova.
+  Dono: Só o usuário faz (painel do provedor), guiado pelo `engenheiro-software`. Roteiro: `seguranca-segredos.md`, 25.
+- **S-5 · MFA nas contas que controlam o projeto.** Git, hospedagem, domínio, banco, nuvem, Microsoft/Power BI,
+  provedores de IA e de pagamento: MFA por aplicativo ou chave de acesso (não SMS), só quem precisa, papéis mínimos,
+  integrações e tokens revisados, alerta de login. Verificar: a lista de contas, cada uma marcada "MFA ligado" e
+  "membros revisados" pelo usuário. Dono: Só o usuário faz. Roteiro: `seguranca-extras.md`, B4.
+- **S-10 · Limite de gasto e alarmes.** Todo serviço cobrado por uso (IA, nuvem, banco, e-mail, SMS, mapas): alerta de
+  cobrança, teto de gasto quando o provedor oferece e limite por chave; cota por usuário nas funções mais caras.
+  Verificar: tela do painel de cada provedor com o alerta e o teto configurados. Dono: Só o usuário faz. Roteiro:
+  `seguranca-extras.md`, B5.
 
 ## S-web · App com servidor próprio (login próprio ou entrada de fora)
 

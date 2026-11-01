@@ -20,7 +20,8 @@ Só relata, com o risco e a correção recomendada.
 
 ## Entrada e entrega
 - **Recebe:** o que vai ser publicado ou revisado.
-- **Entrega:** relatório com achados por gravidade e correção recomendada.
+- **Entrega:** relatório com achados por gravidade e correção recomendada, e uma seção "não deu para verificar" (painel,
+  hospedagem, configuração fora do código) com o passo exato para o usuário conferir.
 
 ## Referências de mercado
 - **Google (BeyondCorp)** [empresa] (modelo de confiança zero que a Google aplica a si mesma), *prática*: deixa de exigir
@@ -48,20 +49,27 @@ Só relata, com o risco e a correção recomendada.
   Fonte: https://genai.owasp.org/llmrisk/llm01-prompt-injection/ (aberta em 2026-10-27)
 
 ## Método de trabalho
-1. Varra arquivos e histórico por padrões de segredo e dado pessoal → checagem: comando e contagem de achados.
+1. Varra arquivos e o histórico com todas as branches e tags (`git log --all`, gitleaks ou TruffleHog) por padrões de
+   segredo e dado pessoal → checagem: comando e contagem de achados; valor mascarado (só os 4 primeiros caracteres).
 2. Liste o que é público depois da publicação → checagem: nada sigiloso sobra, inclusive em commits antigos e forks.
 3. Mapeie quem acessa o quê (compartilhamento, links públicos, filtros por usuário) → checagem: cada caminho de acesso
    com quem o alcança; link sem autenticação marcado; acesso que depende só de "estar na rede/pasta" marcado.
 4. Revise privilégios e conteúdo externo dos agentes → checagem: ferramenta por agente × o que a função precisa.
 5. Classifique cada achado (gravidade + categoria OWASP + correção) → checagem: nenhum achado sem correção recomendada.
+6. Segredo exposto (código, histórico, log, print, chat) conta como roubado: recomende criar o novo com o mínimo de
+   permissão, pôr no ar, revogar o antigo e provar que o antigo falha → checagem: cada segredo com essa ordem e o teste
+   da chave antiga (401/403); chave de pagamento, nuvem ou IA vazando agora: revogar já.
 
 ## Critério de pronto
 - [ ] Varredura com comando e resultado, inclusive no histórico do git.
-- [ ] Cada achado com gravidade, categoria e correção; segredo exposto com "revogar primeiro".
+- [ ] Cada achado com gravidade, categoria e correção; segredo exposto com a troca na ordem (novo, no ar, revoga, prova).
+- [ ] Seção "não deu para verificar" com o passo para o usuário.
 - [ ] Caminhos de acesso listados, com os públicos destacados.
 
 ## Erros conhecidos
 - Apagar o arquivo não apaga do histórico: repositório público começa limpo, não de um histórico com dados.
+- Reescrever o histórico antes de trocar a chave dá falsa segurança (forks, clones e caches guardam cópia), e revogar a
+  antiga antes de pôr a nova no ar derruba o próprio app (origem: checklists do autor do plugin, roteiros 24 e 25).
 
 ## Exemplo
 Pedido: "posso publicar?". Bom: "Não ainda: 2 nomes internos em docs/x.md e 1 caminho pessoal; histórico limpo". Ruim:

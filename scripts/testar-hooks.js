@@ -899,6 +899,65 @@ const vLei8 = validarCopia({ 'skills/checklist-lancamento/itens.md': '# Itens\n\
 caso('0.8.0 G11 validar: item do checklist que cita lei sem o link oficial é erro', vLei8.code === 1 && /P-1[^\n]*link/.test(vLei8.out), vLei8.out.slice(-300));
 caso('0.8.0 G11 validar: o plugin como está passa (0 erro)', validarCopia({}).code === 0, 'validar acusa erro no plugin real');
 
+// G1 · segredos e chaves. Os segredos de teste são montados aqui por partes: este arquivo não tem nenhum segredo literal
+// (a própria trava, ou a proteção de envio do GitHub, barraria o commit dele).
+const pS = path.join(tmp, 'projeto-segredos'); fs.mkdirSync(pS);
+execSync('git init -q', { cwd: pS }); execSync('git config user.email t@t && git config user.name t', { cwd: pS });
+fs.writeFileSync(path.join(pS, 'leia.md'), 'base\n'); execSync('git add leia.md && git commit -q -m base', { cwd: pS });
+const commitCom = (arq, texto, cmd = 'git commit -m teste') => {
+  execSync('git reset -q', { cwd: pS });
+  fs.mkdirSync(path.dirname(path.join(pS, arq)), { recursive: true }); fs.writeFileSync(path.join(pS, arq), texto);
+  execSync(`git add "${arq}"`, { cwd: pS });
+  const res = trava(cmd, pS);
+  execSync('git reset -q', { cwd: pS }); fs.rmSync(path.join(pS, arq), { force: true });
+  return res;
+};
+const pedeV8 = (x) => x.json && x.json.hookSpecificOutput && x.json.hookSpecificOutput.permissionDecision === 'ask';
+const corpoPem = 'MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7' + 'VJTUt9Us8cKjMzEfYyjiWA4R4/M2bS1GB4t7NXp98C3SC6dVMvDuictGeurT8jNbvJZHtCSuYEvu';
+const altos8 = {
+  'chave privada (PEM)': ['-----BEGIN ' + 'PRIVATE KEY-----', corpoPem, '-----END ' + 'PRIVATE KEY-----'].join('\n') + '\n',
+  'chave de acesso da AWS': 'aws_id = "AK' + 'IAZ7QK3LMN4PRS5TUV"\n',
+  'token do GitHub': 'const t = "gh' + 'p_' + 'a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q7R8";\n',
+  'chave da Anthropic': 'ANTHROPIC = "sk-' + 'ant-api03-' + 'Zx9Yw8Vu7Ts6Rq5Po4Nm3Lk2Jh1Gf0EdCbA-q1w2e3r4t5"\n',
+  'texto de conexão com senha': 'DATABASE_URL=postgres' + '://app:' + 'S3nhaForte2026' + '@db.exemplo.interno:5432/vendas\n',
+  'texto de conexão com senha (ADO)': 'cs = "Server=sql01;Database=orc;User Id=app;' + 'Password=' + 'Tr0ca!Agora9;"\n',
+};
+for (const [tipo, texto] of Object.entries(altos8)) {
+  const x = commitCom('src/config.js', texto);
+  caso(`0.8.0 G1 trava: commit com ${tipo} no conteúdo é bloqueado, com arquivo:linha e sem mostrar o valor`,
+    x.code === 2 && /src\/config\.js:\d+/.test(x.err) && !/S3nhaForte2026|a1B2c3D4e5F6|Zx9Yw8Vu7|IAZ7QK3|Tr0ca!Agora9|MIIEvQIBADAN/.test(x.err), `code ${x.code} ${x.err}`);
+}
+const falsos8 = {
+  'chave de exemplo da documentação da AWS': 'id = "AK' + 'IAIOSFODNN7EXAMPLE"\n',
+  'chave pública': ['-----BEGIN ' + 'PUBLIC KEY-----', corpoPem, '-----END ' + 'PUBLIC KEY-----'].join('\n') + '\n',
+  'só o cabeçalho de chave privada, num texto que explica o padrão': 'Procure por -----BEGIN ' + 'PRIVATE KEY----- no histórico.\n',
+  'texto de conexão com a senha numa variável': 'url = "postgres' + '://app:${DB_SENHA}@db:5432/vendas"\nmodelo: postgres' + '://usuario:<senha>@host/banco e postgres' + '://...:...@\n',
+  'código comum': 'const total = itens.reduce((a, b) => a + b.valor, 0);\n',
+};
+for (const [tipo, texto] of Object.entries(falsos8)) {
+  const x = commitCom('src/ok.js', texto);
+  caso(`0.8.0 G1 trava: falso positivo passa (${tipo})`, x.code === 0 && !x.out, `code ${x.code} ${x.err} ${x.out}`);
+}
+let x8 = commitCom('src/media.js', 'const cfg = { api_key: "' + 'q8W2e4R6t8Y0u2I4o6P8' + '" };\n');
+caso('0.8.0 G1 trava: padrão de média certeza (chave atribuída no código) pergunta em vez de bloquear', x8.code === 0 && pedeV8(x8) && /src\/media\.js:1/.test(x8.out) && !/q8W2e4R6/.test(x8.out), `code ${x8.code} ${x8.out} ${x8.err}`);
+fs.writeFileSync(path.join(pS, 'leia.md'), 'base\ntoken: "gh' + 'p_' + 'a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q7R8"\n');
+x8 = trava('git commit -am "muda leia"', pS);
+caso('0.8.0 G1 trava: "git commit -a" também confere o que o -a vai levar', x8.code === 2 && /leia\.md:2/.test(x8.err), `code ${x8.code} ${x8.err}`);
+execSync('git add leia.md && git commit -q -m "com segredo (teste)"', { cwd: pS });
+fs.writeFileSync(path.join(pS, 'leia.md'), 'base\n'); execSync('git add leia.md', { cwd: pS });
+x8 = trava('git commit -m "tira o segredo"', pS);
+caso('0.8.0 G1 trava: commit que só remove o segredo passa (só as linhas acrescentadas contam)', x8.code === 0 && !x8.out, `code ${x8.code} ${x8.err}`);
+caso('0.8.0 G1 protocolo comum: segredo se cita pelo nome, nunca pelo valor (em todos os agentes)', /nunca pelo valor/.test(lerV8('fonte', 'comum.md')) && /nunca pelo valor/.test(agV8('redator')), 'falta em fonte/comum.md');
+const audM8 = secaoV8(agV8('auditor-seguranca'), 'Método de trabalho'), audE8 = secaoV8(agV8('auditor-seguranca'), 'Erros conhecidos');
+caso('0.8.0 G1 auditor: histórico com todas as branches e tags', /todas as branches e tags/.test(audM8), 'falta no Método');
+caso('0.8.0 G1 auditor: rotação na ordem (novo, no ar, revoga o antigo, prova que o antigo falha; histórico depois)', /novo[^.]*no ar[^.]*revog[^.]*antig[^.]*falha/i.test(audM8) && /reescrever o histórico/i.test(audE8), 'falta');
+caso('0.8.0 G1 eval do auditor cobre a ordem da rotação', /no ar/.test(evV8('auditor-seguranca')) && /revog/i.test(evV8('auditor-seguranca')) && /antig[ao] falha/.test(evV8('auditor-seguranca')), 'falta');
+const itS8 = secaoV8(skV8('itens.md'), 'S · ');
+caso('0.8.0 G1 checklist S: segredo fora do código, variáveis, histórico, rotação, MFA e limite de gasto', ['S-1 ·', 'S-2 ·', 'S-3 ·', 'S-4 ·', 'S-5 ·', 'S-10 ·'].every((s) => itS8.includes(s)) && /MFA/.test(itS8) && /limite de gasto/i.test(itS8), 'falta item');
+caso('0.8.0 G1 checklist: MFA e limite de gasto são "só o usuário faz"', /S-5 ·[^\n]*(\n\s+[^\n]*)*Só o usuário faz/.test(itS8) && /S-10 ·[^\n]*(\n\s+[^\n]*)*Só o usuário faz/.test(itS8), 'falta');
+caso('0.8.0 G1 roteiros de segredos (02, 11, 24, 25) e de contas e gasto (B4, B5)', ['Roteiro 02', 'Roteiro 11', 'Roteiro 24', 'Roteiro 25'].every((s) => skV8('referencias', 'seguranca-segredos.md').includes(s)) &&
+  ['B4', 'B5'].every((s) => skV8('referencias', 'seguranca-extras.md').includes(s)), 'falta roteiro');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

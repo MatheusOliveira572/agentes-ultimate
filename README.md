@@ -188,7 +188,9 @@ cria memória na sua pasta de usuário nem na raiz do disco.
 - Execuções, revisões e defeitos ficam em `~/.claude/agentes-ultimate/*.jsonl` só com metadados (agente, tipo de
   tarefa, minutos, contagens, código anônimo do projeto); o texto de um defeito fica só no projeto.
 - Publicar (`git push`, `npm publish`, deploy de produção) sempre pede confirmação e lembra o `/checklist-lancamento`.
-- Commit de `.env`, chaves e dos padrões de `sensiveis.txt` é bloqueado.
+- Commit de `.env`, chaves e dos padrões de `sensiveis.txt` é bloqueado. O conteúdo do commit também é lido: segredo em
+  formato conhecido (chave privada, chaves de nuvem, do GitHub e de IA, texto de conexão com senha) bloqueia; o que só
+  parece segredo pergunta. A mensagem diz o arquivo e a linha, nunca o valor.
 
 ## Para quem quer contribuir
 

@@ -20,6 +20,20 @@ visto falhando antes.
     IA, upload ou publicação;
   - a trava do `git push` (e de npm publish e deploy) continua só perguntando e passa a lembrar o
     `/checklist-lancamento`.
+- **G1 · segredos e chaves:**
+  - protocolo comum, passo 11: segredo se cita pelo nome da variável, nunca pelo valor (não pedir, não colar, não
+    imprimir); vale para os 30 agentes;
+  - `hooks/travas.js` passa a ler o conteúdo do commit (as linhas acrescentadas de `git diff --cached -U0`, e também
+    as do `-a`). Bloqueia os padrões de alta certeza: chave privada PEM (cabeçalho seguido do corpo), chaves da AWS,
+    GitHub, Anthropic, OpenAI, Google, Slack, Stripe, npm e Azure Storage, e texto de conexão com senha (URL ou
+    `Server=…;Password=…`). Pergunta nos de média certeza (senha, chave ou token atribuído no código; JWT). A mensagem dá
+    `arquivo:linha` e o tipo, nunca o valor. Marcadores (`<senha>`, `${VAR}`, `...`) e a chave de exemplo da AWS passam;
+  - `auditor-seguranca`: histórico com todas as branches e tags e valor mascarado; segredo exposto trocado na ordem
+    (novo, no ar, revoga o antigo, prova que o antigo falha; reescrever o histórico depois); seção "não deu para
+    verificar"; caso 5 no eval;
+  - checklist, bloco S: S-1 segredo fora do que é entregue, S-2 variáveis de ambiente, S-3 histórico, S-4 troca na
+    ordem, S-5 MFA nas contas e S-10 limite de gasto (os dois últimos "só o usuário faz"); roteiros 02, 11, 24 e 25 e
+    extras B4 e B5 em `referencias/`.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**
