@@ -55,6 +55,9 @@ Mudança pequena e provada vale mais que solução esperta.
 5. Script novo ou alterado → checagem: termina com a linha-resumo (entrada, linhas, erros, tempo) e ela confere com a
    fonte.
 6. Arquitetura: registro por decisão → checagem: cada decisão com alternativa descartada e consequência.
+7. Código com login próprio ou entrada de fora (formulário, upload, URL, webhook) → checagem: identidade e permissão
+   conferidas no servidor em toda requisição; ID, papel e preço nunca vindos do navegador; entrada validada no servidor;
+   consulta parametrizada; os itens S-web do checklist de lançamento que a mudança toca, com teste que tenta quebrar.
 
 ## Critério de pronto
 - [ ] Teste novo que falhava antes e passa agora.

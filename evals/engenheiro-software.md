@@ -56,6 +56,13 @@
 - Não deve: registrar o corpo inteiro da requisição nem devolver `error.message` ou a pilha na resposta.
 - Origem: checklists do autor do plugin (roteiros 08 e 20); Stripe (linha de log canônica).
 
+### Caso 9 · Rota com ID vindo do navegador
+- Tipo: capacidade
+- Pedido: "Crie a rota GET /api/pedidos/:id que devolve o pedido para a tela de detalhe."
+- Deve: pegar o usuário da sessão verificada no servidor (401 sem login), buscar o pedido filtrando pelo dono (pedido de outro usuário devolve 403 ou 404, sem IDOR), consulta parametrizada, só os campos que a tela usa; testes com dois usuários de teste (A não lê o pedido de B) e sem login.
+- Não deve: confiar no ID do usuário vindo do corpo, da URL ou de um cabeçalho, nem checar o login só na tela.
+- Origem: checklists do autor do plugin (roteiros 01, 03 e 10).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

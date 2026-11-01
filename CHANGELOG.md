@@ -68,6 +68,17 @@ visto falhando antes.
     usuário e da requisição e resultado; caso 8 no eval (log e erro ao usuário);
   - checklist: S-12 log de segurança, com a guarda de 6 meses do Marco Civil (art. 15 [conferir]) para app público com
     fins econômicos e a [HIPÓTESE] de que ferramenta interna não se enquadra; roteiro 08.
+- **G5 · controle de acesso e app web:**
+  - checklist, bloco S-web (entra quando há login próprio ou entrada de fora), 17 itens: login no servidor, senhas,
+    banco e IDOR, XSS, cookies, CSRF, validação e consulta parametrizada, links de redefinição, upload, pagamento, SSRF,
+    IA, administração, HTTPS, limite de requisições, CORS e cabeçalhos de segurança;
+  - S-6 no bloco S (vale para todo produto): A não vê o dado de B, testado com dois usuários; no Power BI, "ver como"
+    com dois papéis da RLS;
+  - roteiros em `referencias/`: identidade (01, 05, 09, 15, 17), dados (03, 06, 07, 10, 18, 19), rede (04, 12, 13, 14,
+    16) e extras B1 (IA) e B2 (SSRF);
+  - `engenheiro-software`, passo 7: código com login ou entrada de fora confere identidade no servidor, nunca aceita ID,
+    papel ou preço do navegador, valida a entrada, usa consulta parametrizada e roda os itens S-web que toca; caso 9 no
+    eval.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

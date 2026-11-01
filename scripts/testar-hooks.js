@@ -985,6 +985,19 @@ caso('0.8.0 G4 eval do engenheiro: log e erro ao usuário', /o ID|IDs/.test(evV8
 caso('0.8.0 G4 checklist S-12: log de segurança sem segredo, com o Marco Civil marcado [conferir] e o link oficial', /S-12 ·[^\n]*(\n\s+[^\n]*)*Marco Civil[^\n]*(\n\s+[^\n]*)*\[conferir\]/.test(skV8('itens.md')) && /planalto\.gov\.br[^\s]*l12965/.test(skV8('itens.md')), 'falta item');
 caso('0.8.0 G4 roteiro 08 (log e monitoramento)', /Roteiro 08/.test(skV8('referencias', 'seguranca-revisao.md')), 'falta roteiro');
 
+// G5 · controle de acesso e app web
+const itW5 = secaoV8(skV8('itens.md'), 'S-web · ');
+caso('0.8.0 G5 checklist S-web: os 17 itens do app com servidor próprio, cada um com "Verificar:"', Array.from({ length: 17 }, (_, i) => 'S-web-' + (i + 1) + ' ·').every((s) => itW5.includes(s)) &&
+  (itW5.match(/Verificar:/g) || []).length >= 17, 'falta item');
+caso('0.8.0 G5 checklist S-6: usuário A não vê dado de B, testado com dois usuários (no Power BI, "ver como" com dois papéis)', /S-6 ·[^\n]*(\n\s+[^\n]*)*dois usuários[^\n]*(\n\s+[^\n]*)*ver como/i.test(skV8('itens.md')), 'falta item');
+caso('0.8.0 G5 roteiros: identidade (01, 05, 09, 15, 17), dados (03, 06, 07, 10, 18, 19), rede (04, 12, 13, 14, 16) e extras B1, B2',
+  ['01', '05', '09', '15', '17'].every((n) => skV8('referencias', 'seguranca-identidade.md').includes('Roteiro ' + n)) &&
+  ['03', '06', '07', '10', '18', '19'].every((n) => skV8('referencias', 'seguranca-dados.md').includes('Roteiro ' + n)) &&
+  ['04', '12', '13', '14', '16'].every((n) => skV8('referencias', 'seguranca-rede.md').includes('Roteiro ' + n)) &&
+  ['B1', 'B2'].every((s) => skV8('referencias', 'seguranca-extras.md').includes('## ' + s)), 'falta roteiro');
+caso('0.8.0 G5 engenheiro: código com login ou entrada de fora roda o bloco S-web (identidade no servidor, nada de ID ou preço do navegador)', /S-web/.test(secaoV8(agV8('engenheiro-software'), 'Método de trabalho')) && /no servidor/.test(secaoV8(agV8('engenheiro-software'), 'Método de trabalho')), 'falta no Método');
+caso('0.8.0 G5 eval do engenheiro: rota com ID vindo do navegador', /IDOR|outro usuário/.test(evV8('engenheiro-software')) && /403|404/.test(evV8('engenheiro-software')), 'falta');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
