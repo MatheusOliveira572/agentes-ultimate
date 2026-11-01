@@ -209,6 +209,29 @@ for (const f of arquivosRef) {
   if (!viaCitacao && !viaIndice) avisos.push(`${r}: nenhum agente, skill ou INDICE.md cita este arquivo`);
 }
 
+// Norma brasileira citada nos agentes (0.8.0, D-e): "Lei", "Decreto", "Resolução", "LC" ou "MP" com número pede o link
+// oficial (gov.br) na mesma linha ou nas 2 seguintes (a citação costuma quebrar a linha). Citar de novo, no mesmo arquivo,
+// uma norma já linkada não pede outro link.
+const NORMA = /\b(?:Lei(?: Complementar)?|Decreto(?:-Lei)?|Resolução(?: CD\/ANPD)?|LC|MP)\s+(?:n[º°o.]\s*)?(\d[\d.]*(?:\/\d{2,4})?)/g;
+const LINK_OFICIAL = /https:\/\/[^\s)]*\.gov\.br/;
+function arquivosMd(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? arquivosMd(path.join(dir, e.name)) : e.name.endsWith('.md') ? [path.join(dir, e.name)] : []));
+}
+for (const arq of arquivosMd(path.join(RAIZ, 'fonte'))) {
+  const texto = fs.readFileSync(arq, 'utf8');
+  const corpo = texto.replace(/^---\n[\s\S]*?\n---\n/, (m) => m.replace(/[^\n]/g, ' '));
+  const linhas = corpo.split(/\r?\n/);
+  const perto = (i) => linhas.slice(i, i + 3).join(' ');
+  const linkada = (num) => linhas.some((l, i) => l.includes(num) && LINK_OFICIAL.test(perto(i)));
+  linhas.forEach((l, i) => {
+    for (const m of l.matchAll(NORMA)) {
+      const base = m[1].split('/')[0].replace(/\.$/, '');
+      if (LINK_OFICIAL.test(perto(i)) || linkada(base)) continue;
+      avisos.push(`${path.relative(RAIZ, arq).split(path.sep).join('/')}:${i + 1}: "${m[0]}" sem link oficial (gov.br) na linha ou nas 2 seguintes`);
+    }
+  });
+}
+
 for (const a of avisos) console.log('AVISO ' + a);
 for (const e of erros) console.log('ERRO  ' + e);
 console.log(`${agentes.length} agentes, ${Object.keys(pac.pacotes).length} pacotes, ${fs.readdirSync(dirSk).length} skills · ${erros.length} erro(s), ${avisos.length} aviso(s)`);

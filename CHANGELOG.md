@@ -157,6 +157,10 @@ visto falhando antes.
 - **G10 · venda ao consumidor:** só os padrões enganosos entram agora (o resto do grupo, com o bloco C-venda, fica fora
   até haver projeto que venda ao consumidor): `estrategista-marketing` ganha o erro conhecido (urgência falsa, caixa já
   marcada, recusa escondida; CDC [conferir]) e o caso 8 no eval; checklist H-8.
+- **Validador (D-e):** norma brasileira citada em `fonte/` ("Lei", "Decreto", "Resolução", "LC" ou "MP" com número) sem
+  link oficial (gov.br) na mesma linha ou nas 2 seguintes vira aviso; citar de novo, no mesmo arquivo, uma norma já
+  linkada não pede outro link. As normas citadas hoje passam (0 aviso). O doc pedia "na linha ou na seguinte"; ficaram 2
+  linhas porque duas citações antigas (compliance e comprador) quebram a linha antes do link.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

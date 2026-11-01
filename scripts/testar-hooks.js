@@ -1059,6 +1059,14 @@ caso('0.8.0 G10 eval do marketing: contagem regressiva falsa', /contagem regress
 caso('0.8.0 G10 checklist H-8: sem padrões enganosos, com o CDC', /H-8 ·[^\n]*(\n\s+[^\n]*)*Verificar:/.test(skV8('itens.md')), 'falta item');
 caso('0.8.0 G10 marketing dentro de 90 linhas', agV8('estrategista-marketing').slice(0, agV8('estrategista-marketing').indexOf('## Protocolo comum')).split('\n').length <= 90, 'passou de 90 linhas');
 
+// D-e · validador: norma brasileira citada em fonte/ sem link oficial vira aviso
+const agFalso = lerV8('fonte', 'agentes', 'nucleo', 'redator.md').replace('## Exemplo', '- Regra inventada para o teste: Decreto 99.999/2030, art. 1º, sem link.\n\n## Exemplo');
+const vDe = validarCopia({ 'fonte/agentes/nucleo/redator.md': agFalso });
+caso('0.8.0 D-e validar: norma citada em fonte/ sem link oficial (gov.br) na linha ou na seguinte vira aviso', /AVISO[^\n]*redator\.md[^\n]*Decreto 99\.999/.test(vDe.out), vDe.out.slice(-400));
+const vDeOk = validarCopia({ 'fonte/agentes/nucleo/redator.md': agFalso.replace('sem link.', 'https://www.planalto.gov.br/ccivil_03/decreto/d99999.htm') });
+caso('0.8.0 D-e validar: com o link oficial na mesma linha, não há aviso', !/AVISO[^\n]*Decreto 99\.999/.test(vDeOk.out), vDeOk.out.slice(-400));
+caso('0.8.0 D-e validar: as normas que o plugin cita hoje têm link (0 aviso de norma)', !/AVISO[^\n]*sem link oficial/.test(validarCopia({}).out), 'há norma sem link em fonte/');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
