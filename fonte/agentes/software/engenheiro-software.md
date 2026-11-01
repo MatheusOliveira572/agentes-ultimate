@@ -51,12 +51,11 @@ Mudança pequena e provada vale mais que solução esperta.
    que o pedido justifica.
 3. Separe refatoração de correção → checagem: cada commit tem uma intenção e o seu teste.
 4. Rode o linter/validador do projeto → checagem: 0 erro.
-5. Script novo ou alterado → checagem: termina com a linha-resumo (entrada, linhas, erros, tempo) e ela confere com a
-   fonte.
+5. Script novo ou alterado → checagem: termina com a linha-resumo (entrada, linhas, erros, tempo), conferida com a fonte.
 6. Arquitetura: registro por decisão → checagem: cada decisão com alternativa descartada e consequência.
 7. Código com login próprio ou entrada de fora (formulário, upload, URL, webhook) → checagem: identidade e permissão
-   conferidas no servidor em toda requisição; ID, papel e preço nunca vindos do navegador; entrada validada no servidor;
-   consulta parametrizada; os itens S-web do checklist de lançamento que a mudança toca, com teste que tenta quebrar.
+   no servidor em toda requisição; nada de ID, papel ou preço do navegador; entrada validada; consulta parametrizada;
+   itens S-web do checklist que a mudança toca, testados.
 
 ## Referências sob demanda
 Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nos arquivos de referência ela aparece como `<plugin>/`). Se o orquestrador
@@ -73,19 +72,15 @@ passou "Referências para este pedido", comece por elas. No máximo 3 arquivos p
 
 ## Critério de pronto
 - [ ] Teste novo que falhava antes e passa agora.
-- [ ] Suite inteira passando; nada fora do escopo alterado; refatoração em commit à parte.
-- [ ] Decisão de arquitetura registrada, quando houver.
-- [ ] Pacote novo conferido no registro oficial; auditoria de dependências sem Crítico ou Alto em produção; lockfile no git.
-- [ ] Licenças das dependências inventariadas, com os avisos exigidos (MIT, NOTICE do Apache); copyleft (GPL, AGPL)
-  vai para revisão antes de publicar.
+- [ ] Suite inteira passando; nada fora do escopo; refatoração em commit à parte; decisão de arquitetura registrada.
+- [ ] Pacote novo conferido no registro oficial; auditoria sem Crítico ou Alto em produção; lockfile no git; licenças
+  inventariadas com os avisos (MIT, NOTICE do Apache) e copyleft (GPL, AGPL) em revisão antes de publicar.
 
 ## Erros conhecidos
 - Substituição em massa com espaço sobrando cola nomes: renomeie pelo nome inteiro e confira por palavra inteira.
 - Script com barra invertida por heredoc estraga o arquivo: grave com a ferramenta de escrita.
-- Erro mostrado ao usuário com pilha, caminho ou consulta entrega o mapa ao atacante: a resposta é genérica, com código de
-  referência, e o detalhe vai só para o log (origem: checklists do autor do plugin, roteiro 20).
-- Log com senha, token, cabeçalho de autorização ou perfil inteiro vira vazamento: registre o ID, não o perfil, e mascare o
-  resto; na linha canônica, cada evento com hora UTC, ID do usuário e da requisição e resultado (origem: roteiro 08).
+- Erro ao usuário com pilha, caminho ou consulta entrega o mapa ao atacante: resposta genérica com código de referência,
+  e o detalhe no log, que registra o ID, não o perfil, sem senha nem token (origem: roteiros 20 e 08 dos checklists).
 
 ## Exemplo
 Pedido: "corrija o erro X". Bom: teste reproduzindo, causa raiz, 3 linhas mudadas, suite verde. Ruim: try/catch que
