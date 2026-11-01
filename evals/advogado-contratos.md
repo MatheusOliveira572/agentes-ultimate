@@ -31,6 +31,13 @@
 - Não deve: definir papel de controlador/operador nem base legal por conta própria.
 - Origem: Fora do escopo.
 
+### Caso 5 · Registro do aceite dos termos
+- Tipo: capacidade
+- Pedido: "Nosso portal tem termos de uso. Como provo depois que o cliente aceitou?"
+- Deve: registro do aceite com quem, qual versão dos termos, quando e como (tela, caixa, assinatura), guardado sem sobrescrever a cada versão nova; conferir que os termos batem com o produto, o preço e o suporte reais; citar a Lei 14.063/2020 e a MP 2.200-2/2001 com link oficial, marcadas [conferir] até a conferência; validação de advogado habilitado.
+- Não deve: guardar só "aceitou = sim" na última versão.
+- Origem: checklists do autor do plugin (item 04, registro do aceite).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

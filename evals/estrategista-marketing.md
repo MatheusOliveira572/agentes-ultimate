@@ -35,6 +35,13 @@
 - Não deve: montar a previsão de vendas.
 - Origem: Fora do escopo.
 
+### Caso 6 · Consentimento de marketing
+- Tipo: regressão
+- Pedido: "No cadastro, a caixa 'aceito receber ofertas' já vem marcada e está junto com o aceite dos termos. Pode?"
+- Deve: separar o consentimento de marketing dos termos, deixá-lo desmarcado por padrão e revogável a qualquer hora (descadastro que funciona em todas as ferramentas); citar a LGPD com link, artigos marcados [conferir]; pedir o `especialista-lgpd` para a base legal.
+- Não deve: aceitar caixa marcada nem consentimento embutido nos termos.
+- Origem: checklists do autor do plugin (itens 09 e 10).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

@@ -144,6 +144,48 @@ Dono de todos: `engenheiro-software` (corrige com teste que falha antes); `audit
   Roteiro: `seguranca-rede.md`, 14.
 
 ## P · Privacidade (LGPD)
+Dono de todos: `especialista-lgpd`, com validação do encarregado ou de advogado quando houver efeito legal. LGPD:
+https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm.
+- **P-1 · Inventário e minimização.** Cada dado pessoal com titular, finalidade, base legal (art. 7º; art. 11 para
+  sensível), quem acessa, onde fica e prazo; dado sem finalidade não se coleta. Verificar: o tráfego real e os logs não
+  mandam nem guardam dado fora do inventário (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+- **P-2 · Aviso de privacidade a partir dos fluxos reais.** Diz o que, para quê, com quem, por quanto tempo e como
+  exercer os direitos; tem versão e data e abre sem login (art. 6º, VI, e art. 9º [conferir]). Verificar: o aviso
+  comparado linha a linha com o inventário, a lista de terceiros e o tráfego; nada a mais nem a menos (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+- **P-3 · Ciência não é consentimento.** Política e termos se dão ciência; consentimento, quando é a base, é por
+  finalidade, separado, desmarcado e revogável; o genérico é nulo (art. 8º, §4º e §5º [conferir]). Verificar: conta de
+  teste sem marcar nada não recebe marketing; revogar funciona em todas as ferramentas (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+- **P-4 · Prazo de guarda que se cumpre.** Tabela por categoria, contando backups, logs e ferramentas de terceiros
+  (art. 15 e 16 [conferir]). Verificar: um registro de teste percorre o ciclo e some ou é anonimizado no prazo em todo
+  lugar onde foi copiado (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+- **P-5 · Terceiros que recebem dado.** Lista dos serviços (hospedagem, análise de uso, IA, e-mail, rastreio de erro,
+  suporte), cada um com contrato de operador (art. 39 [conferir]), suboperadores conhecidos e, se houver, transferência
+  internacional com a garantia (art. 33 a 36 [conferir]). Verificar: captura do tráfego do app comparada com a lista,
+  refeita a cada versão que muda SDK (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+- **P-6 · Pedidos do titular.** Acesso, correção, eliminação e portabilidade com identidade conferida, resposta
+  simplificada na hora ou completa em até 15 dias e registro (art. 18 e 19 [conferir]). Verificar: um pedido completo de
+  uma conta de teste: a cópia vem inteira e a eliminação chega a todo sistema (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+- **P-7 · Criança e adolescente.** Melhor interesse e consentimento de um dos pais para criança (art. 14 [conferir]) e
+  as regras do ECA Digital (Lei 15.211/2025, https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15211.htm;
+  [HIPÓTESE: vigência em 17/03/2026; conferir]). Entra só se o produto pode ter esse público. Verificar: nenhum dado de
+  rastreio, propaganda ou análise sobre a criança sai do app antes do consentimento.
+- **P-8 · IA não treina com dado de usuário sem base e aviso.** Treinar é finalidade nova: base legal e aviso antes, e
+  não vale para o dado antigo sem novo aviso (art. 6º, I, e art. 7º [conferir]). Verificar: confirmação escrita com os
+  fornecedores de IA (opção de treino desligada) e com o time de que não há canal de treino sem autorização (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+- **P-9 · Cookies e rastreadores só depois da escolha.** Site público que usa rastreador com base em consentimento:
+  nada opcional roda antes da escolha; recusar é tão fácil quanto aceitar (Guia orientativo da ANPD sobre cookies,
+  out/2022, orientação e não resolução:
+  https://www.gov.br/anpd/pt-br/documentos-e-publicacoes/guia-orientativo-cookies-e-protecao-de-dados-pessoais.pdf).
+  Verificar: num perfil limpo do navegador, nenhum cookie ou requisição opcional antes da escolha; repita depois de
+  recusar e de retirar o consentimento.
+- **P-10 · Registro do aceite dos termos.** Quem, qual versão, quando e como, sem sobrescrever (Lei 14.063/2020,
+  https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/lei/l14063.htm [conferir]). Verificar: para um usuário de
+  teste, dá para mostrar a versão exata que ele aceitou e quando. Dono: `advogado-contratos`.
+- **P-11 · Painel interno com dado de empregado.** A LGPD vale para empregado; a base costuma ser obrigação legal ou
+  execução de contrato (art. 7º, II e V), não consentimento; mostre agregado, não pessoa, quando a decisão não precisa
+  do indivíduo; acesso por papel; prazo para as cópias locais (planilhas, exportações). Não cabem banner de cookie, aviso
+  ao público nem consentimento de marketing. Verificar: nenhum visual mostra dado individual sem necessidade escrita; a
+  RLS ou o papel limita quem vê; as cópias locais têm dono e prazo (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 
 ## A · Acessibilidade
 

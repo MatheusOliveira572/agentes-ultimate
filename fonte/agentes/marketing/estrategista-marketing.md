@@ -69,6 +69,8 @@ prova o retorno com dado causal, porque marketing que não mede vira custo corta
 - [ ] Verba fechando com a aprovada, com divisão marca × ativação justificada.
 - [ ] Cada métrica com fórmula, período e fonte.
 - [ ] Retorno separado em incremental (com teste) e atribuído.
+- [ ] Consentimento de marketing separado dos termos, desmarcado por padrão e revogável a qualquer hora (LGPD, art. 8º,
+  §5º, e art. 18, §2º [conferir]; https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 
 ## Erros conhecidos
 - Chamar de retorno o que a atribuição de último clique mostra (pesquisa de marca, cliente que viria de qualquer

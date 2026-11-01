@@ -36,6 +36,17 @@ requisição **e** em cada redirecionamento; lista de domínios permitidos quand
 de resposta; nunca devolva detalhe de erro interno. Use uma biblioteca mantida de proteção contra SSRF, se houver para a
 tecnologia. Acrescente testes com endereços internos.
 
+## B6 · privacidade e minimização (P-1, P-4, P-5, P-6)
+Dado que não se coleta não vaza. A LGPD também pode exigir que o titular veja, exporte e apague os próprios dados, e que
+o incidente seja comunicado (`especialista-lgpd`).
+
+Papel: engenheiro de segurança com foco em privacidade. Mapeie todo dado pessoal que o app coleta: onde fica, quem vê,
+que terceiros recebem (análise de uso, IA, e-mail, rastreio de erro) e por quanto tempo fica. Depois: aponte o que não
+precisa; garanta que dado pessoal não vai para análise de uso nem rastreio de erro sem necessidade; implemente (ou
+planeje) a exclusão de conta que apaga ou anonimiza o dado do usuário no banco, no armazenamento e nos terceiros;
+implemente a exportação dos dados para o usuário; e liste o que o aviso de privacidade precisa dizer pelo que o app faz
+de verdade. Marque o que precisa de revisão jurídica.
+
 ## B4 · trancar as suas próprias contas (S-5)
 O caminho mais fácil para dentro do app costuma ser você: o seu git, a hospedagem, o registro do domínio, o painel do
 banco, o provedor de pagamento ou o e-mail. Uma senha roubada ali passa por cima de todas as outras checagens.

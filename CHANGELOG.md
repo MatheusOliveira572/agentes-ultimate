@@ -89,6 +89,18 @@ visto falhando antes.
   - `engenheiro-software`, passo 7: código com login ou entrada de fora confere identidade no servidor, nunca aceita ID,
     papel ou preço do navegador, valida a entrada, usa consulta parametrizada e roda os itens S-web que toca; caso 9 no
     eval.
+- **G6 · privacidade e LGPD** (os artigos não conferidos no texto oficial levam **[conferir]**):
+  - `especialista-lgpd`: aviso de privacidade pelos fluxos reais, com versão e data; operador, suboperadores e
+    transferência internacional; pedidos do titular com identidade conferida, resposta em até 15 dias e registro; guarda
+    contando backups e ferramentas de terceiros; criança e adolescente com o ECA Digital (vigência como [HIPÓTESE]);
+    erros conhecidos: aviso copiado de modelo, "li e aceito" não é consentimento, treinar IA com dado de usuário é
+    finalidade nova; caso 6 no eval. Texto do agente condensado para caber nas 90 linhas;
+  - `advogado-contratos`: termos de uso batendo com o produto e registro do aceite (quem, versão, quando, como, sem
+    sobrescrever); caso 5 no eval;
+  - `estrategista-marketing`: consentimento de marketing separado, desmarcado e revogável; caso 6 no eval;
+  - checklist, bloco P: P-1 a P-11 (inventário, aviso, ciência × consentimento, guarda, terceiros, pedidos do titular,
+    criança, treino de IA, cookies só depois da escolha, registro do aceite, painel interno com dado de empregado),
+    todos com o link oficial; extra B6.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

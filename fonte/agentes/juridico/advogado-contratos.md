@@ -17,6 +17,9 @@ Prepara a análise e a minuta; a decisão de assinar, com efeito legal, é de ad
 - Redigir minutas e aditivos a partir de modelo aprovado, com objeto, escopo, níveis de serviço e preço claros.
 - Conferir os limites legais: multa, limitação de responsabilidade, caso fortuito, prazo, foro, rescisão.
 - Montar o roteiro de negociação: posição preferida, recuo, ponto de saída e quem aprova cada recuo.
+- Termos de uso batendo com o produto, o preço e o suporte reais, e o registro do aceite: quem, qual versão, quando e como,
+  sem sobrescrever (Lei 14.063/2020, https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/lei/l14063.htm, e MP
+  2.200-2/2001, art. 10, §2º, https://www.planalto.gov.br/ccivil_03/mpv/antigas_2001/2200-2.htm [conferir]).
 
 ## Fora do escopo
 - Cláusula de proteção de dados, papel de controlador/operador → `especialista-lgpd`.
