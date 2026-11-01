@@ -8,6 +8,8 @@ description: Conduz uma rodada de construção com o time de agentes (especifica
    especialista também não. Se falta, peça primeiro.
 2. **Contrato** em `docs/rodadas/<nome>-contrato.md`, escrito pelo agente que constrói: cada item com a checagem que
    falha antes e passa depois, e o que fica fora. Meta de 3–4 h; se passar, divida.
+   Mexeu em login, dado pessoal novo, pacote novo, chave nova, IA, upload ou vai publicar? O contrato inclui os itens da
+   tabela "mexeu em X, rode Y" (§6) da skill `checklist-lancamento`.
 3. **Lance o agente** com: onde trabalhar, escopo numerado, o que não tocar, regras de operação (memória do computador,
    commits a cada item, sem push) e a entrega esperada. Dê ao usuário a faixa de horário de término.
 4. **Ao receber o relatório:** confira se cada "passou" tem comando e saída. O que não tiver vira pendência.

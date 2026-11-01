@@ -92,6 +92,7 @@ diz quando a decisão precisa de advogado ou contador habilitado. O padrão comp
 | `ver-mapa` | Abre o mapa do projeto ao vivo, com o painel "Agentes agora" |
 | `placar` | Placar por agente: passou no revisor de primeira, defeitos, retrabalho, acerto da estimativa |
 | `registrar-defeito` | Registra um defeito que o usuário achou e que escapou do revisor |
+| `checklist-lancamento` | Antes de publicar: escolhe os blocos pelo perfil (segredos, app web, LGPD, acessibilidade, honestidade, licenças), prova o comportamento de cada item e entrega o relatório |
 
 ## Como funciona
 
@@ -186,7 +187,7 @@ cria memória na sua pasta de usuário nem na raiz do disco.
   minúscula ou no começo da frase ainda pode ficar.
 - Execuções, revisões e defeitos ficam em `~/.claude/agentes-ultimate/*.jsonl` só com metadados (agente, tipo de
   tarefa, minutos, contagens, código anônimo do projeto); o texto de um defeito fica só no projeto.
-- Publicar (`git push`, `npm publish`, deploy de produção) sempre pede confirmação.
+- Publicar (`git push`, `npm publish`, deploy de produção) sempre pede confirmação e lembra o `/checklist-lancamento`.
 - Commit de `.env`, chaves e dos padrões de `sensiveis.txt` é bloqueado.
 
 ## Para quem quer contribuir

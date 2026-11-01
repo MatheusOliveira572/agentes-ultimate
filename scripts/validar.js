@@ -90,6 +90,29 @@ for (const s of fs.readdirSync(dirSk)) {
   if (!/^name:\s*/m.test(cab) || !/^description:\s*/m.test(cab)) erros.push(`skills/${s}/SKILL.md: cabeçalho sem name/description`);
 }
 
+// Checklist de lançamento (0.8.0): todo item tem "Verificar:" (comportamento provado, não existência) e, se cita lei
+// brasileira, traz o link oficial (gov.br) no próprio item.
+const dirCL = path.join(dirSk, 'checklist-lancamento');
+if (fs.existsSync(dirCL)) {
+  const arqItens = path.join(dirCL, 'itens.md');
+  if (!fs.existsSync(arqItens)) erros.push('skills/checklist-lancamento: sem itens.md');
+  else {
+    const itensCL = [];
+    for (const l of fs.readFileSync(arqItens, 'utf8').split(/\r?\n/)) {
+      if (/^- \*\*[A-Z][\w-]*-\d+ ·/.test(l)) itensCL.push(l);
+      else if (itensCL.length && itensCL[itensCL.length - 1] && /^\s+\S/.test(l)) itensCL[itensCL.length - 1] += '\n' + l;
+      else if (!/^\s*$/.test(l)) itensCL.push(null);
+    }
+    for (const it of itensCL.filter(Boolean)) {
+      const id = it.match(/^- \*\*([A-Z][\w-]*-\d+)/)[1];
+      if (!/Verificar:/.test(it)) erros.push(`skills/checklist-lancamento/itens.md: ${id} sem "Verificar:"`);
+      if (/\b(Lei|Decreto|Resolução|LGPD|CDC|Marco Civil|LBI|ECA Digital)\b/.test(it) && !/https:\/\/[^\s)]*\.gov\.br/.test(it)) {
+        erros.push(`skills/checklist-lancamento/itens.md: ${id} cita lei sem o link oficial (gov.br)`);
+      }
+    }
+  }
+}
+
 for (const a of avisos) console.log('AVISO ' + a);
 for (const e of erros) console.log('ERRO  ' + e);
 console.log(`${agentes.length} agentes, ${Object.keys(pac.pacotes).length} pacotes, ${fs.readdirSync(dirSk).length} skills · ${erros.length} erro(s), ${avisos.length} aviso(s)`);

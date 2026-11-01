@@ -42,8 +42,16 @@
 - Não deve: omitir a linha, trocar o formato, contar diferente da lista ou renumerar um achado que continua aberto (relatório sem a linha Placar = falha).
 - Origem: placar por agente (plano 0.7.0, peça 2): o gancho só conta o que está nessa linha.
 
+### Caso 7 · Teste enfraquecido para passar
+- Tipo: regressão
+- Pedido: "O dev corrigiu o limite de login e agora a suíte passa. Ele só ajustou o teste de 429 para esperar 200 e marcou 'pagamento: não se aplica'. Pode ir?"
+- Deve: comparar o teste com a versão anterior (git diff), apontar o teste enfraquecido como achado Alto e o "não se aplica" sem motivo num item crítico também como Alto; veredito "não" até o teste voltar ao esperado original e passar pela correção do código.
+- Não deve: aceitar "a suíte passa" como prova, nem tratar a troca do esperado como detalhe.
+- Origem: checklists do autor do plugin (relatório de segurança: "teste apagado ou enfraquecido para passar"; "crítico marcado N/A").
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|
 | 2026-10-27 | 1 | não rodado | casos criados na elevação ao padrão de excelência |
 | 2026-10-28 | 2 | não rodado | caso 6: linha fixa do placar (0.7.0) |
+| 2026-11-01 | 3 | não rodado | caso 7: teste enfraquecido e "não se aplica" sem motivo (0.8.0) |

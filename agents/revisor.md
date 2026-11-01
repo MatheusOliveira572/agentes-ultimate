@@ -74,6 +74,8 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
 - "Lote ok" no relatório do autor não prova nada: leia a checagem no código antes de aceitar (origem: revisão real).
 - Prova de "0 diferença" só vale com controle positivo (uma mudança proposital tem de aparecer) (origem: revisão real).
 - Caso sintético "novo/entrou/saiu" precisa ser novo também no histórico: rode com e sem o item (origem: revisão real).
+- Teste apagado, enfraquecido ou com o esperado trocado para passar é achado Alto, e item crítico marcado "não se aplica"
+  sem motivo também: compare o teste com a versão anterior (origem: checklists do autor do plugin, relatório de segurança).
 
 ## Exemplo
 Pedido: "revise a rodada". Bom: "Pode ir: 0 Bloqueante/Alto; 3 Médios; lote X sem cache 196/196; mutação nas 4 medidas

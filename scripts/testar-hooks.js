@@ -863,6 +863,42 @@ fs.writeFileSync(path.join(b16, '.agentes.jsonl'), JSON.stringify({ em: h12(0), 
 const z16 = (registro().agentesAgora(p16, { resumo: null }) || []).find((x) => x.id === 'z1') || {};
 caso('faixa vencida antes do início não vale (nada de "passou da previsão" no início)', z16.estado === 'trabalhando' && z16.fonte !== 'registrada' && z16.passou == null, JSON.stringify(z16));
 
+// ==== 0.8.0 · regras dos checklists do autor do plugin (docs/regras-pdfs-2026-11.md), um bloco por grupo G1–G11 ====
+const lerV8 = (...p) => { try { return fs.readFileSync(path.join(RAIZ, ...p), 'utf8'); } catch (e) { return ''; } };
+const agV8 = (n) => lerV8('agents', n + '.md');
+const evV8 = (n) => lerV8('evals', n + '.md');
+const skV8 = (...p) => lerV8('skills', 'checklist-lancamento', ...p);
+const secaoV8 = (t, titulo) => (t.split('## ' + titulo)[1] || '').split('\n## ')[0];
+// validar.js numa cópia do plugin com arquivos trocados: prova que a regra do validador acusa o caso errado.
+function validarCopia(trocas) {
+  const dst = fs.mkdtempSync(path.join(tmp, 'plugin-'));
+  for (const d of ['agents', 'evals', 'fonte', 'pacotes', 'skills', 'scripts']) fs.cpSync(path.join(RAIZ, d), path.join(dst, d), { recursive: true });
+  for (const [rel, texto] of Object.entries(trocas)) { fs.mkdirSync(path.dirname(path.join(dst, rel)), { recursive: true }); fs.writeFileSync(path.join(dst, rel), texto); }
+  const rv = spawnSync(process.execPath, [path.join(dst, 'scripts', 'validar.js')], { encoding: 'utf8' });
+  return { code: rv.status, out: (rv.stdout || '') + (rv.stderr || '') };
+}
+
+// G11 · fechamento antes de publicar
+const skl8 = skV8('SKILL.md');
+caso('0.8.0 G11 skill checklist-lancamento: perfil, blocos pelo perfil e relatório com os 5 status', /^name:\s*checklist-lancamento/m.test(skl8) && /Perfil/.test(skl8) &&
+  ['Passou', 'Corrigido e retestado', 'Aberto', 'Não se aplica', 'Só o usuário faz'].every((s) => skl8.includes(s)), 'skill ausente ou sem os 5 status');
+caso('0.8.0 G11 skill: repetir as verificações na versão final publicada', /versão final/i.test(skl8), 'falta');
+caso('0.8.0 G11 skill: "não se aplica" só com motivo; teste apagado ou enfraquecido é defeito', /não se aplica[^\n]*motivo/i.test(skl8) && /enfraquecid/i.test(skl8), 'falta');
+caso('0.8.0 G11 skill: "mexeu em X, rode Y" e apontador do incidente', /mexeu em/i.test(skl8) && /incidente/i.test(skl8) && /especialista-lgpd/.test(skl8), 'falta');
+caso('0.8.0 G11 skill: roteiros detalhados em referências carregadas sob demanda', /referencias\//.test(skl8) && fs.existsSync(path.join(RAIZ, 'skills', 'checklist-lancamento', 'referencias', 'seguranca-revisao.md')), 'falta');
+caso('0.8.0 G11 revisor: teste enfraquecido ou apagado e item crítico "não se aplica" sem motivo = achado Alto',
+  /(enfraquecid|apagad)[^\n]*Alto|Alto[^\n]*(enfraquecid|apagad)/i.test(secaoV8(agV8('revisor'), 'Erros conhecidos')) && /não se aplica/i.test(secaoV8(agV8('revisor'), 'Erros conhecidos')), 'falta em Erros conhecidos');
+caso('0.8.0 G11 eval do revisor cobre o teste enfraquecido', /enfraquecid/i.test(evV8('revisor')), 'falta');
+caso('0.8.0 G11 rodada: mexeu em login, dado pessoal, pacote, chave ou publicação → itens do checklist', /checklist-lancamento/.test(lerV8('skills', 'rodada', 'SKILL.md')), 'falta');
+r = trava('git push origin main');
+caso('0.8.0 G11 git push lembra o /checklist-lancamento (só pergunta, não bloqueia)', r.code === 0 && r.json && r.json.hookSpecificOutput &&
+  r.json.hookSpecificOutput.permissionDecision === 'ask' && /checklist-lancamento/.test(r.json.hookSpecificOutput.permissionDecisionReason), r.out);
+const vSemVer8 = validarCopia({ 'skills/checklist-lancamento/itens.md': '# Itens\n\n## S\n- **S-1 · Item sem verificação.** Faça algo. Dono: usuário.\n' });
+caso('0.8.0 G11 validar: item do checklist sem "Verificar:" é erro', vSemVer8.code === 1 && /S-1[^\n]*Verificar/.test(vSemVer8.out), vSemVer8.out.slice(-300));
+const vLei8 = validarCopia({ 'skills/checklist-lancamento/itens.md': '# Itens\n\n## P\n- **P-1 · Base legal.** Conforme a LGPD, art. 7. Verificar: a base está escrita. Dono: especialista-lgpd.\n' });
+caso('0.8.0 G11 validar: item do checklist que cita lei sem o link oficial é erro', vLei8.code === 1 && /P-1[^\n]*link/.test(vLei8.out), vLei8.out.slice(-300));
+caso('0.8.0 G11 validar: o plugin como está passa (0 erro)', validarCopia({}).code === 0, 'validar acusa erro no plugin real');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

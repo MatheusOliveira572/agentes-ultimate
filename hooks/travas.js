@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Travas (PreToolUse em Bash/PowerShell). Regras que viram código em vez de lembrete:
-//   - publicar (git push, npm publish, deploy de produção) → pede confirmação ao usuário;
+//   - publicar (git push, npm publish, deploy de produção) → pede confirmação ao usuário e lembra o /checklist-lancamento;
 //   - commit com arquivo sensível já preparado (padrões em .claude/base/sensiveis.txt + padrões fixos) → bloqueia;
 //   - heredoc gravando script com barra invertida → bloqueia (estraga o arquivo no Windows/Git Bash).
 // Saída 2 + stderr = bloqueio com o motivo. Em qualquer erro interno, não bloqueia.
@@ -37,7 +37,7 @@ process.stdin.on('end', () => {
       bloquear('agentes-ultimate: script com barra invertida não se grava por heredoc (o arquivo sai estragado). Use a ferramenta de escrita de arquivo e rode com o interpretador.');
     }
     if (/\bgit\s+(-\S+\s+(\S+\s+)?)*push\b/.test(cmd) || /\bnpm\s+publish\b/.test(cmd) || /\b(vercel|netlify)\b.*--prod\b/.test(cmd)) {
-      perguntar('agentes-ultimate: publicar é visível a outros. Confirme que quer enviar agora.');
+      perguntar('agentes-ultimate: publicar é visível a outros. Confirme que quer enviar agora. Se for um lançamento ou abrir para mais gente, rodou o /checklist-lancamento?');
     }
     if (/\bgit\s+(-\S+\s+(\S+\s+)?)*commit\b/.test(cmd)) {
       let prep = '';

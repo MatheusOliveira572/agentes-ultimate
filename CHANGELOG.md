@@ -1,5 +1,26 @@
 # Mudanças
 
+## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
+Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
+"Pre-launch Security Toolkit", 2026). Artigos de lei ainda não conferidos no texto oficial ficam marcados **[conferir]**
+até o `especialista-lgpd` confirmar. Um commit por grupo (G1 a G11), cada item com um caso em `scripts/testar-hooks.js`
+visto falhando antes.
+- **G11 · fechamento antes de publicar:**
+  - skill nova `checklist-lancamento`: pergunta o perfil (público ou interno, dado pessoal, login próprio, IA,
+    entrada de fora, repositório público, cobrança), aplica só os blocos que cabem (S, S-web, P, A, H, L), prova o
+    comportamento de cada item e entrega o relatório com Passou / Corrigido e retestado / Aberto / Não se aplica (com
+    motivo) / Só o usuário faz; repete as verificações na versão final; tabela "mexeu em X, rode Y"; cartão de
+    incidente;
+  - os itens ficam em `skills/checklist-lancamento/itens.md` e os roteiros detalhados de segurança (auditar,
+    corrigir, verificar, feito quando) em `referencias/`, um arquivo por área, carregados só quando o item é executado;
+  - `validar.js`: todo item do checklist tem "Verificar:" e, se cita lei, o link oficial (gov.br);
+  - `revisor`: teste apagado ou enfraquecido para passar, e item crítico "não se aplica" sem motivo, são achado Alto
+    (caso 7 no eval);
+  - skill `rodada`: o contrato inclui os itens do checklist quando a rodada mexe em login, dado pessoal, pacote, chave,
+    IA, upload ou publicação;
+  - a trava do `git push` (e de npm publish e deploy) continua só perguntando e passa a lembrar o
+    `/checklist-lancamento`.
+
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**
   - o plugin liga a barra pelo próprio `settings.json` (o plano supunha que não; a skill `instalar-barra` não foi
