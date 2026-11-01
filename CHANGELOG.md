@@ -13,6 +13,16 @@ falhando antes.
     fixo de cada um; ECC só do original `affaan-m/ECC`; apple-design-skill sem cópia;
   - `validar.js`: caminho `${CLAUDE_PLUGIN_ROOT}/...` citado existe, até 8 gatilhos por agente, referência até 15 KB e
     com a linha de crédito (commit, ©, licença em `terceiros/`, alterações marcadas).
+- **Índice de referências e acionamento sozinho:**
+  - cada referência traz, na 2ª linha, tema, palavras e agentes, e, na 3ª, 2 pedidos que devem puxá-la e 1 que não deve;
+    o `gerar-agentes.js` junta tudo em `conhecimento/indice.json` e o `validar.js` confere se está em dia;
+  - o roteador acrescenta ao contexto "Referências para este pedido: `<arquivo>` (para `<agente>`)", com o mesmo
+    vocabulário (sem acento, plural, sinônimos de `pacotes/sinonimos.json`), até 3 por agente e 6 por pedido; referência
+    de integração opcional (`requer=21st`) só entra com `"integracoes": ["21st"]` no config;
+  - pacote novo "Interface (app e site)" (`designer-paineis` + `engenheiro-software`) e, em pedido de construir app,
+    site ou sistema, a lembrança do `/checklist-lancamento` antes de publicar;
+  - casos: cada tema com os 3 pedidos contra o roteador real; os 2 pedidos amplos de ponta a ponta ("redesenhe meu app
+    com visual premium", "crie um site institucional bonito") ficam pendentes até o conteúdo de design (lote 3).
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

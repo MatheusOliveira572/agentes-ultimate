@@ -154,6 +154,44 @@
         "Cargo.toml",
         ".sln",
         "pom.xml"
+      ],
+      "lancamento": true
+    },
+    "interface": {
+      "nome": "Interface (app e site)",
+      "agentes": [
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "lancamento": true,
+      "palavras": [
+        "app",
+        "aplicativo",
+        "site",
+        "site institucional",
+        "landing page",
+        "pagina web",
+        "interface",
+        "ux",
+        "ui",
+        "redesenho",
+        "redesenhar",
+        "redesenhe",
+        "redesign",
+        "visual premium",
+        "frontend",
+        "front-end",
+        "componente",
+        "animacao",
+        "efeito vidro",
+        "glassmorphism",
+        "liquid glass",
+        "formulario",
+        "html",
+        "css",
+        "tailwind",
+        "react",
+        "tela do app"
       ]
     },
     "documentos": {

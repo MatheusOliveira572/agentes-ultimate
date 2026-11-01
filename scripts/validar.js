@@ -159,6 +159,20 @@ for (const arq of agentes) {
   if (gat > MAX_GATILHOS) erros.push(`${arq}: ${gat} linhas de gatilho em "Referências sob demanda" (máximo ${MAX_GATILHOS})`);
   if (sec && !gat) erros.push(`${arq}: seção "Referências sob demanda" sem nenhuma linha "- Quando …, leia …"`);
 }
+// Índice (conhecimento/indice.json): cabeçalho "ref:" em cada referência, agentes que existem, 2 pedidos que puxam e 1
+// que não puxa (rodados contra o roteador no testar-hooks.js), e o arquivo gerado em dia com as referências.
+if (fs.existsSync(path.join(RAIZ, 'conhecimento'))) {
+  const ind = require(path.join(RAIZ, 'scripts', 'indice-referencias.js'));
+  const { referencias, problemas } = ind.montar(RAIZ);
+  for (const p of problemas) erros.push(p);
+  for (const r of referencias) {
+    for (const a of r.agentes) if (!agentes.includes(a + '.md')) erros.push(`${r.arquivo}: "ref:" cita o agente "${a}", que não existe`);
+    if (!r.teste || r.teste.sim.length < 2 || r.teste.nao.length < 1) erros.push(`${r.arquivo}: 3ª linha sem "<!-- teste-ref: sim=<pedido> | <pedido>; nao=<pedido> -->" (2 que puxam, 1 que não)`);
+  }
+  let atual = '';
+  try { atual = fs.readFileSync(path.join(RAIZ, 'conhecimento', 'indice.json'), 'utf8'); } catch (e) { /* falta */ }
+  if (atual.replace(/\r\n/g, '\n') !== ind.texto(referencias)) erros.push('conhecimento/indice.json desatualizado ou ausente: rode node scripts/gerar-agentes.js');
+}
 for (const f of arquivosRef) {
   const r = rel(f);
   if (/(^|\/)INDICE\.md$|^conhecimento\/LEIA-ME\.md$/.test(r)) continue;

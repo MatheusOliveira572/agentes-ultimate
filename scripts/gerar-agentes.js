@@ -24,3 +24,11 @@ for (const pacote of fs.readdirSync(path.join(RAIZ, 'fonte', 'agentes'))) {
   }
 }
 console.log(`${gerados.length} agentes gerados em agents/:\n  ` + gerados.join('\n  '));
+
+// Índice das referências sob demanda (0.8.0): conhecimento/indice.json, lido pelo roteador.
+const indice = require('./indice-referencias');
+const { referencias, problemas } = indice.montar(RAIZ);
+if (fs.existsSync(path.join(RAIZ, 'conhecimento'))) {
+  fs.writeFileSync(path.join(RAIZ, 'conhecimento', 'indice.json'), indice.texto(referencias));
+  console.log(`conhecimento/indice.json: ${referencias.length} referência(s)${problemas.length ? `, ${problemas.length} problema(s) (veja o validar.js)` : ''}`);
+}

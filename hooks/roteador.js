@@ -233,7 +233,49 @@ function main(d) {
   }
   if (pastaPermitida(cwd)) ctx.push('Mapa automático do projeto (o que é cada arquivo e quem cita quem): .claude/base/MAPA-AUTO.md.');
   if (criados.length) ctx.push(`Memória do projeto criada em .claude/base/ (${criados.join(', ')}). Preencha PROJETO.md com o objetivo assim que entender o pedido.`);
+  // Referências sob demanda (0.8.0): o pedido bate com o tema de um arquivo de conhecimento/ → o caminho vai para o
+  // agente certo (até 3 por agente, 6 por pedido). Mesmo vocabulário do roteador: sem acento, plural simples e sinônimos.
+  const basePlugin = [...new Set(escolhidos.flatMap((id) => cfg.pacotes[id].agentes).concat(['revisor']))];
+  const refs = referenciasDoPedido(texto, basePlugin, [projetoCfg.integracoes, usuCfg.integracoes]);
+  if (refs.length) {
+    ctx.push('Referências para este pedido (repasse o caminho a cada agente na chamada; ele abre só o que servir): ' +
+      refs.map((x) => `\`${x.caminho}\` (para \`${chamada(equiv[x.agente] || x.agente)}\`)`).join('; ') + '.');
+  }
+  // Pedido de construir algo que vai ao ar (app, site, sistema): lembrar o checklist antes de publicar.
+  if (escolhidos.some((id) => cfg.pacotes[id].lancamento)) ctx.push('Antes de publicar (deploy, loja, site ou app no ar), rode a skill `/checklist-lancamento`.');
   out(ctx.join('\n'), linhaUsuario);
+}
+
+// Integração opcional ligada pelo usuário: "integracoes": ["21st"] ou { "21st": true } no config do projeto ou do usuário.
+function integracaoLigada(nome, cfgs) {
+  const ligada = (v) => (Array.isArray(v) ? v.includes(nome) : v && typeof v === 'object' ? v[nome] === true || v[nome] === 'true' : false);
+  return cfgs.some(ligada);
+}
+
+function referenciasDoPedido(texto, agentesDoPedido, cfgsIntegracao) {
+  const indice = lerJson(path.join(RAIZ, 'conhecimento', 'indice.json'), null);
+  if (!indice || !Array.isArray(indice.referencias)) return [];
+  const grupos = (lerJson(path.join(RAIZ, 'pacotes', 'sinonimos.json'), {}).grupos || []).map((g) => g.map(normalizar));
+  const variantes = (w) => { const n = normalizar(w); return (!n.includes(' ') && grupos.find((g) => g.includes(n))) || [n]; };
+  const pontuadas = [];
+  indice.referencias.forEach((r, ordem) => {
+    if (r.requer && !integracaoLigada(r.requer, cfgsIntegracao)) return;
+    let s = 0;
+    for (const w of r.palavras || []) if (variantes(w).some((v) => contem(texto, v))) s += w.includes(' ') ? 2 : 1;
+    if (s > 0) pontuadas.push({ r, s, ordem });
+  });
+  pontuadas.sort((a, b) => b.s - a.s || a.ordem - b.ordem);
+  const porAgente = {};
+  const saida = [];
+  for (const { r } of pontuadas) {
+    if (saida.length >= 6) break;
+    const doPedido = (r.agentes || []).filter((a) => agentesDoPedido.includes(a));
+    const alvo = (doPedido.length ? doPedido : r.agentes || []).find((a) => (porAgente[a] || 0) < 3);
+    if (!alvo) continue;
+    porAgente[alvo] = (porAgente[alvo] || 0) + 1;
+    saida.push({ arquivo: r.arquivo, caminho: path.join(RAIZ, r.arquivo), agente: alvo });
+  }
+  return saida;
 }
 
 function out(contexto, mensagem) {

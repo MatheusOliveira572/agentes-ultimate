@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ }) {
+module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hook, ctx }) {
   const ler = (...p) => { try { return fs.readFileSync(path.join(RAIZ, ...p), 'utf8'); } catch (e) { return ''; } };
   const existe = (...p) => fs.existsSync(path.join(RAIZ, ...p));
 
@@ -51,4 +51,60 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ }) {
   caso('0.8.0 B0 validar: mais de 8 linhas de gatilho num agente é erro', v.code === 1 && /curador\.md: 9 linhas de gatilho/.test(v.out), v.out.slice(-300));
   v = validarCopia({ 'agents/curador.md': comGatilhos(8, 'conhecimento/LEIA-ME.md') });
   caso('0.8.0 B0 validar: 8 gatilhos para arquivo que existe passam', v.code === 0, v.out.slice(-300));
+
+  // ---- Índice de referências e acionamento pelo roteador ----
+  const projRef = path.join(tmp, 'projeto-refs'); fs.mkdirSync(path.join(projRef, '.claude', 'base'), { recursive: true });
+  fs.writeFileSync(path.join(projRef, '.claude', 'base', 'desligado'), ''); // sem memória nem grafo: só o roteamento
+  const cfgRef = path.join(projRef, '.claude', 'base', 'config.json');
+  const rotRef = (pedido) => {
+    const r = hook('roteador.js', { prompt: pedido, cwd: projRef, hook_event_name: 'UserPromptSubmit' });
+    const t = ctx(r);
+    const linha = (t.split('\n').find((l) => l.startsWith('Referências para este pedido')) || '');
+    const refs = [...linha.matchAll(/`([^`]+)` \(para `([^`]+)`\)/g)].map((m) => ({ arquivo: path.relative(RAIZ, m[1]).split(path.sep).join('/'), agente: m[2].replace(/^agentes-ultimate:/, '') }));
+    return { t, refs, agentes: (t.match(/Agentes indicados[^:]*: ([^.]+)\./) || [])[1] || '' };
+  };
+  const ind = (() => { try { return JSON.parse(ler('conhecimento', 'indice.json')); } catch (e) { return { referencias: [] }; } })();
+  const fixo = (() => { try { return require(path.join(RAIZ, 'scripts', 'indice-referencias.js')).montar(RAIZ); } catch (e) { return null; } })();
+  caso('0.8.0 B índice: conhecimento/indice.json gerado pelo gerar-agentes.js a partir do cabeçalho de cada referência', !!fixo && fixo.problemas.length === 0 &&
+    JSON.stringify(fixo.referencias) === JSON.stringify(ind.referencias), fixo ? fixo.problemas.join('; ') || 'indice.json diferente do cabeçalho' : 'sem scripts/indice-referencias.js');
+  v = validarCopia({ 'conhecimento/teste/sem-ref.md': '<!-- Texto próprio do agentes-ultimate. Teste. -->\n# Sem a linha ref\n' });
+  caso('0.8.0 B índice: validar acusa referência sem a linha "ref:"', v.code === 1 && /sem-ref\.md: 2ª linha sem/.test(v.out), v.out.slice(-300));
+  v = validarCopia({ 'conhecimento/teste/sem-teste.md': ok + '# x\n' });
+  caso('0.8.0 B índice: validar acusa referência sem os 2+1 pedidos de teste e o indice.json desatualizado', v.code === 1 && /sem-teste\.md: 3ª linha sem/.test(v.out) && /indice\.json desatualizado/.test(v.out), v.out.slice(-300));
+  // Acionamento: para cada tema, 2 pedidos que puxam a referência e 1 que não puxa, contra o roteador real.
+  let falhasAcion = [];
+  for (const r of ind.referencias) {
+    for (const p of (r.teste || {}).sim || []) { const x = rotRef(p); if (!x.refs.some((y) => y.arquivo === r.arquivo)) falhasAcion.push(`"${p}" não puxou ${r.arquivo}`); }
+    for (const p of (r.teste || {}).nao || []) { const x = rotRef(p); if (x.refs.some((y) => y.arquivo === r.arquivo)) falhasAcion.push(`"${p}" puxou ${r.arquivo} sem dever`); }
+  }
+  caso(`0.8.0 B acionamento: ${ind.referencias.length} tema(s) × (2 pedidos que puxam + 1 que não), roteador real`, ind.referencias.length > 0 && !falhasAcion.length, falhasAcion.slice(0, 6).join(' | ') || 'índice vazio');
+  const muitos = rotRef('corrija o erro de build do typescript, a api, o teste e2e, a migração, o desempenho, o git e o ci do sistema');
+  const porAg = {}; for (const y of muitos.refs) porAg[y.agente] = (porAg[y.agente] || 0) + 1;
+  caso('0.8.0 B acionamento: no máximo 3 referências por agente e 6 por pedido', muitos.refs.length <= 6 && Object.values(porAg).every((n) => n <= 3), JSON.stringify(porAg));
+  const trivialRef = rotRef('quanto é 15% de 2300?');
+  caso('0.8.0 B acionamento: pergunta trivial não ganha referência', !trivialRef.refs.length, JSON.stringify(trivialRef.refs));
+
+  // Ponta a ponta (critério do usuário): pedido amplo aciona tudo sozinho. Liga no lote 3 (conteúdo de design).
+  const E2E = existe('conhecimento', 'design', 'metodo.md');
+  const espera = [
+    ['conhecimento/design/metodo.md', 'designer-paineis', 'método do impeccable'],
+    ['conhecimento/design/apple/INDICE.md', 'designer-paineis', 'regras da Apple'],
+    ['conhecimento/design/detalhes-interface.md', 'designer-paineis', 'detalhes de interface do Jakub'],
+    ['conhecimento/design/movimento/INDICE.md', 'engenheiro-software', 'animação do Emil'],
+    ['conhecimento/design/revisao-tela.md', 'revisor', 'revisão de design (Superfuture)'],
+  ];
+  for (const pedido of ['redesenhe meu app com visual premium', 'crie um site institucional bonito']) {
+    for (const ligado of [false, true]) {
+      fs.writeFileSync(cfgRef, JSON.stringify(ligado ? { integracoes: ['21st'] } : {}));
+      const x = rotRef(pedido);
+      const faltam = espera.filter(([a, ag]) => !x.refs.some((y) => y.arquivo === a && y.agente === ag)).map((e) => e[2]);
+      const c21 = x.refs.some((y) => y.arquivo === 'conhecimento/design/componentes.md' && y.agente === 'engenheiro-software');
+      const ags = ['designer-paineis', 'engenheiro-software', 'revisor'].every((a) => x.agentes.includes('agentes-ultimate:' + a));
+      const ok2 = ags && !faltam.length && c21 === ligado && /\/checklist-lancamento/.test(x.t);
+      const nome = `0.8.0 B ponta a ponta: "${pedido}"${ligado ? ' com o 21st ligado' : ''} → designer, engenheiro e revisor, referências certas, ${ligado ? 'componentes do 21st' : 'sem o 21st'} e o /checklist-lancamento`;
+      const det = `agentes: ${x.agentes || 'nenhum'}; faltam: ${faltam.join(', ') || '-'}; 21st: ${c21}; checklist: ${/checklist-lancamento/.test(x.t)}`;
+      if (E2E) caso(nome, ok2, det); else console.log(`PENDENTE (lote 3) ${nome} → hoje: ${ok2 ? 'passaria' : det}`);
+    }
+  }
+  fs.writeFileSync(cfgRef, '{}');
 };
