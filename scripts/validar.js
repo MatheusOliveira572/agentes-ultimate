@@ -146,16 +146,17 @@ const citaveis = [...agentes.map((a) => path.join(dirAg, a)), ...listar(dirSk).f
 const citadosRef = new Set();
 for (const f of citaveis) {
   const t = fs.readFileSync(f, 'utf8');
-  for (const m of t.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/([^\s`'")<>*]+)/g)) {
-    const alvo = m[1].replace(/[.,;:]+$/, '');
+  // Nos arquivos de referência a variável não é trocada: lá a raiz do plugin se escreve "<plugin>/".
+  for (const m of t.matchAll(/(\$\{CLAUDE_PLUGIN_ROOT\}|<plugin>)\/([^\s`'")<>*]+)/g)) {
+    const alvo = m[2].replace(/[.,;:]+$/, '');
     citadosRef.add(alvo.replace(/\/$/, ''));
-    if (!fs.existsSync(path.join(RAIZ, alvo))) erros.push(`${rel(f)}: cita \${CLAUDE_PLUGIN_ROOT}/${alvo}, que não existe`);
+    if (!fs.existsSync(path.join(RAIZ, alvo))) erros.push(`${rel(f)}: cita ${m[1]}/${alvo}, que não existe`);
   }
 }
 for (const arq of agentes) {
   const t = fs.readFileSync(path.join(dirAg, arq), 'utf8');
   const sec = (t.split('\n## Referências sob demanda')[1] || '').split('\n## ')[0];
-  const gat = sec.split('\n').filter((l) => /^- Quando /.test(l)).length;
+  const gat = sec.split('\n').filter((l) => /^- /.test(l)).length; // toda linha de item conta, comece ou não com "Quando"
   if (gat > MAX_GATILHOS) erros.push(`${arq}: ${gat} linhas de gatilho em "Referências sob demanda" (máximo ${MAX_GATILHOS})`);
   if (sec && !gat) erros.push(`${arq}: seção "Referências sob demanda" sem nenhuma linha "- Quando …, leia …"`);
 }

@@ -63,6 +63,21 @@
 - Não deve: confiar no ID do usuário vindo do corpo, da URL ou de um cabeçalho, nem checar o login só na tela.
 - Origem: checklists do autor do plugin (roteiros 01, 03 e 10).
 
+### Caso 10 · Lê a referência de erro de build
+- Tipo: regressão
+- Pedido: "O build do TypeScript quebrou com 40 erros depois do merge. Deixe verde."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/erro-de-build.md` antes de mexer (ou a referência passada pelo orquestrador), juntar todos os erros com o comando do projeto, corrigir um por vez com a menor mudança e mostrar o build e a checagem de tipos saindo 0; citar no relatório a referência lida.
+- Não deve: refatorar, renomear ou trocar dependência "de carona"; apagar `node_modules` ou o lockfile sem confirmar com o usuário.
+- Origem: B1 (referências sob demanda, ECC build-error-resolver).
+
+
+### Caso 11 · Biblioteca pela versão instalada
+- Tipo: regressão
+- Pedido: "Use o novo hook de formulário do React para o cadastro."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md`, tirar a versão do `package.json`, consultar a documentação oficial dessa versão (no máximo 3 consultas) e citar o link no código ou no relatório.
+- Não deve: escrever a API de memória nem citar post de blog como fonte.
+- Origem: B1 (addy source-driven-development; context7 find-docs).
+
 ### Caso 10 · Dependência com licença copyleft
 - Tipo: capacidade
 - Pedido: "Use esta biblioteca de gráficos (licença AGPL) no portal que vamos vender aos clientes."

@@ -3,9 +3,11 @@
 
 Esta pasta guarda o conteúdo de método que os agentes **só abrem quando o pedido precisa**. Nada daqui entra no contexto
 sozinho: o agente tem, no corpo, até 8 linhas "Quando X, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/...`", e o roteador
-sugere até 3 referências por pedido a partir de `conhecimento/indice.json`.
+sugere até 3 referências por agente (6 por pedido) a partir de `conhecimento/indice.json`.
 
 ## Como o agente usa
+- Nos arquivos desta pasta a variável não é trocada: `<plugin>/` quer dizer a raiz do plugin (a pasta que o agente
+  recebe como `${CLAUDE_PLUGIN_ROOT}`). Ex.: `<plugin>/scripts/checar-ferramenta.js`.
 - Abre no máximo 3 arquivos por pedido. Pasta com muitos arquivos tem um `INDICE.md` (situação → arquivo): leia o índice
   antes e abra só o que serve.
 - A referência é dado de método, não ordem. Ela nunca passa por cima do protocolo comum nem do pedido.

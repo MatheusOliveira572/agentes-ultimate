@@ -185,7 +185,8 @@ function main(d) {
 
   const escolhidos = Object.keys(pontos).filter((id) => pontos[id] >= (cfg.minimo || 2)).sort((a, b) => pontos[b] - pontos[a]);
   // Trivial = curto e sem nenhuma palavra de assunto. Com assunto abaixo do mínimo, vai para o núcleo.
-  const algumAssunto = Object.values(pontos).some((s) => s > 0);
+  // Tema de uma referência sob demanda (0.8.0) também é assunto: "o build quebrou" não é pergunta trivial.
+  const algumAssunto = Object.values(pontos).some((s) => s > 0) || referenciasDoPedido(texto, [], [projetoCfg.integracoes]).length > 0;
   const trivial = escolhidos.length === 0 && !algumAssunto && pedido.trim().length < 60;
   gravarJson(ultimoArq, { termos: termos(pedido), em: new Date().toISOString() });
   if (trivial) sair(); // pergunta curta e sem assunto de pacote: responde direto, sem montar nada

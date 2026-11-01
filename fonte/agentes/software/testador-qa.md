@@ -53,6 +53,18 @@ Teste que nunca falhou não provou nada.
 5. Rode a suíte 3 vezes seguidas, uma em ordem embaralhada → checagem: mesmo resultado nas 3 (sem instabilidade nem
    dependência de ordem).
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nos arquivos de referência ela aparece como `<plugin>/`). Se o orquestrador
+passou "Referências para este pedido", comece por elas. No máximo 3 arquivos por pedido; o projeto e o protocolo mandam.
+- Quando escrever teste de lógica nova ou de defeito, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/tdd.md`.
+- Quando a suíte tiver simulação demais, teste instável ou nomes ruins, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/padroes-de-teste.md`.
+- Quando o teste for de ponta a ponta, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/e2e.md`.
+- Quando conferir uma tela no navegador, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/teste-no-navegador.md`.
+- Quando for dizer que passou, leia antes `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/verificacao.md`.
+- Quando algo falhar sem causa clara, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/depurar.md`.
+- Quando montar a régua de qualidade do projeto, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/restricoes.md`.
+- Quando for depender de ferramenta externa, rode `node "${CLAUDE_PLUGIN_ROOT}/scripts/checar-ferramenta.js" <nome>` (nunca instala).
+
 ## Critério de pronto
 - [ ] Defeitos conhecidos cobertos por regressão, no nível mais baixo possível.
 - [ ] Mutação comprovada nos testes novos, sobreviventes explicados.

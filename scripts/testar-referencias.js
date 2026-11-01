@@ -52,6 +52,33 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   v = validarCopia({ 'agents/curador.md': comGatilhos(8, 'conhecimento/LEIA-ME.md') });
   caso('0.8.0 B0 validar: 8 gatilhos para arquivo que existe passam', v.code === 0, v.out.slice(-300));
 
+  // ---- Lote 1 · engenheiro-software e testador-qa ----
+  const secRef = (n) => (ler('agents', n + '.md').split('\n## Referências sob demanda')[1] || '').split('\n## ')[0];
+  caso('0.8.0 B1 engenheiro-software: seção "Referências sob demanda" com erro de build, depuração, arquitetura, versão da biblioteca e plataformas',
+    ['engenharia/erro-de-build.md', 'engenharia/depurar.md', 'engenharia/arquitetura.md', 'metodo/fonte-oficial-da-versao.md', 'plataformas/INDICE.md', 'scripts/checar-ferramenta.js'].every((s) => secRef('engenheiro-software').includes('${CLAUDE_PLUGIN_ROOT}/' + (s.startsWith('scripts') ? s : 'conhecimento/' + s))), secRef('engenheiro-software').slice(0, 200) || 'sem a seção');
+  caso('0.8.0 B1 testador-qa: seção com TDD, padrões de teste, ponta a ponta, navegador e verificação',
+    ['tdd.md', 'padroes-de-teste.md', 'e2e.md', 'teste-no-navegador.md', 'verificacao.md'].every((s) => secRef('testador-qa').includes('/conhecimento/engenharia/' + s)), secRef('testador-qa').slice(0, 200) || 'sem a seção');
+  caso('0.8.0 B1 evals: engenheiro e testador com caso de regressão que cobra a leitura da referência',
+    /conhecimento\/engenharia\/erro-de-build\.md/.test(ler('evals', 'engenheiro-software.md')) && /conhecimento\/engenharia\/verificacao\.md/.test(ler('evals', 'testador-qa.md')), 'falta o caso');
+  // T15 portão de qualidade (modelo para o projeto do usuário): achado bloqueante sai 1; limpo 0; incompleto 2.
+  const qg = path.join(RAIZ, 'modelos', 'quality-gate.mjs');
+  const rodaQG = (ferr, rel) => { const f = path.join(pastaEsp, 'rel-' + Math.random().toString(36).slice(2) + '.json'); fs.writeFileSync(f, JSON.stringify(rel)); const r = spawnSync(process.execPath, [qg, ferr, f], { encoding: 'utf8' }); return r.status; };
+  const sgOk = { results: [], errors: [], paths: { scanned: ['a.js'] } };
+  caso('0.8.0 B1 quality-gate: Semgrep com achado HIGH sai 1, limpo sai 0, varredura sem arquivo lido sai 2',
+    existe('modelos', 'quality-gate.mjs') && rodaQG('semgrep', { ...sgOk, results: [{ extra: { severity: 'HIGH' } }] }) === 1 && rodaQG('semgrep', sgOk) === 0 && rodaQG('semgrep', { ...sgOk, paths: { scanned: [] } }) === 2, 'saídas erradas');
+  caso('0.8.0 B1 quality-gate: axe com violação séria sai 1; página de erro (file://) sai 2',
+    existe('modelos', 'quality-gate.mjs') && rodaQG('axe', [{ url: 'http://localhost:3000/', violations: [{ impact: 'serious' }] }]) === 1 && rodaQG('axe', [{ url: 'file:///c:/erro.html', violations: [] }]) === 2, 'saídas erradas');
+  // T21 gerenciador de pacotes pelo lockfile ou pelo packageManager.
+  const gp = path.join(RAIZ, 'scripts', 'gerenciador-pacotes.js');
+  const pastaGP = (arqs) => { const d = fs.mkdtempSync(path.join(pastaEsp, 'gp-')); for (const [n, c] of Object.entries(arqs)) fs.writeFileSync(path.join(d, n), c); return d; };
+  const rodaGP = (d) => { const r = spawnSync(process.execPath, [gp, d], { encoding: 'utf8' }); return { code: r.status, out: r.stdout || '' }; };
+  let g1 = rodaGP(pastaGP({ 'pnpm-lock.yaml': 'lockfileVersion: 9\n' }));
+  caso('0.8.0 B1 gerenciador-pacotes: pasta com pnpm-lock.yaml → pnpm (sai 0)', existe('scripts', 'gerenciador-pacotes.js') && g1.code === 0 && /^gerenciador: pnpm /.test(g1.out), g1.out);
+  g1 = rodaGP(pastaGP({ 'package.json': '{"packageManager":"yarn@4.1.0"}', 'package-lock.json': '{}' }));
+  caso('0.8.0 B1 gerenciador-pacotes: packageManager do package.json vence e o lockfile de outro gerenciador vira aviso', g1.code === 0 && /^gerenciador: yarn /.test(g1.out) && /atenção: .*npm/.test(g1.out), g1.out);
+  g1 = rodaGP(pastaGP({}));
+  caso('0.8.0 B1 gerenciador-pacotes: sem sinal → sai 1 e manda perguntar', g1.code === 1 && /Pergunte ao usuário/.test(g1.out), g1.out);
+
   // ---- Índice de referências e acionamento pelo roteador ----
   const projRef = path.join(tmp, 'projeto-refs'); fs.mkdirSync(path.join(projRef, '.claude', 'base'), { recursive: true });
   fs.writeFileSync(path.join(projRef, '.claude', 'base', 'desligado'), ''); // sem memória nem grafo: só o roteamento

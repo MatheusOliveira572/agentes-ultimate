@@ -2,6 +2,296 @@
   "_como_usar": "Gerado por scripts/gerar-agentes.js a partir da 2ª e 3ª linhas de cada referência. Não edite aqui.",
   "referencias": [
     {
+      "arquivo": "conhecimento/engenharia/api.md",
+      "tema": "api",
+      "palavras": [
+        "api",
+        "endpoint",
+        "rest",
+        "graphql",
+        "contrato da api",
+        "interface publica",
+        "paginacao",
+        "idempotencia",
+        "chave de idempotencia",
+        "versao da api"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "engenheiro-dados"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe a api rest de pedidos com paginação e formato de erro",
+          "o endpoint de pagamento precisa de chave de idempotência para não cobrar duas vezes"
+        ],
+        "nao": [
+          "revise a ata da reunião do conselho"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/arquitetura.md",
+      "tema": "arquitetura",
+      "palavras": [
+        "arquitetura",
+        "desenho da solucao",
+        "desenhe a arquitetura",
+        "decisao de arquitetura",
+        "escalabilidade",
+        "componentes do sistema",
+        "microsservicos",
+        "monolito",
+        "adr"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe a arquitetura do sistema de pedidos com as decisões registradas",
+          "precisamos decidir entre monolito e microsserviços para a nova plataforma"
+        ],
+        "nao": [
+          "crie a descrição da vaga de analista de RH"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/backend.md",
+      "tema": "backend",
+      "palavras": [
+        "backend",
+        "servidor",
+        "camada de servico",
+        "repositorio de dados",
+        "middleware",
+        "transacao",
+        "fila",
+        "job em segundo plano",
+        "limite de requisicoes",
+        "rate limit",
+        "retentativa",
+        "backoff"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "engenheiro-dados"
+      ],
+      "teste": {
+        "sim": [
+          "estruture o backend com camada de serviço, repositório de dados e middleware de autenticação",
+          "o job em segundo plano precisa de fila, retentativa com backoff e rate limit"
+        ],
+        "nao": [
+          "prepare a proposta comercial para o cliente"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/bibliotecas-interface.md",
+      "tema": "bibliotecas-interface",
+      "palavras": [
+        "qual biblioteca",
+        "biblioteca de componentes",
+        "toast",
+        "toasts",
+        "notificacao na tela",
+        "drag and drop",
+        "arrastar e soltar",
+        "lista virtualizada",
+        "menu de comandos",
+        "biblioteca de graficos",
+        "gerenciamento de estado"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "qual biblioteca usar para toasts e para arrastar e soltar no app react",
+          "preciso de lista virtualizada e de um menu de comandos, que biblioteca de componentes uso?"
+        ],
+        "nao": [
+          "avalie o risco de crédito do cliente"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/ci.md",
+      "tema": "ci",
+      "palavras": [
+        "ci",
+        "cd",
+        "integracao continua",
+        "pipeline",
+        "github actions",
+        "esteira",
+        "portao de qualidade",
+        "implantacao",
+        "deploy em etapas",
+        "canario",
+        "rollback"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte a integração contínua no github actions com lint, testes e build",
+          "o pipeline de deploy precisa de etapas, canário e plano de rollback"
+        ],
+        "nao": [
+          "escreva o roteiro do vídeo institucional"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/codigo-morto.md",
+      "tema": "codigo-morto",
+      "palavras": [
+        "codigo morto",
+        "codigo nao usado",
+        "funcao sem uso",
+        "export sem uso",
+        "dependencia sem uso",
+        "limpar dependencias",
+        "arquivos orfaos",
+        "duplicado",
+        "codigo duplicado"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "remova o código morto e as dependências sem uso do projeto",
+          "tem muito código duplicado e funções sem uso, faça a limpeza com segurança"
+        ],
+        "nao": [
+          "como está o fluxo de caixa da semana"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/depurar.md",
+      "tema": "depuracao",
+      "palavras": [
+        "depurar",
+        "depuracao",
+        "debug",
+        "causa raiz",
+        "parou de funcionar",
+        "funcionava ontem",
+        "comportamento estranho",
+        "intermitente",
+        "teste falhando",
+        "stack trace",
+        "excecao"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "testador-qa"
+      ],
+      "teste": {
+        "sim": [
+          "o script funcionava ontem e hoje parou de funcionar, ache a causa raiz",
+          "o teste está falhando de forma intermitente no servidor de integração"
+        ],
+        "nao": [
+          "monte a apresentação do resultado do trimestre"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/desempenho-web.md",
+      "tema": "desempenho-web",
+      "palavras": [
+        "core web vitals",
+        "lcp",
+        "inp",
+        "cls",
+        "lighthouse",
+        "pagina lenta",
+        "site lento",
+        "carregamento lento",
+        "tamanho do bundle",
+        "imagens pesadas",
+        "fontes da pagina"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "testador-qa"
+      ],
+      "teste": {
+        "sim": [
+          "o site está lento para carregar, melhore o LCP e o CLS da página inicial",
+          "o lighthouse acusa bundle grande e imagens pesadas"
+        ],
+        "nao": [
+          "faça a análise de crédito do fornecedor"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/desempenho.md",
+      "tema": "desempenho",
+      "palavras": [
+        "desempenho",
+        "lento",
+        "lentidao",
+        "performance",
+        "otimizar",
+        "gargalo",
+        "consulta lenta",
+        "n+1",
+        "indice do banco",
+        "cache",
+        "latencia",
+        "pool de conexoes"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "engenheiro-dados"
+      ],
+      "teste": {
+        "sim": [
+          "a api está lenta, ache o gargalo e otimize a consulta",
+          "o sistema ficou lento depois da última versão, parece consulta n+1 no banco"
+        ],
+        "nao": [
+          "redija a carta de boas-vindas ao novo cliente"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/e2e.md",
+      "tema": "e2e",
+      "palavras": [
+        "ponta a ponta",
+        "e2e",
+        "end to end",
+        "playwright",
+        "cypress",
+        "fluxo do usuario",
+        "jornada do usuario",
+        "teste de interface no navegador"
+      ],
+      "agentes": [
+        "testador-qa",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "crie testes ponta a ponta com playwright para o fluxo de login e compra",
+          "os testes e2e da jornada do usuário estão lentos e instáveis"
+        ],
+        "nao": [
+          "faça a conciliação bancária de setembro"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/erro-de-build.md",
       "tema": "erro-de-build",
       "palavras": [
@@ -27,6 +317,526 @@
         ],
         "nao": [
           "escreva a política de férias da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/git.md",
+      "tema": "git",
+      "palavras": [
+        "git",
+        "commit",
+        "commits",
+        "branch",
+        "ramo",
+        "mensagem de commit",
+        "versao semantica",
+        "semver",
+        "tag",
+        "changelog",
+        "worktree",
+        "merge"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "organize os commits desta mudança e escreva as mensagens de commit",
+          "como versionar a biblioteca com versão semântica, tag e changelog"
+        ],
+        "nao": [
+          "calcule o índice de rotatividade da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/incremental.md",
+      "tema": "fatias-incrementais",
+      "palavras": [
+        "funcionalidade nova",
+        "implementar a funcionalidade",
+        "varios arquivos",
+        "fatia",
+        "fatias",
+        "incremental",
+        "feature flag",
+        "implementar a tarefa do plano"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "dev-powerbi"
+      ],
+      "teste": {
+        "sim": [
+          "implementar a funcionalidade nova de exportar pedidos, que mexe em vários arquivos do sistema",
+          "vamos construir em fatias a tarefa 3 do plano, com feature flag"
+        ],
+        "nao": [
+          "qual a melhor época para tirar férias"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/interface-web.md",
+      "tema": "interface-web",
+      "palavras": [
+        "frontend",
+        "front-end",
+        "componente",
+        "componentes",
+        "tela do app",
+        "pagina web",
+        "interface web",
+        "design system",
+        "estado da tela",
+        "responsivo",
+        "site",
+        "app"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "construa o componente de lista de pedidos no frontend, responsivo e acessível",
+          "implemente a página web do cadastro seguindo o design system"
+        ],
+        "nao": [
+          "apure o ICMS da nota fiscal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/migracao.md",
+      "tema": "migracao",
+      "palavras": [
+        "migracao",
+        "migrar",
+        "migrar o sistema",
+        "aposentar",
+        "descontinuar",
+        "sistema legado",
+        "legado",
+        "trocar a biblioteca",
+        "renomear coluna",
+        "renomear uma coluna",
+        "coluna do banco",
+        "mudanca de esquema",
+        "expandir e contrair"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "engenheiro-dados"
+      ],
+      "teste": {
+        "sim": [
+          "migrar o sistema legado de pedidos para a API nova sem parar os clientes",
+          "preciso renomear uma coluna do banco em produção sem quebrar nada"
+        ],
+        "nao": [
+          "organize a festa de fim de ano"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/observabilidade.md",
+      "tema": "observabilidade",
+      "palavras": [
+        "observabilidade",
+        "log estruturado",
+        "logs",
+        "metricas",
+        "rastreamento",
+        "tracing",
+        "opentelemetry",
+        "alerta",
+        "alertas",
+        "monitoramento",
+        "plantao",
+        "runbook"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "engenheiro-dados"
+      ],
+      "teste": {
+        "sim": [
+          "coloque log estruturado, métricas e alertas no serviço de pagamento",
+          "o incidente demorou para ser entendido, monte o monitoramento com opentelemetry e runbook"
+        ],
+        "nao": [
+          "faça a reconciliação dos lançamentos contábeis"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/padroes-codigo.md",
+      "tema": "padroes-codigo",
+      "palavras": [
+        "padrao de codigo",
+        "padroes de codigo",
+        "boas praticas de codigo",
+        "convencao de nomes",
+        "nomes de variaveis",
+        "estilo de codigo",
+        "organizacao de arquivos",
+        "numeros magicos",
+        "code smell",
+        "codigo limpo"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "defina os padrões de código e a convenção de nomes do projeto novo",
+          "revise as boas práticas de código: números mágicos, funções longas e organização de arquivos"
+        ],
+        "nao": [
+          "faça o resumo executivo do relatório de ESG"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/padroes-de-teste.md",
+      "tema": "padroes-de-teste",
+      "palavras": [
+        "mock",
+        "mocks",
+        "simulacao",
+        "dublê de teste",
+        "teste instavel",
+        "flaky",
+        "nome do teste",
+        "arrange act assert",
+        "snapshot",
+        "isolamento dos testes"
+      ],
+      "agentes": [
+        "testador-qa",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "os testes usam mock para tudo e passam mas a produção quebra, revise a suíte",
+          "tem teste flaky que falha só quando roda junto com os outros"
+        ],
+        "nao": [
+          "traduza este e-mail para o inglês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/restricoes.md",
+      "tema": "restricoes",
+      "palavras": [
+        "regua de qualidade",
+        "constraints",
+        "constraints.md",
+        "limite de cobertura",
+        "cobertura minima",
+        "catraca",
+        "orcamento de desempenho",
+        "quality gate",
+        "portao de qualidade do projeto",
+        "excecoes com prazo"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "testador-qa",
+        "analista-compliance"
+      ],
+      "teste": {
+        "sim": [
+          "monte a régua de qualidade do projeto com constraints.md, cobertura mínima e catraca",
+          "quero um quality gate que não deixe a cobertura cair e com exceções com prazo"
+        ],
+        "nao": [
+          "escreva o post de lançamento no linkedin"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/simplificar.md",
+      "tema": "simplificar",
+      "palavras": [
+        "simplificar",
+        "simplifique",
+        "legibilidade",
+        "codigo confuso",
+        "funcao muito longa",
+        "aninhamento",
+        "limpar o codigo",
+        "deixar mais legivel"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "simplifique esta função muito longa sem mudar o comportamento",
+          "o código está confuso, com aninhamento de 5 níveis, deixe mais legível"
+        ],
+        "nao": [
+          "prepare a pauta da reunião de diretoria"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/tdd.md",
+      "tema": "tdd",
+      "palavras": [
+        "tdd",
+        "teste antes",
+        "escrever o teste",
+        "teste que falha",
+        "vermelho verde",
+        "red green",
+        "piramide de testes",
+        "casos de borda",
+        "testes unitarios",
+        "teste de regressao"
+      ],
+      "agentes": [
+        "testador-qa",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "escreva os testes unitários antes de implementar a regra de desconto",
+          "quero TDD com teste de regressão para o defeito do cálculo de juros"
+        ],
+        "nao": [
+          "resuma este contrato de aluguel"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/teste-no-navegador.md",
+      "tema": "teste-no-navegador",
+      "palavras": [
+        "console do navegador",
+        "erro no console",
+        "devtools",
+        "aba de rede",
+        "network",
+        "dom",
+        "captura da pagina",
+        "navegador sem interface",
+        "headless",
+        "core web vitals"
+      ],
+      "agentes": [
+        "testador-qa",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "a página mostra erro no console do navegador e a requisição falha na aba de rede",
+          "confira no navegador sem interface se o layout quebra e se o DOM está certo"
+        ],
+        "nao": [
+          "escreva o comunicado de mudança de horário aos funcionários"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/verificacao.md",
+      "tema": "verificacao",
+      "palavras": [
+        "verificacao final",
+        "verificar antes de entregar",
+        "pronto para pr",
+        "antes do pull request",
+        "relatorio de verificacao",
+        "passou ou nao passou",
+        "portao de qualidade"
+      ],
+      "agentes": [
+        "testador-qa",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça a verificação final antes de abrir o pull request da funcionalidade",
+          "confira se está pronto para PR: build, lint e testes, com relatório de verificação"
+        ],
+        "nao": [
+          "calcule a depreciação do ativo imobilizado"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/fonte-oficial-da-versao.md",
+      "tema": "fonte-oficial-da-versao",
+      "palavras": [
+        "documentacao oficial",
+        "documentacao da biblioteca",
+        "versao da biblioteca",
+        "versao instalada",
+        "api da biblioteca",
+        "como usar a biblioteca",
+        "migrar de versao",
+        "depreciado",
+        "deprecated",
+        "changelog da biblioteca"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "pesquisador",
+        "dev-powerbi"
+      ],
+      "teste": {
+        "sim": [
+          "como usar a api da biblioteca na versão instalada do projeto, pela documentação oficial",
+          "essa função ficou depreciada? confira na documentação da biblioteca para migrar de versão"
+        ],
+        "nao": [
+          "faça o plano de comunicação interna da reorganização"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/plataformas/android.md",
+      "tema": "android",
+      "palavras": [
+        "android",
+        "jetpack compose",
+        "material design",
+        "material 3",
+        "app android",
+        "kotlin",
+        "emulador android",
+        "adb",
+        "material you"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "designer-paineis"
+      ],
+      "teste": {
+        "sim": [
+          "construa a tela inicial do app android em jetpack compose com material 3",
+          "revise o app android: voltar do sistema, alvos de toque e tema escuro"
+        ],
+        "nao": [
+          "monte o cronograma de férias do time"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/plataformas/apple-auditoria.md",
+      "tema": "apple-auditoria",
+      "palavras": [
+        "hig",
+        "auditoria do app ios",
+        "app store",
+        "auditar o app ios",
+        "auditoria do app apple",
+        "conformidade com a hig",
+        "revisar codigo swiftui",
+        "app da apple store",
+        "revisao para a app store"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça a auditoria do app ios contra a HIG antes de mandar para a app store",
+          "revise o código swiftui do app para conformidade com a hig"
+        ],
+        "nao": [
+          "calcule a margem de contribuição do produto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/plataformas/ios.md",
+      "tema": "ios",
+      "palavras": [
+        "ios",
+        "ipados",
+        "swiftui",
+        "uikit",
+        "app de iphone",
+        "app nativo apple",
+        "xcode",
+        "simulador do ios",
+        "dynamic type",
+        "sf symbols"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "designer-paineis"
+      ],
+      "teste": {
+        "sim": [
+          "construa a tela de configurações do app de iphone em swiftui",
+          "revise o app ios: alvos de toque, dynamic type e sf symbols"
+        ],
+        "nao": [
+          "escreva o código de conduta do fornecedor"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/plataformas/swift.md",
+      "tema": "swift",
+      "palavras": [
+        "swift",
+        "swiftui",
+        "xcode",
+        "actor",
+        "async await em swift",
+        "sendable",
+        "concorrencia em swift",
+        "swift testing",
+        "codigo swift"
+      ],
+      "agentes": [
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "escreva o modelo de dados em swift com struct, enum e concorrência segura",
+          "o compilador do swift reclama de sendable no actor, corrija"
+        ],
+        "nao": [
+          "revise o orçamento de marketing do semestre"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/plataformas/web-no-celular.md",
+      "tema": "web-no-celular",
+      "palavras": [
+        "celular",
+        "no celular",
+        "mobile",
+        "iphone",
+        "android",
+        "tela pequena",
+        "toque",
+        "hover preso",
+        "zoom no campo",
+        "100vh",
+        "notch",
+        "area segura",
+        "pwa"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "designer-paineis"
+      ],
+      "teste": {
+        "sim": [
+          "no celular o hover fica preso e a página dá zoom no campo de texto",
+          "o app web no iphone corta no notch e o 100vh passa da tela"
+        ],
+        "nao": [
+          "calcule o custo de frete por região"
         ]
       }
     }

@@ -35,6 +35,21 @@
 - Não deve: alterar o código de produção.
 - Origem: Fora do escopo.
 
+### Caso 6 · Lê a referência antes de dizer que passou
+- Tipo: regressão
+- Pedido: "Confira se a funcionalidade de exportar está pronta para o PR."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/verificacao.md` e entregar o relatório das 6 fases (build, tipos, linter, testes, segurança básica, diff) com a saída de cada comando do projeto e o "Geral: PRONTO | NÃO PRONTO"; separar o aceite no ambiente de destino.
+- Não deve: dizer "passa" sem ter rodado, nem tratar merge ou revisão como prova de que funciona no destino.
+- Origem: B1 (ECC verification-loop).
+
+
+### Caso 7 · Suíte com simulação demais
+- Tipo: capacidade
+- Pedido: "Os testes passam, mas a produção quebrou no cálculo de frete. Revise a suíte."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/padroes-de-teste.md`, apontar onde a simulação cobre a regra de negócio (deveria ser só na borda), propor teste com a implementação real ou versão em memória, e mostrar o novo teste falhando no defeito.
+- Não deve: acrescentar mais mocks nem apagar o teste que falha.
+- Origem: B1 (addy testing-patterns e test-driven-development).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|
