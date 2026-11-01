@@ -166,6 +166,17 @@ com o porquê), histórico e contexto consolidado.
 Detalhes em [docs/como-funciona.md](docs/como-funciona.md). Para criar um pacote seu (ex.: jurídico, marketing), veja
 [docs/criar-pacote.md](docs/criar-pacote.md).
 
+## Referências sob demanda e ferramentas externas
+
+Cada agente tem, no corpo, até 8 linhas "Quando X, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/...`". O Claude Code troca
+a variável pela pasta do plugin, e o agente abre só o arquivo que o pedido pede (no máximo 3 por pedido). O conteúdo vem
+de projetos abertos (MIT e Apache-2.0), copiado e adaptado com crédito; o texto da Apple é nosso, escrito a partir da HIG
+pública. Licenças em `terceiros/`, commits em [CREDITOS.md](CREDITOS.md), regras da pasta em
+[conhecimento/LEIA-ME.md](conhecimento/LEIA-ME.md).
+
+Antes de depender de uma ferramenta externa, o agente roda `node scripts/checar-ferramenta.js <nome>`: ela diz se está
+instalada e a versão, e **nunca instala nada**. Sem a ferramenta, o agente avisa e segue sem ela.
+
 ## Configuração
 
 - `"modelo_por_tarefa": true` em `~/.claude/agentes-ultimate/config.json` (todos os projetos) ou em

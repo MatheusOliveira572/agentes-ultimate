@@ -113,6 +113,60 @@ if (fs.existsSync(dirCL)) {
   }
 }
 
+// Referências sob demanda (0.8.0, docs/inventario-plugins-2026-11.md): os agentes leem arquivos da pasta do plugin pelo
+// caminho `${CLAUDE_PLUGIN_ROOT}/...` (o Claude Code troca a variável no corpo do agente; provado num `claude -p` real).
+// Regras: todo caminho citado existe; no máximo 8 linhas "- Quando …" por agente; arquivo de referência ≤ 15 KB e com a
+// linha de crédito (adaptado, com a licença em terceiros/, ou texto próprio).
+const LIMITE_REF = 15 * 1024;
+const MAX_GATILHOS = 8;
+const pastasTerceiros = new Set(fs.existsSync(path.join(RAIZ, 'terceiros')) ? fs.readdirSync(path.join(RAIZ, 'terceiros')) : []);
+const listar = (dir) => {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? listar(path.join(dir, e.name)) : [path.join(dir, e.name)]);
+};
+const rel = (f) => path.relative(RAIZ, f).split(path.sep).join('/');
+const arquivosRef = [...listar(path.join(RAIZ, 'conhecimento')),
+  ...fs.readdirSync(path.join(RAIZ, 'fonte', 'agentes')).flatMap((p) => listar(path.join(RAIZ, 'fonte', 'agentes', p, 'referencias')))]
+  .filter((f) => f.endsWith('.md'));
+for (const f of arquivosRef) {
+  const tam = fs.statSync(f).size;
+  if (tam > LIMITE_REF) erros.push(`${rel(f)}: ${(tam / 1024).toFixed(1)} KB (limite 15 KB por arquivo de referência: divida e ponha um INDICE.md)`);
+  const l1 = fs.readFileSync(f, 'utf8').split(/\r?\n/)[0];
+  if (/^<!-- Adaptado de /.test(l1)) {
+    const pasta = (l1.match(/Licença em terceiros\/([^/\s]+)\//) || [])[1];
+    if (!pasta || !pastasTerceiros.has(pasta) || !fs.existsSync(path.join(RAIZ, 'terceiros', pasta, 'LICENSE'))) erros.push(`${rel(f)}: crédito sem "Licença em terceiros/<pasta>/" com o LICENSE dentro`);
+    if (!/@[0-9a-f]{7,40}\b/.test(l1)) erros.push(`${rel(f)}: crédito sem o commit de origem (@<commit>)`);
+    if (!/©/.test(l1)) erros.push(`${rel(f)}: crédito sem o aviso de copyright (©)`);
+    if (!/Alterações:[^>]*alterado por agentes-ultimate/.test(l1)) erros.push(`${rel(f)}: crédito sem "Alterações: …; alterado por agentes-ultimate" (Apache §4b)`);
+  } else if (!/^<!-- Texto próprio do agentes-ultimate/.test(l1)) {
+    erros.push(`${rel(f)}: 1ª linha sem o crédito ("<!-- Adaptado de …" ou "<!-- Texto próprio do agentes-ultimate …")`);
+  }
+}
+const citaveis = [...agentes.map((a) => path.join(dirAg, a)), ...listar(dirSk).filter((f) => f.endsWith('.md')), ...arquivosRef];
+const citadosRef = new Set();
+for (const f of citaveis) {
+  const t = fs.readFileSync(f, 'utf8');
+  for (const m of t.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/([^\s`'")<>*]+)/g)) {
+    const alvo = m[1].replace(/[.,;:]+$/, '');
+    citadosRef.add(alvo.replace(/\/$/, ''));
+    if (!fs.existsSync(path.join(RAIZ, alvo))) erros.push(`${rel(f)}: cita \${CLAUDE_PLUGIN_ROOT}/${alvo}, que não existe`);
+  }
+}
+for (const arq of agentes) {
+  const t = fs.readFileSync(path.join(dirAg, arq), 'utf8');
+  const sec = (t.split('\n## Referências sob demanda')[1] || '').split('\n## ')[0];
+  const gat = sec.split('\n').filter((l) => /^- Quando /.test(l)).length;
+  if (gat > MAX_GATILHOS) erros.push(`${arq}: ${gat} linhas de gatilho em "Referências sob demanda" (máximo ${MAX_GATILHOS})`);
+  if (sec && !gat) erros.push(`${arq}: seção "Referências sob demanda" sem nenhuma linha "- Quando …, leia …"`);
+}
+for (const f of arquivosRef) {
+  const r = rel(f);
+  if (/(^|\/)INDICE\.md$|^conhecimento\/LEIA-ME\.md$/.test(r)) continue;
+  const viaCitacao = [...citadosRef].some((c) => r === c || r.startsWith(c + '/'));
+  const viaIndice = arquivosRef.some((g) => /INDICE\.md$/.test(g) && fs.readFileSync(g, 'utf8').includes(path.basename(f)));
+  if (!viaCitacao && !viaIndice) avisos.push(`${r}: nenhum agente, skill ou INDICE.md cita este arquivo`);
+}
+
 for (const a of avisos) console.log('AVISO ' + a);
 for (const e of erros) console.log('ERRO  ' + e);
 console.log(`${agentes.length} agentes, ${Object.keys(pac.pacotes).length} pacotes, ${fs.readdirSync(dirSk).length} skills · ${erros.length} erro(s), ${avisos.length} aviso(s)`);

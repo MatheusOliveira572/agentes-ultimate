@@ -1,5 +1,19 @@
 # Mudanças
 
+## 0.8.0 · em construção (parte B: conteúdo dos 10 projetos lido sob demanda)
+Fonte: `docs/inventario-plugins-2026-11.md`. O desenho do plugin não muda: cada agente ganha até 8 linhas "quando X, leia
+`${CLAUDE_PLUGIN_ROOT}/...`" e o conteúdo fica em `conhecimento/`. Casos em `scripts/testar-referencias.js`, cada um visto
+falhando antes.
+- **B0 · infraestrutura:**
+  - prova num `claude -p` real (Claude Code 2.1.302): o Claude Code troca `${CLAUDE_PLUGIN_ROOT}` no corpo do agente do
+    plugin, e o agente abre o arquivo da pasta do plugin (fora do projeto, caminho com espaço e acento); com outra
+    variável (controle), o caminho chega literal e não abre;
+  - `scripts/checar-ferramenta.js`: confere no PATH e mostra a versão, nunca instala (sai 0, 1 ou 2);
+  - `terceiros/<projeto>/LICENSE` dos 8 projetos copiados (e o `NOTICE.md` do impeccable) e `CREDITOS.md` com o commit
+    fixo de cada um; ECC só do original `affaan-m/ECC`; apple-design-skill sem cópia;
+  - `validar.js`: caminho `${CLAUDE_PLUGIN_ROOT}/...` citado existe, até 8 gatilhos por agente, referência até 15 KB e
+    com a linha de crédito (commit, ©, licença em `terceiros/`, alterações marcadas).
+
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
 "Pre-launch Security Toolkit", 2026). Artigos de lei ainda não conferidos no texto oficial ficam marcados **[conferir]**
