@@ -3,7 +3,7 @@
 
 Esta pasta guarda o conteúdo de método que os agentes **só abrem quando o pedido precisa**. Nada daqui entra no contexto
 sozinho: o agente tem, no corpo, até 8 linhas "Quando X, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/...`", e o roteador
-sugere até 3 referências por agente (6 por pedido) a partir de `conhecimento/indice.json`.
+sugere até 3 referências por agente (8 por pedido) a partir de `conhecimento/indice.json`.
 
 ## Como o agente usa
 - Nos arquivos desta pasta a variável não é trocada: `<plugin>/` quer dizer a raiz do plugin (a pasta que o agente

@@ -15,3 +15,19 @@ Ordem de quem manda: marca e decisões do projeto → norma (WCAG) → referênc
 | documento longo, documentação, relatório de leitura | `modos/ler.md` |
 | campanha, venda, apresentação que convence | `modos/persuadir.md` |
 | ilustração técnica (vista explodida, corte) | `../documentos/ilustracao-tecnica.md` |
+| pedido amplo (redesenhar, app, site, visual premium): o método inteiro | `metodo.md` |
+| planejar a tela antes do código (o brief) | `planejar-tela.md` |
+| tela ou página nova: escolher o mundo visual | `tela-nova/INDICE.md` |
+| painel, app de gestão, tela de tarefa | `modos/operar.md` |
+| gráfico e dado | `visualizacao.md`, `apple/graficos.md` |
+| estilo Apple, HIG, vidro (Liquid Glass) | `apple/INDICE.md`, `apple/materiais.md` |
+| animação, transição, curva, duração | `movimento/INDICE.md` |
+| raio, sombra, ícone, alinhamento óptico | `detalhes-interface.md` |
+| texto variável, vazio, mil linhas: quebrar com dado plausível | `pior-caso.md` |
+| o usuário pediu opções; estados do componente | `variantes.md` |
+| construir a partir do Figma ou do gabarito | `construir-do-desenho.md` |
+| componente pronto do 21st (só com a integração ligada) | `componentes.md` |
+| revisar a tela (semáforo, até 15 achados) | `revisao-tela.md` |
+
+Modelos (só desenvolvimento): `<plugin>/modelos/seletor-variantes/seletor.js` (troca variante e estado pela URL) e
+`<plugin>/modelos/pior-caso/dados.js` (alternador demonstração × pior caso).

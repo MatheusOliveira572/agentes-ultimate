@@ -34,6 +34,342 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/apple/INDICE.md",
+      "tema": "apple-hig",
+      "palavras": [
+        "apple",
+        "estilo apple",
+        "hig",
+        "human interface guidelines",
+        "ios",
+        "iphone",
+        "ipad",
+        "mac",
+        "visual premium",
+        "app premium",
+        "redesenhe",
+        "redesenho",
+        "app",
+        "aplicativo",
+        "liquid glass",
+        "efeito vidro",
+        "site institucional",
+        "site bonito",
+        "bonito"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "revise o app no estilo Apple seguindo a HIG",
+          "redesenhe a tela do aplicativo com visual premium de iphone"
+        ],
+        "nao": [
+          "faça o rateio das despesas por centro de custo"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/apple/acessibilidade-tipo-e-toque.md",
+      "tema": "apple-acessibilidade",
+      "palavras": [
+        "dynamic type",
+        "tamanho minimo da fonte",
+        "alvo de toque",
+        "44 pt",
+        "contraste apple",
+        "acessibilidade ios",
+        "voiceover",
+        "reduzir movimento",
+        "aumentar contraste"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "confira se o app ios atende ao dynamic type e ao alvo de toque de 44 pt",
+          "revise a acessibilidade do app iphone: voiceover, contraste e reduzir movimento"
+        ],
+        "nao": [
+          "elabore o termo de rescisão do contrato"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/apple/componentes.md",
+      "tema": "apple-componentes",
+      "palavras": [
+        "barra de abas",
+        "tab bar",
+        "barra lateral",
+        "sidebar",
+        "botao principal",
+        "botao destrutivo",
+        "alternador",
+        "toggle",
+        "switch",
+        "seletor",
+        "picker",
+        "menu de contexto",
+        "lista e tabela",
+        "campo de busca",
+        "tela de ajustes"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "revise a tab bar, a barra lateral e os botões do app ios",
+          "o switch e o picker da tela de ajustes estão fora do padrão da apple"
+        ],
+        "nao": [
+          "prepare o dossiê do processo trabalhista"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/apple/cor-e-modo-escuro.md",
+      "tema": "apple-cor",
+      "palavras": [
+        "cor do sistema",
+        "cores semanticas",
+        "modo escuro do app",
+        "dark mode",
+        "tema escuro ios",
+        "cor de destaque",
+        "tint",
+        "display p3",
+        "cor apple"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "acerte as cores semânticas e o modo escuro do app ios",
+          "o dark mode do app está com contraste ruim e cor de destaque demais"
+        ],
+        "nao": [
+          "faça a projeção de receita por canal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/apple/escrita-e-primeiro-uso.md",
+      "tema": "apple-escrita",
+      "palavras": [
+        "texto do app",
+        "rotulo de botao",
+        "mensagem de erro do app",
+        "primeiro uso do app",
+        "onboarding",
+        "tom de voz",
+        "escrita apple"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "redator",
+        "especialista-cs"
+      ],
+      "teste": {
+        "sim": [
+          "revise os textos e o onboarding do app iphone no padrão apple",
+          "os rótulos de botão e as mensagens de erro do app estão confusos"
+        ],
+        "nao": [
+          "apure o PIS e a COFINS do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/apple/fundamentos.md",
+      "tema": "apple-fundamentos",
+      "palavras": [
+        "principios de design apple",
+        "identidade visual do app",
+        "marca no app",
+        "branding",
+        "grade",
+        "margens",
+        "size classes",
+        "area segura",
+        "layout ios"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "aplique os princípios de design da apple e a marca no app sem exagero",
+          "o layout do app ipad não se adapta às size classes nem respeita a área segura"
+        ],
+        "nao": [
+          "faça o fechamento contábil de outubro"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/apple/graficos.md",
+      "tema": "apple-graficos",
+      "palavras": [
+        "grafico",
+        "graficos",
+        "chart",
+        "charts",
+        "eixo do grafico",
+        "visualizacao de dados apple",
+        "swift charts",
+        "audio graphs",
+        "legenda do grafico"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "engenheiro-software",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "revise os gráficos do painel: eixos, legenda e descrição acessível",
+          "desenhe o gráfico de linha do app ios com swift charts no padrão apple"
+        ],
+        "nao": [
+          "organize o inventário físico do almoxarifado"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/apple/materiais.md",
+      "tema": "apple-materiais",
+      "palavras": [
+        "efeito vidro",
+        "vidro",
+        "glass",
+        "glassmorphism",
+        "liquid glass",
+        "desfoque",
+        "blur",
+        "backdrop-filter",
+        "translucido",
+        "translucidez",
+        "fosco",
+        "card de vidro"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "engenheiro-software",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "faça um card com efeito vidro estilo Apple",
+          "quero glassmorphism com backdrop-filter na barra de navegação, translúcido"
+        ],
+        "nao": [
+          "calcule o custo médio ponderado do estoque"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/apple/movimento-e-retorno.md",
+      "tema": "apple-movimento",
+      "palavras": [
+        "movimento apple",
+        "animacao ios",
+        "transicao",
+        "retorno ao usuario",
+        "feedback",
+        "carregando",
+        "indicador de progresso",
+        "alerta",
+        "reduzir movimento",
+        "haptico"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "revise as animações e o feedback do app ios no padrão apple",
+          "o carregamento e os alertas do app estão confusos, ajuste o retorno ao usuário"
+        ],
+        "nao": [
+          "faça a ata da assembleia de acionistas"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/componentes.md",
+      "tema": "componentes-21st",
+      "palavras": [
+        "componente pronto",
+        "componentes prontos",
+        "21st",
+        "shadcn",
+        "biblioteca de componentes react",
+        "registro de componentes",
+        "componente da comunidade",
+        "app",
+        "site",
+        "visual premium",
+        "redesenhe"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "designer-paineis"
+      ],
+      "requer": "21st",
+      "teste": {
+        "sim": [
+          "use um componente pronto do 21st com shadcn no app react",
+          "procure no registro de componentes da comunidade um cartão de preço pronto"
+        ],
+        "nao": [
+          "calcule o adicional noturno da folha"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/construir-do-desenho.md",
+      "tema": "construir-do-desenho",
+      "palavras": [
+        "construir a partir do figma",
+        "figma",
+        "gabarito",
+        "a partir do desenho",
+        "implementar o design",
+        "fiel ao layout",
+        "pixel perfect",
+        "da imagem para o codigo",
+        "construir a tela do gabarito"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "dev-powerbi",
+        "designer-paineis"
+      ],
+      "teste": {
+        "sim": [
+          "construa a tela a partir do figma, fiel ao layout aprovado",
+          "implemente o gabarito aprovado em código e compare elemento por elemento"
+        ],
+        "nao": [
+          "agende a reunião de alinhamento trimestral"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/cor/INDICE.md",
       "tema": "cor",
       "palavras": [
@@ -123,6 +459,41 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/detalhes-interface.md",
+      "tema": "detalhes-interface",
+      "palavras": [
+        "detalhes de interface",
+        "raio da borda",
+        "cantos arredondados",
+        "sombra",
+        "sombras",
+        "icones",
+        "alinhamento optico",
+        "borda do cartao",
+        "botao pressionado",
+        "acabamento fino",
+        "visual premium",
+        "redesenhe",
+        "redesenho",
+        "site bonito",
+        "bonito",
+        "site institucional"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "acerte os detalhes de interface: raio, sombras e ícones do cartão",
+          "o botão pressionado e o alinhamento óptico dos ícones estão estranhos"
+        ],
+        "nao": [
+          "calcule a taxa interna de retorno do projeto"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/layout/INDICE.md",
       "tema": "layout",
       "palavras": [
@@ -154,6 +525,41 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/metodo.md",
+      "tema": "metodo-de-design",
+      "palavras": [
+        "redesenhe",
+        "redesenho",
+        "redesenhar",
+        "redesign",
+        "visual premium",
+        "app premium",
+        "site institucional",
+        "site bonito",
+        "bonito",
+        "tela nova",
+        "pagina nova",
+        "landing page",
+        "novo visual",
+        "app",
+        "aplicativo",
+        "site"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "redesenhe meu app com visual premium",
+          "crie um site institucional bonito para a empresa"
+        ],
+        "nao": [
+          "faça o controle de ponto dos funcionários"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/modos/ler.md",
       "tema": "modo-ler",
       "palavras": [
@@ -179,6 +585,35 @@
         ],
         "nao": [
           "defina o preço do plano anual"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/modos/operar.md",
+      "tema": "modo-operar",
+      "palavras": [
+        "painel",
+        "dashboard",
+        "tela de tarefa",
+        "app de gestao",
+        "sistema interno",
+        "editor",
+        "administracao",
+        "tela de ajustes",
+        "ferramenta interna",
+        "densidade de informacao"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe o painel de gestão com densidade de informação e leitura rápida",
+          "a tela de administração do sistema interno está confusa, revise"
+        ],
+        "nao": [
+          "escreva o roteiro do podcast da marca"
         ]
       }
     },
@@ -213,6 +648,76 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/movimento/INDICE.md",
+      "tema": "movimento",
+      "palavras": [
+        "animacao",
+        "animacoes",
+        "animar",
+        "movimento",
+        "transicao",
+        "transicoes",
+        "easing",
+        "curva de animacao",
+        "duracao da animacao",
+        "mola",
+        "spring",
+        "micro interacao",
+        "hover animado",
+        "entrada da tela",
+        "visual premium",
+        "redesenhe",
+        "redesenho",
+        "site bonito",
+        "bonito",
+        "site institucional"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "designer-paineis",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "crie a animação de entrada do modal com a curva e a duração certas",
+          "revise as animações e transições do app, estão lentas e com easing estranho"
+        ],
+        "nao": [
+          "calcule o ponto de equilíbrio do produto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/pior-caso.md",
+      "tema": "pior-caso",
+      "palavras": [
+        "pior caso",
+        "dados de pior caso",
+        "texto longo",
+        "nome longo",
+        "estado vazio",
+        "lista vazia",
+        "quebrar a tela",
+        "testar a tela com dados reais",
+        "casos extremos",
+        "texto variavel"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "testador-qa",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "teste a tela com dados de pior caso: nome longo, lista vazia e mil linhas",
+          "quero quebrar o componente com texto variável e casos extremos antes de entregar"
+        ],
+        "nao": [
+          "prepare o orçamento de viagens da diretoria"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/piso-de-qualidade.md",
       "tema": "piso-de-qualidade",
       "palavras": [
@@ -242,6 +747,34 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/planejar-tela.md",
+      "tema": "planejar-tela",
+      "palavras": [
+        "planejar a tela",
+        "briefing de design",
+        "brief da tela",
+        "especificar a tela",
+        "antes de desenhar",
+        "ux antes do codigo",
+        "descoberta",
+        "entrevista de design"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "gerente-produto"
+      ],
+      "teste": {
+        "sim": [
+          "antes de desenhar, faça o briefing de design da tela nova",
+          "quero planejar a ux da tela antes do código, com as perguntas de descoberta"
+        ],
+        "nao": [
+          "reveja a conciliação de cartões"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/polimento.md",
       "tema": "polimento",
       "palavras": [
@@ -265,6 +798,67 @@
         ],
         "nao": [
           "simule o fluxo de caixa com juros compostos"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/revisao-tela.md",
+      "tema": "revisao-de-tela",
+      "palavras": [
+        "revisar a tela",
+        "revisao de tela",
+        "revisao de design",
+        "revisar o design",
+        "revisar a interface",
+        "semaforo",
+        "o que funciona",
+        "site institucional",
+        "site bonito",
+        "visual premium",
+        "redesenhe",
+        "redesenho",
+        "app"
+      ],
+      "agentes": [
+        "revisor",
+        "designer-paineis"
+      ],
+      "teste": {
+        "sim": [
+          "revise a tela nova antes de ir ao usuário, com semáforo por impacto",
+          "faça a revisão de design da interface do app com o que funciona e o que corrigir"
+        ],
+        "nao": [
+          "faça a declaração do imposto de renda"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/tela-nova/INDICE.md",
+      "tema": "tela-nova",
+      "palavras": [
+        "tela nova",
+        "pagina nova",
+        "novo site",
+        "novo app",
+        "mundo visual",
+        "direcao visual",
+        "tres direcoes",
+        "composicao",
+        "comp",
+        "do zero"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "crie uma tela nova do zero com três direções visuais para eu escolher",
+          "preciso de uma página nova com direção visual própria para o produto"
+        ],
+        "nao": [
+          "faça a provisão para devedores duvidosos"
         ]
       }
     },
@@ -297,6 +891,65 @@
         ],
         "nao": [
           "reconcilie os lançamentos do banco com o razão"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/variantes.md",
+      "tema": "variantes",
+      "palavras": [
+        "variantes",
+        "opcoes de layout",
+        "tres opcoes",
+        "alternativas de design",
+        "prototipo",
+        "prototipos",
+        "comparar versoes",
+        "estados do componente",
+        "seletor de variantes",
+        "me mostre opcoes"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "testador-qa"
+      ],
+      "teste": {
+        "sim": [
+          "me mostre três opções de layout para o cartão, lado a lado com seletor",
+          "quero protótipos de variantes do componente e todos os estados dele"
+        ],
+        "nao": [
+          "faça o recibo de aluguel"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/visualizacao.md",
+      "tema": "visualizacao-de-dados",
+      "palavras": [
+        "visualizacao de dados",
+        "grafico de barras",
+        "grafico de linha",
+        "tipo de grafico",
+        "qual grafico usar",
+        "eixo zero",
+        "legenda",
+        "cores das series",
+        "painel de dados",
+        "kpi"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "qual gráfico usar para comparar as vendas por região no painel de dados",
+          "o gráfico de linha está com legenda confusa e cores das séries demais"
+        ],
+        "nao": [
+          "elabore o contrato de prestação de serviço"
         ]
       }
     },

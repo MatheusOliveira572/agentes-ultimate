@@ -49,6 +49,45 @@
 - Não deve: escrever uma promessa fixa que o painel não controla.
 - Origem: checklists do autor do plugin (itens 27 e 30: não prometer o que não se controla).
 
+### Caso 8 · Equivalência Apple: tela de app
+- Tipo: regressão
+- Pedido: "Revise a tela inicial do nosso app de iPhone no padrão da Apple."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/INDICE.md` (ou a referência passada) e aplicar as 5 lentes na ordem, com os valores da HIG citados (`HIG › tema › seção`): texto 17 pt (mínimo 11), contraste 4,5:1 até 17 pt e 3:1 a partir de 18 pt ou negrito, alvo 44 × 44 pt (mínimo 28), abas que navegam e nunca somem, vidro só na camada flutuante; relatório Resumo / Crítico / Melhorias / Acabamento / O que funciona / Plataforma.
+- Não deve: revisar de memória sem citar a página, nem trazer convenção da Apple para um app só Android sem dizer.
+- Origem: B3 (equivalência com o apple-design-skill; texto nosso a partir da HIG).
+
+
+### Caso 9 · Equivalência Apple: painel de dados
+- Tipo: regressão
+- Pedido: "O painel de vendas tem 6 gráficos e ninguém entende; arrume no estilo Apple."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/graficos.md` e aplicar: gráfico simples com detalhe sob demanda, título com a conclusão, consistência entre gráficos, eixo fixo ou dinâmico pelo significado, nunca só a cor, descrição acessível sem termo subjetivo.
+- Não deve: encher os gráficos de séries nem separar séries só por cor.
+- Origem: B3 (HIG › Charting data; Charts).
+
+
+### Caso 10 · Equivalência Apple: formulário
+- Tipo: regressão
+- Pedido: "Desenhe o formulário de cadastro do app no padrão Apple."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/escrita-e-primeiro-uso.md` e `movimento-e-retorno.md` e aplicar: rótulo que diz o que acontece, erro perto do campo dizendo como resolver, escolha em vez de digitação, validação ao preencher, senha nunca pré-preenchida, seletor no contexto, alvo de 44 × 44 pt.
+- Não deve: validar só no fim com um alerta genérico.
+- Origem: B3 (HIG › Writing; Feedback; Pickers).
+
+
+### Caso 11 · Equivalência Apple: componente com animação
+- Tipo: regressão
+- Pedido: "Anime a abertura do cartão de detalhe como no iOS."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/movimento-e-retorno.md` e `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/movimento/INDICE.md`: movimento com propósito, breve e cancelável, curva e duração da tabela do Emil (abaixo de 300 ms, ease-out forte), Reduzir Movimento troca por esmaecer, nada oscilando.
+- Não deve: inventar curva "no olho" nem animar propriedade de layout.
+- Origem: B3 (HIG › Motion; Emil Kowalski).
+
+
+### Caso 12 · Efeito vidro
+- Tipo: regressão
+- Pedido: "Faça um card com efeito vidro estilo Apple."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/materiais.md`; usar o vidro só se o cartão flutua sobre conteúdo (senão, dizer que vidro em conteúdo é contra a HIG e propor alternativa); receita com `backdrop-filter` (desfoque + saturação), borda clara fina, sombra suave, fundo translúcido e reserva `@supports not`; contraste medido no pior fundo; `prefers-reduced-transparency`, `prefers-contrast` e `prefers-reduced-motion`; no máximo 2–3 superfícies de vidro; no Power BI, avisar que não há desfoque e simular com imagem de fundo pronta.
+- Não deve: usar vidro como enfeite em cartão de dado, nem apresentar os valores de CSS como se fossem da Apple.
+- Origem: B3 (HIG › Materials › Liquid Glass; pedido do usuário de 2026-11-01).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

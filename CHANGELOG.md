@@ -17,7 +17,7 @@ falhando antes.
   - cada referência traz, na 2ª linha, tema, palavras e agentes, e, na 3ª, 2 pedidos que devem puxá-la e 1 que não deve;
     o `gerar-agentes.js` junta tudo em `conhecimento/indice.json` e o `validar.js` confere se está em dia;
   - o roteador acrescenta ao contexto "Referências para este pedido: `<arquivo>` (para `<agente>`)", com o mesmo
-    vocabulário (sem acento, plural, sinônimos de `pacotes/sinonimos.json`), até 3 por agente e 6 por pedido; referência
+    vocabulário (sem acento, plural, sinônimos de `pacotes/sinonimos.json`), até 3 por agente e 8 por pedido (eram 6; o pedido amplo com o 21st ligado precisa de 7); referência
     de integração opcional (`requer=21st`) só entra com `"integracoes": ["21st"]` no config;
   - pacote novo "Interface (app e site)" (`designer-paineis` + `engenheiro-software`) e, em pedido de construir app,
     site ou sistema, a lembrança do `/checklist-lancamento` antes de publicar;
@@ -56,6 +56,22 @@ falhando antes.
   - **T7** `ferramentas/teardown/`: cópia inteira da ferramenta do Jakub (sem npm), com o LICENSE; os 5 testes dela
     passam numa pasta com espaço e acento, e trocar `Math.PI` por 3 faz o de geometria falhar;
   - `designer-documentos` ganha a seção "Referências sob demanda" (8 linhas) e 2 casos de eval.
+- **B3 · design comum, parte 2** (~70 KB): apple/ em 9 arquivos (texto nosso a partir da HIG pública, com a fonte em
+  cada regra e a mesma função do apple-design-skill: situar, carregar por assunto, 5 lentes na ordem, relatório com "O que
+  funciona"), efeito vidro em `apple/materiais.md` (quando usar, receita web com reserva, acessibilidade, desempenho,
+  limites por plataforma; no Power BI só simulado com imagem de fundo); movimento (Emil, MIT); detalhes de interface e
+  revisão de tela com semáforo (Jakub, MIT; ideia do Superfuture); método de design em 5 etapas, modos Operar, planejar a
+  tela e tela nova (impeccable, Apache-2.0); pior caso, variantes e estados, construir do desenho; componentes do 21st
+  (MIT, só com `"integracoes": ["21st"]`); visualização de dados (texto nosso);
+  - **T8** `modelos/seletor-variantes/seletor.js` e **T9** `modelos/pior-caso/dados.js` (só desenvolvimento);
+  - equivalência Apple: 4 pedidos (tela de app, painel, formulário, componente com animação) com as regras da skill
+    original conferidas na nossa versão; 5 casos de eval no `designer-paineis` (inclui "efeito vidro") e 1 no
+    `designer-documentos`;
+  - os 2 pedidos amplos de ponta a ponta passam: designer (método, Apple, detalhes), engenheiro (movimento, interface
+    web e, com o 21st ligado, componentes), revisor (revisão de tela) e o `/checklist-lancamento`;
+- **D-h (pendência da parte A):** `pacotes.json` → `skills.checklist-lancamento.palavras` ("go-live", "antes de
+  publicar", "colocar no ar", "publicar o app/site"...): o roteador lembra o checklist; "plano de lançamento" de
+  produto continua indo para Marketing, sem o lembrete.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

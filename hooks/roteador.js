@@ -186,7 +186,8 @@ function main(d) {
   const escolhidos = Object.keys(pontos).filter((id) => pontos[id] >= (cfg.minimo || 2)).sort((a, b) => pontos[b] - pontos[a]);
   // Trivial = curto e sem nenhuma palavra de assunto. Com assunto abaixo do mínimo, vai para o núcleo.
   // Tema de uma referência sob demanda (0.8.0) também é assunto: "o build quebrou" não é pergunta trivial.
-  const algumAssunto = Object.values(pontos).some((s) => s > 0) || referenciasDoPedido(texto, [], [projetoCfg.integracoes]).length > 0;
+  const algumAssunto = Object.values(pontos).some((s) => s > 0) || referenciasDoPedido(texto, [], [projetoCfg.integracoes]).length > 0 ||
+    Object.values(cfg.skills || {}).some((s) => (s.palavras || []).some((w) => contem(texto, w)));
   const trivial = escolhidos.length === 0 && !algumAssunto && pedido.trim().length < 60;
   gravarJson(ultimoArq, { termos: termos(pedido), em: new Date().toISOString() });
   if (trivial) sair(); // pergunta curta e sem assunto de pacote: responde direto, sem montar nada
@@ -235,7 +236,7 @@ function main(d) {
   if (pastaPermitida(cwd)) ctx.push('Mapa automático do projeto (o que é cada arquivo e quem cita quem): .claude/base/MAPA-AUTO.md.');
   if (criados.length) ctx.push(`Memória do projeto criada em .claude/base/ (${criados.join(', ')}). Preencha PROJETO.md com o objetivo assim que entender o pedido.`);
   // Referências sob demanda (0.8.0): o pedido bate com o tema de um arquivo de conhecimento/ → o caminho vai para o
-  // agente certo (até 3 por agente, 6 por pedido). Mesmo vocabulário do roteador: sem acento, plural simples e sinônimos.
+  // agente certo (até 3 por agente, 8 por pedido). Mesmo vocabulário do roteador: sem acento, plural simples e sinônimos.
   const basePlugin = [...new Set(escolhidos.flatMap((id) => cfg.pacotes[id].agentes).concat(['revisor']))];
   const refs = referenciasDoPedido(texto, basePlugin, [projetoCfg.integracoes, usuCfg.integracoes]);
   if (refs.length) {
@@ -243,7 +244,11 @@ function main(d) {
       refs.map((x) => `\`${x.caminho}\` (para \`${chamada(equiv[x.agente] || x.agente)}\`)`).join('; ') + '.');
   }
   // Pedido de construir algo que vai ao ar (app, site, sistema): lembrar o checklist antes de publicar.
-  if (escolhidos.some((id) => cfg.pacotes[id].lancamento)) ctx.push('Antes de publicar (deploy, loja, site ou app no ar), rode a skill `/checklist-lancamento`.');
+  // Também quando o pedido fala de ir ao ar ("go-live", "antes de publicar"): pacotes.json → skills.<nome>.palavras.
+  // "Lançamento" de produto sozinho não entra (é Marketing): as palavras da skill são expressões de publicar sistema.
+  const skillCL = (cfg.skills || {})['checklist-lancamento'] || {};
+  const pedeCL = (skillCL.palavras || []).some((w) => contem(texto, w));
+  if (escolhidos.some((id) => cfg.pacotes[id].lancamento) || pedeCL) ctx.push(skillCL.mensagem || 'Antes de publicar (deploy, loja, site ou app no ar), rode a skill `/checklist-lancamento`.');
   out(ctx.join('\n'), linhaUsuario);
 }
 
@@ -269,7 +274,7 @@ function referenciasDoPedido(texto, agentesDoPedido, cfgsIntegracao) {
   const porAgente = {};
   const saida = [];
   for (const { r } of pontuadas) {
-    if (saida.length >= 6) break;
+    if (saida.length >= 8) break;
     const doPedido = (r.agentes || []).filter((a) => agentesDoPedido.includes(a));
     const alvo = (doPedido.length ? doPedido : r.agentes || []).find((a) => (porAgente[a] || 0) < 3);
     if (!alvo) continue;

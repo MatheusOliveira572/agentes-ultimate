@@ -50,6 +50,13 @@
 - Não deve: apresentar como desenho de fabricação nem inventar medida como se fosse real.
 - Origem: B2 (jakub teardown).
 
+### Caso 8 · Equivalência Apple: apresentação no estilo Apple
+- Tipo: regressão
+- Pedido: "Monte a apresentação do lançamento no estilo das keynotes da Apple."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/fundamentos.md` e `cor-e-modo-escuro.md`: uma ideia por slide, a marca cede ao conteúdo, cor de destaque com critério, poucos tipos, contraste medido (4,5:1 no texto pequeno), a ousadia num lugar só; citar `HIG › tema` nas decisões.
+- Não deve: copiar logotipo, fonte ou imagem da Apple, nem encher de gradiente e vidro decorativo.
+- Origem: B3 (HIG › Branding; Color; equivalência com o apple-design-skill).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

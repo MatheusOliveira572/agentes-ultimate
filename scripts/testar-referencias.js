@@ -176,15 +176,58 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   // Acionamento: para cada tema, 2 pedidos que puxam a referência e 1 que não puxa, contra o roteador real.
   let falhasAcion = [];
   for (const r of ind.referencias) {
+    // Referência de integração opcional (requer=…) só é testada com a integração ligada no config do projeto.
+    fs.writeFileSync(cfgRef, JSON.stringify(r.requer ? { integracoes: [r.requer] } : {}));
     for (const p of (r.teste || {}).sim || []) { const x = rotRef(p); if (!x.refs.some((y) => y.arquivo === r.arquivo)) falhasAcion.push(`"${p}" não puxou ${r.arquivo}`); }
     for (const p of (r.teste || {}).nao || []) { const x = rotRef(p); if (x.refs.some((y) => y.arquivo === r.arquivo)) falhasAcion.push(`"${p}" puxou ${r.arquivo} sem dever`); }
   }
+  fs.writeFileSync(cfgRef, '{}');
+  const sem21 = rotRef('use um componente pronto do 21st com shadcn no app react');
+  caso('0.8.0 B acionamento: referência de integração desligada (21st) não entra', !sem21.refs.some((y) => y.arquivo === 'conhecimento/design/componentes.md'), JSON.stringify(sem21.refs));
   caso(`0.8.0 B acionamento: ${ind.referencias.length} tema(s) × (2 pedidos que puxam + 1 que não), roteador real`, ind.referencias.length > 0 && !falhasAcion.length, falhasAcion.slice(0, 6).join(' | ') || 'índice vazio');
   const muitos = rotRef('corrija o erro de build do typescript, a api, o teste e2e, a migração, o desempenho, o git e o ci do sistema');
   const porAg = {}; for (const y of muitos.refs) porAg[y.agente] = (porAg[y.agente] || 0) + 1;
-  caso('0.8.0 B acionamento: no máximo 3 referências por agente e 6 por pedido', muitos.refs.length <= 6 && Object.values(porAg).every((n) => n <= 3), JSON.stringify(porAg));
+  caso('0.8.0 B acionamento: no máximo 3 referências por agente e 8 por pedido', muitos.refs.length <= 8 && Object.values(porAg).every((n) => n <= 3), JSON.stringify(porAg));
   const trivialRef = rotRef('quanto é 15% de 2300?');
   caso('0.8.0 B acionamento: pergunta trivial não ganha referência', !trivialRef.refs.length, JSON.stringify(trivialRef.refs));
+
+  // D-h (pendência da parte A): palavras de ir ao ar puxam o /checklist-lancamento; lançamento de produto continua Marketing.
+  for (const p of ['faça o go-live do sistema na sexta', 'antes de publicar o app, confira o que falta', 'vamos colocar no ar a nova versão do portal']) {
+    const x = rotRef(p);
+    caso(`0.8.0 D-h roteador: "${p}" lembra o /checklist-lancamento`, /\/checklist-lancamento/.test(x.t), x.t.slice(0, 200) || 'trivial');
+  }
+  const mkt = rotRef('monte o plano de lançamento do produto novo com a campanha nas redes sociais');
+  caso('0.8.0 D-h roteador: plano de lançamento de produto vai para Marketing e não pede o checklist de publicação',
+    /estrategista-marketing/.test(mkt.agentes) && !/\/checklist-lancamento/.test(mkt.t), `agentes: ${mkt.agentes}; checklist: ${/checklist-lancamento/.test(mkt.t)}`);
+
+  // Equivalência com o apple-design-skill (lido como referência do que cobrir, sem copiar): para 4 pedidos de design,
+  // as regras que a skill original aplicaria têm de estar na nossa versão, com o mesmo valor e a fonte na HIG.
+  const ap = (f) => ler('conhecimento', 'design', 'apple', f);
+  const equiv = {
+    'tela de app (iPhone)': [['tipo padrão 17 pt e mínimo 11 pt', 'acessibilidade-tipo-e-toque.md', /iOS, iPadOS \| 17 pt \| 11 pt/], ['contraste 4,5:1 até 17 pt e 3:1 a partir de 18 pt ou negrito', 'acessibilidade-tipo-e-toque.md', /até 17 pt \| 4,5:1[\s\S]*18 pt ou mais, ou negrito \| 3:1/],
+      ['alvo 44 × 44 pt (mínimo 28) no celular e 28 × 28 (mínimo 20) no desktop', 'acessibilidade-tipo-e-toque.md', /44 × 44 pt \| 28 × 28 pt[\s\S]*28 × 28 pt \| 20 × 20 pt/], ['abas navegam, não agem; nunca escondidas ou desabilitadas', 'componentes.md', /Abas navegam, não agem[\s\S]*nunca desabilite nem esconda/],
+      ['vidro só na camada flutuante, nunca no conteúdo', 'materiais.md', /Nunca na camada de conteúdo/], ['5 lentes na ordem e relatório com "O que funciona"', 'INDICE.md', /Acessibilidade[\s\S]*Convenções da plataforma[\s\S]*Desenho visual[\s\S]*Interação[\s\S]*Conteúdo e escrita[\s\S]*O que funciona/]],
+    'painel de dados': [['gráfico simples com detalhe sob demanda', 'graficos.md', /Simples, com mais detalhe quando a pessoa pedir/], ['nunca só a cor para separar séries', 'graficos.md', /Nunca só a cor/], ['descrição sem termos subjetivos e formato sem ambiguidade', 'graficos.md', /Sem termos subjetivos[\s\S]*sem ambiguidade/],
+      ['faixa do eixo fixa ou dinâmica pelo significado', 'graficos.md', /fixa ou dinâmica pelo significado/], ['uma cor, um significado; claro, escuro e Aumentar Contraste', 'cor-e-modo-escuro.md', /Uma cor, um significado[\s\S]*claro, escuro e Aumentar Contraste/]],
+    'formulário': [['erro perto do problema, dizendo como resolver', 'escrita-e-primeiro-uso.md', /perto do problema[^.]*como resolver/], ['rótulo diz o que acontece e mantém o nome no fluxo', 'escrita-e-primeiro-uso.md', /Cada rótulo diz o que acontece[\s\S]*mantém o nome no fluxo/],
+      ['puxar do sistema, escolha em vez de digitação, validar ao preencher, nunca pré-preencher senha', 'movimento-e-retorno.md', /Puxe do sistema[\s\S]*nunca\s+preencha senha/], ['seletor no contexto, perto do campo', 'componentes.md', /no contexto\*\*, perto do\s+campo/], ['alvo de toque e contraste do campo', 'acessibilidade-tipo-e-toque.md', /44 × 44 pt/]],
+    'componente com animação': [['movimento com propósito, breve, cancelável e raro no frequente', 'movimento-e-retorno.md', /Com propósito[\s\S]*Breve, cancelável e raro/], ['Reduzir Movimento troca por esmaecer', 'movimento-e-retorno.md', /Reduzir Movimento, troque por\s+esmaecer/],
+      ['evitar oscilação perto de 0,2 Hz', 'movimento-e-retorno.md', /0,2 Hz/], ['curvas e durações com o dono do movimento', '../movimento/INDICE.md', /animação de interface abaixo de 300 ms/], ['vidro: Reduzir Transparência e o pior fundo', 'materiais.md', /prefers-reduced-transparency[\s\S]*pior fundo|pior fundo[\s\S]*prefers-reduced-transparency/]],
+  };
+  for (const [pedido, regras] of Object.entries(equiv)) {
+    const faltam = regras.filter(([, f, re]) => !re.test(ap(f))).map((r) => r[0]);
+    caso(`0.8.0 B3 equivalência Apple: "${pedido}" — as ${regras.length} regras da skill original estão na nossa versão`, !faltam.length, faltam.join('; '));
+  }
+  const semFonte = ['acessibilidade-tipo-e-toque.md', 'cor-e-modo-escuro.md', 'componentes.md', 'materiais.md', 'movimento-e-retorno.md', 'escrita-e-primeiro-uso.md', 'graficos.md', 'fundamentos.md']
+    .filter((f) => (ap(f).match(/HIG ›/g) || []).length < 3);
+  caso('0.8.0 B3 apple: cada arquivo cita a HIG pública nas regras (≥ 3 citações "HIG ›") e nenhum copia o repositório sem licença', !semFonte.length &&
+    !/dickwu\/apple-design-skill\/(?!.*sem licença)/.test(ap('INDICE.md').split('\n')[0] || 'x') && fs.readdirSync(path.join(RAIZ, 'conhecimento', 'design', 'apple')).every((f) => /^<!-- Texto próprio/.test(ap(f))), semFonte.join(', ') || 'crédito errado');
+  const vidro = ap('materiais.md');
+  caso('0.8.0 B3 vidro: quando usar, receita web com reserva, acessibilidade, desempenho e limites por plataforma (Power BI sem desfoque)',
+    /camada funcional que flutua/.test(vidro) && /backdrop-filter: blur/.test(vidro) && /saturate/.test(vidro) && /@supports not/.test(vidro) && /prefers-reduced-transparency/.test(vidro) &&
+    /prefers-reduced-motion/.test(vidro) && /prefers-contrast/.test(vidro) && /pior fundo/i.test(vidro) && /no máximo 2–3 superfícies/.test(vidro) && /Power BI\*\* \| \*\*não há desfoque/.test(vidro) && /imagem de fundo pronta/.test(vidro), 'falta item');
+  caso('0.8.0 B3 evals: designer-paineis e designer-documentos com os casos de equivalência Apple e o efeito vidro',
+    /equivalência Apple/i.test(ler('evals', 'designer-paineis.md')) && /Efeito vidro/i.test(ler('evals', 'designer-paineis.md')) && /equivalência Apple/i.test(ler('evals', 'designer-documentos.md')), 'falta caso');
 
   // Ponta a ponta (critério do usuário): pedido amplo aciona tudo sozinho. Liga no lote 3 (conteúdo de design).
   const E2E = existe('conhecimento', 'design', 'metodo.md');

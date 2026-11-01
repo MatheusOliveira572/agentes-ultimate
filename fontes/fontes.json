@@ -12,6 +12,22 @@
       "vigiar": true,
       "arquivos": [
         {
+          "origem": "skills/animate/SKILL.md",
+          "destino": "conhecimento/design/movimento/INDICE.md"
+        },
+        {
+          "origem": "skills/review-animations/STANDARDS.md",
+          "destino": "conhecimento/design/movimento/INDICE.md"
+        },
+        {
+          "origem": "skills/break-ui/SKILL.md",
+          "destino": "conhecimento/design/pior-caso.md"
+        },
+        {
+          "origem": "skills/prototype/SKILL.md",
+          "destino": "conhecimento/design/variantes.md"
+        },
+        {
           "origem": "skills/pick-ui-library/SKILL.md",
           "destino": "conhecimento/engenharia/bibliotecas-interface.md"
         },
@@ -22,6 +38,14 @@
         {
           "origem": "skills/mobile-native/SKILL.md",
           "destino": "conhecimento/plataformas/web-no-celular.md"
+        },
+        {
+          "origem": "skills/break-ui/SKILL.md",
+          "destino": "modelos/pior-caso/dados.js"
+        },
+        {
+          "origem": "skills/prototype/SKILL.md",
+          "destino": "modelos/seletor-variantes/seletor.js"
         }
       ]
     },
@@ -40,16 +64,36 @@
           "destino": "conhecimento/design/acessibilidade/INDICE.md"
         },
         {
+          "origem": "skills/build-design/SKILL.md",
+          "destino": "conhecimento/design/construir-do-desenho.md"
+        },
+        {
           "origem": "skills/better-colors/SKILL.md",
           "destino": "conhecimento/design/cor/INDICE.md"
+        },
+        {
+          "origem": "skills/better-ui/SKILL.md",
+          "destino": "conhecimento/design/detalhes-interface.md"
         },
         {
           "origem": "skills/better-layout/SKILL.md",
           "destino": "conhecimento/design/layout/INDICE.md"
         },
         {
+          "origem": "skills/better-interface/SKILL.md",
+          "destino": "conhecimento/design/revisao-tela.md"
+        },
+        {
           "origem": "skills/better-typography/SKILL.md",
           "destino": "conhecimento/design/tipografia/INDICE.md"
+        },
+        {
+          "origem": "skills/state-machine/SKILL.md",
+          "destino": "conhecimento/design/variantes.md"
+        },
+        {
+          "origem": "skills/variant/SKILL.md",
+          "destino": "conhecimento/design/variantes.md"
         },
         {
           "origem": "skills/teardown/SKILL.md",
@@ -62,6 +106,10 @@
         {
           "origem": "skills/teardown/scripts",
           "destino": "ferramentas/teardown/LEIA-ME.md"
+        },
+        {
+          "origem": "skills/variant/SKILL.md",
+          "destino": "modelos/seletor-variantes/seletor.js"
         }
       ]
     },
@@ -278,6 +326,10 @@
           "destino": "conhecimento/design/critica/INDICE.md"
         },
         {
+          "origem": "skill/SKILL.src.md",
+          "destino": "conhecimento/design/metodo.md"
+        },
+        {
           "origem": "skill/reference/mode-read.md",
           "destino": "conhecimento/design/modos/ler.md"
         },
@@ -290,8 +342,16 @@
           "destino": "conhecimento/design/piso-de-qualidade.md"
         },
         {
+          "origem": "skill/reference/shape.md",
+          "destino": "conhecimento/design/planejar-tela.md"
+        },
+        {
           "origem": "skill/reference/polish.md",
           "destino": "conhecimento/design/polimento.md"
+        },
+        {
+          "origem": "skill/reference/visualize.md",
+          "destino": "conhecimento/design/tela-nova/INDICE.md"
         },
         {
           "origem": "skill/reference/android.md",

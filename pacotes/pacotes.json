@@ -549,5 +549,26 @@
       ],
       "arquivos": []
     }
+  },
+  "skills": {
+    "checklist-lancamento": {
+      "palavras": [
+        "go-live",
+        "go live",
+        "antes de publicar",
+        "antes de ir ao ar",
+        "colocar no ar",
+        "vai ao ar",
+        "publicar o app",
+        "publicar o site",
+        "publicar o sistema",
+        "lancar o app",
+        "lancar o site",
+        "subir para producao",
+        "deploy em producao",
+        "checklist de lancamento"
+      ],
+      "mensagem": "Antes de publicar (deploy, loja, site ou app no ar), rode a skill `/checklist-lancamento`."
+    }
   }
 }
