@@ -34,6 +34,14 @@ visto falhando antes.
   - checklist, bloco S: S-1 segredo fora do que é entregue, S-2 variáveis de ambiente, S-3 histórico, S-4 troca na
     ordem, S-5 MFA nas contas e S-10 limite de gasto (os dois últimos "só o usuário faz"); roteiros 02, 11, 24 e 25 e
     extras B4 e B5 em `referencias/`.
+- **G2 · pacotes e cadeia de suprimentos:**
+  - protocolo comum, passo 11 (agora "Segredos e pacotes"): pacote novo só depois de conferir no registro oficial que
+    existe e é o conhecido, não um nome parecido;
+  - `auditor-seguranca`, novo passo 3: auditoria de dependências (`npm audit`, `pip-audit`, `osv-scanner`), diretas
+    conferidas no registro e lockfile no git;
+  - `engenheiro-software`: critério de pronto com pacote conferido, auditoria sem Crítico/Alto em produção e lockfile;
+    caso 7 no eval (pacote sugerido que pode não existir);
+  - checklist: S-7 dependências e S-8 o que não se usa; roteiros 21 e 22 em `referencias/seguranca-publicacao.md`.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

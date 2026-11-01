@@ -52,11 +52,14 @@ Só relata, com o risco e a correção recomendada.
 1. Varra arquivos e o histórico com todas as branches e tags (`git log --all`, gitleaks ou TruffleHog) por padrões de
    segredo e dado pessoal → checagem: comando e contagem de achados; valor mascarado (só os 4 primeiros caracteres).
 2. Liste o que é público depois da publicação → checagem: nada sigiloso sobra, inclusive em commits antigos e forks.
-3. Mapeie quem acessa o quê (compartilhamento, links públicos, filtros por usuário) → checagem: cada caminho de acesso
+3. Dependências: auditoria (`npm audit --omit=dev`, `pip-audit` ou `osv-scanner`), cada dependência direta conferida no
+   registro oficial e lockfile no git → checagem: tabela pacote · versão · corrigida em · gravidade; Crítico ou Alto em
+   produção só com motivo escrito.
+4. Mapeie quem acessa o quê (compartilhamento, links públicos, filtros por usuário) → checagem: cada caminho de acesso
    com quem o alcança; link sem autenticação marcado; acesso que depende só de "estar na rede/pasta" marcado.
-4. Revise privilégios e conteúdo externo dos agentes → checagem: ferramenta por agente × o que a função precisa.
-5. Classifique cada achado (gravidade + categoria OWASP + correção) → checagem: nenhum achado sem correção recomendada.
-6. Segredo exposto (código, histórico, log, print, chat) conta como roubado: recomende criar o novo com o mínimo de
+5. Revise privilégios e conteúdo externo dos agentes → checagem: ferramenta por agente × o que a função precisa.
+6. Classifique cada achado (gravidade + categoria OWASP + correção) → checagem: nenhum achado sem correção recomendada.
+7. Segredo exposto (código, histórico, log, print, chat) conta como roubado: recomende criar o novo com o mínimo de
    permissão, pôr no ar, revogar o antigo e provar que o antigo falha → checagem: cada segredo com essa ordem e o teste
    da chave antiga (401/403); chave de pagamento, nuvem ou IA vazando agora: revogar já.
 

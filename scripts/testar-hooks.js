@@ -958,6 +958,14 @@ caso('0.8.0 G1 checklist: MFA e limite de gasto são "só o usuário faz"', /S-5
 caso('0.8.0 G1 roteiros de segredos (02, 11, 24, 25) e de contas e gasto (B4, B5)', ['Roteiro 02', 'Roteiro 11', 'Roteiro 24', 'Roteiro 25'].every((s) => skV8('referencias', 'seguranca-segredos.md').includes(s)) &&
   ['B4', 'B5'].every((s) => skV8('referencias', 'seguranca-extras.md').includes(s)), 'falta roteiro');
 
+// G2 · pacotes e cadeia de suprimentos
+caso('0.8.0 G2 protocolo comum: pacote novo só depois de conferir no registro oficial (em todos os agentes)', /registro oficial/.test(lerV8('fonte', 'comum.md')) && /registro oficial/.test(agV8('analista-fpa')), 'falta em fonte/comum.md');
+caso('0.8.0 G2 auditor: auditoria de dependências (npm audit, pip-audit ou osv-scanner) e lockfile no git', /npm audit/.test(secaoV8(agV8('auditor-seguranca'), 'Método de trabalho')) && /osv-scanner/.test(secaoV8(agV8('auditor-seguranca'), 'Método de trabalho')) && /lockfile/.test(secaoV8(agV8('auditor-seguranca'), 'Método de trabalho')), 'falta no Método');
+caso('0.8.0 G2 engenheiro: critério de pronto com pacote conferido, auditoria de dependências e lockfile', /registro oficial/.test(secaoV8(agV8('engenheiro-software'), 'Critério de pronto')) && /lockfile/.test(secaoV8(agV8('engenheiro-software'), 'Critério de pronto')), 'falta no Critério de pronto');
+caso('0.8.0 G2 eval do engenheiro: pacote sugerido que pode não existir', /registro oficial/.test(evV8('engenheiro-software')), 'falta');
+caso('0.8.0 G2 checklist S: dependências (S-7) e o que sobra sem uso (S-8)', /S-7 ·[^\n]*(\n\s+[^\n]*)*Verificar:/.test(skV8('itens.md')) && /S-8 ·/.test(skV8('itens.md')), 'falta item');
+caso('0.8.0 G2 roteiros 21 (dependências) e 22 (sem uso)', ['Roteiro 21', 'Roteiro 22'].every((s) => skV8('referencias', 'seguranca-publicacao.md').includes(s)), 'falta roteiro');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

@@ -36,6 +36,15 @@ acessibilidade, licenças e a honestidade do que o painel afirma ("atualizado em
   provedores de IA e de pagamento: MFA por aplicativo ou chave de acesso (não SMS), só quem precisa, papéis mínimos,
   integrações e tokens revisados, alerta de login. Verificar: a lista de contas, cada uma marcada "MFA ligado" e
   "membros revisados" pelo usuário. Dono: Só o usuário faz. Roteiro: `seguranca-extras.md`, B4.
+- **S-7 · Dependências reais e sem falha conhecida.** Cada dependência direta existe no registro oficial e é a conhecida
+  (não um nome parecido nem inventado pela IA); sem falha Crítica ou Alta em produção; lockfile no git e instalação a
+  partir dele. Verificar: `npm audit --omit=dev`, `pip-audit` ou `osv-scanner` com 0 Crítico/Alto de produção (ou
+  cada um com motivo); lista das diretas conferida no registro. Dono: `auditor-seguranca` (audita) e
+  `engenheiro-software` (atualiza). Roteiro: `seguranca-publicacao.md`, 21.
+- **S-8 · Nada sem uso vai ao ar.** Pacote, rota, página, script, variável e chave de funções abandonadas saem antes de
+  publicar. Verificar: `npx knip`/`npx depcheck` ou `deptry` sem pendência, lista de rotas conferida, e o app ainda
+  compila, passa nos testes e roda. Dono: `engenheiro-software`; revogar as chaves sem uso: Só o usuário faz. Roteiro:
+  `seguranca-publicacao.md`, 22.
 - **S-10 · Limite de gasto e alarmes.** Todo serviço cobrado por uso (IA, nuvem, banco, e-mail, SMS, mapas): alerta de
   cobrança, teto de gasto quando o provedor oferece e limite por chave; cota por usuário nas funções mais caras.
   Verificar: tela do painel de cada provedor com o alerta e o teto configurados. Dono: Só o usuário faz. Roteiro:

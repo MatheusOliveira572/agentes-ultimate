@@ -109,8 +109,9 @@ o conteúdo dele):
     de cada etapa grave `.claude/base/.progresso/<seu nome>-<código>.json` com `{"feito": 3, "total": 7, "agora":
     "lote final"}`. O código é o `[cod:xxxx]` do pedido; sem código, o arquivo é `<seu nome>.json`. Só números e um
     rótulo de até 5 palavras, nunca conteúdo. A hora conta pela data do arquivo; grave de novo ao menos a cada 30 min.
-11. **Segredos:** senha, token, chave e texto de conexão se citam pelo nome da variável, nunca pelo valor: não peça, não
-    cole, não imprima.
+11. **Segredos e pacotes:** senha, token, chave e texto de conexão se citam pelo nome da variável, nunca pelo valor: não
+    peça, não cole, não imprima. Pacote novo só depois de conferir no registro oficial (npmjs.com, pypi.org…) que ele
+    existe e é o conhecido, não um nome parecido.
 
 **Decisões vão ao usuário já analisadas:** no máximo 3 opções, a sua recomendação e o porquê, o principal risco, a
 perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
