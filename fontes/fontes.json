@@ -34,7 +34,36 @@
       "ultimo_conferido": "592aedc44d7d5b3e29740984252902f3e5402a1c",
       "conferido_em": "2026-11-01",
       "vigiar": true,
-      "arquivos": []
+      "arquivos": [
+        {
+          "origem": "skills/better-accessibility/SKILL.md",
+          "destino": "conhecimento/design/acessibilidade/INDICE.md"
+        },
+        {
+          "origem": "skills/better-colors/SKILL.md",
+          "destino": "conhecimento/design/cor/INDICE.md"
+        },
+        {
+          "origem": "skills/better-layout/SKILL.md",
+          "destino": "conhecimento/design/layout/INDICE.md"
+        },
+        {
+          "origem": "skills/better-typography/SKILL.md",
+          "destino": "conhecimento/design/tipografia/INDICE.md"
+        },
+        {
+          "origem": "skills/teardown/SKILL.md",
+          "destino": "conhecimento/documentos/ilustracao-tecnica.md"
+        },
+        {
+          "origem": "skills/teardown/assets",
+          "destino": "ferramentas/teardown/LEIA-ME.md"
+        },
+        {
+          "origem": "skills/teardown/scripts",
+          "destino": "ferramentas/teardown/LEIA-ME.md"
+        }
+      ]
     },
     {
       "repo": "addyosmani/agent-skills",
@@ -240,6 +269,30 @@
       "conferido_em": "2026-11-01",
       "vigiar": true,
       "arquivos": [
+        {
+          "origem": "skill/reference/critique.md",
+          "destino": "conhecimento/design/critica/heuristicas.md"
+        },
+        {
+          "origem": "skill/reference/critique.md",
+          "destino": "conhecimento/design/critica/INDICE.md"
+        },
+        {
+          "origem": "skill/reference/mode-read.md",
+          "destino": "conhecimento/design/modos/ler.md"
+        },
+        {
+          "origem": "skill/reference/mode-persuade.md",
+          "destino": "conhecimento/design/modos/persuadir.md"
+        },
+        {
+          "origem": "skill/reference/craft-floor.md",
+          "destino": "conhecimento/design/piso-de-qualidade.md"
+        },
+        {
+          "origem": "skill/reference/polish.md",
+          "destino": "conhecimento/design/polimento.md"
+        },
         {
           "origem": "skill/reference/android.md",
           "destino": "conhecimento/plataformas/android.md"

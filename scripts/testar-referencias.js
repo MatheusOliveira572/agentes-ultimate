@@ -79,6 +79,24 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   g1 = rodaGP(pastaGP({}));
   caso('0.8.0 B1 gerenciador-pacotes: sem sinal → sai 1 e manda perguntar', g1.code === 1 && /Pergunte ao usuário/.test(g1.out), g1.out);
 
+  // ---- Lote 2 · designer-documentos e design comum (parte 1) ----
+  caso('0.8.0 B2 designer-documentos: seção com tipografia, cor, layout, piso, crítica, modos e ilustração técnica',
+    ['design/tipografia/INDICE.md', 'design/cor/INDICE.md', 'design/layout/INDICE.md', 'design/piso-de-qualidade.md', 'design/critica/INDICE.md', 'design/modos/ler.md', 'documentos/ilustracao-tecnica.md', 'design/acessibilidade/INDICE.md']
+      .every((s) => secRef('designer-documentos').includes('/conhecimento/' + s)), secRef('designer-documentos').slice(0, 200) || 'sem a seção');
+  caso('0.8.0 B2 eval do designer-documentos cobra a leitura da tipografia', /conhecimento\/design\/tipografia\/INDICE\.md/.test(ler('evals', 'designer-documentos.md')), 'falta o caso');
+  // T7 teardown: os 5 testes da ferramenta passam numa pasta com espaço e acento; mexer na geometria faz um falhar.
+  const tdOrig = path.join(RAIZ, 'ferramentas', 'teardown');
+  const tdCopia = path.join(pastaEsp, 'teardown');
+  const testesTD = existe('ferramentas', 'teardown', 'scripts') ? fs.readdirSync(path.join(tdOrig, 'scripts')).filter((f) => /^test-.*\.cjs$/.test(f)) : [];
+  const rodaTD = () => testesTD.map((t) => ({ t, code: spawnSync(process.execPath, [path.join(tdCopia, 'scripts', t)], { cwd: tdCopia, encoding: 'utf8' }).status }));
+  if (testesTD.length) fs.cpSync(tdOrig, tdCopia, { recursive: true });
+  const td1 = rodaTD();
+  caso('0.8.0 B2 teardown: os 5 testes da ferramenta passam (Node, pasta com espaço e acento)', testesTD.length === 5 && td1.every((x) => x.code === 0), JSON.stringify(td1));
+  if (testesTD.length) { const g = path.join(tdCopia, 'assets', 'geometry.js'); fs.writeFileSync(g, fs.readFileSync(g, 'utf8').replace(/Math\.PI/g, '3')); }
+  const td2 = rodaTD();
+  caso('0.8.0 B2 teardown: trocar Math.PI por 3 na geometria faz o test-geometry falhar', td2.some((x) => x.t === 'test-geometry.cjs' && x.code !== 0), JSON.stringify(td2));
+  caso('0.8.0 B2 teardown: LICENSE do autor junto da ferramenta', /Jakub Krehel/.test(ler('ferramentas', 'teardown', 'LICENSE')), 'sem LICENSE');
+
   // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
   v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });
   caso('0.8.0 B fontes: linha de crédito que cita fonte fora de fontes/fontes.json é erro', v.code === 1 && /cita fulano\/projeto-x, que não está em fontes\/fontes\.json/.test(v.out), v.out.slice(-300));

@@ -2,6 +2,331 @@
   "_como_usar": "Gerado por scripts/gerar-agentes.js a partir da 2ª e 3ª linhas de cada referência. Não edite aqui.",
   "referencias": [
     {
+      "arquivo": "conhecimento/design/acessibilidade/INDICE.md",
+      "tema": "acessibilidade",
+      "palavras": [
+        "acessibilidade",
+        "wcag",
+        "leitor de tela",
+        "teclado",
+        "foco visivel",
+        "aria",
+        "contraste minimo",
+        "area de toque",
+        "alvo de toque",
+        "movimento reduzido",
+        "zoom de 200"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "engenheiro-software",
+        "testador-qa"
+      ],
+      "teste": {
+        "sim": [
+          "revise a acessibilidade da tela: teclado, foco visível e leitor de tela",
+          "o formulário precisa passar no WCAG 2.2 AA com aria e área de toque mínima"
+        ],
+        "nao": [
+          "faça a previsão de vendas do trimestre"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/cor/INDICE.md",
+      "tema": "cor",
+      "palavras": [
+        "cor",
+        "cores",
+        "paleta",
+        "contraste",
+        "tokens de cor",
+        "rampa de cor",
+        "oklch",
+        "tema escuro",
+        "modo escuro",
+        "cor da marca",
+        "gradiente"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte a paleta e os tokens de cor do app com tema escuro",
+          "o contraste das cores do relatório está ruim, revise a paleta"
+        ],
+        "nao": [
+          "prepare o parecer sobre a cláusula de multa"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/critica/INDICE.md",
+      "tema": "critica-de-design",
+      "palavras": [
+        "critica de design",
+        "criticar a tela",
+        "revisao de ux",
+        "heuristicas",
+        "nielsen",
+        "pontuacao de usabilidade",
+        "carga cognitiva",
+        "avaliar a interface",
+        "avalie a interface",
+        "problemas de ux",
+        "revisar o design"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "faça a crítica de design da tela com as heurísticas de Nielsen e a carga cognitiva",
+          "avalie a interface do app: o que funciona e os problemas de ux por prioridade"
+        ],
+        "nao": [
+          "calcule o imposto de renda diferido"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/critica/heuristicas.md",
+      "tema": "heuristicas",
+      "palavras": [
+        "heuristicas de nielsen",
+        "nota de usabilidade",
+        "carga cognitiva",
+        "personas",
+        "persona",
+        "memoria de trabalho",
+        "excesso de opcoes"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "dê nota às heurísticas de Nielsen desta tela e avalie a carga cognitiva",
+          "teste a tela com personas: usuário avançado e quem usa pela primeira vez"
+        ],
+        "nao": [
+          "atualize a planilha de comissões"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/layout/INDICE.md",
+      "tema": "layout",
+      "palavras": [
+        "layout",
+        "espacamento",
+        "alinhamento",
+        "grade",
+        "grid",
+        "agrupamento",
+        "hierarquia visual",
+        "responsivo",
+        "quebra de layout",
+        "margens",
+        "ordem de leitura"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "o layout da página está desalinhado e o espaçamento entre os grupos confuso",
+          "revise o grid e o alinhamento do documento, com margens e ordem de leitura"
+        ],
+        "nao": [
+          "calcule a provisão de férias"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/modos/ler.md",
+      "tema": "modo-ler",
+      "palavras": [
+        "documentacao",
+        "manual",
+        "guia",
+        "artigo",
+        "relatorio para ler",
+        "pagina de leitura",
+        "changelog",
+        "base de conhecimento",
+        "documento longo",
+        "leitura confortavel"
+      ],
+      "agentes": [
+        "designer-documentos",
+        "redator"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe a página da documentação do produto para leitura confortável",
+          "formate o manual do usuário em PDF como documento longo de leitura"
+        ],
+        "nao": [
+          "defina o preço do plano anual"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/modos/persuadir.md",
+      "tema": "modo-persuadir",
+      "palavras": [
+        "landing page",
+        "pagina de vendas",
+        "pagina de campanha",
+        "convencer",
+        "persuasao",
+        "apresentacao para investidores",
+        "pitch",
+        "portfolio",
+        "site institucional",
+        "campanha"
+      ],
+      "agentes": [
+        "estrategista-marketing",
+        "designer-documentos",
+        "designer-paineis"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe a landing page da campanha de lançamento para convencer o visitante",
+          "monte a apresentação para investidores, o pitch precisa convencer"
+        ],
+        "nao": [
+          "registre o boletim de ocorrência do furto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/piso-de-qualidade.md",
+      "tema": "piso-de-qualidade",
+      "palavras": [
+        "piso de qualidade",
+        "acabamento",
+        "cara de ia",
+        "cara de template",
+        "visual amador",
+        "antes de editar a tela",
+        "premium",
+        "visual premium",
+        "refinado",
+        "sofisticado"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "a tela está com cara de template feito por IA, dê um acabamento premium",
+          "antes de editar a tela, confira o piso de qualidade do visual"
+        ],
+        "nao": [
+          "lance as notas fiscais de entrada"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/polimento.md",
+      "tema": "polimento",
+      "palavras": [
+        "polimento",
+        "polir",
+        "passe final",
+        "refinar",
+        "refinamento",
+        "acabamento final",
+        "antes de entregar a tela",
+        "detalhes finais"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "faça o passe final de polimento da tela antes de entregar ao usuário",
+          "polir os detalhes finais do relatório sem redesenhar"
+        ],
+        "nao": [
+          "simule o fluxo de caixa com juros compostos"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/tipografia/INDICE.md",
+      "tema": "tipografia",
+      "palavras": [
+        "tipografia",
+        "fonte",
+        "fontes",
+        "tipo de letra",
+        "escala tipografica",
+        "entrelinha",
+        "altura da linha",
+        "espacamento entre letras",
+        "hierarquia do texto",
+        "titulos e corpo",
+        "tamanho da fonte",
+        "formatar documento"
+      ],
+      "agentes": [
+        "designer-documentos",
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "acerte a tipografia do relatório: escala, entrelinha e hierarquia dos títulos",
+          "a fonte do slide está pequena e a altura da linha apertada, revise a tipografia"
+        ],
+        "nao": [
+          "reconcilie os lançamentos do banco com o razão"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/documentos/ilustracao-tecnica.md",
+      "tema": "ilustracao-tecnica",
+      "palavras": [
+        "ilustracao tecnica",
+        "vista explodida",
+        "desenho tecnico",
+        "como funciona por dentro",
+        "corte do objeto",
+        "axonometrica",
+        "diagrama de camadas",
+        "desenho do produto"
+      ],
+      "agentes": [
+        "designer-documentos"
+      ],
+      "teste": {
+        "sim": [
+          "faça uma ilustração técnica em vista explodida do equipamento para o manual",
+          "preciso de um desenho técnico mostrando como funciona por dentro, com corte"
+        ],
+        "nao": [
+          "revise a política de reembolso de despesas"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/api.md",
       "tema": "api",
       "palavras": [

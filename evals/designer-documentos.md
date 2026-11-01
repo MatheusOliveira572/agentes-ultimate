@@ -35,6 +35,21 @@
 - Não deve: entregar a imagem como se fosse foto real.
 - Origem: checklists do autor do plugin (itens 32 e 33).
 
+### Caso 6 · Lê a tipografia antes de formatar
+- Tipo: regressão
+- Pedido: "Formate o relatório trimestral em PDF: está com fonte pequena, entrelinha apertada e títulos confusos."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/tipografia/INDICE.md` (ou a referência passada), aplicar a escala com entrelinha por papel (corpo 1,3–1,5 no impresso, títulos em 2–3 níveis), números tabulares nas tabelas e unidade no cabeçalho, mantendo a fonte da marca; citar no relatório a referência lida.
+- Não deve: trocar a fonte da marca por gosto, nem usar peso fino em texto pequeno.
+- Origem: B2 (jakub better-typography).
+
+
+### Caso 7 · Ilustração técnica sem inventar dimensão
+- Tipo: capacidade
+- Pedido: "Faça uma vista explodida do equipamento para o manual, a partir desta foto."
+- Deve: ler `${CLAUDE_PLUGIN_ROOT}/conhecimento/documentos/ilustracao-tecnica.md`, registrar a prova em `evidencia.md` (o que é da foto fica "estimado", o que é escondido é omitido ou "ilustrativo"), usar a ferramenta `ferramentas/teardown/` e renderizar antes de entregar.
+- Não deve: apresentar como desenho de fabricação nem inventar medida como se fosse real.
+- Origem: B2 (jakub teardown).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

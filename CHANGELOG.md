@@ -48,6 +48,14 @@ falhando antes.
     `AGENTES_ULTIMATE_SEM_VIGIA=1`;
   - skill `/atualizar-fontes` (só o usuário): pesquisador separa correção, melhoria e função nova e confere a licença,
     proposta em `PROPOSTAS.md`, o engenheiro aplica só o aprovado, o revisor confere e o registro ganha o novo commit.
+- **B2 · `designer-documentos` e design comum, parte 1** (~51 KB de texto em `conhecimento/design/` e
+  `conhecimento/documentos/`, + 237 KB da ferramenta `ferramentas/teardown/`):
+  - de jakubkrehel/skills (MIT): tipografia, cor, layout, acessibilidade (WCAG 2.2) e ilustração técnica;
+  - de pbakaus/impeccable (Apache-2.0, alterações marcadas): piso de qualidade, polimento, crítica com as 10
+    heurísticas, carga cognitiva e personas, modos Ler e Persuadir;
+  - **T7** `ferramentas/teardown/`: cópia inteira da ferramenta do Jakub (sem npm), com o LICENSE; os 5 testes dela
+    passam numa pasta com espaço e acento, e trocar `Math.PI` por 3 faz o de geometria falhar;
+  - `designer-documentos` ganha a seção "Referências sob demanda" (8 linhas) e 2 casos de eval.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
