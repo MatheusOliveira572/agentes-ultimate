@@ -240,6 +240,11 @@ cobertura dos dados vale do mesmo jeito.
   assistente automático. No Brasil não há lei geral sobre isso [HIPÓTESE: o PL 2338/2023 ainda tramita; conferir em
   https://www25.senado.leg.br/web/atividade/materias/-/materia/157233]. Verificar: o rótulo aparece em toda superfície
   onde o conteúdo de IA aparece (tela, exportação, notificação). Dono: `redator` e `designer-documentos`.
+- **H-8 · Sem padrões enganosos.** Nada de urgência falsa (contagem que recomeça, "últimas unidades" inventadas), caixa
+  já marcada, recusa escondida ou menor que o aceite, taxa que aparece só no fim (CDC, art. 37 e art. 39 [conferir]:
+  https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm). Verificar: alguém que não conhece o produto faz cada fluxo e diz o que aceitou; a contagem mostra o mesmo
+  prazo ao recarregar, em janela anônima e em outro aparelho; o valor cobrado é o primeiro total mostrado. Dono:
+  `estrategista-marketing` e quem desenha a tela.
 
 ## L · Licenças
 Direito autoral: Lei 9.610/1998 (https://www.planalto.gov.br/ccivil_03/leis/l9610.htm) e programa de computador: Lei

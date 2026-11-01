@@ -1053,6 +1053,12 @@ caso('0.8.0 G9 evals: pesquisador (PDF sem licença) e engenheiro (licença copy
 const itL9 = secaoV8(skV8('itens.md'), 'L · ');
 caso('0.8.0 G9 checklist L: imagens e fontes, licenças das dependências e material de terceiro', ['L-1 ·', 'L-2 ·', 'L-3 ·'].every((s) => itL9.includes(s)) && /l9610\.htm/.test(itL9), 'falta item');
 
+// G10 · venda ao consumidor: só os padrões enganosos entram agora (o resto do grupo fica fora até haver venda)
+caso('0.8.0 G10 marketing: padrões enganosos (urgência falsa, caixa já marcada, recusa escondida)', /urgência falsa/.test(secaoV8(agV8('estrategista-marketing'), 'Erros conhecidos')) && /já marcada/.test(secaoV8(agV8('estrategista-marketing'), 'Erros conhecidos')), 'falta em Erros conhecidos');
+caso('0.8.0 G10 eval do marketing: contagem regressiva falsa', /contagem regressiva/.test(evV8('estrategista-marketing')), 'falta');
+caso('0.8.0 G10 checklist H-8: sem padrões enganosos, com o CDC', /H-8 ·[^\n]*(\n\s+[^\n]*)*Verificar:/.test(skV8('itens.md')), 'falta item');
+caso('0.8.0 G10 marketing dentro de 90 linhas', agV8('estrategista-marketing').slice(0, agV8('estrategista-marketing').indexOf('## Protocolo comum')).split('\n').length <= 90, 'passou de 90 linhas');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);

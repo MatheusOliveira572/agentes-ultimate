@@ -143,6 +143,9 @@ visto falhando antes.
   - `engenheiro-software`: inventário de licenças das dependências com os avisos (MIT, NOTICE do Apache); copyleft vai
     para revisão; caso 10 no eval;
   - checklist, bloco L: L-1 recursos visuais, L-2 dependências, L-3 material de terceiro.
+- **G10 · venda ao consumidor:** só os padrões enganosos entram agora (o resto do grupo, com o bloco C-venda, fica fora
+  até haver projeto que venda ao consumidor): `estrategista-marketing` ganha o erro conhecido (urgência falsa, caixa já
+  marcada, recusa escondida; CDC [conferir]) e o caso 8 no eval; checklist H-8.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

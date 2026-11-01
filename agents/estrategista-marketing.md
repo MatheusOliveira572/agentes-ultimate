@@ -81,6 +81,7 @@ prova o retorno com dado causal, porque marketing que não mede vira custo corta
 - Trocar ativos de marca a cada campanha e perder reconhecimento.
 - Depoimento ou avaliação sem cliente real por trás, ou com incentivo escondido, é publicidade enganosa (CDC, art. 37
   [conferir]; https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm; origem: checklists do autor do plugin).
+- Padrão enganoso: urgência falsa (contagem que reinicia), caixa já marcada, recusa escondida (CDC, art. 37 e 39 [conferir]).
 
 ## Exemplo
 Pedido: "Nosso CAC está saudável?". Bom: CAC = (mídia + equipe de vendas e marketing) ÷ clientes novos do período, LTV
