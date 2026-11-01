@@ -35,6 +35,13 @@
 - Não deve: aceitar "apaguei a mensagem" ou "reescrevi o histórico" como solução, revogar a antiga antes de a nova estar no ar, nem mostrar o valor da senha no relatório.
 - Origem: checklists do autor do plugin (roteiros 24 e 25: trocar primeiro, reescrever depois, se vier).
 
+### Caso 6 · Arquivo exposto no que vai ao ar
+- Tipo: capacidade
+- Pedido: "O site do portal vai ao ar amanhã. Confere se a pasta publicada está limpa?"
+- Deve: listar o que a hospedagem serve (pasta pública e saída do build) e procurar `.env` e cópias, `.git`, dumps e bancos (`.sql`, `.sqlite`), backups compactados, `.map` e configuração interna; dar o comando que pede cada caminho sensível ao site e espera 404; se um `.env` já esteve acessível, tratar as chaves dele como roubadas (troca na ordem).
+- Não deve: olhar só o repositório e concluir sem testar os caminhos no endereço publicado.
+- Origem: checklists do autor do plugin (roteiro 23, arquivos expostos).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

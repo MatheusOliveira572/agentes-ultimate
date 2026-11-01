@@ -45,10 +45,21 @@ acessibilidade, licenças e a honestidade do que o painel afirma ("atualizado em
   publicar. Verificar: `npx knip`/`npx depcheck` ou `deptry` sem pendência, lista de rotas conferida, e o app ainda
   compila, passa nos testes e roda. Dono: `engenheiro-software`; revogar as chaves sem uso: Só o usuário faz. Roteiro:
   `seguranca-publicacao.md`, 22.
+- **S-9 · Nada privado no que vai ao ar.** Na pasta ou no pacote publicado não há `.env` e cópias, `.git`, dumps,
+  bancos, backups, logs, `.map` nem dado real de teste; listagem de pasta desligada; armazenamento privado. No Power BI:
+  sem "Publicar na web" com dado sigiloso, sem link para "qualquer pessoa da organização" onde só alguns podem ver, com a
+  exportação de dados detalhados limitada e a RLS ligada quando o acesso é por pessoa. Verificar: cada caminho sensível
+  pedido ao endereço publicado devolve 404 (script do roteiro 23); no Power BI, a lista de acessos do workspace, dos
+  links e das exportações. Dono: `auditor-seguranca`. Roteiro: `seguranca-publicacao.md`, 23.
 - **S-10 · Limite de gasto e alarmes.** Todo serviço cobrado por uso (IA, nuvem, banco, e-mail, SMS, mapas): alerta de
   cobrança, teto de gasto quando o provedor oferece e limite por chave; cota por usuário nas funções mais caras.
   Verificar: tela do painel de cada provedor com o alerta e o teto configurados. Dono: Só o usuário faz. Roteiro:
   `seguranca-extras.md`, B5.
+- **S-11 · Erro sem detalhe e sem modo de depuração.** Em produção o usuário vê uma mensagem genérica com código de
+  referência; pilha, caminho, consulta e versões vão só para o log; documentação de API e playground fechados ou
+  protegidos; sem source map público; versões de pré-visualização protegidas. Verificar: provoque no endereço de produção
+  um 404, um 500 e um erro de validação e confira que nenhum mostra pilha, caminho, consulta ou versão. Dono:
+  `engenheiro-software`. Roteiro: `seguranca-publicacao.md`, 20.
 
 ## S-web · App com servidor próprio (login próprio ou entrada de fora)
 

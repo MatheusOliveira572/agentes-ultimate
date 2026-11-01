@@ -872,7 +872,7 @@ const secaoV8 = (t, titulo) => (t.split('## ' + titulo)[1] || '').split('\n## ')
 // validar.js numa cópia do plugin com arquivos trocados: prova que a regra do validador acusa o caso errado.
 function validarCopia(trocas) {
   const dst = fs.mkdtempSync(path.join(tmp, 'plugin-'));
-  for (const d of ['agents', 'evals', 'fonte', 'pacotes', 'skills', 'scripts']) fs.cpSync(path.join(RAIZ, d), path.join(dst, d), { recursive: true });
+  for (const d of ['agents', 'evals', 'fonte', 'pacotes', 'skills', 'scripts', 'hooks', 'conhecimento', 'terceiros', 'modelos', 'ferramentas']) if (fs.existsSync(path.join(RAIZ, d))) fs.cpSync(path.join(RAIZ, d), path.join(dst, d), { recursive: true });
   for (const [rel, texto] of Object.entries(trocas)) { fs.mkdirSync(path.dirname(path.join(dst, rel)), { recursive: true }); fs.writeFileSync(path.join(dst, rel), texto); }
   const rv = spawnSync(process.execPath, [path.join(dst, 'scripts', 'validar.js')], { encoding: 'utf8' });
   return { code: rv.status, out: (rv.stdout || '') + (rv.stderr || '') };
@@ -965,6 +965,19 @@ caso('0.8.0 G2 engenheiro: critério de pronto com pacote conferido, auditoria d
 caso('0.8.0 G2 eval do engenheiro: pacote sugerido que pode não existir', /registro oficial/.test(evV8('engenheiro-software')), 'falta');
 caso('0.8.0 G2 checklist S: dependências (S-7) e o que sobra sem uso (S-8)', /S-7 ·[^\n]*(\n\s+[^\n]*)*Verificar:/.test(skV8('itens.md')) && /S-8 ·/.test(skV8('itens.md')), 'falta item');
 caso('0.8.0 G2 roteiros 21 (dependências) e 22 (sem uso)', ['Roteiro 21', 'Roteiro 22'].every((s) => skV8('referencias', 'seguranca-publicacao.md').includes(s)), 'falta roteiro');
+
+// G3 · o que vai ser publicado expõe demais?
+const audMet3 = secaoV8(agV8('auditor-seguranca'), 'Método de trabalho');
+caso('0.8.0 G3 auditor: no que vai publicado não pode haver .env, .git, dump, backup nem .map', ['.env', '.git', 'dump', 'backup', '.map'].every((s) => audMet3.includes(s)), 'falta no Método');
+caso('0.8.0 G3 auditor: no Power BI, link "qualquer pessoa da organização", exportação de dados e RLS desligada', /qualquer pessoa da organização/.test(audMet3) && /export/i.test(audMet3) && /RLS/.test(audMet3), 'falta no Método');
+caso('0.8.0 G3 eval do auditor: arquivo exposto no que vai ao ar', /\.map|dump/.test(evV8('auditor-seguranca')) && /404/.test(evV8('auditor-seguranca')), 'falta');
+caso('0.8.0 G3 engenheiro: erro ao usuário é genérico, com código de referência; o detalhe vai só para o log', /genéric/.test(secaoV8(agV8('engenheiro-software'), 'Erros conhecidos')) && /código de\s+referência/.test(secaoV8(agV8('engenheiro-software'), 'Erros conhecidos')), 'falta em Erros conhecidos');
+caso('0.8.0 G3 LGPD: inventário inclui os serviços de terceiros que recebem dado (análise de uso, IA, e-mail, rastreio de erro)', /terceiros que recebem/.test(secaoV8(agV8('especialista-lgpd'), 'Responsabilidades')) && /rastreio de erro/.test(secaoV8(agV8('especialista-lgpd'), 'Responsabilidades')), 'falta em Responsabilidades');
+caso('0.8.0 G3 checklist S: arquivos expostos (S-9, com os pontos do Power BI) e erro sem detalhe (S-11)', /S-9 ·[^\n]*(\n\s+[^\n]*)*Publicar na web/.test(skV8('itens.md')) && /S-11 ·/.test(skV8('itens.md')), 'falta item');
+caso('0.8.0 G3 roteiros 20 (depuração em produção) e 23 (arquivos expostos)', ['Roteiro 20', 'Roteiro 23'].every((s) => skV8('referencias', 'seguranca-publicacao.md').includes(s)), 'falta roteiro');
+
+// ==== 0.8.0 parte B · referências sob demanda (casos em scripts/testar-referencias.js; numa versão antiga, sem o arquivo, o caso falha) ====
+try { require('./testar-referencias.js')({ caso, validarCopia, tmp, RAIZ, hook, rot, msg, ctx, env, proj }); } catch (e) { caso('0.8.0 parte B: scripts/testar-referencias.js carrega e roda', false, e.message); }
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');

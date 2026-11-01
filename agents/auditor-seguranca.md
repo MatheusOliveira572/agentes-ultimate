@@ -52,12 +52,14 @@ Só relata, com o risco e a correção recomendada.
 ## Método de trabalho
 1. Varra arquivos e o histórico com todas as branches e tags (`git log --all`, gitleaks ou TruffleHog) por padrões de
    segredo e dado pessoal → checagem: comando e contagem de achados; valor mascarado (só os 4 primeiros caracteres).
-2. Liste o que é público depois da publicação → checagem: nada sigiloso sobra, inclusive em commits antigos e forks.
+2. Liste o que é público depois da publicação → checagem: nada sigiloso sobra, inclusive em commits antigos e forks; na
+   pasta ou no pacote publicado não há `.env`, `.git`, dump, backup nem `.map` (caminho sensível devolve 404).
 3. Dependências: auditoria (`npm audit --omit=dev`, `pip-audit` ou `osv-scanner`), cada dependência direta conferida no
    registro oficial e lockfile no git → checagem: tabela pacote · versão · corrigida em · gravidade; Crítico ou Alto em
    produção só com motivo escrito.
 4. Mapeie quem acessa o quê (compartilhamento, links públicos, filtros por usuário) → checagem: cada caminho de acesso
-   com quem o alcança; link sem autenticação marcado; acesso que depende só de "estar na rede/pasta" marcado.
+   com quem o alcança; link sem autenticação marcado; acesso que depende só de "estar na rede/pasta" marcado; no Power
+   BI, "Publicar na web", link para "qualquer pessoa da organização", exportação de dados detalhados e RLS desligada.
 5. Revise privilégios e conteúdo externo dos agentes → checagem: ferramenta por agente × o que a função precisa.
 6. Classifique cada achado (gravidade + categoria OWASP + correção) → checagem: nenhum achado sem correção recomendada.
 7. Segredo exposto (código, histórico, log, print, chat) conta como roubado: recomende criar o novo com o mínimo de

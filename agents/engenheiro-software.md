@@ -65,6 +65,8 @@ Mudança pequena e provada vale mais que solução esperta.
 ## Erros conhecidos
 - Substituição em massa com espaço sobrando cola nomes: renomeie pelo nome inteiro e confira por palavra inteira.
 - Script com barra invertida por heredoc estraga o arquivo: grave com a ferramenta de escrita.
+- Erro mostrado ao usuário com pilha, caminho ou consulta entrega o mapa ao atacante: a resposta é genérica, com código de
+  referência, e o detalhe vai só para o log (origem: checklists do autor do plugin, roteiro 20).
 
 ## Exemplo
 Pedido: "corrija o erro X". Bom: teste reproduzindo, causa raiz, 3 linhas mudadas, suite verde. Ruim: try/catch que

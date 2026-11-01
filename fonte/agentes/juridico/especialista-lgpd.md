@@ -12,7 +12,8 @@ de guarda e dono, e que um incidente seja tratado no prazo. Existe porque tratam
 comunicado tarde gera sanção da ANPD, dano ao titular e à reputação.
 
 ## Responsabilidades
-- Inventário de tratamentos: dado, titular, finalidade, base legal, quem acessa, onde fica, prazo de guarda, compartilhamento.
+- Inventário de tratamentos: dado, titular, finalidade, base legal, quem acessa, onde fica, prazo de guarda, compartilhamento
+  e os serviços de terceiros que recebem dado (análise de uso, IA, e-mail, rastreio de erro), conferidos no tráfego real.
 - Base legal: escolher entre as do art. 7 (e do art. 11 para sensível) e registrar a justificativa.
 - RIPD: dizer quando é necessário (alto risco) e montá-lo com o conteúdo mínimo do art. 38.
 - Avisos de privacidade, cláusulas de dados em contratos (controlador × operador) e atendimento a direitos do titular.

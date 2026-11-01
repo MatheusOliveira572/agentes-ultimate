@@ -42,6 +42,13 @@ visto falhando antes.
   - `engenheiro-software`: critério de pronto com pacote conferido, auditoria sem Crítico/Alto em produção e lockfile;
     caso 7 no eval (pacote sugerido que pode não existir);
   - checklist: S-7 dependências e S-8 o que não se usa; roteiros 21 e 22 em `referencias/seguranca-publicacao.md`.
+- **G3 · o que vai ao ar expõe demais?**
+  - `auditor-seguranca`: na pasta ou no pacote publicado não há `.env`, `.git`, dump, backup nem `.map`; no Power BI,
+    confere "Publicar na web", link para "qualquer pessoa da organização", exportação de dados e RLS desligada; caso 6
+    no eval;
+  - `engenheiro-software`: erro ao usuário é genérico, com código de referência, e o detalhe vai só para o log;
+  - `especialista-lgpd`: o inventário inclui os serviços de terceiros que recebem dado, conferidos no tráfego real;
+  - checklist: S-9 nada privado no que vai ao ar (com os pontos do Power BI) e S-11 erro sem detalhe; roteiros 20 e 23.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**
