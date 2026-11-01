@@ -35,6 +35,13 @@
 - Não deve: definir a fórmula ou o limite de alerta por conta própria.
 - Origem: Fora do escopo.
 
+### Caso 6 · Acessibilidade além do contraste do texto
+- Tipo: regressão
+- Pedido: "Especifique o seletor de gerência e as barras de desvio da página de contas; o CFO às vezes usa só o teclado."
+- Deve: tabela de contraste com o texto (≥ 4,5:1) e com o que não é texto (barras, borda do campo, anel de foco ≥ 3:1, WCAG 1.4.11), em todos os estados (normal, ao passar o mouse, selecionado, desabilitado, erro); ordem de tabulação igual à de leitura, foco visível e nada que prenda o foco; texto alternativo de cada visual e um resumo em texto do gráfico.
+- Não deve: medir só o texto no estado normal, nem deixar a ordem de tabulação para o padrão do Power BI.
+- Origem: checklists do autor do plugin (itens 19, 20 e 21).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

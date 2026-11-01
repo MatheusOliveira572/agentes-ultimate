@@ -188,6 +188,24 @@ https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm.
   RLS ou o papel limita quem vê; as cópias locais têm dono e prazo (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 
 ## A · Acessibilidade
+Dono de todos: `designer-paineis` (especifica) e quem constrói. Base: WCAG 2.2 (https://www.w3.org/TR/WCAG22/) e a ABNT
+NBR 17225:2025, alinhada a ela. Site de empresa com sede no Brasil: a Lei Brasileira de Inclusão exige acessibilidade
+(Lei 13.146/2015, art. 63 [conferir]; https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm); para
+ferramenta interna, [HIPÓTESE] o dever vem do ambiente de trabalho acessível (art. 34 [conferir]); confirme com o jurídico.
+- **A-1 · Contraste em tudo e em todos os estados.** Texto ≥ 4,5:1 (3:1 se grande); barra, borda de campo, ícone e foco
+  ≥ 3:1 (WCAG 1.4.11); conferido no normal, ao passar o mouse, selecionado, desabilitado e erro; cor nunca sozinha.
+  Verificar: verificador automático nos fluxos principais e revisão manual do que ele não mede (texto sobre imagem);
+  refeito depois de cada mudança de tema ou marca.
+- **A-2 · Texto alternativo e resumo.** Cada imagem ou visual que informa tem texto alternativo (no Power BI, o campo
+  "texto alternativo" de cada visual) e cada gráfico, um resumo em texto do que mostra; o decorativo fica oculto ao leitor.
+  Verificar: um verificador acha os que faltam e a qualidade é revisada à mão; o leitor de tela (NVDA, Narrador,
+  VoiceOver) anuncia cada visual com sentido.
+- **A-3 · Só com o teclado.** Ordem de tabulação igual à de leitura, foco visível, nada que prenda o foco, atalhos sem
+  conflito. Verificar: os fluxos principais (abrir, filtrar, trocar de página, exportar) feitos só com Tab, Shift+Tab,
+  Enter, Espaço, Esc e setas.
+- **A-4 · Teste com quem usa tecnologia assistiva.** Além das ferramentas automáticas. Verificar: uma pessoa com
+  deficiência, ou um especialista em acessibilidade, faz os fluxos principais com a tecnologia dela, e os achados viram
+  itens com dono. Dono: Só o usuário faz (convidar).
 
 ## H · Honestidade do que se afirma
 

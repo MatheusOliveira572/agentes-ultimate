@@ -101,6 +101,13 @@ visto falhando antes.
   - checklist, bloco P: P-1 a P-11 (inventário, aviso, ciência × consentimento, guarda, terceiros, pedidos do titular,
     criança, treino de IA, cookies só depois da escolha, registro do aceite, painel interno com dado de empregado),
     todos com o link oficial; extra B6.
+- **G7 · acessibilidade:**
+  - `designer-paineis`: contraste de 3:1 também para o que não é texto (barra, borda de campo, foco; WCAG 1.4.11) e em
+    todos os estados; ordem de tabulação igual à de leitura, foco visível, nada preso; a NBR 17225:2025 entra no método;
+    critério de pronto com texto alternativo de cada visual e resumo em texto; caso 6 no eval;
+  - checklist, bloco A: A-1 contraste em tudo e em todos os estados, A-2 texto alternativo e resumo, A-3 só com o
+    teclado, A-4 teste com quem usa tecnologia assistiva; LBI art. 63 [conferir] e a [HIPÓTESE] do art. 34 para
+    ferramenta interna.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

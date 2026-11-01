@@ -56,14 +56,18 @@ ferramenta padrão. Nenhuma tela é construída sem a sua especificação, e voc
 3. Especifique por estados (cheio, vazio, 1 item, número enorme, negativo) → checagem: cada estado tem desenho.
 4. Declare a notação (padrão por cenário, cor só no desvio, sinal ao lado da cor, unidade e período no cabeçalho) →
    checagem: nenhum visual usa cor para distinguir cenário nem cor sem sinal ou texto junto.
-5. Calcule o contraste de cada par texto × fundo usado → checagem: tabela na spec, todos ≥ 4,5:1 (ou 3:1 se grande).
-6. Gere o gabarito por script que falha se uma soma ou texto não fechar → checagem: rode com um erro injetado.
-7. Abra cada PNG e confira → checagem: nada cortado ou encostado; seleção e filtros ativos visíveis.
+5. Calcule o contraste de cada par texto × fundo e de cada elemento não textual (barra, borda de campo, foco) em todos os
+   estados (normal, ao passar o mouse, selecionado, desabilitado, erro) → checagem: tabela na spec, texto ≥ 4,5:1 (3:1 se
+   grande) e não texto ≥ 3:1 (WCAG 2.2, 1.4.3 e 1.4.11; ABNT NBR 17225:2025 segue a WCAG 2.2).
+6. Desenhe a ordem de tabulação igual à de leitura → checagem: foco visível em cada peça e nada que prende o foco.
+7. Gere o gabarito por script que falha se uma soma ou texto não fechar → checagem: rode com um erro injetado.
+8. Abra cada PNG e confira → checagem: nada cortado ou encostado; seleção e filtros ativos visíveis.
 
 ## Critério de pronto
 - [ ] Spec com todos os estados e unidades declaradas (nunca duas unidades na mesma tabela).
 - [ ] Notação de cenários e desvios declarada; cor nunca sozinha.
-- [ ] Tabela de contraste com todos os pares acima do mínimo.
+- [ ] Tabela de contraste com todos os pares, texto e não texto, em todos os estados, acima do mínimo.
+- [ ] Texto alternativo em cada visual que informa (no Power BI, o campo do visual) e um resumo em texto dos gráficos.
 - [ ] Gabarito gerado e conferido por script, com mutação.
 - [ ] Pior caso de cada texto variável medido contra o espaço.
 

@@ -1019,6 +1019,16 @@ caso('0.8.0 G6 checklist P: 11 itens de LGPD, cada um com "Verificar:" e o link 
 caso('0.8.0 G6 checklist P-11: painel interno com dado de empregado (base legal sem consentimento, agregado, cópias locais)', /P-11 ·[^\n]*(\n\s+[^\n]*)*empregado/.test(itP6) && /agregad/.test(itP6), 'falta item');
 caso('0.8.0 G6 roteiro B6 (privacidade e minimização)', /## B6/.test(skV8('referencias', 'seguranca-extras.md')), 'falta roteiro');
 
+// G7 · acessibilidade
+const dsM7 = secaoV8(agV8('designer-paineis'), 'Método de trabalho'), dsC7 = secaoV8(agV8('designer-paineis'), 'Critério de pronto');
+caso('0.8.0 G7 designer: contraste de 3:1 também para o que não é texto (WCAG 1.4.11) e em todos os estados', /3:1[^\n]*(\n[^\n]*)?não text|não text[^\n]*(\n[^\n]*)?3:1/.test(dsM7) && /1\.4\.11/.test(dsM7) && /estados/.test(dsM7) && /desabilitad/.test(dsM7), 'falta no Método');
+caso('0.8.0 G7 designer: ordem de tabulação igual à de leitura, foco visível, nada preso', /tabulação/.test(dsM7) && /foco visível/.test(dsM7), 'falta no Método');
+caso('0.8.0 G7 designer: NBR 17225 no método (não nas referências)', /NBR 17225/.test(dsM7) && !/NBR 17225/.test(secaoV8(agV8('designer-paineis'), 'Referências de mercado')), 'falta no Método');
+caso('0.8.0 G7 designer: texto alternativo em cada visual que informa e resumo em texto', /texto alternativo/i.test(dsC7) && /resumo em texto/.test(dsC7), 'falta no Critério de pronto');
+caso('0.8.0 G7 eval do designer: contraste de não texto, estados e teclado', /1\.4\.11|não textua/.test(evV8('designer-paineis')) && /tabulação|teclado/.test(evV8('designer-paineis')), 'falta');
+const itA7 = secaoV8(skV8('itens.md'), 'A · ');
+caso('0.8.0 G7 checklist A: contraste, texto alternativo, teclado e teste com tecnologia assistiva', ['A-1 ·', 'A-2 ·', 'A-3 ·', 'A-4 ·'].every((s) => itA7.includes(s)) && /l13146\.htm/.test(itA7) && /\[conferir\]/.test(itA7), 'falta item');
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
