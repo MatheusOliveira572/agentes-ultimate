@@ -172,6 +172,14 @@ visto falhando antes.
 - **Backup (D-i):** `engenheiro-dados` só dá por pronto, com banco próprio, o backup provado por restauração num
   ambiente separado (com `RESTORE.md`); caso 6 no eval; checklist S-13 e extra B3.
 - `engenheiro-software` condensado para voltar às 90 linhas depois da seção de referências da parte B.
+- **Trava de segredos, falso positivo:** senha sem nenhuma letra ou número (`…`, `***`) conta como marcador; o próprio
+  CHANGELOG, que descreve o formato `Server=…;Password=…`, era bloqueado. Medido depois: a árvore inteira do plugin (206
+  arquivos) e a de um projeto real (671 arquivos, 158 mil linhas) como um commit só passam sem bloqueio nem pergunta, em
+  cerca de 3 s.
+- Testes: 103 casos novos da parte A em `scripts/testar-hooks.js`, rodados contra a cópia do commit 60cf275 (antes da
+  parte A): 90 falham lá e passam aqui; os outros 13 guardam a regressão (falso positivo da trava, commit que só remove o
+  segredo, limite de 90 linhas, validador sem aviso no plugin real). O commit do G1 diz "14 vistos falhando"; o
+  número certo é 15.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**

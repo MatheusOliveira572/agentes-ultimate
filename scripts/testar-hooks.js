@@ -933,6 +933,7 @@ const falsos8 = {
   'só o cabeçalho de chave privada, num texto que explica o padrão': 'Procure por -----BEGIN ' + 'PRIVATE KEY----- no histórico.\n',
   'texto de conexão com a senha numa variável': 'url = "postgres' + '://app:${DB_SENHA}@db:5432/vendas"\nmodelo: postgres' + '://usuario:<senha>@host/banco e postgres' + '://...:...@\n',
   'código comum': 'const total = itens.reduce((a, b) => a + b.valor, 0);\n',
+  'texto que descreve o formato (reticências no lugar da senha)': 'bloqueia texto de conexão (URL ou `Server=…;' + 'Password=…`).\n',
 };
 for (const [tipo, texto] of Object.entries(falsos8)) {
   const x = commitCom('src/ok.js', texto);

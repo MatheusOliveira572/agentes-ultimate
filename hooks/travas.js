@@ -34,7 +34,7 @@ const MEDIOS = [
   { tipo: 'senha, chave ou token atribuído no código', re: /\b(?:api[_-]?key|apikey|client[_-]?secret|secret|access[_-]?token|auth[_-]?token|token|senha|password|passwd|pwd)["']?\s*[:=]\s*["']([^"'\s]{12,})["']/i, senha: 1, valor: (v) => /\d/.test(v) && /[A-Za-z]/.test(v) },
   { tipo: 'token JWT', re: /\beyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/ },
 ];
-const marcador = (v) => /^(\.{2,}|\*+|x{3,}|<[^>]*>|\$\{[^}]*\}|\$\(?\w+\)?|\{\{?[^}]*\}?\}|%[sd]|\[[^\]]*\])$/i.test(v) ||
+const marcador = (v) => !/[A-Za-z0-9]/.test(v) || /^(\.{2,}|\*+|x{3,}|<[^>]*>|\$\{[^}]*\}|\$\(?\w+\)?|\{\{?[^}]*\}?\}|%[sd]|\[[^\]]*\])$/i.test(v) ||
   /^(senha|password|pass|pwd|secret|changeme|sua[_-]?senha|your[_-]?password|usuario|user)$/i.test(v) || /process\.env|os\.environ|getenv|EXAMPLE|exemplo/i.test(v);
 
 // Linhas acrescentadas do diff (-U0), com arquivo e número da linha no arquivo novo.
