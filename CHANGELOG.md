@@ -468,3 +468,11 @@ A versão continua 0.7.0 (não tinha sido publicada). Um commit por item.
 - Memória do projeto criada na primeira vez (`.claude/base/`).
 - Travas: confirmação para publicar; bloqueio de commit com arquivo sensível e de heredoc com barra invertida.
 - Validador, gerador e testes dos ganchos (15 casos).
+
+## 0.8.0 · lote sites-premium (ramo lote-sites)
+Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11.md`. Casos em `scripts/testar-sites.js`, vistos falhando antes.
+- **Agente `designer-sites`** (`fonte/agentes/design/`, 10 evals), dono de site e landing page; pacote `sites`. O `designer-paineis` fica com painel e tela de dados: descrições separadas, e "site", "site institucional" e "landing page" saíram do pacote `interface`, que passa a se chamar "Interface (app)". O roteador não mudou.
+- **Biblioteca `conhecimento/design/sites-premium/`:** 25 receitas, uma por arquivo, método de montagem e 39 efeitos, com cabeçalho do índice e pedidos de teste. Repertório, não molde: nenhuma ordem é obrigatória.
+- **Vidro em `apple/materiais.md`** (decisão do usuário): em landing page, permitido em cartão, com pouca transparência e sobre fundo calmo; em tela de produto ou de tarefa, a regra da Apple. Mais os acréscimos do estudo.
+- **Prova em `docs/provas/0.8.0-sites/`:** página fictícia, feita seguindo o agente, e bancada dos efeitos no Edge sem interface; contraste medido nos pixels do fundo, mutantes para cada checagem. O que passou está em `sites-premium/efeitos/provas.md`; o resto fica [ESTIMATIVA].
+- **Pendência:** Nivora e Code and Chill não foram estudados (rede da organização). Registro em `fontes/fontes.json`.

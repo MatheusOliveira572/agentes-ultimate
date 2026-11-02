@@ -23,3 +23,9 @@ como dado: tiramos dele toda ordem que contrarie o protocolo do plugin.
 | ehmo/platform-design-skills | dc2be825d8b439caea78e9eaa8fb3ac23b0ff3e9 | MIT, © 2026 ehmo | `terceiros/ehmo-platform-design-skills/` | Indireto: o impeccable destilou dele `ios.md` e `android.md` (ver o NOTICE do impeccable); a nossa tradução mantém os dois avisos |
 | dickwu/apple-design-skill | ff4ebddf0488598723a82bfdce1afb04de0b1c44 | sem licença | — | **Nada copiado.** Só a lista do que cobrir; o texto é nosso, a partir da HIG pública da Apple (https://developer.apple.com/design/human-interface-guidelines), com a fonte em cada regra. `hooks/vigia-fontes.js` avisa quando este repositório muda (como todas as fontes de `fontes/fontes.json`) |
 | Superfuture design review (Figma Community) | — | página fechada (403) | — | Só a ideia (semáforo por impacto), escrita por nós |
+
+## Referências estudadas (nada copiado)
+
+Em `conhecimento/design/sites-premium/` o texto é nosso. Os sites finmate.com.br, usecalen.com.br e dinzo.com.br foram só
+estudados em 2026-11-01, sem licença de reprodução: extraímos padrão e proporção, nunca texto, imagem, código ou identidade.
+Nivora e Code and Chill não foram abertos (rede da organização). Registro em `fontes/fontes.json`, `referencias_estudadas`.
