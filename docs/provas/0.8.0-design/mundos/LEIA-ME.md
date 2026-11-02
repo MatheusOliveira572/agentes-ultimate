@@ -9,7 +9,7 @@ existe no Chromium). `visao-geral.html` junta os 10 PNGs numa folha.
 | `index.html`, `mostruario.css`, `mundos.css`, `mostruario.js` | o mostruário (moldura neutra + um bloco por mundo; dados, gráficos e o mar renderizado do mundo Apple feitos por código) |
 | `molas.css` | as 10 molas em `linear()`, geradas por `gerar-molas.js` a partir de `modelos/mola-linear.js` |
 | `verificar.js` | capturas a 2× pelo Edge sem interface (uma por vez) e as checagens |
-| `png/` | `<mundo>.png` (2464 px de largura) e `visao-geral.png` |
+| `png/` | `<mundo>.webp` (2464 px de largura) e `visao-geral.webp` |
 
 ## Como rodar
 - `node gerar-molas.js`: reescreve `molas.css`.
