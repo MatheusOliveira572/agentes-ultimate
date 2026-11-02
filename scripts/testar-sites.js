@@ -584,8 +584,9 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   caso('0.8.0 sites prova: resultado.json gerado pela bancada', !!res, 'falta docs/provas/0.8.0-sites/resultado.json');
   if (res) {
     const cap = res.capturas || [];
-    const esperadas = ['claro', 'escuro'].flatMap((t) => [1440, 390].map((l) => `site-${t}-${l}.png`));
-    caso('0.8.0 sites prova: 4 PNGs do site (2 temas, 2 larguras) existem e não estão vazios', esperadas.every((p) => existe(...PROVA, 'png', p) && fs.statSync(path.join(RAIZ, ...PROVA, 'png', p)).size > 20000), esperadas.join(', '));
+    // As capturas guardadas são WebP (scripts/comprimir-provas.js); o provar.js grava PNG. Vale um dos dois.
+    const esperadas = ['claro', 'escuro'].flatMap((t) => [1440, 390].map((l) => `site-${t}-${l}`)).map((n) => (existe(...PROVA, 'png', n + '.webp') ? n + '.webp' : n + '.png'));
+    caso('0.8.0 sites prova: 4 capturas do site (2 temas, 2 larguras) existem e não estão vazias', esperadas.every((p) => existe(...PROVA, 'png', p) && fs.statSync(path.join(RAIZ, ...PROVA, 'png', p)).size > 20000), esperadas.join(', '));
     caso('0.8.0 sites prova: 0 erro de JS, 0 rolagem lateral, 0 texto cortado ou sobreposto, 0 título sob a barra nas 4 capturas', cap.length === 4 && cap.every((c) => c.erros_js === 0 && c.rolagem_lateral === 0 && c.texto_cortado === 0 && c.texto_sobreposto === 0 && c.titulos_cobertos === 0), JSON.stringify(cap.map((c) => [c.png, c.erros_js, c.rolagem_lateral, c.texto_cortado])));
     caso('0.8.0 sites prova: contraste medido no pior ponto do fundo (0 falha)', cap.length === 4 && cap.every((c) => c.contraste_falhas === 0 && c.contraste_medidos > 20), JSON.stringify(cap.map((c) => [c.png, c.contraste_falhas, c.contraste_medidos])));
     caso('0.8.0 sites prova: no celular, alvos ≥ 44 px e corpo ≥ 16 px', cap.filter((c) => c.largura === 390).every((c) => c.alvos_pequenos === 0 && c.corpo_pequeno === 0), JSON.stringify(cap.map((c) => [c.alvos_pequenos, c.corpo_pequeno])));

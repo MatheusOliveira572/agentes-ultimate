@@ -24,3 +24,6 @@ não existe prova real de um produto fictício.
 - Custo de pintura e de compositor não está medido com confiança: o controle de desfoque sobe numa rodada e não em outra. Sem aparelho real.
 - Fontes de sistema do Windows (Sitka, Segoe UI): em outro sistema, a página cai nas reservas.
 - Na 1ª rodada, as checagens passaram com um rótulo sobre outro texto: só apareceu abrindo o PNG. Virou a checagem de texto sobreposto, com mutante.
+
+As capturas ficam em WebP (o plugin é baixado inteiro por quem instala). Os verificadores gravam PNG; antes do commit, rode
+`node scripts/comprimir-provas.js <pasta png>` (Edge ou Chrome sem interface; converte e apaga o PNG).

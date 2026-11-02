@@ -446,6 +446,8 @@ Fontes: `docs/pesquisas/referencias-visuais-2026-11.md`, `docs/pesquisas/referen
 - **Limpeza (M-3, pedido do usuário):** sai a 1ª tentativa da prova de design (2026-11-01), as propostas já aplicadas, a
   cópia antiga do Liquid Glass (as páginas usam `modelos/liquid-glass/`), 15 PNGs da v1 e 3 PNGs do site sem citação;
   revisões vão para `docs/historico/` e pesquisas e planos para `docs/pesquisas/`.
+- **Capturas em WebP** (`scripts/comprimir-provas.js`, pelo Edge ou Chrome sem interface): as provas da 0.7.0 e do lote de sites
+  passam de PNG a WebP, com o texto legível; os verificadores continuam gravando PNG, e o script converte antes do commit.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/pesquisas/plano-0.7.md`):**

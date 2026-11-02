@@ -3,7 +3,7 @@
 <!-- teste-ref: sim=este efeito pesa, qual a prova dos efeitos | mostre o efeito provado e os quadros do efeito; nao=calcule o custo médio ponderado do estoque -->
 # Efeitos: o que foi provado, com que valor
 
-39 de 39 efeitos passaram na bancada (rodadas seguidas: 39/39, 39/39, 39/39) (`docs/provas/0.8.0-sites/bancada-efeitos.html`; folha de contato em `png/bancada-efeitos.png`).
+39 de 39 efeitos passaram na bancada (rodadas seguidas: 39/39, 39/39, 39/39) (`docs/provas/0.8.0-sites/bancada-efeitos.html`; folha de contato em `png/bancada-efeitos.webp`).
 **Condição:** Edg/156.0.4314.58, sem interface, 390 px, CPU freada 4×; quadros por requestAnimationFrame em 1,5 s. Sem aparelho real.
 
 **PROVADO quer dizer:** nas 3 últimas rodadas seguidas, com p95 do quadro que não variou mais de 2× entre elas, com o valor da coluna, em código próprio, o efeito apareceu ou mexeu, ficou parado e legível com
