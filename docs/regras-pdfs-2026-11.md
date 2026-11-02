@@ -115,8 +115,10 @@ compartilhamento "qualquer pessoa da organização", exportação de dados detal
 
 **Brasil:** o Marco Civil (art. 15) obriga provedor de aplicação com fins econômicos a guardar registros de acesso por
 6 meses. https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2014/lei/l12965.htm
+Conferido em 2026-11-01: o art. 15 vale para o provedor pessoa jurídica que exerce a atividade "de forma organizada,
+profissional e com fins econômicos"; guarda sob sigilo, por 6 meses.
 **Painel interno:** [HIPÓTESE] ferramenta interna, que não é oferecida ao público, não é "provedor de aplicações de
-internet" para esse artigo. Confirmar com o jurídico.
+internet" para esse artigo (a lei não trata do caso; é interpretação). Confirmar com o jurídico.
 
 ### G5. Controle de acesso e app web (B 01, 03, 05, 06, 07, 09, 10, 12–19; B2)
 | Regra | Onde entra | Prioridade |
@@ -133,13 +135,13 @@ workspace sem acesso amplo e conta de serviço com o mínimo de permissão.
 | Aviso de privacidade escrito a partir dos fluxos reais e comparado linha a linha com eles. Tem versão e data | LGPD art. 6º, VI (transparência) e art. 9º (informações ao titular) | **Ag** `especialista-lgpd`: Erros conhecidos ("aviso copiado de modelo que não bate com o fluxo") | Depois |
 | Política de privacidade se dá "ciência". Não se "aceita" como consentimento geral | LGPD art. 8º, §4º: consentimento genérico é nulo | **Ag** `especialista-lgpd`: Erros conhecidos | Depois |
 | Consentimento de marketing separado, desmarcado e revogável | LGPD art. 8º, §5º (revogação) e art. 18, §2º (oposição) | **Ag** `estrategista-marketing`: Critério de pronto | Depois |
-| Pedido do titular (acesso, correção, eliminação, portabilidade), com identidade conferida e registro | LGPD art. 18 e art. 19 (resposta simplificada imediata ou declaração completa em até 15 dias) | **Ag** `especialista-lgpd`: Responsabilidades | Depois |
+| Pedido do titular (acesso, correção, eliminação, portabilidade), com identidade conferida e registro | LGPD art. 19 (confirmação e acesso: simplificada imediata ou declaração completa em até 15 dias) e art. 18, §§ 3º a 5º (os demais pedidos: providência imediata ou resposta com o motivo). Conferido em 2026-11-01: o prazo de 15 dias é só da confirmação e do acesso | **Ag** `especialista-lgpd`: Responsabilidades | Depois |
 | Tabela de guarda por categoria, contando backups e ferramentas de terceiros | LGPD art. 15 e 16 (término e eliminação) | Já está em parte (Google). Acrescentar "inclui backups e ferramentas de terceiros" | Depois |
-| Contrato com cada operador, controle de suboperadores e transferência internacional | LGPD art. 39 (operador segue instruções) e art. 33 a 36. [HIPÓTESE: Resolução CD/ANPD 19/2024 para as cláusulas-padrão; conferir o link oficial] | **Ag** `especialista-lgpd` com `advogado-contratos` (a cláusula de dados já é do LGPD) | Depois |
-| Treinar IA com dado de usuário é finalidade nova: exige base legal e aviso antes, e não vale para dado antigo sem novo aviso | LGPD art. 6º, I (finalidade) e art. 7º. [HIPÓTESE: a ANPD suspendeu em 2024 o uso de dados para treino de IA de uma grande plataforma; conferir a decisão antes de citar] | **Ag** `especialista-lgpd`: Erros conhecidos | Depois |
+| Contrato com cada operador, controle de suboperadores e transferência internacional | LGPD art. 39 (operador segue instruções) e art. 33 a 36. Resolução CD/ANPD 19/2024 (regulamento de transferência internacional; cláusulas-padrão no Anexo II; 12 meses da publicação para incorporá-las), conferida em 2026-11-01: https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024 | **Ag** `especialista-lgpd` com `advogado-contratos` (a cláusula de dados já é do LGPD) | Depois |
+| Treinar IA com dado de usuário é finalidade nova: exige base legal e aviso antes, e não vale para dado antigo sem novo aviso | LGPD art. 6º, I (finalidade) e art. 7º. Conferido em 2026-11-01: medida preventiva da ANPD contra a Meta, 02/07/2024 (legítimo interesse inadequado em análise preliminar, falta de transparência, o titular não esperava que o conteúdo antigo treinasse IA), https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-determina-suspensao-cautelar-do-tratamento-de-dados-pessoais-para-treinamento-da-ia-da-meta | **Ag** `especialista-lgpd`: Erros conhecidos | Depois |
 | Cookies e rastreadores só depois da escolha, quando a base for consentimento | Guia orientativo da ANPD sobre cookies (out/2022), que é orientação, não resolução. Aberto em 2026-11-01: https://www.gov.br/anpd/pt-br/documentos-e-publicacoes/guia-orientativo-cookies-e-protecao-de-dados-pessoais.pdf | **Sk**, bloco P, condicional ("site público com rastreador?") | Depois |
-| Dado de criança e adolescente | LGPD art. 14 (melhor interesse; consentimento de um dos pais para criança) e Lei 15.211/2025, o ECA Digital. Aberto em 2026-11-01: https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15211.htm. [HIPÓTESE: vigência em 17/03/2026, segundo fonte secundária; conferir no texto] | **Ag** `especialista-lgpd`: Método passo 3 (criança já é critério de alto risco do RIPD) | Depois |
-| Registro do aceite: quem, qual versão, quando, como, sem sobrescrever | Lei 14.063/2020 (assinaturas eletrônicas), https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/lei/l14063.htm, e MP 2.200-2/2001, art. 10, §2º, https://www.planalto.gov.br/ccivil_03/mpv/antigas_2001/2200-2.htm | **Ag** `advogado-contratos`: Responsabilidades (termos de uso) | Depois |
+| Dado de criança e adolescente | LGPD art. 14 (melhor interesse; consentimento de um dos pais para criança) e Lei 15.211/2025, o ECA Digital. Aberto em 2026-11-01: https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15211.htm. Vigência conferida no texto em 2026-11-01: 17/03/2026 (art. 41-A, redação da Lei 15.352/2026) | **Ag** `especialista-lgpd`: Método passo 3 (criança já é critério de alto risco do RIPD) | Depois |
+| Registro do aceite: quem, qual versão, quando, como, sem sobrescrever | MP 2.200-2/2001, art. 10, §2º (outro meio de provar autoria e integridade, se as partes o admitem), https://www.planalto.gov.br/ccivil_03/mpv/antigas_2001/2200-2.htm. Corrigido em 2026-11-01: a Lei 14.063/2020 só rege a assinatura com ente público (art. 2º; o parágrafo único, II, a, exclui a interação entre particulares), https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/lei/l14063.htm | **Ag** `advogado-contratos`: Responsabilidades (termos de uso) | Depois |
 
 **Painel interno:** a LGPD vale para dado de empregado. A base costuma ser obrigação legal ou execução de contrato
 (art. 7º, II e V), não consentimento (o LGPD já tem esse erro conhecido). Cabem minimização (mostrar agregado, não
@@ -157,13 +159,17 @@ titular nem consentimento de marketing.
 **Brasil:**
 - A Lei Brasileira de Inclusão (Lei 13.146/2015) exige acessibilidade nos sites de empresas com sede ou
   representação no país (art. 63). https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm
-- A ABNT NBR 17225:2025 (acessibilidade em conteúdo e aplicações web, alinhada à WCAG 2.2) foi lançada em 11/03/2025.
+- A ABNT NBR 17225:2025 (acessibilidade em conteúdo e aplicações web, alinhada à WCAG 2.2 [conferir]) foi lançada em 11/03/2025.
   Notícia aberta em 2026-11-01: https://teletime.com.br/11/03/2025/abnt-lanca-norma-para-aprimorar-a-acessibilidade-de-sites/.
-  O texto está no site da ABNT, https://www.abnt.org.br.
+  Lançamento e data confirmados pelo MDHC (https://www.gov.br/mdh/pt-br/assuntos/noticias/2025/marco/com-apoio-do-governo-federal-nova-norma-tecnica-da-abnt-e-instituida-para-impulsionar-acessibilidade-digital-no-brasil);
+  o texto da norma, no site da ABNT (https://www.abnt.org.br), não foi aberto: o alinhamento à WCAG 2.2 fica [conferir].
 - WCAG 2.2: https://www.w3.org/TR/WCAG22/
 
 **Painel interno:** [HIPÓTESE] o art. 63 fala de sítio da internet. Para a ferramenta interna, o dever vem do
 ambiente de trabalho acessível (LBI art. 34). Confirmar com o jurídico. Entra como boa prática de qualquer jeito.
+Conferido em 2026-11-01: art. 63 (sítios mantidos por empresa com sede ou representação no país) e art. 34, §1º (a
+pessoa jurídica é obrigada a garantir ambiente de trabalho acessível e inclusivo); a hipótese é só se o painel interno
+cabe num ou noutro.
 
 ### G8. Honestidade do que se afirma (A 27–32; B "relatório")
 | Regra | Onde entra | Prioridade |
@@ -179,8 +185,10 @@ ambiente de trabalho acessível (LBI art. 34). Confirmar com o jurídico. Entra 
   (publicidade enganosa ou abusiva). https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm
 - Código do CONAR (autorregulamentação): https://www.conar.org.br/
 - Marca alheia: Lei 9.279/1996 (art. 129 e art. 195, concorrência desleal). https://www.planalto.gov.br/ccivil_03/leis/l9279.htm
-- Rotular IA: não há lei geral no Brasil. [HIPÓTESE] o PL 2338/2023 ainda tramita; conferir em
-  https://www25.senado.leg.br/web/atividade/materias/-/materia/157233
+- Rotular IA: não há lei geral no Brasil [HIPÓTESE: ausência não se prova por busca]. O PL 2338/2023 tramita
+  (conferido em 2026-11-01): aprovado no Senado em 10/12/2024, remetido à Câmara em 17/03/2025, aguarda parecer do
+  relator na comissão especial. https://www25.senado.leg.br/web/atividade/materias/-/materia/157233 e
+  https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2487262
 - **Painel interno:** o CDC não se aplica (empregado não é consumidor). A honestidade sobre atualização e cobertura
   dos dados cabe mesmo assim.
 
@@ -240,7 +248,7 @@ https://www.planalto.gov.br/ccivil_03/leis/l9609.htm
 ### Entra depois
 | # | Mudança | Quando |
 |---|---|---|
-| D-a | `especialista-lgpd`: aviso comparado com o fluxo real; ciência × consentimento; pedidos do titular com os prazos do art. 19; guarda com backups; operador, suboperador e transferência; treino de IA; crianças e ECA Digital | Depois de conferir cada artigo e resolução no texto oficial (algumas fontes estão [HIPÓTESE]) |
+| D-a | `especialista-lgpd`: aviso comparado com o fluxo real; ciência × consentimento; pedidos do titular com os prazos do art. 19; guarda com backups; operador, suboperador e transferência; treino de IA; crianças e ECA Digital | Depois de conferir cada artigo e resolução no texto oficial (conferidos em 2026-11-01; ficam [HIPÓTESE] só as interpretações para ferramenta interna e a ausência de lei sobre rótulo de IA) |
 | D-b | `advogado-contratos`: termos de uso, registro do aceite, nível de serviço medível, uso de marca e publicidade, licenças | Junto com D-a (o LGPD e o contratos se tocam) |
 | D-c | `estrategista-marketing` e `analista-compliance`: alegação com evidência datada, avaliações, consentimento de marketing, padrões enganosos, selos | Quando houver projeto de marketing ou site público |
 | D-d | Bloco "S-web" da skill e passo no `engenheiro-software` (servidor checa identidade, IDOR, validação, consulta parametrizada, CORS, CSRF, cookies, uploads, pagamento, SSRF, IA) | Quando o plugin for usado para app web com servidor próprio |

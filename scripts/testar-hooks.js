@@ -983,7 +983,7 @@ try { require('./testar-referencias.js')({ caso, validarCopia, tmp, RAIZ, hook, 
 // G4 · logs sem segredo e rastreáveis
 caso('0.8.0 G4 engenheiro: log sem senha, token nem dado pessoal desnecessário; registra o ID, não o perfil', /log/i.test(secaoV8(agV8('engenheiro-software'), 'Erros conhecidos')) && /o ID, não o perfil/.test(secaoV8(agV8('engenheiro-software'), 'Erros conhecidos')), 'falta em Erros conhecidos');
 caso('0.8.0 G4 eval do engenheiro: log e erro ao usuário', /o ID|IDs/.test(evV8('engenheiro-software')) && /código de referência/.test(evV8('engenheiro-software')), 'falta');
-caso('0.8.0 G4 checklist S-12: log de segurança sem segredo, com o Marco Civil marcado [conferir] e o link oficial', /S-12 ·[^\n]*(\n\s+[^\n]*)*Marco Civil[^\n]*(\n\s+[^\n]*)*\[conferir\]/.test(skV8('itens.md')) && /planalto\.gov\.br[^\s]*l12965/.test(skV8('itens.md')), 'falta item');
+caso('0.8.0 G4 checklist S-12: log de segurança sem segredo, com o Marco Civil conferido (6 meses), o link oficial e a [HIPÓTESE] da ferramenta interna', /S-12 ·[^\n]*(\n\s+[^\n]*)*Marco Civil[^\n]*(\n\s+[^\n]*)*6 meses/.test(skV8('itens.md')) && !/S-12 ·[^\n]*(\n\s+[^\n]*)*\[conferir\]/.test(skV8('itens.md')) && /S-12 ·[^\n]*(\n\s+[^\n]*)*\[HIPÓTESE/.test(skV8('itens.md')) && /planalto\.gov\.br[^\s]*l12965/.test(skV8('itens.md')), 'falta item');
 caso('0.8.0 G4 roteiro 08 (log e monitoramento)', /Roteiro 08/.test(skV8('referencias', 'seguranca-revisao.md')), 'falta roteiro');
 
 // G5 · controle de acesso e app web
@@ -999,15 +999,15 @@ caso('0.8.0 G5 roteiros: identidade (01, 05, 09, 15, 17), dados (03, 06, 07, 10,
 caso('0.8.0 G5 engenheiro: código com login ou entrada de fora roda o bloco S-web (identidade no servidor, nada de ID ou preço do navegador)', /S-web/.test(secaoV8(agV8('engenheiro-software'), 'Método de trabalho')) && /no servidor/.test(secaoV8(agV8('engenheiro-software'), 'Método de trabalho')), 'falta no Método');
 caso('0.8.0 G5 eval do engenheiro: rota com ID vindo do navegador', /IDOR|outro usuário/.test(evV8('engenheiro-software')) && /403|404/.test(evV8('engenheiro-software')), 'falta');
 
-// G6 · privacidade e LGPD (artigos não conferidos no texto oficial ficam marcados [conferir])
+// G6 · privacidade e LGPD (artigos conferidos no texto oficial em 2026-11-01: a marca [conferir] saiu)
 const lg6 = agV8('especialista-lgpd'), lgE6 = secaoV8(lg6, 'Erros conhecidos'), lgR6 = secaoV8(lg6, 'Responsabilidades'), lgM6 = secaoV8(lg6, 'Método de trabalho');
 caso('0.8.0 G6 LGPD: aviso de privacidade copiado de modelo, que não bate com o fluxo real', /modelo/.test(lgE6) && /fluxo/.test(lgE6), 'falta em Erros conhecidos');
-caso('0.8.0 G6 LGPD: política se dá ciência; consentimento genérico é nulo (art. 8º, §4º [conferir])', /ciência/.test(lgE6) && /§ ?4º[^\n]*\[conferir\]/.test(lgE6), 'falta em Erros conhecidos');
+caso('0.8.0 G6 LGPD: política se dá ciência; consentimento genérico é nulo (art. 8º, §4º, conferido)', /ciência/.test(lgE6) && /§ ?4º/.test(lgE6) && !/\[conferir\]/.test(lgE6), 'falta em Erros conhecidos');
 caso('0.8.0 G6 LGPD: treinar IA com dado de usuário é finalidade nova', /treinar IA|treino de IA/i.test(lgE6) && /finalidade nova/.test(lgE6), 'falta em Erros conhecidos');
-caso('0.8.0 G6 LGPD: pedidos do titular com identidade conferida, prazo do art. 19 e registro', /identidade\s+conferida/.test(lgR6) && /15 dias/.test(lgR6) && /art\. 19[^\n]*\[conferir\]/.test(lgR6), 'falta em Responsabilidades');
+caso('0.8.0 G6 LGPD: pedidos do titular com identidade conferida, prazo do art. 19 e registro', /identidade\s+conferida/.test(lgR6) && /15 dias/.test(lgR6) && /art\. 19/.test(lgR6) && !/\[conferir\]/.test(lgR6), 'falta em Responsabilidades');
 caso('0.8.0 G6 LGPD: operador, suboperador e transferência internacional', /suboperador/.test(lgR6) && /transferência internacional/.test(lgR6), 'falta em Responsabilidades');
 caso('0.8.0 G6 LGPD: guarda conta backups e ferramentas de terceiros', /backups/.test(lgM6) && /ferramentas de terceiros/.test(lgM6), 'falta no Método');
-caso('0.8.0 G6 LGPD: criança e adolescente com o ECA Digital (link oficial; vigência como [HIPÓTESE])', /ECA Digital/.test(lgM6) && /L15211\.htm/.test(lgM6) && /\[HIPÓTESE[^\]]*vigência/.test(lgM6), 'falta no Método');
+caso('0.8.0 G6 LGPD: criança e adolescente com o ECA Digital (link oficial; vigência conferida: 17/03/2026, art. 41-A)', /ECA Digital/.test(lgM6) && /L15211\.htm/.test(lgM6) && /17\/03\/2026[^\n]*art\. 41-A/.test(lgM6) && !/HIPÓTESE[^\]]*vigência/.test(lgM6), 'falta no Método');
 caso('0.8.0 G6 LGPD: parte específica dentro de 90 linhas', lg6.slice(0, lg6.indexOf('## Protocolo comum')).split('\n').length <= 90, 'passou de 90 linhas');
 caso('0.8.0 G6 eval do LGPD: aviso que não bate com o fluxo e "li e aceito"', /li e aceito/i.test(evV8('especialista-lgpd')) && /ciência/.test(evV8('especialista-lgpd')), 'falta');
 const adv6 = secaoV8(agV8('advogado-contratos'), 'Responsabilidades');
@@ -1028,7 +1028,7 @@ caso('0.8.0 G7 designer: NBR 17225 no método (não nas referências)', /NBR 172
 caso('0.8.0 G7 designer: texto alternativo em cada visual que informa e resumo em texto', /texto alternativo/i.test(dsC7) && /resumo em texto/.test(dsC7), 'falta no Critério de pronto');
 caso('0.8.0 G7 eval do designer: contraste de não texto, estados e teclado', /1\.4\.11|não textua/.test(evV8('designer-paineis')) && /tabulação|teclado/.test(evV8('designer-paineis')), 'falta');
 const itA7 = secaoV8(skV8('itens.md'), 'A · ');
-caso('0.8.0 G7 checklist A: contraste, texto alternativo, teclado e teste com tecnologia assistiva', ['A-1 ·', 'A-2 ·', 'A-3 ·', 'A-4 ·'].every((s) => itA7.includes(s)) && /l13146\.htm/.test(itA7) && /\[conferir\]/.test(itA7), 'falta item');
+caso('0.8.0 G7 checklist A: contraste, texto alternativo, teclado e teste com tecnologia assistiva', ['A-1 ·', 'A-2 ·', 'A-3 ·', 'A-4 ·'].every((s) => itA7.includes(s)) && /l13146\.htm/.test(itA7) && /art\. 63;/.test(itA7) && /\[HIPÓTESE/.test(itA7), 'falta item');
 
 // G8 · honestidade do que se afirma
 const mkC8 = secaoV8(agV8('estrategista-marketing'), 'Critério de pronto'), mkE8 = secaoV8(agV8('estrategista-marketing'), 'Erros conhecidos');

@@ -188,6 +188,13 @@ visto falhando antes.
 - **Backup (D-i):** `engenheiro-dados` só dá por pronto, com banco próprio, o backup provado por restauração num
   ambiente separado (com `RESTORE.md`); caso 6 no eval; checklist S-13 e extra B3.
 - `engenheiro-software` condensado para voltar às 90 linhas depois da seção de referências da parte B.
+- **Leis conferidas no texto oficial (2026-11-01, `especialista-lgpd`):** LGPD, CDC, LBI, Marco Civil, Leis 9.279,
+  9.609 e 9.610, MP 2.200-2, ECA Digital (vigência 17/03/2026, art. 41-A), Resolução CD/ANPD 19/2024, medida
+  preventiva da ANPD de 02/07/2024 (treino de IA) e PL 2338/2023 (aguarda parecer na Câmara): saem as marcas
+  [conferir]; corrigidos o prazo de 15 dias (só confirmação e acesso, art. 19), o art. 39 (instruções do controlador) e
+  o registro do aceite (entre particulares vale a MP 2.200-2, art. 10, §2º; a Lei 14.063 só rege assinatura com ente
+  público); ficam [HIPÓTESE] o Marco Civil e a LBI para ferramenta interna e a ausência de lei sobre rótulo de IA, e
+  [conferir] o alinhamento da NBR 17225 à WCAG 2.2 (texto da ABNT não aberto); casos de `testar-hooks.js` ajustados.
 - **Trava de segredos, falso positivo:** senha sem nenhuma letra ou número (`…`, `***`) conta como marcador; o próprio
   CHANGELOG, que descreve o formato `Server=…;Password=…`, era bloqueado. Medido depois: a árvore inteira do plugin (206
   arquivos) e a de um projeto real (671 arquivos, 158 mil linhas) como um commit só passam sem bloqueio nem pergunta, em

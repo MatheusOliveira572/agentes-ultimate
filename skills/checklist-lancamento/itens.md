@@ -4,8 +4,8 @@ Adaptado dos checklists do autor do plugin ("The App Launch Checklist" e "Pre-la
 leis brasileiras no lugar das estrangeiras. Leia só os blocos que o perfil (SKILL.md §2) aplicou.
 
 Formato de cada item: `- **<bloco>-<n> · título.** o que é e quando vale. Verificar: como provar o comportamento.
-Dono: quem faz.` Item que cita lei traz o link oficial; **[conferir]** = artigo ainda não conferido no texto oficial pelo
-`especialista-lgpd`. O validador (`scripts/validar.js`) exige "Verificar:" em todo item e o link em todo item que cita lei.
+Dono: quem faz.` Item que cita lei traz o link oficial; **[conferir]** = texto oficial ainda não aberto pelo
+`especialista-lgpd` (as leis foram conferidas em 2026-11-01); **[HIPÓTESE]** = interpretação a confirmar com o jurídico. O validador (`scripts/validar.js`) exige "Verificar:" em todo item e o link em todo item que cita lei.
 
 **Painel interno (Power BI, SharePoint):** a plataforma cuida de login, cookies, CORS e CSRF; o bloco S-web quase nunca
 entra. Entram segredos, quem acessa o quê (workspace, link de compartilhamento, RLS), LGPD de empregado,
@@ -73,9 +73,11 @@ acessibilidade, licenças e a honestidade do que o painel afirma ("atualizado em
 - **S-12 · Log de segurança, sem segredo.** Login certo e errado, permissão negada, ação de administração, troca de
   papel, limite atingido e evento de pagamento ficam registrados com hora UTC, ID do usuário (não o perfil), IP, ID da
   requisição e resultado; senha, token, cookie e chave nunca entram no log; alerta para força bruta e pico de erros.
-  App público com fins econômicos: o Marco Civil (art. 15 [conferir]) manda guardar os registros de acesso por 6 meses
-  (https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2014/lei/l12965.htm); ferramenta interna [HIPÓTESE] não se
-  enquadra, confirme com o jurídico. Verificar: erre o login 5 vezes e ache os eventos no log em até 2 min, com hora,
+  App público com fins econômicos: o Marco Civil (art. 15) manda o provedor de aplicação (pessoa jurídica, atividade
+  organizada, profissional e com fins econômicos) guardar os registros de acesso, sob sigilo, por 6 meses
+  (https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2014/lei/l12965.htm, consultada em 2026-11-01); ferramenta
+  interna [HIPÓTESE: não é oferecida como aplicação com fins econômicos, e a lei não trata do caso] não se enquadra,
+  confirme com o jurídico. Verificar: erre o login 5 vezes e ache os eventos no log em até 2 min, com hora,
   conta e IP; procure no log por `password`, `token`, `authorization`: 0 achado. Dono: `engenheiro-software`.
   Roteiro: `seguranca-revisao.md`, 08.
 
@@ -149,32 +151,37 @@ Dono de todos: `engenheiro-software` (corrige com teste que falha antes); `audit
 
 ## P · Privacidade (LGPD)
 Dono de todos: `especialista-lgpd`, com validação do encarregado ou de advogado quando houver efeito legal. LGPD:
-https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm.
+https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm (artigos conferidos em 2026-11-01).
 - **P-1 · Inventário e minimização.** Cada dado pessoal com titular, finalidade, base legal (art. 7º; art. 11 para
   sensível), quem acessa, onde fica e prazo; dado sem finalidade não se coleta. Verificar: o tráfego real e os logs não
   mandam nem guardam dado fora do inventário (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 - **P-2 · Aviso de privacidade a partir dos fluxos reais.** Diz o que, para quê, com quem, por quanto tempo e como
-  exercer os direitos; tem versão e data e abre sem login (art. 6º, VI, e art. 9º [conferir]). Verificar: o aviso
+  exercer os direitos; tem versão e data e abre sem login (art. 6º, VI, e art. 9º). Verificar: o aviso
   comparado linha a linha com o inventário, a lista de terceiros e o tráfego; nada a mais nem a menos (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 - **P-3 · Ciência não é consentimento.** Política e termos se dão ciência; consentimento, quando é a base, é por
-  finalidade, separado, desmarcado e revogável; o genérico é nulo (art. 8º, §4º e §5º [conferir]). Verificar: conta de
+  finalidade, separado, desmarcado e revogável; o genérico é nulo (art. 8º, §4º e §5º). Verificar: conta de
   teste sem marcar nada não recebe marketing; revogar funciona em todas as ferramentas (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 - **P-4 · Prazo de guarda que se cumpre.** Tabela por categoria, contando backups, logs e ferramentas de terceiros
-  (art. 15 e 16 [conferir]). Verificar: um registro de teste percorre o ciclo e some ou é anonimizado no prazo em todo
+  (art. 15 e 16). Verificar: um registro de teste percorre o ciclo e some ou é anonimizado no prazo em todo
   lugar onde foi copiado (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 - **P-5 · Terceiros que recebem dado.** Lista dos serviços (hospedagem, análise de uso, IA, e-mail, rastreio de erro,
-  suporte), cada um com contrato de operador (art. 39 [conferir]), suboperadores conhecidos e, se houver, transferência
-  internacional com a garantia (art. 33 a 36 [conferir]). Verificar: captura do tráfego do app comparada com a lista,
+  suporte), cada um com contrato que registra as instruções do controlador (o operador as segue, art. 39), suboperadores
+  conhecidos e, se houver, transferência internacional com a garantia (art. 33 a 36); nas cláusulas-padrão, as da
+  Resolução CD/ANPD 19/2024 (prazo de 12 meses desde 23/08/2024 para incorporá-las;
+  https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024). Verificar: captura do tráfego do app comparada com a lista,
   refeita a cada versão que muda SDK (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
-- **P-6 · Pedidos do titular.** Acesso, correção, eliminação e portabilidade com identidade conferida, resposta
-  simplificada na hora ou completa em até 15 dias e registro (art. 18 e 19 [conferir]). Verificar: um pedido completo de
+- **P-6 · Pedidos do titular.** Acesso, correção, eliminação e portabilidade com identidade conferida e registro;
+  confirmação e acesso simplificados na hora ou por declaração completa em até 15 dias (art. 19); os demais, na hora ou
+  com resposta que diz o motivo (art. 18, §§ 3º a 5º). Verificar: um pedido completo de
   uma conta de teste: a cópia vem inteira e a eliminação chega a todo sistema (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
-- **P-7 · Criança e adolescente.** Melhor interesse e consentimento de um dos pais para criança (art. 14 [conferir]) e
-  as regras do ECA Digital (Lei 15.211/2025, https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15211.htm;
-  [HIPÓTESE: vigência em 17/03/2026; conferir]). Entra só se o produto pode ter esse público. Verificar: nenhum dado de
+- **P-7 · Criança e adolescente.** Melhor interesse e consentimento de um dos pais para criança (art. 14, caput e §1º) e
+  as regras do ECA Digital (Lei 15.211/2025, em vigor desde 17/03/2026, art. 41-A; sem perfilamento para publicidade,
+  art. 22 e 26; https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15211.htm). Entra só se o produto pode ter esse público. Verificar: nenhum dado de
   rastreio, propaganda ou análise sobre a criança sai do app antes do consentimento.
 - **P-8 · IA não treina com dado de usuário sem base e aviso.** Treinar é finalidade nova: base legal e aviso antes, e
-  não vale para o dado antigo sem novo aviso (art. 6º, I, e art. 7º [conferir]). Verificar: confirmação escrita com os
+  o dado antigo pede cuidado a mais, porque o titular não esperava esse uso (art. 6º, I, e art. 7º; ANPD, medida
+  preventiva contra a Meta, 02/07/2024:
+  https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-determina-suspensao-cautelar-do-tratamento-de-dados-pessoais-para-treinamento-da-ia-da-meta). Verificar: confirmação escrita com os
   fornecedores de IA (opção de treino desligada) e com o time de que não há canal de treino sem autorização (LGPD: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 - **P-9 · Cookies e rastreadores só depois da escolha.** Site público que usa rastreador com base em consentimento:
   nada opcional roda antes da escolha; recusar é tão fácil quanto aceitar (Guia orientativo da ANPD sobre cookies,
@@ -182,8 +189,10 @@ https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm.
   https://www.gov.br/anpd/pt-br/documentos-e-publicacoes/guia-orientativo-cookies-e-protecao-de-dados-pessoais.pdf).
   Verificar: num perfil limpo do navegador, nenhum cookie ou requisição opcional antes da escolha; repita depois de
   recusar e de retirar o consentimento.
-- **P-10 · Registro do aceite dos termos.** Quem, qual versão, quando e como, sem sobrescrever (Lei 14.063/2020,
-  https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/lei/l14063.htm [conferir]). Verificar: para um usuário de
+- **P-10 · Registro do aceite dos termos.** Quem, qual versão, quando e como, sem sobrescrever. Entre particulares, o
+  aceite eletrônico vale por outro meio de provar autoria e integridade que as partes admitam (MP 2.200-2/2001, art. 10,
+  §2º, https://www.planalto.gov.br/ccivil_03/mpv/antigas_2001/2200-2.htm); a Lei 14.063/2020 só rege a assinatura com
+  ente público (art. 2º, https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/lei/l14063.htm). Verificar: para um usuário de
   teste, dá para mostrar a versão exata que ele aceitou e quando. Dono: `advogado-contratos`.
 - **P-11 · Painel interno com dado de empregado.** A LGPD vale para empregado; a base costuma ser obrigação legal ou
   execução de contrato (art. 7º, II e V), não consentimento; mostre agregado, não pessoa, quando a decisão não precisa
@@ -193,9 +202,12 @@ https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm.
 
 ## A · Acessibilidade
 Dono de todos: `designer-paineis` (especifica) e quem constrói. Base: WCAG 2.2 (https://www.w3.org/TR/WCAG22/) e a ABNT
-NBR 17225:2025, alinhada a ela. Site de empresa com sede no Brasil: a Lei Brasileira de Inclusão exige acessibilidade
-(Lei 13.146/2015, art. 63 [conferir]; https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm); para
-ferramenta interna, [HIPÓTESE] o dever vem do ambiente de trabalho acessível (art. 34 [conferir]); confirme com o jurídico.
+NBR 17225:2025, lançada em 11/03/2025 (https://www.gov.br/mdh/pt-br/assuntos/noticias/2025/marco/com-apoio-do-governo-federal-nova-norma-tecnica-da-abnt-e-instituida-para-impulsionar-acessibilidade-digital-no-brasil),
+alinhada a ela [conferir: texto da norma não aberto]. Site de empresa com sede ou representação no Brasil: a Lei
+Brasileira de Inclusão exige acessibilidade nos sítios da internet (Lei 13.146/2015, art. 63; https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm,
+consultada em 2026-11-01); para ferramenta interna, [HIPÓTESE: o art. 63 fala de sítio da internet, e o painel interno
+não é sítio aberto] o dever vem do ambiente de trabalho acessível e inclusivo que a empresa tem de garantir (art. 34,
+§1º); confirme com o jurídico.
 - **A-1 · Contraste em tudo e em todos os estados.** Texto ≥ 4,5:1 (3:1 se grande); barra, borda de campo, ícone e foco
   ≥ 3:1 (WCAG 1.4.11); conferido no normal, ao passar o mouse, selecionado, desabilitado e erro; cor nunca sozinha.
   Verificar: verificador automático nos fluxos principais e revisão manual do que ele não mede (texto sobre imagem);
@@ -212,7 +224,7 @@ ferramenta interna, [HIPÓTESE] o dever vem do ambiente de trabalho acessível (
   itens com dono. Dono: Só o usuário faz (convidar).
 
 ## H · Honestidade do que se afirma
-Produto ao consumidor: CDC, art. 6º, III, art. 30, art. 36 e art. 37 [conferir] (https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm) e o código do CONAR
+Produto ao consumidor: CDC, art. 6º, III, art. 30, art. 36 e art. 37 (https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm, consultado em 2026-11-01) e o código do CONAR
 (https://www.conar.org.br/). Painel interno: o CDC não se aplica a empregado, mas a honestidade sobre atualização e
 cobertura dos dados vale do mesmo jeito.
 - **H-1 · Alegação objetiva com evidência datada.** "Seguro", "certificado", "100%", resultado, economia, "com IA",
@@ -229,7 +241,7 @@ cobertura dos dados vale do mesmo jeito.
   `estrategista-marketing` (texto).
 - **H-4 · Depoimentos e avaliações reais.** Cada um ligado a um cliente real e à fonte; incentivo declarado perto do
   depoimento; negativos e positivos pelas mesmas regras; nada escrito pelo time ou por IA como se fosse de cliente.
-  Verificar: rastreio de cada depoimento até o cliente e a fonte (CDC, art. 37 [conferir]: https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm). Dono:
+  Verificar: rastreio de cada depoimento até o cliente e a fonte (CDC, art. 36 e art. 37, §1º: https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm). Dono:
   `estrategista-marketing`.
 - **H-5 · Selo e certificação só com relatório vigente.** ISO, SOC 2, "em conformidade com a LGPD": cada um com o
   certificado ou relatório da própria empresa, vigente, com escopo, tipo e período; o do provedor de nuvem não cobre o
@@ -237,23 +249,26 @@ cobertura dos dados vale do mesmo jeito.
   o documento ao lado; "em conformidade com a LGPD" só com o inventário e o parecer do `especialista-lgpd` (LGPD:
   https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm). Dono: `analista-compliance`.
 - **H-6 · Logo de cliente só com permissão escrita.** Logo e nome de cliente sugerem relação e endosso; a marca é de
-  quem a registrou (Lei 9.279/1996, art. 129 e art. 195 [conferir]; https://www.planalto.gov.br/ccivil_03/leis/l9279.htm).
+  quem a registrou, que pode licenciar o uso (Lei 9.279/1996, art. 129 e art. 130, II; concorrência desleal, art. 195;
+  https://www.planalto.gov.br/ccivil_03/leis/l9279.htm).
   Verificar: permissão escrita arquivada com data e escopo para cada logo; o logo sai quando a relação acaba. Dono:
   `advogado-contratos`.
 - **H-7 · Conteúdo feito com IA rotulado quando alguém puder ser enganado.** Texto, imagem, voz ou vídeo feitos com IA
   que pareçam de pessoa real, depoimento ou foto real levam rótulo, também na exportação; chatbot se identifica como
-  assistente automático. No Brasil não há lei geral sobre isso [HIPÓTESE: o PL 2338/2023 ainda tramita; conferir em
-  https://www25.senado.leg.br/web/atividade/materias/-/materia/157233]. Verificar: o rótulo aparece em toda superfície
+  assistente automático. No Brasil não há lei geral sobre isso [HIPÓTESE: ausência não se prova por busca]; o PL
+  2338/2023 passou no Senado em 10/12/2024 e aguarda parecer na comissão especial da Câmara (consulta em 2026-11-01:
+  https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2487262). Verificar: o rótulo aparece em toda superfície
   onde o conteúdo de IA aparece (tela, exportação, notificação). Dono: `redator` e `designer-documentos`.
 - **H-8 · Sem padrões enganosos.** Nada de urgência falsa (contagem que recomeça, "últimas unidades" inventadas), caixa
-  já marcada, recusa escondida ou menor que o aceite, taxa que aparece só no fim (CDC, art. 37 e art. 39 [conferir]:
+  já marcada, recusa escondida ou menor que o aceite, taxa que aparece só no fim (CDC, art. 37, §1º, e art. 39:
   https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm). Verificar: alguém que não conhece o produto faz cada fluxo e diz o que aceitou; a contagem mostra o mesmo
   prazo ao recarregar, em janela anônima e em outro aparelho; o valor cobrado é o primeiro total mostrado. Dono:
   `estrategista-marketing` e quem desenha a tela.
 
 ## L · Licenças
 Direito autoral: Lei 9.610/1998 (https://www.planalto.gov.br/ccivil_03/leis/l9610.htm) e programa de computador: Lei
-9.609/1998 (https://www.planalto.gov.br/ccivil_03/leis/l9609.htm), artigos [conferir].
+9.609/1998, que aplica a ele o regime do direito autoral (art. 2º) e condiciona o uso a contrato de licença (art. 9º)
+(https://www.planalto.gov.br/ccivil_03/leis/l9609.htm); consultadas em 2026-11-01.
 - **L-1 · Imagem, fonte, ícone e som com licença que cobre o uso.** "Achei na internet" não é licença; licença de foto
   editorial, fonte de desktop usada embutida, Creative Commons não comercial em produto comercial e termos da ferramenta
   de IA que gerou a imagem precisam ser conferidos. Verificar: inventário de cada recurso com origem, tipo de licença,
@@ -266,5 +281,5 @@ Direito autoral: Lei 9.610/1998 (https://www.planalto.gov.br/ccivil_03/leis/l961
 - **L-3 · Material de terceiro sem licença.** Texto, imagem, prompt ou código de terceiro sem licença entra só como
   ideia, com as nossas palavras e a fonte citada; nada copiado para repositório público. Pergunte antes se o material é
   do próprio usuário. Verificar: busca no que vai ser publicado por trechos longos copiados, cada um com licença ou
-  reescrito (Lei 9.610/1998, art. 8º, I, e art. 29 [conferir]: https://www.planalto.gov.br/ccivil_03/leis/l9610.htm).
+  reescrito (Lei 9.610/1998, art. 8º, I, art. 29 e art. 46, III: https://www.planalto.gov.br/ccivil_03/leis/l9610.htm).
   Dono: `pesquisador` e `redator`.

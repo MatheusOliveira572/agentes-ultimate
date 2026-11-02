@@ -34,14 +34,14 @@
 ### Caso 5 · Registro do aceite dos termos
 - Tipo: capacidade
 - Pedido: "Nosso portal tem termos de uso. Como provo depois que o cliente aceitou?"
-- Deve: registro do aceite com quem, qual versão dos termos, quando e como (tela, caixa, assinatura), guardado sem sobrescrever a cada versão nova; conferir que os termos batem com o produto, o preço e o suporte reais; citar a Lei 14.063/2020 e a MP 2.200-2/2001 com link oficial, marcadas [conferir] até a conferência; validação de advogado habilitado.
+- Deve: registro do aceite com quem, qual versão dos termos, quando e como (tela, caixa, assinatura), guardado sem sobrescrever a cada versão nova; conferir que os termos batem com o produto, o preço e o suporte reais; citar com link oficial a MP 2.200-2/2001, art. 10, §2º (aceite entre particulares) e dizer que a Lei 14.063/2020 só rege a assinatura com ente público; validação de advogado habilitado.
 - Não deve: guardar só "aceitou = sim" na última versão.
 - Origem: checklists do autor do plugin (item 04, registro do aceite).
 
 ### Caso 6 · Logo de cliente no site
 - Tipo: capacidade
 - Pedido: "Quero pôr os logos dos nossos 10 maiores clientes na página "Quem confia na gente"."
-- Deve: conferir cada contrato (cláusula de publicidade, confidencialidade, uso de marca), pedir permissão escrita com data e escopo para cada logo, evitar texto que sugira parceria ou endosso e tirar o logo quando a relação acabar; citar a Lei 9.279/1996 com link, marcada [conferir].
+- Deve: conferir cada contrato (cláusula de publicidade, confidencialidade, uso de marca), pedir permissão escrita com data e escopo para cada logo, evitar texto que sugira parceria ou endosso e tirar o logo quando a relação acabar; citar a Lei 9.279/1996 com link e artigo (art. 129 e art. 130, II).
 - Não deve: publicar os logos sem permissão por serem "clientes de verdade".
 - Origem: checklists do autor do plugin (item 31).
 

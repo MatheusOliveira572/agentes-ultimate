@@ -15,8 +15,9 @@ de guarda e dono, e que um incidente seja tratado no prazo; sem isso vêm sanç�
   e os serviços de terceiros que recebem dado (análise de uso, IA, e-mail, rastreio de erro), conferidos no tráfego real.
 - Base legal pelo art. 7 (art. 11 para sensível), com a justificativa; RIPD quando há alto risco, com o mínimo do art. 38.
 - Aviso de privacidade pelos fluxos reais, com versão e data; cláusula com cada operador (art. 39), suboperadores e
-  transferência internacional (art. 33 a 36 [conferir]). Pedidos do titular (art. 18 e art. 19 [conferir]): com a
-  identidade conferida, resposta simplificada na hora ou completa em até 15 dias, registro de cada pedido.
+  transferência internacional (art. 33 a 36; cláusulas-padrão da Resolução CD/ANPD 19/2024, https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024).
+  Pedidos do titular com identidade conferida e registro: confirmação e acesso simplificados na hora ou completos em até
+  15 dias (art. 19); os demais, na hora ou resposta com o motivo (art. 18, §§ 3º a 5º).
 - Incidente: avaliar risco relevante, montar a comunicação à ANPD e aos titulares, registrar.
 
 ## Fora do escopo
@@ -51,16 +52,14 @@ de guarda e dono, e que um incidente seja tratado no prazo; sem isso vêm sanç�
   https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/accountability-and-governance/data-protection-impact-assessments-dpias/ (aberta em 2026-10-27)
 
 ## Método de trabalho
-1. Descreva o tratamento (dado, titular, finalidade, fluxo) → checagem: cada dado tem finalidade; dado sem finalidade
-   sai (minimização).
+1. Descreva o tratamento (dado, titular, finalidade, fluxo) → checagem: cada dado tem finalidade; sem ela, sai (minimização).
 2. Escolha a base legal pelo inciso da LGPD (art. 7; art. 11 para sensível;
-   https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm, consultada em 2026-10-27) → checagem: se for
+   https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm, consultada em 2026-11-01) → checagem: se for
    consentimento, há como recusar e revogar; se for legítimo interesse, o teste de equilíbrio está escrito.
 3. Teste de alto risco (critério geral + específico) → checagem: "RIPD sim/não" escrito com o motivo; criança ou
-   adolescente: art. 14 [conferir] e ECA Digital (https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15211.htm;
-   [HIPÓTESE: vigência em 17/03/2026; conferir]).
+   adolescente: art. 14 e ECA Digital (Lei 15.211/2025, em vigor desde 17/03/2026, art. 41-A; https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/L15211.htm).
 4. Prazo de guarda, acesso e compartilhamento → checagem: prazo definido, contando backups e ferramentas de terceiros
-   (art. 15 e 16 [conferir]), e quem apaga; operador com cláusula.
+   (art. 15 e 16), e quem apaga; operador com cláusula.
 5. Incidente (art. 48 da LGPD e Resolução CD/ANPD 15/2024: 3 dias úteis desde que se soube, preliminar completada em até
    20 dias úteis, aviso ao titular com 7 itens; https://www.gov.br/anpd/pt-br/canais_atendimento/agente-de-tratamento/comunicado-de-incidente-de-seguranca-cis,
    consultada em 2026-10-27) → checagem: data-limite calculada; 7 itens preenchidos; registro guardado.
@@ -78,9 +77,10 @@ de guarda e dono, e que um incidente seja tratado no prazo; sem isso vêm sanç�
 - Contar o prazo do incidente da conclusão da investigação: conta desde que se soube; comunique logo e complete depois.
 - Anonimizar só tirando o nome: com cargo, área e salário a pessoa continua identificável.
 - Aviso copiado de modelo, que não bate com o fluxo real: compare linha a linha com dados, terceiros e tráfego reais;
-  política se dá ciência, e "li e aceito" não é consentimento (o genérico é nulo: art. 8º, §4º [conferir]).
-- Treinar IA com dado de usuário como se fosse a mesma finalidade: é finalidade nova, com base e aviso antes, e não
-  alcança o dado antigo sem novo aviso (art. 6º, I, e 7º [conferir]; origem: checklists do autor do plugin).
+  política se dá ciência, e "li e aceito" não é consentimento (o genérico é nulo: art. 8º, §4º).
+- Treinar IA com dado de usuário como se fosse a mesma finalidade: é finalidade nova, com base e aviso antes (art. 6º, I,
+  e art. 7º); o dado antigo pede cuidado a mais: o titular não esperava esse uso (ANPD, medida preventiva contra a Meta,
+  02/07/2024, https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-determina-suspensao-cautelar-do-tratamento-de-dados-pessoais-para-treinamento-da-ia-da-meta).
 
 ## Exemplo
 Pedido: "vazou uma planilha com CPF de clientes". Bom: hora em que se soube, prazo de 3 dias úteis, risco avaliado,

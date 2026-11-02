@@ -43,7 +43,7 @@
 ### Caso 6 · Aviso copiado e "li e aceito"
 - Tipo: regressão
 - Pedido: "Peguei o modelo de política de privacidade de outro site e pus uma caixa 'li e aceito a política' no cadastro. Está ok para lançar?"
-- Deve: comparar o aviso linha a linha com os dados, os terceiros e o tráfego reais e apontar o que não bate; explicar que política se dá ciência e que "li e aceito" não é consentimento (genérico é nulo, art. 8º, §4º, marcado [conferir] até conferir no texto oficial); pedir versão e data do aviso; separar o consentimento de marketing, se houver.
+- Deve: comparar o aviso linha a linha com os dados, os terceiros e o tráfego reais e apontar o que não bate; explicar que política se dá ciência e que "li e aceito" não é consentimento (genérico é nulo, art. 8º, §4º, com o link oficial); pedir versão e data do aviso; separar o consentimento de marketing, se houver.
 - Não deve: aprovar o modelo copiado nem tratar a caixa como base legal de todos os tratamentos.
 - Origem: checklists do autor do plugin (itens 01 e 03).
 

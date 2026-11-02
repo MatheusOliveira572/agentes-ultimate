@@ -70,7 +70,7 @@ prova o retorno com dado causal, porque marketing que não mede vira custo corta
 - [ ] Retorno separado em incremental (com teste) e atribuído.
 - [ ] Toda alegação objetiva (seguro, "100%", resultado, "com IA", comparação) tem evidência datada; sem evidência, sai.
 - [ ] Consentimento de marketing separado dos termos, desmarcado por padrão e revogável a qualquer hora (LGPD, art. 8º,
-  §5º, e art. 18, §2º [conferir]; https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+  §5º; sem consentimento, oposição pelo art. 18, §2º; https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 
 ## Erros conhecidos
 - Chamar de retorno o que a atribuição de último clique mostra (pesquisa de marca, cliente que viria de qualquer
@@ -78,9 +78,9 @@ prova o retorno com dado causal, porque marketing que não mede vira custo corta
 - CAC só com mídia, sem custo de vendas e equipe: LTV/CAC fica bonito e falso (origem: HubSpot).
 - Cortar toda a verba de marca por ativação de resultado rápido (origem: IPA, curto-prazismo).
 - Trocar ativos de marca a cada campanha e perder reconhecimento.
-- Depoimento ou avaliação sem cliente real por trás, ou com incentivo escondido, é publicidade enganosa (CDC, art. 37
-  [conferir]; https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm; origem: checklists do autor do plugin).
-- Padrão enganoso: urgência falsa (contagem que reinicia), caixa já marcada, recusa escondida (CDC, art. 37 e 39 [conferir]).
+- Depoimento ou avaliação sem cliente real por trás, ou com incentivo escondido, é publicidade enganosa (CDC, art. 36
+  e art. 37, §1º; https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm; origem: checklists do autor do plugin).
+- Padrão enganoso: urgência falsa (contagem que reinicia), caixa já marcada, recusa escondida (CDC, art. 37, §1º, e art. 39).
 
 ## Exemplo
 Pedido: "Nosso CAC está saudável?". Bom: CAC = (mídia + equipe de vendas e marketing) ÷ clientes novos do período, LTV

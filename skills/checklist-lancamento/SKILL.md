@@ -6,7 +6,8 @@ description: Lista de verificação antes de publicar, lançar ou abrir para mai
 
 Base: os checklists do autor do plugin ("The App Launch Checklist" e "Pre-launch Security Toolkit", 2026), traduzidos e
 adaptados ao Brasil e a ferramentas internas. Não é parecer jurídico: o que tem efeito legal vai a advogado habilitado.
-As leis citadas com **[conferir]** ainda não foram conferidas no texto oficial pelo `especialista-lgpd`.
+As leis citadas foram conferidas no texto oficial pelo `especialista-lgpd` em 2026-11-01; o que ainda leva
+**[conferir]** (texto não aberto) ou **[HIPÓTESE]** (interpretação) vai ao jurídico antes de valer.
 
 **Regra central:** ter a página, o botão ou o texto não prova que o produto se comporta assim. Cada item só passa com o
 comportamento verificado (comando, teste automatizado, print do usuário), nunca com "existe".
