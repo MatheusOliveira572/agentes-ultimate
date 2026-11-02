@@ -536,3 +536,9 @@ Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11
   html, css, react e frontend sem site vão ao engenheiro); teclado na prova, no método e no critério (A-2); bancada com tolerância
   de 3 níveis por canal (M-1); objeção e títulos nascidos do produto (M-2); vidro sem contradição (M-3); ponto preso à curva (M-4);
   20 mutantes na prova da página (M-5); 8 larguras (M-6); a maré até o fim da página (b-1); b-2 a b-7.
+- **Correção de relato (b-11 da 2ª revisão):** a mensagem do commit 4e28d29 diz que os 2 mutantes que escapavam "agora são
+  pegos". Um deles não foi pego: foi **trocado**. "Tábua de preços sem empilhar" em 768 px não é defeito (fica apertada, mas
+  legível, como o revisor confirmou no PNG), e passou a rodar em 320 px, onde o cabeçalho da tábua se sobrepõe e é pego.
+- **2ª revisão do lote** (`docs/revisao-0.8.0-sites-r2.md`): junção com a `main` antes de mexer no roteador; desempate site ×
+  interface (`pacotes.json` → `desempate`, regra genérica no `roteador.js`); 160 frases na bateria; teclado comparado com a
+  lista real de controles; tábua das semanas no lugar do calendário; PROVADO só com 3 rodadas estáveis.
