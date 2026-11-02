@@ -403,7 +403,7 @@ async function provarSite() {
     await midia(b, [{ name: 'prefers-color-scheme', value: 'light' }]); await janela(b, 390);
     await b.cdp('Emulation.setScriptExecutionDisabled', { value: true }); await ir(b, u); await espera(600);
     await b.cdp('Emulation.setScriptExecutionDisabled', { value: false });
-    const t = await b.ev(`(function(){var e=document.querySelector('h1');var c=getComputedStyle(e);var l=getComputedStyle(document.querySelector('.linha.on'));var b=document.body.innerText;return {h1:+c.opacity===1,titulos:document.querySelectorAll('h2').length,tem:['312','Cartão vence','maré baixa','Por que é pago','178,80','fictício'].every(function(s){return b.indexOf(s)>=0}),curva:+l.opacity===1,botoes:getComputedStyle(document.getElementById('cenas')).display==='none'}})()`);
+    const t = await b.ev(`(function(){var e=document.querySelector('h1');var c=getComputedStyle(e);var l=getComputedStyle(document.querySelector('.linha.on'));var b=document.body.innerText;return {h1:+c.opacity===1,titulos:document.querySelectorAll('h2').length,tem:['312','Cartão vence','maré baixa','E quando a tábua erra','178,80','fictício'].every(function(s){return b.indexOf(s)>=0}),curva:+l.opacity===1,botoes:getComputedStyle(document.getElementById('cenas')).display==='none'}})()`);
     if (png) fs.writeFileSync(path.join(PNG, png), await foto(b));
     return { ...t, texto_completo: t.h1 && t.titulos >= 6 && t.tem && t.curva && t.botoes };
   }

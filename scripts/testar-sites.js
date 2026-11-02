@@ -69,6 +69,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     comAg.length === 1 && ['landing page', 'pagina de vendas', 'site institucional'].every((w) => comAg[0].palavras.includes(w)) &&
     !['landing page', 'site institucional'].some((w) => ((pac.pacotes.interface || {}).palavras || []).includes(w)), JSON.stringify(comAg.map((p) => p.nome)));
   caso('0.8.0 sites A-2: teclado no método e no critério de pronto', /Shift\+Tab/.test(ag.split('## Método de trabalho')[1].split('## Critério')[0]) && /Teclado/.test(ag.split('## Critério de pronto')[1].split('## Erros')[0]) && /Caso \d+ · Teclado/.test(ler('evals', 'designer-sites.md')), 'falta');
+  caso('0.8.0 sites M-2: agente e critério proíbem imitar argumento e ordem de referência', /sem imitar os de uma referência/.test(ag) && /nem o argumento e a ordem de um bloco/.test(ag.split('## Critério de pronto')[1].split('## Erros')[0]), 'falta');
   caso('0.8.0 sites agente: método diz repertório, não molde, e direção própria', /repertório/i.test(ag) && /direção própria/i.test(ag), 'falta');
 
   // ---- Evals: vidro para os dois lados e os gatilhos ----
@@ -152,6 +153,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const mut = res.mutantes || [];
     caso('0.8.0 sites prova: as checagens falham no caso errado (mutantes)', mut.length >= 5 && mut.every((m) => m.pegou === true), JSON.stringify(mut));
     const html = ler(...PROVA, 'site-preamar.html');
+    caso('0.8.0 sites M-2: sem o bloco e os títulos parecidos com os de uma referência', !/Por que é pago|quanto sobra|Perguntas de quem/i.test(html), 'sobrou');
     caso('0.8.0 sites direitos: a página de prova não traz nome, texto nem endereço de terceiros, e diz que é fictícia', /fict[ií]c/i.test(html) && !/finmate|usecalen|dinzo|nivora|code ?and ?chill/i.test(html) && !/(src|href)=["']https?:/i.test(html) && !/url\(["']?https?:/i.test(html), 'falta aviso ou há referência externa');
     // Cada efeito ou tem prova na bancada, ou fica [ESTIMATIVA] no quadro.
     const quadro = lerSP('efeitos', 'provas.md');

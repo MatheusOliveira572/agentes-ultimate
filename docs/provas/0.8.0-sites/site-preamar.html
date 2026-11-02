@@ -140,6 +140,7 @@ tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 .objecao { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 72px; align-items: start; }
 .objecao .resp { font: 400 clamp(21px, 2vw, 25px)/1.42 var(--serif); margin-top: 22px; max-width: 34em; }
 .dados { border-left: 2px solid var(--regua-forte); padding-left: 28px; }
+.certeza { display: block; width: 100%; height: 44px; margin-top: 14px; fill: none; stroke: var(--mar); stroke-width: 2.5; } .certeza .est { stroke-dasharray: 6 6; }
 .dados ul { list-style: none; margin: 14px 0 0; padding: 0; } .dados li { padding: 10px 0; border-top: 1px solid var(--regua); font-size: 16px; }
 
 /* Preço */
@@ -261,8 +262,8 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
 <section class="heroi">
   <div class="grade heroi-in">
     <div>
-      <h1>Veja a maré baixa do seu dinheiro antes de ela chegar.</h1>
-      <p class="sub">O Preamar lê as suas contas e desenha o mês como uma tábua de marés: em que dia o saldo desce mais, e quanto sobra até lá.</p>
+      <h1>Seu dinheiro tem maré. Agora tem tábua.</h1>
+      <p class="sub">O Preamar lê as suas contas e desenha o mês como uma tábua de marés: em que dia o saldo desce mais, e o que o empurra para baixo.</p>
       <div class="acoes">
         <a class="btn btn-1" href="#preco">Testar por 14 dias</a>
         <a class="btn btn-2" href="#como-ler">Como se lê a tábua</a>
@@ -404,15 +405,16 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
 <section class="bloco">
   <div class="grade objecao">
     <div>
-      <h2 id="pago">Por que é pago?</h2>
-      <p class="resp">Porque quem paga é você, e não quem quer vender um empréstimo no dia da sua maré baixa. Um aplicativo grátis de finanças precisa ganhar em algum lugar; o nosso ganha a assinatura, e só.</p>
+      <h2 id="erra">E quando a tábua erra?</h2>
+      <p class="resp">Erra, como toda previsão. Uma tábua não manda no mar: ela dá a hora provável, e quem navega olha o céu também. Por isso a curva mostra o que já é certo e o que ainda é palpite, e se refaz a cada lançamento.</p>
     </div>
     <aside class="dados">
-      <h3>O que fazemos com os seus dados</h3>
+      <h3>Como ler a certeza</h3>
+      <svg class="certeza" viewBox="0 0 320 44" aria-hidden="true"><path d="M0 34 C50 34 70 10 130 10 L160 10"/><path class="est" d="M160 10 C210 10 240 30 320 30"/></svg>
       <ul>
-        <li>Não vendemos nem compartilhamos para oferta de crédito.</li>
-        <li>Não mostramos anúncio.</li>
-        <li>Você baixa ou apaga tudo pela conta, a qualquer hora.</li>
+        <li>Linha cheia: salário, aluguel e contas fixas.</li>
+        <li>Tracejado: mercado e fatura ainda em aberto.</li>
+        <li>Chegou um gasto novo? A curva muda no mesmo dia.</li>
       </ul>
     </aside>
   </div>
@@ -452,8 +454,8 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
 
 <section class="bloco">
   <div class="grade perguntas">
-    <h2 id="perguntas" style="margin-bottom:28px">Perguntas de quem ainda está em dúvida</h2>
-    <details class="p"><summary>A previsão erra?</summary><p>Erra, sim: um gasto novo muda a curva. Por isso ela se refaz a cada lançamento e mostra o que é certo e o que é estimado.</p></details>
+    <h2 id="perguntas" style="margin-bottom:28px">Antes de confiar na tábua</h2>
+    <details class="p"><summary>Funciona com conta em mais de um banco?</summary><p>Funciona. A tábua soma as contas que você autorizar e mostra uma curva só, com o saldo de todas.</p></details>
     <details class="p"><summary>Preciso cadastrar tudo à mão?</summary><p>Não. Depois de autorizar a leitura, os lançamentos entram sozinhos; você só corrige o que quiser.</p></details>
     <details class="p"><summary>O Preamar pode mexer no meu dinheiro?</summary><p>Não. A conexão é só de leitura, e nenhum pagamento sai pelo aplicativo.</p></details>
     <details class="p"><summary>E se eu cancelar?</summary><p>Você baixa os seus dados e a assinatura termina no fim do período pago. Nada é renovado depois.</p></details>

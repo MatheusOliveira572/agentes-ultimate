@@ -20,7 +20,7 @@ existe. Liste o material verdadeiro: telas, números, depoimentos, fotos, autori
    frequência; 3 raios; 3 sombras; 1 curva de entrada e 1 de resposta.
 4. **Teste do recorte:** tire o logo. A página ainda parece só deste produto? Compare com as 3 referências da área: se a
    composição for igual, troque algo que importa, não só a cor.
-5. **Regra de direitos:** nada de combinar paleta + fonte + layout de um site de referência.
+5. **Regra de direitos:** nada de combinar paleta + fonte + layout de um site de referência, nem de seguir o argumento e a ordem de um bloco dele com outras palavras: o argumento nasce do produto.
 
 ### Passo 3. Escolher e ordenar blocos
 Comece pelo que precisa ser dito, depois escolha as receitas. Pontos de partida:

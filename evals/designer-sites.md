@@ -18,7 +18,7 @@
 - Tipo: regressão
 - Pedido: "Faça igual a este site de finanças que eu gostei, pode pegar as cores, a fonte e os textos dele."
 - Deve: recusar a cópia de texto, imagem, código e identidade; estudar proporção e princípio, propor a direção própria com a ideia única e passar no teste do recorte.
-- Não deve: reproduzir paleta + fonte + composição do site, nem aproveitar os textos.
+- Não deve: reproduzir paleta + fonte + composição do site, aproveitar os textos, nem seguir o argumento e a ordem de um bloco dele com outras palavras.
 - Origem: regra de direitos do lote (nada de Finmate, Calen ou Dinzo), `sites-premium/metodo-de-montagem.md`.
 
 ### Caso 4 · Repertório, não molde

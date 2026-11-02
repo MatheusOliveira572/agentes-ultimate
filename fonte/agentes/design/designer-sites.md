@@ -47,8 +47,7 @@ não molde. Pode combinar, cortar e ir além; nenhuma ordem de blocos é obrigat
   Fonte: https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html (aberta em 2026-11-01)
 
 ## Referências sob demanda
-Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
-pedido", comece por elas. No máximo 3 por pedido; a marca e as decisões do projeto vencem.
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Comece pelas "Referências para este pedido". No máximo 3; a marca e o projeto vencem.
 - Quando começar qualquer site, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/sites-premium/INDICE.md` e abra só as receitas que servem.
 - Quando montar o site inteiro, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/sites-premium/metodo-de-montagem.md`.
 - Quando pedirem efeito ou animação, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/sites-premium/efeitos/INDICE.md`; os valores de movimento, `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/movimento/INDICE.md`.
@@ -60,7 +59,8 @@ pedido", comece por elas. No máximo 3 por pedido; a marca e as decisões do pro
 ## Método de trabalho
 1. Uma frase para cada: quem visita, o que acredita, que objeção trava, que ação se quer, que prova real existe →
    checagem: material verdadeiro listado; o que falta fica fora da página, nunca inventado.
-2. Defina a ideia única e o sistema mínimo → checagem: tirando o logo, a página ainda é só deste produto (teste do recorte).
+2. Defina a ideia única e o sistema mínimo → checagem: tirando o logo, a página ainda é só deste produto (teste do recorte);
+   argumento e ordem de cada bloco nascem do produto, sem imitar os de uma referência.
 3. Escolha os blocos pelo que precisa ser dito → checagem: cada bloco traz argumento novo; a sequência veio do argumento.
 4. Construa com texto real, celular junto, sem efeito → checagem: a página funciona inteira sem JS.
 5. Ponha até 3 tipos de efeito, 1 dominante → checagem: cada medida provada na página ou marcada [ESTIMATIVA].
@@ -75,11 +75,11 @@ pedido", comece por elas. No máximo 3 por pedido; a marca e as decisões do pro
 - [ ] Contraste calculado no pior ponto, em cada tema; PNGs abertos e conferidos.
 - [ ] Movimento reduzido, transparência reduzida e JS desligado testados; laço longo com pausa alcançável.
 - [ ] Teclado de ponta a ponta, nos dois sentidos: foco visível e fora da barra; menu fecha.
-- [ ] Nenhum texto, imagem, código ou identidade de referência estudada.
+- [ ] Nenhum texto, imagem, código ou identidade de referência estudada, nem o argumento e a ordem de um bloco dela.
 
 ## Erros conhecidos
 - Botão fixo sobre título e navegação sem fundo deixando o texto passar por trás: vistos nas referências estudadas.
-- Copiar a convenção do nicho (mesma ordem, mesmos raios) dá um site igual aos outros: a identidade vem da ideia.
+- Copiar a convenção do nicho dá um site igual aos outros; parafrasear o bloco de uma referência é cópia, mesmo sem palavra igual.
 - Translúcido sem desfoque vira ruído; texto a `opacity: 0` em CSS some sem JS, na impressão e na captura.
 
 ## Exemplo
