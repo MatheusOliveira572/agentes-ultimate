@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Preamar: a tábua de marés do seu dinheiro (produto fictício)</title>
+<meta name="description" content="Página de demonstração. Produto, valores e nomes fictícios.">
+<style>
+/* Direção: almanaque de marés. Fonte serifada de tábua náutica, régua fina, números tabulares e uma curva que atravessa a dobra. Acento: vermelho de boia. */
+:root {
+  color-scheme: light dark;
+  --fundo: #f1f3ef; --fundo-2: #e6eae5; --cartao: #fbfcfa; --texto: #14242c; --texto-2: #47585f; --regua: #c4ccc8; --regua-forte: #66767c;
+  --acento: #b5321d; --acento-txt: #ffffff; --acento-forte: #952713; --mar: #0f6277; --mar-suave: #0f627724;
+  --n1: #f6d9d1; --n2: #e4e8e0; --n3: #cfe0df; --n4: #a9cfd3; --n5: #7cb6bf; --n-txt: #14242c;
+  --vidro: rgb(251 252 250 / 0.72);
+  --serif: "Sitka Display", "Sitka Text", Georgia, "Times New Roman", serif;
+  --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --entra: cubic-bezier(.16, 1, .3, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0d1a21; --fundo-2: #12232c; --cartao: #152933; --texto: #e8eff0; --texto-2: #a9babf; --regua: #2c424d; --regua-forte: #7f949b;
+    --acento: #f28a70; --acento-txt: #1a0d09; --acento-forte: #f7a48f; --mar: #6cc2d2; --mar-suave: #6cc2d226;
+    --n1: #5a2a22; --n2: #24353d; --n3: #1f4450; --n4: #1f5a6b; --n5: #2a7388; --n-txt: #eef4f5;
+    --vidro: rgb(13 26 33 / 0.72);
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--fundo); color: var(--texto); font: 400 17px/1.55 var(--sans); }
+h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; text-wrap: balance; }
+h2 { font-size: clamp(32px, 3.4vw, 46px); line-height: 1.1; letter-spacing: -0.015em; scroll-margin-top: 88px; }
+h3 { font-size: 21px; line-height: 1.25; }
+p { margin: 0; text-wrap: pretty; }
+a { color: inherit; }
+.num { font-variant-numeric: tabular-nums; }
+.grade { width: min(1240px, 100% - 48px); margin-inline: auto; }
+.bloco { padding-block: 96px; }
+:focus-visible { outline: 2px solid var(--acento-forte); outline-offset: 2px; border-radius: 4px; }
+.pular { position: absolute; left: 12px; top: -80px; background: var(--cartao); color: var(--texto); padding: 12px 16px; border-radius: 8px; z-index: 30; }
+.pular:focus { top: 12px; }
+
+/* Botões */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 24px; border-radius: 10px; font: 600 16px/1.2 var(--sans); text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: background-color .16s ease-out, transform .1s ease-out; }
+.btn:active { transform: scale(.98); }
+.btn-1 { background: var(--acento); color: var(--acento-txt); }
+.btn-2 { background: transparent; color: var(--texto); border-color: var(--regua-forte); }
+@media (hover: hover) { .btn-1:hover { background: var(--acento-forte); } .btn-2:hover { background: var(--mar-suave); } }
+
+/* Navegação: vidro permitido (é camada flutuante) */
+.nav { position: sticky; top: 0; z-index: 20; background: var(--vidro); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); border-bottom: 1px solid var(--regua); }
+.nav-in { display: flex; align-items: center; gap: 28px; min-height: 64px; }
+.marca { font: 500 23px/1 var(--serif); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+.links { display: flex; gap: 4px; margin-left: auto; list-style: none; padding: 0; margin-block: 0; }
+.links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-size: 15px; text-decoration: none; border-radius: 8px; }
+@media (hover: hover) { .links a:hover { background: var(--mar-suave); } }
+.nav .btn { min-height: 44px; padding: 0 16px; font-size: 15px; }
+.menu { display: none; }
+.menu summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; padding: 0 10px; font-size: 15px; border: 1px solid var(--regua-forte); border-radius: 8px; }
+.menu summary::-webkit-details-marker { display: none; }
+
+/* Dobra */
+.heroi { position: relative; overflow: hidden; }
+.heroi-in { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; padding-top: 56px; align-items: start; position: relative; z-index: 2; }
+h1 { font-size: clamp(36px, 5vw, 68px); line-height: 1.04; letter-spacing: -0.02em; }
+.sub { font-size: 19px; color: var(--texto-2); max-width: 54ch; margin-top: 20px; }
+.acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.aviso { font-size: 14px; color: var(--texto-2); margin-top: 14px; }
+
+.tabua { background: var(--cartao); border: 1px solid var(--regua); border-radius: 16px; padding: 22px 24px 18px; box-shadow: 0 1px 4px rgb(10 30 40 / .06); }
+.tabua-topo { font-size: 14px; color: var(--texto-2); display: flex; justify-content: space-between; gap: 12px; }
+.metrica { display: flex; align-items: baseline; font-family: var(--serif); margin-top: 6px; color: var(--texto); }
+.metrica .s { font-size: 26px; margin-right: 6px; } .metrica .i { font-size: 54px; line-height: 1.1; letter-spacing: -0.01em; } .metrica .c { font-size: 26px; }
+.variacao { font-size: 14px; color: var(--texto-2); min-height: 22px; }
+.cenas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.cenas button { min-height: 44px; padding: 0 12px; font: 500 14px/1.15 var(--sans); color: var(--texto); background: transparent; border: 1px solid var(--regua-forte); border-radius: 8px; cursor: pointer; transition: background-color .16s ease-out; }
+.cenas button[aria-pressed="true"] { background: var(--texto); color: var(--fundo); border-color: var(--texto); }
+.cenas .pausa { margin-left: auto; }
+table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 15px; }
+th { text-align: left; font-weight: 500; color: var(--texto-2); font-size: 13px; border-bottom: 1px solid var(--regua-forte); padding: 4px 0; }
+td { border-bottom: 1px solid var(--regua); padding: 7px 0; }
+tr:last-child td { border-bottom: 0; }
+.dir { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.baixa td { font-weight: 600; color: var(--acento-forte); }
+.troca { transition: opacity .3s ease-out; }
+.troca.saindo { opacity: 0; }
+
+.mare { position: relative; margin-top: -24px; height: 240px; z-index: 1; }
+.mare svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.linha { fill: none; stroke: var(--mar); stroke-width: 2.5; vector-effect: non-scaling-stroke; transition: opacity .4s ease-out; opacity: 0; }
+.area { fill: var(--mar-suave); stroke: none; transition: opacity .4s ease-out; opacity: 0; }
+.linha.on, .area.on { opacity: 1; }
+.desenhar .linha.on { stroke-dasharray: 1; stroke-dashoffset: 1; animation: traca 1.2s var(--entra) forwards; }
+@keyframes traca { to { stroke-dashoffset: 0; } }
+.marco { position: absolute; transform: translate(-50%, -100%); font-size: 13px; line-height: 1.2; white-space: nowrap; padding-bottom: 8px; color: var(--texto); }
+.marco::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--mar); }
+.marco.b { color: var(--acento-forte); font-weight: 600; transform: translate(-50%, 8px); padding: 14px 0 0; }
+.marco.b::after { background: var(--acento); bottom: auto; top: -2px; }
+
+/* Almanaque */
+.almanaque { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 64px; align-items: start; }
+.almanaque .txt p { color: var(--texto-2); margin-top: 16px; }
+.unidade { font-size: 14px; color: var(--texto-2); margin: 0 0 10px; }
+.semana, .dias { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; list-style: none; padding: 0; margin: 0; }
+.semana { font-size: 13px; color: var(--texto-2); margin-bottom: 6px; }
+.dia { position: relative; min-height: 76px; padding: 8px 10px; border-radius: 8px; color: var(--n-txt); display: flex; flex-direction: column; justify-content: space-between; }
+.dia .d { font-size: 13px; } .dia .v { font: 500 21px/1 var(--serif); font-variant-numeric: tabular-nums; }
+.n1 { background: var(--n1); } .n2 { background: var(--n2); } .n3 { background: var(--n3); } .n4 { background: var(--n4); } .n5 { background: var(--n5); }
+.baixa.dia { outline: 2px solid var(--acento-forte); outline-offset: 1px; }
+.tag { position: absolute; right: 8px; top: 8px; font-size: 12px; font-weight: 600; line-height: 1.1; }
+
+/* Como ler */
+.passos { list-style: none; counter-reset: p; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; margin: 48px 0 0; padding: 40px 0 0; position: relative; }
+.passos::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--regua-forte); }
+.passos li { counter-increment: p; position: relative; }
+.passos li::before { content: counter(p); position: absolute; top: -56px; left: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--fundo); border: 2px solid var(--mar); color: var(--texto); font: 500 16px/28px var(--serif); text-align: center; }
+.passos p { color: var(--texto-2); margin-top: 8px; }
+
+/* Recursos: mar calmo com cartões de vidro quase opacos (landing page: permitido) */
+.mar-calmo { --texto: #eaf1f2; --texto-2: #b9c9cd; --regua: #ffffff24; --mar: #6cc2d2; --acento-forte: #f7a48f; color: var(--texto);
+  background: radial-gradient(900px 620px at 12% 8%, #1a5367 0, transparent 70%), radial-gradient(1000px 700px at 88% 92%, #17465a 0, transparent 72%), #0c2029; }
+.mar-calmo .cab p { color: var(--texto-2); margin-top: 14px; max-width: 60ch; }
+.bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
+.vidro { background: rgb(18 44 56 / 0.82); -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%); border: 1px solid rgb(255 255 255 / 0.10); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); border-radius: 20px; padding: 26px; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .vidro { background: rgb(18 44 56 / 0.96); } .nav { background: var(--cartao); } }
+.b-a { grid-column: span 7; grid-row: span 2; } .b-b { grid-column: span 5; } .b-c { grid-column: span 5; } .b-d { grid-column: span 5; } .b-e { grid-column: span 7; }
+.vidro h3 { color: var(--texto); } .vidro p { color: var(--texto-2); margin-top: 8px; font-size: 16px; }
+.extrato { list-style: none; padding: 0; margin: 18px 0 0; }
+.extrato li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 16px; padding: 12px 0; border-top: 1px solid var(--regua); }
+.extrato .t { font-size: 16px; overflow-wrap: anywhere; } .extrato .m { font-size: 14px; color: var(--texto-2); grid-column: 1; } .extrato .val { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.barra { height: 8px; border-radius: 99px; background: rgb(255 255 255 / .14); margin-top: 16px; overflow: hidden; }
+.barra i { display: block; height: 100%; background: var(--mar); border-radius: inherit; }
+.rotulos { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--texto-2); margin-top: 8px; }
+.linhas-se { margin: 14px 0 0; padding: 0; list-style: none; } .linhas-se li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-top: 1px solid var(--regua); font-size: 15px; }
+
+/* Por que é pago */
+.objecao { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 72px; align-items: start; }
+.objecao .resp { font: 400 clamp(21px, 2vw, 25px)/1.42 var(--serif); margin-top: 22px; max-width: 34em; }
+.dados { border-left: 2px solid var(--regua-forte); padding-left: 28px; }
+.dados ul { list-style: none; margin: 14px 0 0; padding: 0; } .dados li { padding: 10px 0; border-top: 1px solid var(--regua); font-size: 16px; }
+
+/* Preço */
+.preco { background: var(--fundo-2); }
+.periodo { display: inline-flex; margin-top: 28px; border: 1px solid var(--regua-forte); border-radius: 10px; padding: 3px; }
+.periodo label { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; cursor: pointer; font-size: 15px; transition: background-color .2s ease-out; }
+.oculto { position: absolute; opacity: 0; width: 1px; height: 1px; }
+#p-anual:checked ~ .periodo label[for="p-anual"], #p-mensal:checked ~ .periodo label[for="p-mensal"] { background: var(--texto); color: var(--fundo); }
+#p-anual:focus-visible ~ .periodo label[for="p-anual"], #p-mensal:focus-visible ~ .periodo label[for="p-mensal"] { outline: 2px solid var(--acento-forte); outline-offset: 2px; }
+#p-anual:checked ~ .planos .so-mensal, #p-mensal:checked ~ .planos .so-anual { display: none; }
+.planos { display: grid; grid-template-columns: repeat(2, minmax(0, 380px)); gap: 20px; margin-top: 24px; align-items: stretch; }
+.plano { background: var(--cartao); border: 1px solid var(--regua); border-radius: 18px; padding: 28px; display: flex; flex-direction: column; }
+.plano.rec { border: 2px solid var(--acento); }
+.plano .selo { font-size: 13px; font-weight: 600; color: var(--acento-forte); margin-top: 4px; min-height: 20px; }
+.valor { font-family: var(--serif); display: flex; align-items: baseline; margin-top: 14px; }
+.valor .s { font-size: 22px; margin-right: 5px; } .valor .i { font-size: 52px; line-height: 1; } .valor .c { font-size: 24px; } .valor .p { font: 400 15px var(--sans); color: var(--texto-2); margin-left: 6px; }
+.total { font-size: 15px; color: var(--texto-2); margin-top: 8px; }
+.plano ul { margin: 18px 0 22px; padding: 0; list-style: none; flex: 1; } .plano li { padding: 7px 0; font-size: 15px; border-top: 1px solid var(--regua); }
+.garantia { margin-top: 18px; font-size: 15px; color: var(--texto-2); }
+
+/* Perguntas */
+.perguntas { max-width: 780px; }
+details.p { border-top: 1px solid var(--regua-forte); } details.p:last-child { border-bottom: 1px solid var(--regua-forte); }
+details.p summary { list-style: none; cursor: pointer; min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-weight: 500; padding: 10px 0; }
+details.p summary::-webkit-details-marker { display: none; }
+details.p summary::after { content: "+"; font: 400 24px/1 var(--serif); transition: transform .2s ease-out; }
+details.p[open] summary::after { transform: rotate(45deg); }
+details.p p { padding: 0 32px 18px 0; color: var(--texto-2); }
+
+/* Fim */
+.fim { background: var(--acento); color: var(--acento-txt); }
+.fim h2 { max-width: 16em; } .fim p { margin-top: 12px; }
+.fim .btn { margin-top: 26px; background: var(--acento-txt); color: var(--acento); }
+@media (hover: hover) { .fim .btn:hover { background: var(--acento-txt); opacity: .92; } }
+footer { padding-block: 40px; font-size: 15px; color: var(--texto-2); }
+footer nav { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-bottom: 12px; }
+footer a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Preferências de quem visita */
+@media (prefers-reduced-transparency: reduce) {
+  .vidro { background: rgb(18 44 56 / 1); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .nav { background: var(--fundo); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  :root { --regua: #5b6b72; --texto-2: var(--texto); }
+  .vidro { background: #0c2029; border-color: #ffffff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .nav { background: var(--fundo); border-bottom-color: var(--texto); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .desenhar .linha.on { stroke-dasharray: none; stroke-dashoffset: 0; }
+}
+@media (forced-colors: active) { .vidro, .nav { border: 1px solid CanvasText; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+
+/* Celular: junto, não depois */
+@media (max-width: 900px) {
+  .links, .nav .so-grande { display: none; }
+  .menu { display: block; margin-left: auto; position: relative; }
+  .menu ul { position: absolute; right: 0; top: 52px; margin: 0; padding: 8px; width: 220px; list-style: none; background: var(--cartao); border: 1px solid var(--regua-forte); border-radius: 12px; }
+  .menu a { display: flex; align-items: center; min-height: 44px; padding: 0 10px; text-decoration: none; }
+  .nav-in { min-height: 56px; gap: 12px; }
+  .grade { width: calc(100% - 40px); }
+  .bloco { padding-block: 64px; }
+  body { font-size: 16px; }
+  .heroi-in, .almanaque, .objecao { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .heroi-in { padding-top: 28px; }
+  .sub { font-size: 17px; }
+  .acoes .btn { flex: 1 1 100%; }
+  .mare { height: 180px; margin-top: 8px; }
+  .cenas .pausa { margin-left: 0; }
+  .passos { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 0 0 0 44px; margin-top: 32px; }
+  .passos::before { left: 15px; right: auto; top: 6px; bottom: 6px; width: 2px; height: auto; }
+  .passos li::before { top: 0; left: -44px; }
+  .bento { grid-template-columns: minmax(0, 1fr); margin-top: 32px; }
+  .bento > * { grid-column: auto; grid-row: auto; }
+  .vidro { padding: 22px; border-radius: 18px; }
+  .dia { min-height: 62px; padding: 6px; } .dia .v { font-size: 17px; } .semana { font-size: 12px; } .semana, .dias { gap: 4px; }
+  .tag { position: static; order: 3; font-size: 12px; } .baixa.dia { min-height: 76px; }
+  .planos { grid-template-columns: minmax(0, 1fr); } .plano.rec { order: -1; }
+  .dados { border-left: 0; padding-left: 0; border-top: 2px solid var(--regua-forte); padding-top: 22px; }
+  .fim .btn { width: 100%; }
+  .marco { font-size: 12px; }
+  .plano li, .total, .garantia, footer, .linhas-se li, .periodo label { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="nav">
+  <div class="grade nav-in">
+    <a class="marca" href="#conteudo">Preamar</a>
+    <ul class="links">
+      <li><a href="#almanaque">O mês</a></li>
+      <li><a href="#como-ler">Como ler</a></li>
+      <li><a href="#recursos">Recursos</a></li>
+      <li><a href="#preco">Preço</a></li>
+      <li><a href="#perguntas">Perguntas</a></li>
+    </ul>
+    <details class="menu">
+      <summary>Menu</summary>
+      <ul>
+        <li><a href="#almanaque">O mês</a></li>
+        <li><a href="#como-ler">Como ler</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#preco">Preço</a></li>
+        <li><a href="#perguntas">Perguntas</a></li>
+      </ul>
+    </details>
+    <a class="btn btn-1" href="#preco">Testar</a>
+  </div>
+</header>
+
+<main id="conteudo">
+<section class="heroi">
+  <div class="grade heroi-in">
+    <div>
+      <h1>Veja a maré baixa do seu dinheiro antes de ela chegar.</h1>
+      <p class="sub">O Preamar lê as suas contas e desenha o mês como uma tábua de marés: em que dia o saldo desce mais, e quanto sobra até lá.</p>
+      <div class="acoes">
+        <a class="btn btn-1" href="#preco">Testar por 14 dias</a>
+        <a class="btn btn-2" href="#como-ler">Como se lê a tábua</a>
+      </div>
+      <p class="aviso">Demonstração: produto, valores e nomes são fictícios.</p>
+    </div>
+    <div class="tabua" id="tabua">
+      <p class="tabua-topo"><span>Menor saldo de novembro</span><span id="cena-nome" class="troca">Como está</span></p>
+      <p class="metrica num troca" id="metrica" aria-label="R$ 312,40"><span class="s">R$</span><span class="i" id="m-i">312</span><span class="c" id="m-c">,40</span></p>
+      <p class="variacao troca" id="variacao">No dia 22, quando o cartão vence.</p>
+      <div class="cenas" id="cenas" hidden>
+        <button type="button" data-cena="0" aria-pressed="true">Como está</button>
+        <button type="button" data-cena="1" aria-pressed="false">Parcelar o seguro</button>
+        <button type="button" data-cena="2" aria-pressed="false">Antecipar o freela</button>
+        <button type="button" class="pausa" id="pausa" aria-pressed="false">Pausar</button>
+      </div>
+      <table>
+        <thead><tr><th scope="col">Dia</th><th scope="col">O que acontece</th><th scope="col" class="dir">Saldo previsto (R$)</th></tr></thead>
+        <tbody class="troca" id="linhas">
+          <tr><td class="num">5</td><td>Salário entra</td><td class="dir">4.820,00</td></tr>
+          <tr><td class="num">10</td><td>Aluguel e condomínio</td><td class="dir">2.610,00</td></tr>
+          <tr class="baixa"><td class="num">22</td><td>Cartão vence</td><td class="dir" id="t-22">312,40</td></tr>
+          <tr><td class="num">30</td><td>Mês fecha</td><td class="dir" id="t-30">1.148,90</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mare" role="img" aria-label="Curva do saldo em novembro: sobe no dia 5, com o salário, e tem o ponto mais baixo no dia 22, com o cartão.">
+    <svg viewBox="0 0 1440 240" preserveAspectRatio="none" aria-hidden="true">
+      <path class="area on" data-c="0" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 140.9 794.5 141.6 C808.4 142.3 830.2 143.6 844.1 144.3 C858.0 145.1 879.9 146.1 893.8 146.7 C907.7 147.4 929.5 148.5 943.4 149.1 C957.4 149.8 979.2 143.3 993.1 151.2 C1007.0 159.1 1028.9 202.4 1042.8 205.3 C1056.7 208.2 1078.5 176.3 1092.4 171.8 C1106.3 167.2 1128.2 172.6 1142.1 172.8 C1156.0 173.0 1177.8 173.3 1191.7 173.5 C1205.6 173.7 1227.5 174.0 1241.4 174.2 C1255.3 174.4 1277.1 174.7 1291.0 174.9 C1304.9 175.0 1326.8 175.1 1340.7 175.2 C1354.6 175.3 1376.4 175.7 1390.3 175.9 C1404.2 176.1 1433.0 176.5 1440.0 176.6 L1440 240 L0 240 Z"/><path class="area" data-c="1" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 140.9 794.5 141.6 C808.4 142.3 830.2 143.6 844.1 144.3 C858.0 145.1 879.9 146.1 893.8 146.7 C907.7 147.4 929.5 148.5 943.4 149.1 C957.4 149.8 979.2 144.8 993.1 151.2 C1007.0 157.6 1028.9 193.4 1042.8 194.8 C1056.7 196.2 1078.5 165.8 1092.4 161.3 C1106.3 156.7 1128.2 162.1 1142.1 162.3 C1156.0 162.5 1177.8 162.8 1191.7 163.0 C1205.6 163.2 1227.5 163.5 1241.4 163.7 C1255.3 163.9 1277.1 164.2 1291.0 164.4 C1304.9 164.5 1326.8 164.6 1340.7 164.7 C1354.6 164.9 1376.4 165.2 1390.3 165.4 C1404.2 165.6 1433.0 166.0 1440.0 166.1 L1440 240 L0 240 Z"/><path class="area" data-c="2" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 144.3 794.5 141.6 C808.4 138.9 830.2 123.0 844.1 120.3 C858.0 117.7 879.9 122.1 893.8 122.7 C907.7 123.4 929.5 124.5 943.4 125.1 C957.4 125.8 979.2 119.3 993.1 127.2 C1007.0 135.1 1028.9 178.4 1042.8 181.3 C1056.7 184.2 1078.5 152.3 1092.4 147.8 C1106.3 143.2 1128.2 148.6 1142.1 148.8 C1156.0 149.0 1177.8 149.3 1191.7 149.5 C1205.6 149.7 1227.5 150.0 1241.4 150.2 C1255.3 150.4 1277.1 150.7 1291.0 150.9 C1304.9 151.0 1326.8 151.1 1340.7 151.2 C1354.6 151.3 1376.4 151.7 1390.3 151.9 C1404.2 152.1 1433.0 152.5 1440.0 152.6 L1440 240 L0 240 Z"/>
+      <path class="linha on" data-c="0" pathLength="1" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 140.9 794.5 141.6 C808.4 142.3 830.2 143.6 844.1 144.3 C858.0 145.1 879.9 146.1 893.8 146.7 C907.7 147.4 929.5 148.5 943.4 149.1 C957.4 149.8 979.2 143.3 993.1 151.2 C1007.0 159.1 1028.9 202.4 1042.8 205.3 C1056.7 208.2 1078.5 176.3 1092.4 171.8 C1106.3 167.2 1128.2 172.6 1142.1 172.8 C1156.0 173.0 1177.8 173.3 1191.7 173.5 C1205.6 173.7 1227.5 174.0 1241.4 174.2 C1255.3 174.4 1277.1 174.7 1291.0 174.9 C1304.9 175.0 1326.8 175.1 1340.7 175.2 C1354.6 175.3 1376.4 175.7 1390.3 175.9 C1404.2 176.1 1433.0 176.5 1440.0 176.6"/><path class="linha" data-c="1" pathLength="1" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 140.9 794.5 141.6 C808.4 142.3 830.2 143.6 844.1 144.3 C858.0 145.1 879.9 146.1 893.8 146.7 C907.7 147.4 929.5 148.5 943.4 149.1 C957.4 149.8 979.2 144.8 993.1 151.2 C1007.0 157.6 1028.9 193.4 1042.8 194.8 C1056.7 196.2 1078.5 165.8 1092.4 161.3 C1106.3 156.7 1128.2 162.1 1142.1 162.3 C1156.0 162.5 1177.8 162.8 1191.7 163.0 C1205.6 163.2 1227.5 163.5 1241.4 163.7 C1255.3 163.9 1277.1 164.2 1291.0 164.4 C1304.9 164.5 1326.8 164.6 1340.7 164.7 C1354.6 164.9 1376.4 165.2 1390.3 165.4 C1404.2 165.6 1433.0 166.0 1440.0 166.1"/><path class="linha" data-c="2" pathLength="1" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 144.3 794.5 141.6 C808.4 138.9 830.2 123.0 844.1 120.3 C858.0 117.7 879.9 122.1 893.8 122.7 C907.7 123.4 929.5 124.5 943.4 125.1 C957.4 125.8 979.2 119.3 993.1 127.2 C1007.0 135.1 1028.9 178.4 1042.8 181.3 C1056.7 184.2 1078.5 152.3 1092.4 147.8 C1106.3 143.2 1128.2 148.6 1142.1 148.8 C1156.0 149.0 1177.8 149.3 1191.7 149.5 C1205.6 149.7 1227.5 150.0 1241.4 150.2 C1255.3 150.4 1277.1 150.7 1291.0 150.9 C1304.9 151.0 1326.8 151.1 1340.7 151.2 C1354.6 151.3 1376.4 151.7 1390.3 151.9 C1404.2 152.1 1433.0 152.5 1440.0 152.6"/>
+    </svg>
+    <span class="marco" style="left:13.79%;top:21.14%">dia 5, maré alta</span>
+    <span class="marco b" style="left:72.41%;top:85.54%">dia 22, maré baixa</span>
+  </div>
+</section>
+
+<section class="bloco" id="almanaque-s">
+  <div class="grade almanaque">
+    <div class="txt">
+      <h2 id="almanaque">Um mês inteiro, de relance.</h2>
+      <p>Cada dia traz o saldo que deve sobrar. Quanto mais fundo o tom, mais folga; o dia mais apertado vem marcado, com o nome escrito.</p>
+    </div>
+    <div>
+      <p class="unidade">Novembro de 2026 · saldo previsto em R$ mil (exemplo fictício)</p>
+      <ul class="semana" aria-hidden="true"><li>dom</li><li>seg</li><li>ter</li><li>qua</li><li>qui</li><li>sex</li><li>sáb</li></ul>
+      <ul class="dias">
+          <li class="dia n3"><span class="d">1</span><span class="v">2,0</span></li>
+          <li class="dia n3"><span class="d">2</span><span class="v">1,9</span></li>
+          <li class="dia n3"><span class="d">3</span><span class="v">1,9</span></li>
+          <li class="dia n3"><span class="d">4</span><span class="v">1,9</span></li>
+          <li class="dia n5"><span class="d">5</span><span class="v">4,8</span></li>
+          <li class="dia n5"><span class="d">6</span><span class="v">4,8</span></li>
+          <li class="dia n5"><span class="d">7</span><span class="v">4,7</span></li>
+          <li class="dia n5"><span class="d">8</span><span class="v">4,6</span></li>
+          <li class="dia n5"><span class="d">9</span><span class="v">4,6</span></li>
+          <li class="dia n4"><span class="d">10</span><span class="v">2,6</span></li>
+          <li class="dia n4"><span class="d">11</span><span class="v">2,6</span></li>
+          <li class="dia n4"><span class="d">12</span><span class="v">2,5</span></li>
+          <li class="dia n3"><span class="d">13</span><span class="v">2,4</span></li>
+          <li class="dia n3"><span class="d">14</span><span class="v">2,4</span></li>
+          <li class="dia n3"><span class="d">15</span><span class="v">2,3</span></li>
+          <li class="dia n3"><span class="d">16</span><span class="v">2,2</span></li>
+          <li class="dia n3"><span class="d">17</span><span class="v">2,2</span></li>
+          <li class="dia n3"><span class="d">18</span><span class="v">2,1</span></li>
+          <li class="dia n3"><span class="d">19</span><span class="v">2,0</span></li>
+          <li class="dia n3"><span class="d">20</span><span class="v">2,0</span></li>
+          <li class="dia n3"><span class="d">21</span><span class="v">1,9</span></li>
+          <li class="dia n1 baixa"><span class="d">22</span><span class="v">0,3</span><span class="tag">baixa</span></li>
+          <li class="dia n2"><span class="d">23</span><span class="v">1,3</span></li>
+          <li class="dia n2"><span class="d">24</span><span class="v">1,3</span></li>
+          <li class="dia n2"><span class="d">25</span><span class="v">1,2</span></li>
+          <li class="dia n2"><span class="d">26</span><span class="v">1,2</span></li>
+          <li class="dia n2"><span class="d">27</span><span class="v">1,2</span></li>
+          <li class="dia n2"><span class="d">28</span><span class="v">1,2</span></li>
+          <li class="dia n2"><span class="d">29</span><span class="v">1,2</span></li>
+          <li class="dia n2"><span class="d">30</span><span class="v">1,1</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="bloco" style="padding-top:0">
+  <div class="grade">
+    <h2 id="como-ler">Três leituras, e você já sabe o que fazer.</h2>
+    <ol class="passos">
+      <li><h3>Conecte as contas</h3><p>Você autoriza a leitura. O Preamar separa o que se repete do que foi só uma vez.</p></li>
+      <li><h3>Olhe a maré baixa</h3><p>A tábua mostra o dia mais apertado do mês e o que empurra o saldo para baixo.</p></li>
+      <li><h3>Teste o "e se"</h3><p>Parcelar, adiar, antecipar: cada escolha redesenha a curva antes de você decidir.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="bloco mar-calmo">
+  <div class="grade">
+    <div class="cab">
+      <h2 id="recursos">Feito para quem prefere saber antes.</h2>
+      <p>Nada de relatório no fim do mês, quando já passou. Tudo aqui olha para a frente.</p>
+    </div>
+    <div class="bento">
+      <article class="vidro b-a">
+        <h3>Um extrato que já entende o mês</h3>
+        <p>Cada lançamento entra na curva, com o efeito dele no saldo até o fim do mês.</p>
+        <ul class="extrato">
+          <li><span class="t">Aluguel e condomínio</span><span class="m">10 nov · repete todo mês</span><span class="val">− R$ 1.940,00</span></li>
+          <li><span class="t">Mercado do bairro</span><span class="m">18 nov · variável</span><span class="val">− R$ 80,00</span></li>
+          <li><span class="t">Fatura do cartão</span><span class="m">22 nov · puxa a maré baixa</span><span class="val">− R$ 1.577,60</span></li>
+          <li><span class="t">Reembolso da clínica</span><span class="m">23 nov · foi só uma vez</span><span class="val">+ R$ 977,60</span></li>
+        </ul>
+      </article>
+      <article class="vidro b-b">
+        <h3>Aviso com folga</h3>
+        <p>Faltam 7 dias para a maré baixa: dá tempo de mudar alguma coisa.</p>
+        <div class="barra" role="img" aria-label="15 de 22 dias já passaram"><i style="width:68%"></i></div>
+        <div class="rotulos"><span>dia 15</span><span>dia 22</span></div>
+      </article>
+      <article class="vidro b-c">
+        <h3>E se eu…?</h3>
+        <ul class="linhas-se">
+          <li><span>Parcelar o seguro</span><span class="num">+ R$ 306,00</span></li>
+          <li><span>Antecipar o freela</span><span class="num">+ R$ 700,00</span></li>
+        </ul>
+      </article>
+      <article class="vidro b-d">
+        <h3>Conta dividida</h3>
+        <p>Quem divide a casa vê a mesma curva, e cada um só os próprios lançamentos.</p>
+      </article>
+      <article class="vidro b-e">
+        <h3>Só leitura, com a sua autorização</h3>
+        <p>O Preamar lê os lançamentos e não movimenta dinheiro. Você cancela a conexão quando quiser, e os dados dela são apagados.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="bloco">
+  <div class="grade objecao">
+    <div>
+      <h2 id="pago">Por que é pago?</h2>
+      <p class="resp">Porque quem paga é você, e não quem quer vender um empréstimo no dia da sua maré baixa. Um aplicativo grátis de finanças precisa ganhar em algum lugar; o nosso ganha a assinatura, e só.</p>
+    </div>
+    <aside class="dados">
+      <h3>O que fazemos com os seus dados</h3>
+      <ul>
+        <li>Não vendemos nem compartilhamos para oferta de crédito.</li>
+        <li>Não mostramos anúncio.</li>
+        <li>Você baixa ou apaga tudo pela conta, a qualquer hora.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section class="bloco preco">
+  <div class="grade">
+    <h2 id="preco">Dois planos, sem letra miúda.</h2>
+    <input class="oculto" type="radio" name="periodo" id="p-anual" checked>
+    <input class="oculto" type="radio" name="periodo" id="p-mensal">
+    <div class="periodo" role="group" aria-label="Período de cobrança"><label for="p-anual">Anual</label><label for="p-mensal">Mensal</label></div>
+    <div class="planos">
+      <article class="plano">
+        <h3>Solo</h3>
+        <p class="selo"></p>
+        <p class="valor num so-anual"><span class="s">R$</span><span class="i">14</span><span class="c">,90</span><span class="p">por mês</span></p>
+        <p class="total so-anual">R$ 178,80 cobrados uma vez por ano.</p>
+        <p class="valor num so-mensal"><span class="s">R$</span><span class="i">19</span><span class="c">,90</span><span class="p">por mês</span></p>
+        <p class="total so-mensal">R$ 19,90 cobrados todo mês.</p>
+        <ul><li>Tábua de marés e calendário</li><li>Avisos antes da maré baixa</li><li>Até 3 contas</li></ul>
+        <a class="btn btn-2" href="#perguntas">Testar o Solo</a>
+      </article>
+      <article class="plano rec">
+        <h3>Casa</h3>
+        <p class="selo">Recomendado para quem divide as contas</p>
+        <p class="valor num so-anual"><span class="s">R$</span><span class="i">22</span><span class="c">,90</span><span class="p">por mês</span></p>
+        <p class="total so-anual">R$ 274,80 cobrados uma vez por ano.</p>
+        <p class="valor num so-mensal"><span class="s">R$</span><span class="i">29</span><span class="c">,90</span><span class="p">por mês</span></p>
+        <p class="total so-mensal">R$ 29,90 cobrados todo mês.</p>
+        <ul><li>Tudo do Solo</li><li>2 pessoas na mesma curva</li><li>Contas sem limite</li></ul>
+        <a class="btn btn-1" href="#perguntas">Testar o Casa</a>
+      </article>
+    </div>
+    <p class="garantia">14 dias sem cobrança. Cancele pelo próprio aplicativo, sem multa. Preços fictícios.</p>
+  </div>
+</section>
+
+<section class="bloco">
+  <div class="grade perguntas">
+    <h2 id="perguntas" style="margin-bottom:28px">Perguntas de quem ainda está em dúvida</h2>
+    <details class="p"><summary>A previsão erra?</summary><p>Erra, sim: um gasto novo muda a curva. Por isso ela se refaz a cada lançamento e mostra o que é certo e o que é estimado.</p></details>
+    <details class="p"><summary>Preciso cadastrar tudo à mão?</summary><p>Não. Depois de autorizar a leitura, os lançamentos entram sozinhos; você só corrige o que quiser.</p></details>
+    <details class="p"><summary>O Preamar pode mexer no meu dinheiro?</summary><p>Não. A conexão é só de leitura, e nenhum pagamento sai pelo aplicativo.</p></details>
+    <details class="p"><summary>E se eu cancelar?</summary><p>Você baixa os seus dados e a assinatura termina no fim do período pago. Nada é renovado depois.</p></details>
+  </div>
+</section>
+
+<section class="bloco fim">
+  <div class="grade">
+    <h2 id="fim">Da próxima vez, a maré baixa não pega você de surpresa.</h2>
+    <p>14 dias para ler o seu próximo mês, sem cobrança.</p>
+    <a class="btn" href="#preco">Testar por 14 dias</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="grade">
+    <nav aria-label="Rodapé"><a href="#preco">Preço</a><a href="#perguntas">Perguntas</a><a href="#conteudo">Voltar ao topo</a></nav>
+    <p>Preamar é um produto fictício, criado só para demonstrar um site. Nenhuma empresa, valor ou pessoa aqui é real.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var cenas = [
+    { nome: 'Como está', i: '312', c: ',40', falado: 'R$ 312,40', nota: 'No dia 22, quando o cartão vence.', d22: '312,40', d30: '1.148,90' },
+    { nome: 'Parcelar o seguro', i: '618', c: ',40', falado: 'R$ 618,40', nota: '+ R$ 306,00 sobre como está hoje.', d22: '618,40', d30: '1.454,90' },
+    { nome: 'Antecipar o freela', i: '1.012', c: ',40', falado: 'R$ 1.012,40', nota: '+ R$ 700,00 sobre como está hoje.', d22: '1.012,40', d30: '1.848,90' }
+  ];
+  var q = function (s) { return document.querySelector(s); };
+  var reduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var caixa = q('#cenas'), botoes = caixa.querySelectorAll('[data-cena]'), pausa = q('#pausa');
+  var atual = 0, parado = false, visivel = true, relogio = null;
+  caixa.hidden = false;
+
+  function mostra(n) {
+    atual = n;
+    var c = cenas[n];
+    var trocar = function () {
+      q('#cena-nome').textContent = c.nome; q('#m-i').textContent = c.i; q('#m-c').textContent = c.c;
+      q('#metrica').setAttribute('aria-label', c.falado); q('#variacao').textContent = c.nota;
+      q('#t-22').textContent = c.d22; q('#t-30').textContent = c.d30;
+      alvos.forEach(function (e) { e.classList.remove('saindo'); });
+    };
+    var alvos = [q('#cena-nome'), q('#metrica'), q('#variacao')];
+    botoes.forEach(function (b, i) { b.setAttribute('aria-pressed', String(i === n)); });
+    document.querySelectorAll('.linha, .area').forEach(function (p) { p.classList.toggle('on', +p.dataset.c === n); });
+    if (reduzido.matches) { trocar(); return; }
+    alvos.forEach(function (e) { e.classList.add('saindo'); });
+    setTimeout(trocar, 300);
+  }
+  function para() { clearInterval(relogio); relogio = null; }
+  function roda() {
+    para();
+    if (parado || !visivel || document.hidden || reduzido.matches) return;
+    relogio = setInterval(function () { mostra((atual + 1) % cenas.length); }, 3000);
+  }
+  botoes.forEach(function (b) {
+    b.addEventListener('click', function () { parado = true; pausa.textContent = 'Retomar'; pausa.setAttribute('aria-pressed', 'true'); para(); mostra(+b.dataset.cena); });
+  });
+  pausa.addEventListener('click', function () {
+    parado = !parado; pausa.textContent = parado ? 'Retomar' : 'Pausar'; pausa.setAttribute('aria-pressed', String(parado)); roda();
+  });
+  document.addEventListener('visibilitychange', roda);
+  reduzido.addEventListener('change', function () { if (reduzido.matches) { mostra(0); } roda(); atualizaPausa(); });
+  function atualizaPausa() { pausa.hidden = reduzido.matches; }
+  atualizaPausa();
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) { visivel = e[0].isIntersecting; roda(); }).observe(q('#tabua'));
+  }
+  if (!reduzido.matches) {
+    var svg = q('.mare');
+    svg.classList.add('desenhar');
+    svg.addEventListener('animationend', function () { svg.classList.remove('desenhar'); });
+  }
+  roda();
+})();
+</script>
+</body>
+</html>

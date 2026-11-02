@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bancada de efeitos (prova do plugin; código próprio, sem terceiros)</title>
+<style>
+/* Um efeito por vez: só a seção .ativo existe na tela e roda. Cada valor usado está em data-valor. */
+@property --ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+:root { --f: #10242f; --f2: #173644; --t: #eaf1f2; --t2: #b9c9cd; --ac: #f28a70; --m: #6cc2d2; --entra: cubic-bezier(.16, 1, .3, 1); }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: #0b1a22; color: var(--t); font: 16px/1.4 "Segoe UI", system-ui, sans-serif; }
+.ef { display: none; padding: 12px; }
+.ef.ativo { display: block; }
+.palco { position: relative; width: 360px; height: 240px; overflow: hidden; background: var(--f); border-radius: 12px; padding: 16px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px; border: 0; border-radius: 10px; background: var(--ac); color: #1a0d09; font: 600 15px "Segoe UI", sans-serif; cursor: pointer; }
+.btn2 { background: transparent; color: var(--t); border: 1px solid var(--t2); }
+.cart { position: relative; background: var(--f2); border-radius: 12px; padding: 14px; }
+.rola { height: 240px; width: 360px; overflow-y: auto; position: relative; background: var(--f); border-radius: 12px; }
+.alto { height: 900px; }
+.pausa { position: absolute; right: 8px; bottom: 8px; z-index: 5; min-height: 36px; padding: 0 10px; font-size: 13px; }
+
+/* A. Superfície e luz */
+#A1 .palco { background: radial-gradient(260px 200px at 20% 20%, #1a6c85, transparent 70%), radial-gradient(260px 220px at 90% 90%, #7a3b2a, transparent 70%), var(--f); }
+#A1 .vd { margin: 34px 24px; padding: 18px; border-radius: 16px; background: rgb(18 44 56 / .82); backdrop-filter: blur(10px) saturate(140%); border: 1px solid rgb(255 255 255 / .1); box-shadow: inset 0 1px 0 rgb(255 255 255 / .14); }
+#A1.sem .vd { background: none; backdrop-filter: none; border-color: transparent; box-shadow: none; }
+@media (prefers-reduced-transparency: reduce) { #A1 .vd { background: rgb(18 44 56); backdrop-filter: none; } }
+#A2 .luz { position: absolute; inset: 0; opacity: 0; transition: opacity .25s ease-out; pointer-events: none; background: radial-gradient(320px circle at var(--x, 50%) var(--y, 50%), rgb(255 255 255 / .1), transparent 70%); }
+#A2 .palco.perto .luz { opacity: 1; }
+#A3 .borda { position: relative; margin: 30px; padding: 26px; border-radius: 14px; background: var(--f2); isolation: isolate; }
+#A3 .borda::before { content: ""; position: absolute; inset: -2px; z-index: -2; border-radius: 16px; background: conic-gradient(from var(--ang), var(--ac), transparent 30%, transparent 70%, var(--ac)); animation: giro 5s linear infinite; }
+#A3 .borda::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 14px; background: var(--f2); }
+@keyframes giro { to { --ang: 360deg; } }
+#A4 .btn { box-shadow: 0 6px 20px rgb(242 138 112 / .38), inset 0 1px 0 rgb(255 255 255 / .2); margin: 60px 80px; }
+#A4.sem .btn { box-shadow: none; }
+#A5 .selo { position: relative; overflow: hidden; margin: 60px 40px; padding: 20px; background: var(--f2); border-radius: 12px; }
+#A5 .selo::after { content: ""; position: absolute; inset: 0 auto 0 0; width: 45%; background: linear-gradient(100deg, transparent, rgb(255 255 255 / .22), transparent); transform: translateX(-120%) skewX(-16deg); animation: passa 7.2s linear infinite; }
+@keyframes passa { 0% { transform: translateX(-120%) skewX(-16deg); } 17%, 100% { transform: translateX(320%) skewX(-16deg); } }
+#A6 .ponto { position: absolute; left: 170px; top: 110px; width: 14px; height: 14px; border-radius: 50%; background: var(--m); }
+#A6 .ponto::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--m); opacity: .5; animation: anel 2s ease-out infinite; }
+@keyframes anel { to { transform: scale(2.5); opacity: 0; } }
+#A7 .palco { perspective: 1000px; }
+#A7 .cart { margin: 30px; padding: 40px 20px; will-change: transform; transition: transform .4s var(--entra); }
+
+/* B. Fundos */
+#B1 .palco { background: radial-gradient(420px 320px at 15% 10%, rgb(108 194 210 / .45), transparent 75%), radial-gradient(460px 340px at 90% 100%, rgb(242 138 112 / .25), transparent 80%), var(--f); }
+#B1.sem .palco { background: var(--f); }
+.mancha { position: absolute; width: 280px; height: 280px; border-radius: 50%; animation: deriva 20s ease-in-out infinite alternate; }
+.mancha.a { left: -60px; top: -60px; background: radial-gradient(circle, rgb(108 194 210 / .5), transparent 70%); }
+.mancha.b { right: -80px; bottom: -80px; background: radial-gradient(circle, rgb(242 138 112 / .35), transparent 70%); animation-duration: 28s; }
+@keyframes deriva { to { transform: translate(54px, 30px); } }
+#B3 .palco { background: radial-gradient(240px at 10% 20%, #2a7388, transparent 70%), radial-gradient(260px at 80% 10%, #4b6d8a, transparent 70%), radial-gradient(280px at 40% 100%, #1f5a6b, transparent 70%), radial-gradient(240px at 100% 90%, #38566b, transparent 70%), var(--f); }
+#B3.sem .palco { background: var(--f); }
+#B4 .palco::before { content: ""; position: absolute; inset: 0; opacity: .05; background-size: 180px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23r)'/%3E%3C/svg%3E"); }
+#B4.sem .palco::before { display: none; }
+#B5 .palco::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgb(255 255 255 / .08) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / .08) 1px, transparent 1px); background-size: 32px 32px; -webkit-mask-image: radial-gradient(circle at 50% 50%, #000, transparent 72%); mask-image: radial-gradient(circle at 50% 50%, #000, transparent 72%); }
+#B5.sem .palco::before { display: none; }
+#B6 .sob { position: absolute; left: 0; right: 0; top: 110px; bottom: 0; background: #eef3f1; color: #14242c; border-radius: 32px 32px 0 0; padding: 18px; }
+#B6.sem .sob { border-radius: 0; }
+#B7 .barco { position: absolute; width: 18px; height: 18px; border-radius: 4px; background: var(--ac); offset-path: path("M-20 200 C 90 60, 240 60, 380 170"); animation: cruza 15s linear infinite; }
+@keyframes cruza { to { offset-distance: 100%; } }
+
+/* C. Rolagem */
+.js-entra .item { opacity: 0; transform: translateY(24px); }
+.js-entra .item.v { opacity: 1; transform: none; transition: opacity .6s var(--entra), transform .6s var(--entra); }
+#C1 .item { margin: 14px; padding: 18px; background: var(--f2); border-radius: 10px; }
+#C2 .fig { position: absolute; left: 30px; top: 120px; width: 300px; height: 150px; border-radius: 12px; background: linear-gradient(135deg, #2a7388, #1f4450); will-change: transform; }
+#C3 .preso { position: sticky; top: 0; height: 90px; display: flex; align-items: center; justify-content: center; background: var(--f2); }
+#C3 .passo { height: 150px; padding: 16px; }
+#C4 path { fill: none; stroke: var(--m); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: 0; }
+#C4.corre path { stroke-dashoffset: 1; animation: traca 1.1s ease-out forwards; }
+@keyframes traca { to { stroke-dashoffset: 0; } }
+#C5 .caixa { view-transition-name: caixa-c5; width: 120px; height: 80px; border-radius: 12px; background: var(--m); margin-top: 16px; }
+#C5 .caixa.dir { margin-left: 200px; height: 120px; }
+::view-transition-group(caixa-c5) { animation-duration: .3s; }
+#C6 .pilha { position: sticky; height: 130px; margin: 0 16px 24px; border-radius: 12px; padding: 16px; background: var(--f2); border: 1px solid #ffffff24; }
+#D5 .tit { font: 500 28px/1.2 Georgia, serif; margin: 40px 16px; }
+
+/* D. Texto e números */
+#D1 .n { font: 500 48px Georgia, serif; font-variant-numeric: tabular-nums; margin-top: 60px; }
+#D2 h3 { font: 500 34px/1.15 Georgia, serif; margin: 30px 0; }
+#D2 .ln { display: block; overflow: hidden; } #D2 .ln span { display: inline-block; }
+#D2.corre .ln span { animation: sobe .65s var(--entra) both; animation-delay: calc(var(--i) * 50ms); }
+@keyframes sobe { from { transform: translateY(105%); } }
+#D3 h3 { font: 500 30px/1.2 Georgia, serif; } #D3 em { font-style: normal; color: var(--ac); } #D3.sem em { color: inherit; }
+#D4 .tr { display: inline-block; min-width: 150px; color: var(--ac); transition: opacity .25s ease-out, transform .25s ease-out; }
+#D4 .tr.fora { opacity: 0; transform: translateY(8px); }
+@supports (animation-timeline: scroll()) {
+  #D5 .tit { background: linear-gradient(90deg, var(--t) 50%, var(--t2) 50%) no-repeat 100% 0 / 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: pinta linear both; animation-timeline: scroll(nearest); }
+  @keyframes pinta { to { background-position: 0 0; } }
+}
+#D6 .bar { position: absolute; bottom: 20px; width: 40px; background: var(--m); transform-origin: bottom; border-radius: 4px 4px 0 0; }
+#D6.corre .bar { animation: cresce .7s var(--entra) both; }
+@keyframes cresce { from { transform: scaleY(0); } }
+
+/* E. Repetição */
+#E1 .fila { display: flex; gap: 40px; width: max-content; margin-top: 80px; animation: anda 30s linear infinite; }
+#E1 .fila span { padding: 14px 18px; background: var(--f2); border-radius: 8px; }
+@keyframes anda { to { transform: translateX(-50%); } }
+.parado * , .parado *::before, .parado *::after { animation-play-state: paused !important; }
+#E2 .anel { position: absolute; left: 80px; top: 20px; width: 200px; height: 200px; border: 1px solid #ffffff33; border-radius: 50%; animation: gira 60s linear infinite; }
+#E2 .logo { position: absolute; left: 80px; top: -16px; width: 36px; height: 36px; border-radius: 50%; background: var(--m); animation: gira 60s linear infinite reverse; }
+@keyframes gira { to { transform: rotate(360deg); } }
+#E2 .feixe { position: absolute; left: 180px; top: 120px; width: 90px; height: 2px; background: linear-gradient(90deg, transparent, var(--ac), transparent); transform-origin: left; animation: fx 2s ease-in-out infinite; }
+@keyframes fx { from { opacity: .2; transform: scaleX(.3); } to { opacity: 1; transform: scaleX(1); } }
+#E3 .cart { margin: 60px 40px; animation: boia 4s ease-in-out infinite alternate; }
+@keyframes boia { to { transform: translateY(-8px); } }
+#E4 li { list-style: none; padding: 8px 10px; margin-bottom: 6px; background: var(--f2); border-radius: 8px; transition: opacity .35s ease-out, transform .35s ease-out; }
+#E4 li.fora { opacity: .15; transform: translateX(10px); } #E4 ul { margin: 0; padding: 0; }
+.conf { position: absolute; top: -10px; width: 7px; height: 11px; animation: cai 1.2s cubic-bezier(.3, .7, .6, 1) forwards; }
+@keyframes cai { to { transform: translateY(270px) rotate(200deg); opacity: 0; } }
+
+/* F. Micro-interações */
+#F1 .btn { margin: 80px 90px; transition: background-color .16s ease-out, transform .16s ease-out; }
+#F1 .btn:hover { background: #f7a48f; transform: translateY(-1px); } #F1 .btn:active { transform: scale(.98); transition-duration: .08s; }
+#F1 .btn:focus-visible, #F5 input:focus-visible + label { outline: 2px solid var(--t); outline-offset: 2px; }
+#F2 .btn { margin: 80px 110px; transition: transform .4s var(--entra); }
+#F3 .cursor { position: absolute; left: 0; top: 0; width: 24px; height: 24px; border: 2px solid var(--ac); border-radius: 50%; pointer-events: none; will-change: transform; }
+#F4 .cart { margin: 44px 40px; padding: 36px 18px; transition: transform .2s ease-out, box-shadow .2s ease-out; box-shadow: 0 1px 4px #0005; }
+#F4 .cart:hover { transform: translateY(-3px); box-shadow: 0 12px 30px #0008; }
+#F5 .sel { position: relative; display: inline-flex; margin: 60px 40px; padding: 3px; border: 1px solid var(--t2); border-radius: 10px; }
+#F5 .ind { position: absolute; left: 3px; top: 3px; bottom: 3px; width: 110px; background: var(--m); border-radius: 8px; transition: transform .25s var(--entra); }
+#F5 input { position: absolute; opacity: 0; } #F5 label { position: relative; width: 110px; min-height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+#F5 input#f5b:checked ~ .ind { transform: translateX(110px); }
+#F6 .corpo { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease-out; } #F6 .corpo > div { overflow: hidden; }
+#F6 .ab .corpo { grid-template-rows: 1fr; } #F6 .ico { display: inline-block; transition: transform .25s ease-out; } #F6 .ab .ico { transform: rotate(45deg); }
+#F7 .ok path { fill: none; stroke: var(--m); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 0; } #F7.corre .ok path { stroke-dashoffset: 1; animation: traca .4s ease-out forwards; }
+#F7 .aviso { position: absolute; left: 16px; right: 16px; bottom: 16px; padding: 12px; background: var(--f2); border-radius: 10px; transition: transform .3s var(--entra), opacity .3s ease-out; opacity: 0; transform: translateY(12px); }
+#F7 .aviso.v { opacity: 1; transform: none; }
+#F8 .esq { height: 18px; margin: 12px 0; border-radius: 6px; background: var(--f2); position: relative; overflow: hidden; }
+#F8 .esq::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgb(255 255 255 / .14), transparent); transform: translateX(-100%); animation: brilha 1.6s linear infinite; }
+@keyframes brilha { to { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  #A3 .borda::before { background: var(--ac); }
+  #C3 .preso, #C6 .pilha { position: static; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  #D5 .tit { background: none; color: var(--t); }
+}
+</style>
+</head>
+<body>
+<section class="ef" id="A1" data-tipo="estatico" data-nome="Vidro" data-valor="cartão a 82%, desfoque 10 px, saturação 140%, borda 10%, luz 1 px"><div class="palco"><div class="vd"><strong>Cartão de vidro</strong><br>Texto legível sobre fundo calmo.</div></div></section>
+<section class="ef" id="A2" data-tipo="hover" data-nome="Brilho que segue o mouse" data-valor="raio 320 px, 10%, some em 0,25 s"><div class="palco"><div class="luz"></div><p>Passe o ponteiro.</p></div></section>
+<section class="ef" id="A3" data-tipo="loop" data-nome="Borda animada" data-valor="borda 2 px, 5 s por volta, uma peça"><div class="palco"><div class="borda">Plano recomendado</div></div></section>
+<section class="ef" id="A4" data-tipo="estatico" data-nome="Brilho na ação" data-valor="sombra 0 6 px 20 px a 0,38; luz interna 1 px a 0,2"><div class="palco"><button class="btn" type="button">Assinar</button></div></section>
+<section class="ef" id="A5" data-tipo="loop" data-nome="Faixa de brilho" data-valor="passa em 1,2 s, pausa de 6 s, 22%"><div class="palco"><div class="selo">Selo</div></div></section>
+<section class="ef" id="A6" data-tipo="loop" data-nome="Pulso e anel" data-valor="2 s, escala até 2,5, anel a 50%"><div class="palco"><div class="ponto"></div><p>Ao vivo</p></div></section>
+<section class="ef" id="A7" data-tipo="hover" data-nome="Inclinação 3D" data-valor="até 6°, perspectiva 1000 px, volta em 0,4 s"><div class="palco"><div class="cart">Cartão de produto</div></div></section>
+<section class="ef" id="B1" data-tipo="estatico" data-nome="Gradiente radial" data-valor="raios 320–460 px, 25–45%, somem em 75–80%"><div class="palco"><p>Fundo</p></div></section>
+<section class="ef" id="B2" data-tipo="loop" data-t="2500" data-nome="Aurora" data-valor="2 manchas, 20 e 28 s por ciclo, deslocamento 15% da largura"><div class="palco"><div class="mancha a"></div><div class="mancha b"></div><p style="position:relative">Herói</p></div></section>
+<section class="ef" id="B3" data-tipo="estatico" data-nome="Malha de gradiente" data-valor="4 radiais da mesma família"><div class="palco"><p>Capa</p></div></section>
+<section class="ef" id="B4" data-tipo="estatico" data-nome="Granulado" data-valor="5%, tela 180 px, SVG como imagem"><div class="palco"><p>Fundo</p></div></section>
+<section class="ef" id="B5" data-tipo="estatico" data-nome="Grade de fundo" data-valor="passo 32 px, linha 1 px a 8%, máscara radial"><div class="palco"><p>Técnico</p></div></section>
+<section class="ef" id="B6" data-tipo="estatico" data-nome="Curva entre seções" data-valor="raio 32 px"><div class="palco"><p>Bloco</p><div class="sob">Bloco seguinte</div></div></section>
+<section class="ef" id="B7" data-tipo="loop" data-t="2500" data-nome="Cena animada" data-valor="15 s pelo caminho, área pequena"><div class="palco"><div class="barco"></div><p>Cena</p></div></section>
+<section class="ef" id="C1" data-tipo="rolagem" data-nome="Entrada ao rolar" data-valor="24 px, 0,6 s, uma vez"><div class="rola"><div class="item">Primeiro bloco</div><div style="height:260px"></div><div class="item">Segundo bloco</div><div class="item">Terceiro bloco</div><div style="height:220px"></div></div></section>
+<section class="ef" id="C2" data-tipo="rolagem" data-nome="Parallax" data-valor="20% da rolagem, até 100 px"><div class="rola"><div class="fig"></div><div class="alto"></div></div></section>
+<section class="ef" id="C3" data-tipo="rolagem" data-nome="Seção presa" data-valor="3 passos de 150 px"><div class="rola"><div class="preso" id="c3v">Passo 1</div><div class="passo" data-p="1">Texto do passo 1</div><div class="passo" data-p="2">Texto do passo 2</div><div class="passo" data-p="3">Texto do passo 3</div><div style="height:200px"></div></div></section>
+<section class="ef" id="C4" data-tipo="auto" data-nome="Linha que se desenha" data-valor="1,1 s, uma vez"><div class="palco"><svg width="320" height="180" aria-hidden="true"><path pathLength="1" d="M0 150 C 80 20, 150 170, 320 30"/></svg></div></section>
+<section class="ef" id="C5" data-tipo="clique" data-nome="Transição de vista" data-valor="0,3 s, peça com o mesmo nome"><div class="palco"><button class="btn btn2" data-gatilho type="button">Trocar</button><div class="caixa"></div></div></section>
+<section class="ef" id="C6" data-tipo="rolagem" data-nome="Cartões empilhados" data-valor="3 cartões, 20 px de diferença"><div class="rola"><div class="pilha" style="top:0">Cartão 1</div><div class="pilha" style="top:20px">Cartão 2</div><div class="pilha" style="top:40px">Cartão 3</div><div style="height:320px"></div></div></section>
+<section class="ef" id="D1" data-tipo="auto" data-nome="Número que sobe" data-valor="1,2 s, começa em 85%, uma vez"><div class="palco"><div class="n" aria-label="R$ 4.820,00"><span id="d1n" aria-hidden="true">R$ 4.820,00</span></div></div></section>
+<section class="ef" id="D2" data-tipo="auto" data-nome="Título por linha" data-valor="0,65 s, 50 ms entre linhas"><div class="palco"><h3 aria-label="Veja antes de chegar"><span class="ln" aria-hidden="true"><span style="--i:0">Veja antes</span></span><span class="ln" aria-hidden="true"><span style="--i:1">de chegar</span></span></h3></div></section>
+<section class="ef" id="D3" data-tipo="estatico" data-nome="Palavra em destaque" data-valor="uma palavra na cor do acento, sem gradiente"><div class="palco"><h3>Veja a <em>maré baixa</em> antes</h3></div></section>
+<section class="ef" id="D4" data-tipo="loop" data-t="3000" data-pausa data-nome="Texto que troca" data-valor="2,5 s por palavra, 3 palavras, largura reservada"><div class="palco"><p>Pague <span class="tr" id="d4w">antes</span></p><button class="btn btn2 pausa" type="button" data-botao-pausa>Pausar</button></div></section>
+<section class="ef" id="D5" data-tipo="rolagem" data-nome="Título ligado à rolagem" data-valor="texto a 2 tons, contraste já no início; animation-timeline com reserva"><div class="rola"><div class="tit">Um título que se preenche enquanto a página rola para baixo</div><div class="alto"></div></div></section>
+<section class="ef" id="D6" data-tipo="auto" data-nome="Gráfico que se desenha" data-valor="0,7 s, uma vez"><div class="palco"><div class="bar" style="left:40px;height:90px"></div><div class="bar" style="left:100px;height:150px"></div><div class="bar" style="left:160px;height:60px"></div><div class="bar" style="left:220px;height:120px"></div></div></section>
+<section class="ef" id="E1" data-tipo="loop" data-t="2000" data-pausa data-nome="Marquee" data-valor="30 s por volta, conteúdo duplicado, com pausa"><div class="palco"><div class="fila"><span>Marca 1</span><span>Marca 2</span><span>Marca 3</span><span>Marca 4</span><span aria-hidden="true">Marca 1</span><span aria-hidden="true">Marca 2</span><span aria-hidden="true">Marca 3</span><span aria-hidden="true">Marca 4</span></div><button class="btn btn2 pausa" type="button" data-botao-pausa>Pausar</button></div></section>
+<section class="ef" id="E2" data-tipo="loop" data-t="2000" data-pausa data-nome="Órbita e feixes" data-valor="anel 60 s, feixe 2 s, com pausa"><div class="palco"><div class="anel"><div class="logo"></div></div><div class="feixe"></div><button class="btn btn2 pausa" type="button" data-botao-pausa>Pausar</button></div></section>
+<section class="ef" id="E3" data-tipo="loop" data-t="2000" data-nome="Flutuação" data-valor="8 px, 4 s"><div class="palco"><div class="cart">Cartão</div></div></section>
+<section class="ef" id="E4" data-tipo="loop" data-t="2500" data-pausa data-nome="Cena em ciclo" data-valor="2 s por estado, transição 0,35 s, 3 estados, com pausa"><div class="palco"><ul><li>Aluguel</li><li>Mercado</li><li>Cartão</li></ul><button class="btn btn2 pausa" type="button" data-botao-pausa>Pausar</button></div></section>
+<section class="ef" id="E5" data-tipo="clique" data-nome="Confete" data-valor="24 peças, 1,2 s, só depois de um gesto"><div class="palco"><button class="btn" data-gatilho type="button">Concluir</button><p id="e5m" aria-live="polite"></p></div></section>
+<section class="ef" id="F1" data-tipo="hover" data-nome="Botão" data-valor="−1 px em 0,16 s; apertar .98 em 0,08 s"><div class="palco"><button class="btn" type="button">Assinar</button></div></section>
+<section class="ef" id="F2" data-tipo="hover" data-nome="Botão magnético" data-valor="até 8 px, volta em 0,4 s"><div class="palco"><button class="btn" type="button">Portfólio</button></div></section>
+<section class="ef" id="F3" data-tipo="hover" data-nome="Cursor próprio" data-valor="24 px, suavizado, cursor do sistema mantido"><div class="palco"><div class="cursor"></div><p>Área</p></div></section>
+<section class="ef" id="F4" data-tipo="hover" data-nome="Cartão ao passar o mouse" data-valor="−3 px, 0,2 s"><div class="palco"><div class="cart">Cartão clicável</div></div></section>
+<section class="ef" id="F5" data-tipo="clique" data-nome="Seletor deslizante" data-valor="0,25 s, rádio real"><div class="palco"><div class="sel"><input type="radio" name="f5" id="f5a" checked><label for="f5a">Anual</label><input type="radio" name="f5" id="f5b"><label for="f5b" data-gatilho>Mensal</label><span class="ind"></span></div></div></section>
+<section class="ef" id="F6" data-tipo="clique" data-nome="Acordeão" data-valor="0,25 s, linhas de 0fr a 1fr"><div class="palco"><button class="btn btn2" data-gatilho type="button">Pergunta <span class="ico" style="margin-left:8px">+</span></button><div class="corpo"><div><p>Resposta que aparece.</p></div></div></div></section>
+<section class="ef" id="F7" data-tipo="clique" data-nome="Confirmação e aviso" data-valor="marca 0,4 s, aviso 6 s, entra em 0,3 s"><div class="palco"><button class="btn" data-gatilho type="button">Salvar</button><svg class="ok" width="40" height="40" aria-hidden="true"><path pathLength="1" d="M6 22 L16 32 L34 10"/></svg><div class="aviso" role="status" aria-live="polite"></div></div></section>
+<section class="ef" id="F8" data-tipo="auto" data-nome="Esqueleto de carga" data-valor="brilho 1,6 s, aparece após 250 ms"><div class="palco"><div id="f8c"></div></div></section>
+
+<script>
+(function () {
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var q = function (id, s) { return document.getElementById(id).querySelector(s); };
+  var limpa = [];
+  var fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  function aoMover(palco, f) { palco.addEventListener('pointermove', f); limpa.push(function () { palco.removeEventListener('pointermove', f); }); }
+  function pausavel(id, f) {
+    var b = document.getElementById(id).querySelector('[data-botao-pausa]'); if (!b) return;
+    if (RM.matches) { b.hidden = true; return; }
+    var clique = function () { var s = document.getElementById(id); var p = s.classList.toggle('parado'); b.textContent = p ? 'Retomar' : 'Pausar'; if (f) f(p); };
+    b.addEventListener('click', clique); limpa.push(function () { b.removeEventListener('click', clique); b.textContent = 'Pausar'; document.getElementById(id).classList.remove('parado'); });
+  }
+  function intervalo(f, ms) { var t = setInterval(f, ms); limpa.push(function () { clearInterval(t); }); return t; }
+  var ini = {
+    A2: function () { var p = q('A2', '.palco'); if (RM.matches) return; var pend = 0; aoMover(p, function (e) { var r = p.getBoundingClientRect(); var x = e.clientX - r.left, y = e.clientY - r.top; p.classList.add('perto'); if (pend) return; pend = requestAnimationFrame(function () { pend = 0; p.style.setProperty('--x', x + 'px'); p.style.setProperty('--y', y + 'px'); }); }); },
+    A7: function () { var c = q('A7', '.cart'), p = q('A7', '.palco'); if (RM.matches) return; aoMover(p, function (e) { var r = p.getBoundingClientRect(); var dx = (e.clientX - r.left) / r.width - .5, dy = (e.clientY - r.top) / r.height - .5; c.style.transform = 'rotateY(' + (dx * 12).toFixed(2) + 'deg) rotateX(' + (-dy * 12).toFixed(2) + 'deg)'; }); },
+    C1: function () { var s = document.getElementById('C1'); if (RM.matches) return; var r = s.querySelector('.rola'); s.classList.add('js-entra'); var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('v'); io.unobserve(e.target); } }); }, { root: r }); s.querySelectorAll('.item').forEach(function (i) { i.classList.remove('v'); io.observe(i); }); limpa.push(function () { io.disconnect(); s.classList.remove('js-entra'); }); },
+    C2: function () { var r = q('C2', '.rola'), f = q('C2', '.fig'); if (RM.matches) return; var p = 0; var ao = function () { if (p) return; p = requestAnimationFrame(function () { p = 0; f.style.transform = 'translateY(' + Math.min(r.scrollTop * .2, 100).toFixed(1) + 'px)'; }); }; r.addEventListener('scroll', ao, { passive: true }); limpa.push(function () { r.removeEventListener('scroll', ao); }); },
+    C3: function () { var r = q('C3', '.rola'), v = document.getElementById('c3v'); var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) v.textContent = 'Passo ' + e.target.dataset.p; }); }, { root: r, rootMargin: '-45% 0px -45% 0px' }); r.querySelectorAll('.passo').forEach(function (p) { io.observe(p); }); limpa.push(function () { io.disconnect(); }); },
+    C4: function () { if (!RM.matches) document.getElementById('C4').classList.add('corre'); limpa.push(function () { document.getElementById('C4').classList.remove('corre'); }); },
+    C5: function () { var b = q('C5', '[data-gatilho]'), c = q('C5', '.caixa'); var f = function () { var tr = function () { c.classList.toggle('dir'); }; if (document.startViewTransition && !RM.matches) document.startViewTransition(tr); else tr(); }; b.addEventListener('click', f); limpa.push(function () { b.removeEventListener('click', f); c.classList.remove('dir'); }); },
+    D1: function () { var el = document.getElementById('d1n'), fim = 4820; if (RM.matches) { el.textContent = fmt.format(fim); return; } var t0 = 0, id = 0; var passo = function (t) { t0 = t0 || t; var k = Math.min((t - t0) / 1200, 1), d = 1 - Math.pow(1 - k, 3); el.textContent = fmt.format(fim * (.85 + .15 * d)); if (k < 1) id = requestAnimationFrame(passo); }; id = requestAnimationFrame(passo); limpa.push(function () { cancelAnimationFrame(id); el.textContent = fmt.format(fim); }); },
+    D2: function () { var s = document.getElementById('D2'); if (!RM.matches) s.classList.add('corre'); limpa.push(function () { s.classList.remove('corre'); }); },
+    D4: function () { var w = document.getElementById('d4w'), L = ['antes', 'sem susto', 'com folga'], i = 0, parado = false; if (RM.matches) { w.textContent = L[0]; return; } pausavel('D4', function (p) { parado = p; }); intervalo(function () { if (parado) return; w.classList.add('fora'); setTimeout(function () { i = (i + 1) % 3; w.textContent = L[i]; w.classList.remove('fora'); }, 250); }, 2500); },
+    D6: function () { var s = document.getElementById('D6'); if (!RM.matches) s.classList.add('corre'); limpa.push(function () { s.classList.remove('corre'); }); },
+    E1: function () { pausavel('E1'); }, E2: function () { pausavel('E2'); },
+    E4: function () { var it = document.querySelectorAll('#E4 li'), i = 0, parado = false; if (RM.matches) { it.forEach(function (x) { x.classList.remove('fora'); }); return; } pausavel('E4', function (p) { parado = p; }); intervalo(function () { if (parado) return; it.forEach(function (x, n) { x.classList.toggle('fora', n === i); }); i = (i + 1) % 3; }, 2000); limpa.push(function () { it.forEach(function (x) { x.classList.remove('fora'); }); }); },
+    E5: function () { var b = q('E5', '[data-gatilho]'), p = q('E5', '.palco'), m = document.getElementById('e5m'); var cores = ['#f28a70', '#6cc2d2', '#eaf1f2']; var f = function () { m.textContent = 'Concluído.'; if (RM.matches) return; for (var i = 0; i < 24; i++) { var c = document.createElement('i'); c.className = 'conf'; c.style.left = (8 + i * 14) + 'px'; c.style.background = cores[i % 3]; c.style.animationDelay = (i % 6) * 40 + 'ms'; c.addEventListener('animationend', function () { this.remove(); }); p.appendChild(c); } }; b.addEventListener('click', f); limpa.push(function () { b.removeEventListener('click', f); m.textContent = ''; }); },
+    F2: function () { var b = q('F2', '.btn'), p = q('F2', '.palco'); if (RM.matches) return; aoMover(p, function (e) { var r = b.getBoundingClientRect(); var dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), d = Math.hypot(dx, dy); if (d < 100) b.style.transform = 'translate(' + (dx / d * Math.min(8, d / 8)).toFixed(1) + 'px,' + (dy / d * Math.min(8, d / 8)).toFixed(1) + 'px)'; else b.style.transform = ''; }); },
+    F3: function () { var c = q('F3', '.cursor'), p = q('F3', '.palco'); if (RM.matches) { c.hidden = true; return; } var x = 0, y = 0, cx = 0, cy = 0, id = 0; aoMover(p, function (e) { var r = p.getBoundingClientRect(); x = e.clientX - r.left - 12; y = e.clientY - r.top - 12; }); var t = function () { cx += (x - cx) * .3; cy += (y - cy) * .3; c.style.transform = 'translate(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px)'; id = requestAnimationFrame(t); }; id = requestAnimationFrame(t); limpa.push(function () { cancelAnimationFrame(id); }); },
+    F6: function () { var b = q('F6', '[data-gatilho]'), s = q('F6', '.palco'); var f = function () { s.classList.toggle('ab'); }; b.addEventListener('click', f); limpa.push(function () { b.removeEventListener('click', f); s.classList.remove('ab'); }); },
+    F7: function () { var s = document.getElementById('F7'), b = q('F7', '[data-gatilho]'), a = q('F7', '.aviso'); var f = function () { s.classList.remove('corre'); void s.offsetWidth; if (!RM.matches) s.classList.add('corre'); a.textContent = 'Salvo. Desfazer?'; a.classList.add('v'); setTimeout(function () { a.classList.remove('v'); }, 6000); }; b.addEventListener('click', f); limpa.push(function () { b.removeEventListener('click', f); a.classList.remove('v'); a.textContent = ''; s.classList.remove('corre'); }); },
+    F8: function () { var c = document.getElementById('f8c'); var t = setTimeout(function () { c.innerHTML = '<div class="esq" style="width:80%"></div><div class="esq" style="width:60%"></div><div class="esq" style="width:70%"></div>'; }, 250); limpa.push(function () { clearTimeout(t); c.innerHTML = ''; }); }
+  };
+  window.bancada = {
+    ids: function () { return Array.prototype.map.call(document.querySelectorAll('.ef'), function (s) { return { id: s.id, tipo: s.dataset.tipo, nome: s.dataset.nome, valor: s.dataset.valor, t: +(s.dataset.t || 1500), pausa: s.hasAttribute('data-pausa') }; }); },
+    ativar: function (id) {
+      limpa.forEach(function (f) { f(); }); limpa = [];
+      document.querySelectorAll('.ef').forEach(function (s) { s.classList.remove('ativo', 'sem'); });
+      var s = document.getElementById(id); s.classList.add('ativo');
+      var r = s.querySelector('.rola'); if (r) r.scrollTop = 0;
+      if (ini[id]) ini[id]();
+    },
+    sem: function (id) { document.getElementById(id).classList.add('sem'); },
+    rolar: function (id, ms) { var r = document.getElementById(id).querySelector('.rola'); if (!r) return Promise.resolve(); var fim = r.scrollHeight - r.clientHeight, t0 = 0; return new Promise(function (ok) { var f = function (t) { t0 = t0 || t; var k = Math.min((t - t0) / ms, 1); r.scrollTop = fim * k; if (k < 1) requestAnimationFrame(f); else ok(); }; requestAnimationFrame(f); }); },
+    medir: function (ms) { return new Promise(function (ok) { var d = [], u = 0, t0 = 0; var f = function (t) { if (u) d.push(t - u); u = t; t0 = t0 || t; if (t - t0 < ms) requestAnimationFrame(f); else { d.sort(function (a, b) { return a - b; }); ok({ quadros: d.length, p95: d[Math.floor(d.length * .95)] || 0, longos: d.filter(function (x) { return x > 34; }).length }); } }; requestAnimationFrame(f); }); },
+    props: function () { var p = {}; document.getAnimations().forEach(function (a) { var e = a.effect; if (!e || !e.getKeyframes) return; e.getKeyframes().forEach(function (k) { Object.keys(k).forEach(function (n) { if (['offset', 'computedOffset', 'easing', 'composite'].indexOf(n) < 0) p[n] = 1; }); }); if (a.transitionProperty) p[a.transitionProperty] = 1; }); return Object.keys(p).sort(); },
+    rodando: function () { return document.getAnimations().filter(function (a) { var t = a.effect && a.effect.getTiming ? a.effect.getTiming() : {}; return a.playState === 'running' && t.iterations === Infinity; }).length; },
+    texto: function (id) { var s = document.getElementById(id), ruim = 0; s.querySelectorAll('p, strong, button, h3, li, label, .n, .tit, .item, .preso, .passo, .pilha, .cart, .borda, .selo').forEach(function (e) { var o = 1, n = e; while (n && n !== s) { o *= +getComputedStyle(n).opacity; n = n.parentElement; } if (o < .9 && !e.closest('#E4')) ruim++; }); return ruim; },
+    centro: function (id, s) { var el = document.getElementById(id).querySelector(s || '.palco, .rola'); var r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, l: r.left, t: r.top, w: r.width, h: r.height }; }
+  };
+})();
+</script>
+</body>
+</html>
