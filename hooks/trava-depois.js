@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Depois do comando (PostToolUse em Bash/PowerShell): se o HEAD mudou, lê o commit novo. Com segredo, avisa em destaque e diz
+// Depois do comando (PostToolUse e PostToolUseFailure em Bash/PowerShell: o comando que faz o commit e depois falha também passa aqui): se o HEAD mudou, lê o commit novo. Com segredo, avisa em destaque e diz
 // como desfazer antes do push. Pega o que nenhuma leitura de comando prevê (script, alias antigo). Não executa texto do comando.
 'use strict';
 const fs = require('fs');

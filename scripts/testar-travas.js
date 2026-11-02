@@ -126,6 +126,11 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   caso('0.8.0 trava depois: HEAD mudou com segredo → aviso com a instrução de desfazer antes do push, sem o valor', d5.code === 0 && /ANTES do push/.test(d5.out) && /a\.js:2/.test(d5.out) && !d5.out.includes('IAZ7QK3'), d5.out);
   d5 = depois('qualquer', q5);
   caso('0.8.0 trava depois: o aviso sai uma vez', !d5.out, d5.out);
+  const hj = JSON.parse(fs.readFileSync(path.join(RAIZ, 'hooks', 'hooks.json'), 'utf8')).hooks;
+  caso('0.8.0 M-6 trava depois: ligado também no PostToolUseFailure de Bash e PowerShell', ['PostToolUse', 'PostToolUseFailure'].every((ev) => (hj[ev] || []).some((g) => g.matcher === 'Bash|PowerShell' && g.hooks.some((x) => /trava-depois\.js/.test(x.command)))), JSON.stringify(Object.keys(hj)));
+  const q6 = muda(repo()); depois('git status', q6); git('git add a.js', q6); git('git commit -q -m s', q6);
+  const d6 = hook('trava-depois.js', { tool_name: 'Bash', tool_input: { command: 'git commit -am s && npm test' }, cwd: q6, hook_event_name: 'PostToolUseFailure' });
+  caso('0.8.0 M-6 trava depois: comando que fez o commit e falhou também avisa', /ATENÇÃO/.test(d6.out) && /a\.js:2/.test(d6.out), d6.out);
   x5 = trava('git push origin main', q5);
   caso('0.8.0 trava push: segredo em commit não enviado bloqueia, sem o valor', x5.code === 2 && /a\.js:2/.test(x5.err) && !x5.err.includes('IAZ7QK3'), `code ${x5.code} ${x5.out}`);
   x5 = trava('git add -A && git commit -m x && git push', novo(repo()));
