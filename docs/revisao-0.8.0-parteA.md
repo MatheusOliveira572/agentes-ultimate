@@ -686,3 +686,106 @@ Mediana de 5, intercalada com um `node` vazio. As linhas sem nota foram medidas 
 5. Diga se as perguntas que ainda aparecem no seu dia a dia (lista da M-9) incomodam: elas decidem o que entra na lista curta.
 
 Placar: autor=engenheiro-software cod=tr86 veredito=não B=1 A=2 M=6 b=3 ids=B-2,A-4,A-5,M-6,M-7,M-8,M-9,M-10,M-11,b-10,b-11,b-12
+
+## 4ª rodada (2026-11-02): os 6 achados corrigidos e os limites declarados
+
+**Pode juntar: NÃO**, só por texto do README. O código está pronto para juntar.
+- **Os 6 achados corrigidos estão fechados:** B-2, A-4, A-5, M-6, M-7 e M-10. Cada um foi conferido com a sonda da 3ª rodada, com 2 a 4
+  variações novas e com controle positivo no código antigo. O M-6 também foi conferido no Claude Code real.
+- **Falta corrigir 1 frase do README (M-12):** um dos limites declarados está escrito errado, e é justamente o pior caso que ficou.
+  O README diz que um commit feito por script "só é visto depois de rodar e no push". Isso não vale em dois casos:
+  - **script que também publica** (`sh deploy.sh`, `npm run <nome livre>`, `.\deploy.ps1`): nada pergunta, e o segredo chega ao remoto;
+  - **script rodado numa pasta fora da sessão:** o depois não diz nada, e o push só pergunta "não conferido".
+  É troca de texto, sem código. Proponho o texto abaixo. Feita a troca, basta conferir a frase: não precisa de nova rodada.
+- **Recomendado, sem impedir a junção (M-13):** 1 caso de teste. O mutante que faz o depois rodar git fora da sessão escapou da bateria.
+- Escopo, como o usuário decidiu: só os 6 corrigidos e o texto dos limites. M-8, M-9, M-11, b-10, b-11 e b-12 não foram reabertos.
+  Para eles, só conferi se o README os descreve como são.
+
+- Revisor: `revisor`, código rv90 (2026-11-02, das 09h39 às 11h25). Autor: `engenheiro-software`, código tr86.
+- Revisado: cópia `git archive` do da13c1c (c910a7b..da13c1c). Controle: cópia do a13ea41, o código que a 3ª rodada revisou.
+- **Bateria sem a tabela** (`AGENTES_ULTIMATE_SEM_FORMAS=1 node scripts/testar-hooks.js`, na cópia, das 10h22 às 10h33): **515 ok, 0 falha**.
+- **Tabela de formas sozinha** (`node scripts/testar-travas-formas.js`): **52 formas, 0 furo**, 17 formas comuns sem falso positivo (337 s).
+  - Controle positivo, a mesma tabela com os ganchos do a13ea41: **10 furos** (403 s). É o número que o autor declarou.
+- `validar.js`: 0 erro, 0 aviso. `claude plugin validate .`: passou.
+- Uma execução de `claude -p` (haiku, Claude Code 2.1.302), usada no M-6.
+- Os testes rodaram em cópias e em repositórios do temp. No repositório do autor, só leitura e o commit deste relatório.
+
+### Passe de veredito (os 6 corrigidos)
+| Id | Veredito | Prova |
+|---|---|---|
+| B-2 | **resolvido** | **Fora da sessão:** 9 configurações-espiãs × 9 formas, nenhuma execução. As configurações: assinatura com `gpg.program`, `core.fsmonitor`, `core.hooksPath`, `include.path`, filtro clean/smudge, `filter.process`, `textconv` com `diff.external`, pager e `trace2`. As formas: `cd`, `-C`, `Set-Location`, `GIT_DIR=`, `add -A && commit`, `commit -am && push`, script && push, o depois e o depois de falha. No a13ea41, a assinatura e o `include.path` rodaram em 7 de 9 formas cada (controle). O `git` puro roda 6 dessas configurações. `pager`, `trace2` e `hooksPath` não rodam nem no git puro (sem terminal; o `trace2` não é lido da configuração do repositório), então essas 3 linhas não provam nada. **Dentro da sessão** (decisão do usuário): nenhuma execução, exceto o filtro clean e o `filter.process`, nas 2 formas que leem a pasta de trabalho (`cd app && git add -A && git commit`, `commit -am`). É o que o README declara. As mensagens: `git -C <fora> push`, `Set-Location <fora>; git push` e `cd .. && git push` dizem "não conferido: pasta fora da sessão (<pasta>). Nenhum git rodou lá". `cd app && git commit -m x`, `git -C app commit -m x` e `cd app && git add -A && git commit -m x` passam sem pergunta; com a chave, bloqueiam |
+| A-4 | **resolvido** para publicar visível no comando | 4 formas da 3ª rodada: `echo >> a.js && commit -am && push`, alias && push, script && push e `eval` && push. Todas perguntam "o segredo não pôde ser conferido antes de publicar". Formas novas que também perguntam: `cp segredo.txt a.js && ...`, `commit -am > log.txt && push`, `Add-Content; commit -am; push` (PowerShell), `powershell -File salvar.ps1; git push`, `push && exit 1`, `gh repo create` (com e sem `--push`), `git subtree push` e `npm run deploy:prod`. Nas que rodei de verdade, com remoto nu, o segredo só chegou ao remoto depois dessa pergunta, e o depois disse "Já foi publicado... troque a chave". A exceção é o push sem ramo de rastreio (b-13). `gh`, `subtree` e `deploy:prod` só passaram pela decisão do antes. Controles: `git commit -m "x"` e `git add -A && git commit -m x`, limpos, **passam sem pergunta**; a forma comum com push pergunta só "publicar"; com a chave, bloqueia. **O que fica:** script que publica sem a palavra no comando (`sh deploy.sh`, `npm run ship`, `.\deploy.ps1`, `npx gh-pages`) não pergunta nada, e o segredo chega ao remoto. Não tem como ler isso antes: é limite, e o README o descreve errado (M-12) |
+| A-5 | **resolvido** | O verificador recebe o nome literal em: `x%USERNAME%.js`, ``a$(echo PWN)`id`.js``, `b & echo PWN ^x.js` e `sub/c%PATH%.js`. O comando em texto não roda na edição e diz para usar a lista. A 3ª rodada já provou que o código antigo expandia o nome (`x18-112089.js`). Os 3 casos do autor em `testar-painel.js` passam. O exemplo da skill `integracoes` usa a lista. Ficam 2 bordas, em b-14 |
+| M-6 | **resolvido** | **No Claude Code real**, num `claude -p` com o plugin da cópia: o comando foi `sh salvar.sh; exit 3`, um script que faz o commit da chave sem a palavra. Saída 3. O stream trouxe "PostToolUseFailure:PowerShell says: agentes-ultimate: ATENÇÃO... a.js:2 · chave de acesso da AWS", e o modelo recebeu o aviso como "hook blocking error". Nos ganchos, `commit && push && exit 1` também avisa "já foi publicado" |
+| M-7 | **resolvido** | A tabela usa o cwd da sessão no depois e no push, faz o push do mesmo jeito que o commit, roda o `&& git push` contra um remoto nu e tem um comando que falha. Resultado: 0 furo no atual e 10 no a13ea41, rodados por mim (números acima). A correção da frase da 2ª rodada está no CHANGELOG |
+| M-10 | **resolvido** | Passam: `.env.example` e `config/.env.sample` com valores vazios ou marcador, e `.env.Template` com `.env.dist`. Bloqueiam: `.env.example` com chave (pelo conteúdo, `.env.example:1`); `.env`, `.env.local`, `.env.example.bak` e `.env.examples` (pelo nome) |
+
+### Mutação nas partes alteradas
+**Pegou 11 de 12.** Cada mutante rodou numa cópia nova do da13c1c, com troca de texto que falha se o trecho não for achado. Rodei só o módulo de
+teste da parte (`testar-travas.js` ou `testar-painel.js`, com o mesmo `hook()` da bateria). Controles sem mutação: 144 ok / 0 falha e 26 ok / 0
+falha. Rodado junto da tabela, o controle deu 1 falha falsa, no caso M-3 (árvore do plugin): o prazo de 7 s estourou com a máquina ocupada. Sozinho,
+o caso passou 3 de 3.
+
+| Mutante | Resultado |
+|---|---|
+| B-2: `naSessao` sempre verdadeiro (git roda fora no antes) | pegou (5 casos) |
+| B-2: `pastasCitadas` também devolve as pastas de fora (git roda fora no depois) | **escapou: M-13** |
+| B-2: sem `log.showSignature=false`, `gpg.program=` e `--no-show-signature` | pegou (2) |
+| A-4: comando que grava em arquivo volta a ser forma lida | pegou (1) |
+| A-4: `gh --push`, `gh repo create` e `npm run deploy` deixam de ser publicação | pegou (3) |
+| A-4: sem a pergunta "não pôde ser conferido" | pegou (7) |
+| A-4: o depois nunca diz "já foi publicado" | pegou (1) |
+| M-6: sem o `PostToolUseFailure` no `hooks.json` | pegou (1) |
+| A-5: lista rodada com `shell: true` | pegou (5) |
+| A-5: comando em texto volta a rodar na edição | pegou (1) |
+| M-10: sem a exceção dos modelos | pegou (5) |
+| M-10: exceção larga demais (`.env.<qualquer>`) | pegou (1, `.env.local`) |
+
+### Os limites do README, frase a frase
+| Limite no README | Confere? | Prova |
+|---|---|---|
+| Script, alias antigo ou palavra montada "só é visto depois de rodar e no push" | **não (M-12)** | Vale para o alias e o script **sem** push, na pasta da sessão: o depois avisa e o push barra (tabela, linhas L). Não vale para script que publica: `sh deploy.sh`, `npm run ship` e `.\deploy.ps1` não perguntam nada, o segredo chega ao remoto e o depois diz "já foi publicado". Não vale fora da sessão: `cd <fora> && sh salvar.sh` passa, o depois fica calado e o push só pergunta "não conferido" |
+| UTF-16 "passa pelas 3 barreiras" | sim | Esta faixa de commits não mexeu na leitura de binário (diff de `leitor-segredos.js`: só nome, opções do git e `--no-show-signature`). Vale a prova da 3ª rodada |
+| Formas pouco comuns perguntam (`git rm`, `git mv`, `checkout -b`, "R$5", `--trailer`, barra invertida no PowerShell, `Out-Null`) | sim, mas incompleta (b-15) | As 7 perguntam. Também perguntam, e o README não cita: `npm test && git commit` (comum), `commit -S` e `switch -c`. Saíram da lista, porque passam sem pergunta (decisão do usuário): `cd app && git commit` e `git -C app commit` com a sessão na pasta-mãe |
+| Repositório grande passa do prazo de 7 s | sim | Código do prazo intocado. Não medi de novo |
+| `com$'mit'`: nada avisa com a pasta em variável | sim | `plano` sem mudança nesta faixa |
+| `retomar.js` cancelado no `claude -p` | sim | Sem mudança |
+| O depois custa cerca de 0,4 s | sim | Mediana de 7: 371 ms, contra 167 ms de um `node` vazio, com a máquina ocupada |
+| Repositório malicioso dentro da sessão roda o filtro clean | sim, exato | O filtro clean e o `filter.process` rodaram em 2 de 9 formas, as que leem a pasta de trabalho. Assinatura, fsmonitor, `include.path`, `hooksPath`, `textconv` e diff externo: 0 de 9 |
+
+### Achados abertos
+| Id | Gravidade | Achado | Dono |
+|---|---|---|---|
+| M-12 | Médio | A frase do limite "script... só é visto depois de rodar e no push" esconde o pior caso: script que publica (nada pergunta, o segredo vai ao remoto) e script fora da sessão (nada é lido) | `engenheiro-software` |
+| M-13 | Médio | O teste do B-2 não prova que nenhum git roda fora da sessão: o mutante que devolve as pastas de fora ao depois escapou. A espiã usa a assinatura, e as opções `-c` também a desligam. Hoje o código está certo; uma regressão na regra principal do B-2 passaria verde. **Sugestão:** depois de `cd <fora> && ls`, conferir que não foi criado o registro `agentes-ultimate-head/<sha1 da pasta>` (ele só existe se o git rodou lá), ou usar uma configuração que as opções não cobrem | `engenheiro-software` |
+| b-13 | Baixo | Push para caminho ou URL sem ramo de rastreio (`git push ../nu HEAD:main`): o depois diz "Desfaça ANTES do push" quando já foi publicado. A pergunta de antes avisou | `engenheiro-software` |
+| b-14 | Baixo | Verificador em lista no Windows: o exemplo do comentário (`"aoParar": ["npm.cmd", "test"]`) não roda no Node 24 ("verificador não rodou (EINVAL)"), e `["npm", ...]` dá ENOENT. Na prática, ferramenta `.cmd` (npx, eslint, prettier) não roda como verificador. Nome de arquivo que começa com `-` vira opção (`--x.js` → "node: bad option") | `engenheiro-software` |
+| b-15 | Baixo | A lista de formas que perguntam (M-9 no README) omite `npm test && git commit`, `commit -S` e `switch -c` | `engenheiro-software` |
+| M-8, M-9, M-11, b-10, b-11, b-12 | - | Declarados no README por decisão do usuário. Não reabertos; o texto confere, exceto b-15 | usuário (aceitos) |
+
+**Texto proposto para o M-12** (no lugar da 1ª linha dos limites):
+> - Comando que faz o commit sem citar a palavra (script, alias antigo, palavra montada em variável) não é lido antes. Na pasta da sessão, o
+>   depois avisa e o push seguinte barra. **Script que também publica** (`sh deploy.sh`, `npm run <nome>`, `.\deploy.ps1`, `npx gh-pages`)
+>   não pergunta nada: o segredo chega ao remoto, e o depois só avisa "já foi publicado: troque a chave". Fora da pasta da sessão, nada é
+>   lido: o depois fica calado e o push só pergunta "não conferido".
+
+Para o b-15: acrescentar `npm test && git commit`, `commit -S` e `switch -c` à lista. Para o b-14: no comentário, trocar o exemplo por
+`["node", "node_modules/eslint/bin/eslint.js", "{arquivo}"]` e dizer que `.cmd` não roda sem shell. Para o nome com `-`: passar `./` antes do nome.
+
+### Não verificado
+- Linux e macOS (A-5 com `$(...)` num `sh` de verdade). Tudo rodou no Windows 11, Git 2.55, Node 24.18 e Claude Code 2.1.302.
+- O B-2 no `claude -p`: o autor diz que provou; eu usei a única execução no M-6. A prova do B-2 é direta nos ganchos, com controle positivo.
+- `gh pr create` sem `--push`, que pode empurrar o ramo [HIPÓTESE]: não está na regra `OUTRO_PUBLICA`. Não rodei, porque não há `gh`
+  autenticado aqui.
+- Junção ou link simbólico dentro da sessão apontando para fora: `naSessao` compara o caminho escrito, não o real. Não testei.
+- `pager`, `trace2` e `hooksPath`: os controles não dispararam nem no git puro. As linhas desses 3 não provam nem que estão cobertos, nem que estão descobertos.
+
+### Lista do usuário
+1. Peça um commit de um `.env.example` com os nomes e os valores vazios: deve passar, sem pergunta.
+2. Peça "adicione esta chave falsa em config.ini, faça o commit e o push no mesmo comando": deve perguntar, dizendo que o segredo não
+   pôde ser conferido. Responda "não".
+3. Com o Claude Code aberto numa pasta-mãe, peça um commit no projeto de dentro: não deve perguntar se não houver segredo.
+4. Leia a frase nova do limite (M-12) e decida se "script que publica não pergunta nada" é aceitável. Se não for, o caminho é um gancho
+   `pre-push` do git no projeto, que o plugin hoje não instala.
+
+Placar: autor=engenheiro-software cod=tr86 veredito=não B=0 A=0 M=5 b=6 ids=M-12,M-13,M-8,M-9,M-11,b-13,b-14,b-15,b-10,b-11,b-12
