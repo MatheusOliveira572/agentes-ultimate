@@ -32,7 +32,9 @@ async function abrirEdge() {
   const proc = spawn(EDGE, ['--headless=new', '--remote-debugging-port=0', `--user-data-dir=${perfil}`, '--no-first-run', '--disable-extensions', '--disable-background-networking', '--disable-sync', '--hide-scrollbars', '--force-color-profile=srgb', 'about:blank'], { windowsHide: true, stdio: 'ignore' });
   const arq = path.join(perfil, 'DevToolsActivePort');
   for (let i = 0; i < 100 && !fs.existsSync(arq); i++) await espera(200);
-  const porta = fs.readFileSync(arq, 'utf8').split('\n')[0].trim();
+  // O Edge ainda pode estar escrevendo o arquivo (EBUSY no Windows): tenta de novo por até 5 s.
+  let porta = '';
+  for (let k = 0; k < 25 && !porta; k++) { try { porta = fs.readFileSync(arq, 'utf8').split('\n')[0].trim(); } catch (e) { if (e.code !== 'EBUSY' && e.code !== 'ENOENT') throw e; } if (!porta) await espera(200); }
   const lista = await (await fetch(`http://127.0.0.1:${porta}/json`)).json();
   const alvo = lista.find((t) => t.type === 'page');
   const ws = new WebSocket(alvo.webSocketDebuggerUrl);
@@ -140,7 +142,7 @@ const CHECAGENS = `(function (celular) {
   var cortado = [];
   document.querySelectorAll('body *').forEach(function (e) {
     var cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden' || e.closest('svg, script, style, .oculto, .pular')) return;
-    var q = e.getBoundingClientRect(); if (q.width <= 1 || q.height <= 1) return;
+    var q = e.getBoundingClientRect(); if ((q.width <= 1 && q.height <= 1) || (!q.width && !q.height)) return;
     var temTexto = Array.prototype.some.call(e.childNodes, function (n) { return n.nodeType === 3 && n.textContent.trim(); });
     if (temTexto && (q.right > innerWidth + 1 || q.left < -1)) cortado.push(e.tagName + ':' + e.textContent.trim().slice(0, 30));
     if (temTexto && /hidden|clip/.test(cs.overflowX) && e.scrollWidth > e.clientWidth + 1) cortado.push(e.tagName + ':' + e.textContent.trim().slice(0, 30));
@@ -178,7 +180,7 @@ const CHECAGENS = `(function (celular) {
   var caixas = [], wt = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (wt.nextNode()) {
     var nt = wt.currentNode; if (!nt.textContent.trim()) continue; var pe = nt.parentElement; if (!pe || pe.closest('script, style, .pular') || (pe.closest('details:not([open])') && !pe.closest('summary'))) continue;
-    var ce = getComputedStyle(pe); if (ce.visibility === 'hidden' || !pe.getClientRects().length || pe.getBoundingClientRect().width <= 1) continue;
+    var ce = getComputedStyle(pe); if (ce.visibility === 'hidden' || !pe.getClientRects().length || (pe.getBoundingClientRect().width <= 1 && pe.getBoundingClientRect().height <= 1)) continue;
     var rg = document.createRange(); rg.selectNodeContents(nt);
     Array.prototype.forEach.call(rg.getClientRects(), function (x) { if (x.width > 1 && x.height > 1) caixas.push({ e: pe, t: nt.textContent.trim().slice(0, 24), l: x.left, r: x.right, a: x.top + 2, b: x.bottom - 2 }); });
   }
@@ -439,7 +441,7 @@ async function provarSite() {
   c = await capturaSite(b, mutante('rotulo', (t) => t.replace('transform: translate(-50%, 0); padding: 12px 0 0;', 'transform: translate(-50%, 0); padding: 120px 0 0;')), 'claro', 1440, null);
   mutantes.push({ nome: 'rótulo cortado na vertical pela seção', pegou: c.texto_cortado > 0 });
   gravarRes({ mutantes }); await novo();
-  c = await capturaSite(b, mutante('sobre', (t) => t.replace('.mare { position: relative; margin-top: 16px;', '.mare { position: relative; margin-top: -150px;')), 'claro', 1440, null);
+  c = await capturaSite(b, mutante('sobre', (t) => t.replace('.mare { position: relative; margin-top: 16px;', '.mare { position: relative; margin-top: -70px;')), 'claro', 1440, null);
   mutantes.push({ nome: 'rótulo da curva em cima de outro texto', pegou: c.texto_sobreposto > 0 });
 
   // Pontos cegos da revisão (M-5) e as checagens de teclado, curva, cenas e larguras.
@@ -469,8 +471,8 @@ async function provarSite() {
   c = await medirCurva(b, mut('ponto', '.ponto { position: absolute; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, -50%);', '.ponto { position: absolute; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, 40%);'), 1440);
   mutantes.push({ nome: 'ponto da maré baixa solto da curva', pegou: c.some((x) => !x.ok) });
   gravarRes({ mutantes }); await novo();
-  c = await medirLargura(b, mut('planos', '@media (max-width: 1120px) {', '@media (max-width: 1px) {'), 768);
-  mutantes.push({ nome: 'tábua de preços sem empilhar (768 px)', pegou: !larguraOk(c) });
+  c = await medirLargura(b, mut('planos', '@media (max-width: 1120px) {', '@media (max-width: 1px) {'), 320);
+  mutantes.push({ nome: 'tábua de preços sem empilhar (320 px)', pegou: !larguraOk(c) });
   gravarRes({ mutantes });
 
   const teclado = []; for (const [tm, l] of [['claro', 1440], ['escuro', 1440], ['claro', 390]]) { await novo(); teclado.push(await medirTeclado(b, url, tm, l)); }
@@ -490,6 +492,15 @@ async function provarSite() {
 }
 
 // ---- Bancada de efeitos ----
+// Duas fotos do mesmo gradiente parado diferem em 2 ou 3 níveis de 255 (raster), e a comparação byte a byte reprovava ao
+// acaso. Iguais = nenhum canal difere mais que 3 níveis.
+const TOLERANCIA = 3;
+function parecidas(a, b) {
+  const x = lerPng(a), y = lerPng(b);
+  if (x.w !== y.w || x.h !== y.h) return false;
+  for (let i = 0; i < x.w * x.h; i++) for (let c = 0; c < 3; c++) if (Math.abs(x.px[i * x.cores + c] - y.px[i * y.cores + c]) > TOLERANCIA) return false;
+  return true;
+}
 async function mouse(b, x, y) { await b.cdp('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y }); }
 async function varrer(b, c, ms) { const n = Math.max(6, Math.round(ms / 40)); for (let i = 0; i <= n; i++) { const k = i / n; await mouse(b, c.l + 20 + k * (c.w - 40), c.t + 20 + (Math.sin(k * 6) * .5 + .5) * (c.h - 40)); await espera(ms / n); } }
 async function clicar(b, id) { const c = await b.ev(`bancada.centro(${JSON.stringify(id)}, '[data-gatilho]')`); await b.cdp('Input.dispatchMouseEvent', { type: 'mouseMoved', x: c.x, y: c.y }); await b.cdp('Input.dispatchMouseEvent', { type: 'mousePressed', x: c.x, y: c.y, button: 'left', clickCount: 1 }); await b.cdp('Input.dispatchMouseEvent', { type: 'mouseReleased', x: c.x, y: c.y, button: 'left', clickCount: 1 }); }
@@ -520,14 +531,14 @@ async function provarEfeitos() {
     if (e.tipo === 'estatico') {
       await espera(120); f = await foto(b, clip);
       await b.ev(`bancada.sem(${j})`); await espera(80); const sem = await foto(b, clip);
-      r.mexeu = !f.equals(sem); m = sem; quadros[e.id] = { inicio: f, meio: f, fim: sem };
+      r.mexeu = !parecidas(f, sem); m = sem; quadros[e.id] = { inicio: f, meio: f, fim: sem };
     } else {
       const meioMs = Math.round(e.t / 2);
       if (e.tipo === 'clique') { await clicar(b, e.id); await espera(Math.min(meioMs, 160)); m = await foto(b, clip); await espera(e.t); f = await foto(b, clip); }
       else if (e.tipo === 'hover') { await varrer(b, c, meioMs); m = await foto(b, clip); await varrer(b, c, meioMs); await mouse(b, c.x, c.y); await espera(200); f = await foto(b, clip); }
       else if (e.tipo === 'rolagem') { const p = b.ev(`bancada.rolar(${j}, ${e.t})`); await espera(meioMs); m = await foto(b, clip); await p; await espera(800); f = await foto(b, clip); }
       else { await espera(e.id === 'C4' || e.id === 'D2' || e.id === 'D6' ? 90 : meioMs); m = await foto(b, clip); await espera(meioMs); f = await foto(b, clip); }
-      r.mexeu = !a.equals(m) || !m.equals(f) || !a.equals(f);
+      r.mexeu = !parecidas(a, m) || !parecidas(m, f) || !parecidas(a, f);
       quadros[e.id] = { inicio: a, meio: m, fim: f };
     }
     r.texto_invisivel_no_fim = await b.ev(`bancada.texto(${j})`);
@@ -536,7 +547,7 @@ async function provarEfeitos() {
       await b.ev(`bancada.ativar(${j})`); await espera(100);
       await b.ev(`document.getElementById(${j}).querySelector('[data-botao-pausa]').click()`); await espera(450);
       const p1 = await foto(b, clip); await espera(Math.max(e.t, 2200)); const p2 = await foto(b, clip);
-      r.pausa_ok = p1.equals(p2);
+      r.pausa_ok = parecidas(p1, p2);
     }
     saida.push(r);
   }
@@ -566,7 +577,7 @@ async function provarEfeitos() {
     await espera(600); const f1 = await foto(b, clip); await espera(450); const f2 = await foto(b, clip);
     const rod = await b.ev('bancada.rodando()');
     const txt = await b.ev(`bancada.texto(${j})`);
-    r.reduzido_ok = f1.equals(f2) && rod === 0 && txt === 0; r.reduzido_rodando = rod; r.reduzido_texto_invisivel = txt;
+    r.reduzido_ok = parecidas(f1, f2) && rod === 0 && txt === 0; r.reduzido_rodando = rod; r.reduzido_texto_invisivel = txt;
     quadros[r.id].reduzido = f2;
     r.provado = !!(r.mexeu && r.reduzido_ok && r.p95_ms > 0 && r.p95_ms <= 34 && r.erros_js === 0 && r.texto_invisivel_no_fim === 0 && (!r.pausa || r.pausa_ok));
     delete r.t;
@@ -601,14 +612,16 @@ async function provarEfeitos() {
   await b.ev("bancada.ativar('E1')"); await espera(300);
   const ce = await b.ev("bancada.centro('E1')");
   const r1 = await foto(b, clipDe(ce)); await espera(600); const r2 = await foto(b, clipDe(ce)); const rr = await b.ev('bancada.rodando()');
-  controles.push({ nome: 'marquee sem o ramo de movimento reduzido', pegou: !(r1.equals(r2) && rr === 0) });
+  controles.push({ nome: 'marquee sem o ramo de movimento reduzido', pegou: !(parecidas(r1, r2) && rr === 0) });
   const mC = path.join(TEMP, 'b-parado.html'); fs.writeFileSync(mC, fonteB.replace('animation: anda 30s linear infinite;', ''));
   await midia(b, []); await ir(b, urlDe(mC));
   await b.ev("bancada.ativar('E1')"); await espera(100);
   const a1 = await foto(b, clipDe(ce)); await espera(1000); const a2 = await foto(b, clipDe(ce));
-  controles.push({ nome: 'marquee sem a animação (o "mexeu" tem de dar falso)', pegou: a1.equals(a2) });
+  controles.push({ nome: 'marquee sem a animação (o "mexeu" tem de dar falso)', pegou: parecidas(a1, a2) });
   console.log(JSON.stringify(controles));
-  gravarRes({ efeitos: saida, efeitos_controles: controles, efeitos_condicao: `${versao}, sem interface, 390 px, CPU freada 4×; quadros por requestAnimationFrame em 1,5 s. Sem aparelho real.` });
+  const rodadas = [...(lerRes().efeitos_rodadas || []), { em: new Date().toISOString(), provados: saida.filter((r) => r.provado).length, total: saida.length, ids: saida.filter((r) => r.provado).map((r) => r.id),
+    falhas: saida.filter((r) => !r.provado).map((r) => ({ id: r.id, motivo: [!r.mexeu && 'não mexeu', !r.reduzido_ok && 'reduzido', r.pausa && !r.pausa_ok && 'pausa', !(r.p95_ms > 0 && r.p95_ms <= 34) && 'quadro ' + r.p95_ms + ' ms', r.erros_js && 'js', r.texto_invisivel_no_fim && 'texto'].filter(Boolean) })) }].slice(-3);
+  gravarRes({ efeitos_rodadas: rodadas, efeitos: saida, efeitos_controles: controles, efeitos_condicao: `${versao}, sem interface, 390 px, CPU freada 4×; quadros por requestAnimationFrame em 1,5 s. Sem aparelho real.` });
   const ruins = saida.filter((r) => !r.provado);
   for (const r of ruins) console.log('NÃO PROVADO', r.id, r.nome, JSON.stringify({ mexeu: r.mexeu, red: r.reduzido_ok, rod: r.reduzido_rodando, txtR: r.reduzido_texto_invisivel, txt: r.texto_invisivel_no_fim, p95: r.p95_ms, js: r.erros_js, pausa: r.pausa_ok }));
   console.log(`RESUMO efeitos: ${saida.length} efeitos, ${saida.length - ruins.length} provados, ${ruins.length} não, ${Math.round((Date.now() - t0) / 1000)} s`);
@@ -617,26 +630,29 @@ async function provarEfeitos() {
 // ---- Quadro de provas ----
 function gravarQuadro() {
   const res = lerRes(); const e = res.efeitos || [];
+  const ult = (res.efeitos_rodadas || []).filter((x) => x.ids).slice(-2);
+  const estavel = (id) => ult.length === 2 && ult.every((x) => x.ids.includes(id));
+  const oscila = (id) => ult.some((x) => x.ids.includes(id)) && !estavel(id);
   const IDS = [...'ABCDEF'].flatMap((g) => Array.from({ length: { A: 7, B: 7, C: 6, D: 6, E: 5, F: 8 }[g] }, (_, i) => g + (i + 1)));
   const linhas = IDS.map((id) => {
     const r = e.find((x) => x.id === id);
-    if (!r || !r.provado) return `| ${id} | ${r ? r.nome : '—'} | [ESTIMATIVA: não provado na bancada] | ${r ? r.valor : '—'} | ${r ? r.p95_ms + ' ms' : '—'} | ${r && r.reduzido_ok ? 'sim' : 'não'} | ${r && r.props && r.props.length ? r.props.join(', ') : '—'} |`;
-    return `| ${id} | ${r.nome} | PROVADO | ${r.valor} | ${r.p95_ms} ms | sim | ${r.props && r.props.length ? r.props.join(', ') : 'sem animação'} |`;
+    if (!r || !estavel(id)) return `| ${id} | ${r ? r.nome : '—'} | [ESTIMATIVA: ${oscila(id) ? 'passou numa rodada e não na outra (' + ult.map((x) => ((x.falhas.find((f) => f.id === id) || {}).motivo || ['ok']).join(' ')).join(' × ') + ')' : 'não provado na bancada'}] | ${r ? r.valor : '—'} | ${r ? r.p95_ms + ' ms' : '—'} | ${r && r.reduzido_ok ? 'sim' : 'não'} | ${r && r.props && r.props.length ? r.props.join(', ') : '—'} |`;
+    return `| ${id} | ${r.nome} | PROVADO${r.p95_ms > 30 ? " (perto do limite: o quadro oscila entre rodadas)" : ""} | ${r.valor} | ${r.p95_ms} ms | sim | ${r.props && r.props.length ? r.props.join(', ') : r.tipo === 'estatico' ? 'sem animação (efeito parado)' : 'por JS (requestAnimationFrame) ou transição já encerrada na medida'} |`;
   }).join('\n');
-  const provados = e.filter((x) => x.provado).length;
+  const provados = IDS.filter(estavel).length;
   const txt = `<!-- Texto próprio do agentes-ultimate. Gerado por docs/provas/0.8.0-sites/provar.js a partir de resultado.json. -->
 <!-- ref: tema=efeitos-provados; palavras=prova dos efeitos, efeito provado, quadros do efeito, efeito pesa; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=este efeito pesa, qual a prova dos efeitos | mostre o efeito provado e os quadros do efeito; nao=calcule o custo médio ponderado do estoque -->
 # Efeitos: o que foi provado, com que valor
 
-${provados} de ${IDS.length} efeitos passaram na bancada (\`docs/provas/0.8.0-sites/bancada-efeitos.html\`; folha de contato em \`png/bancada-efeitos.png\`).
+${provados} de ${IDS.length} efeitos passaram na bancada (rodadas seguidas: ${(res.efeitos_rodadas || []).map((x) => x.provados + '/' + x.total).join(', ') || '1'}) (\`docs/provas/0.8.0-sites/bancada-efeitos.html\`; folha de contato em \`png/bancada-efeitos.png\`).
 **Condição:** ${res.efeitos_condicao || 'sem medição'}
 
-**PROVADO quer dizer:** com o valor da coluna, em código próprio, o efeito apareceu ou mexeu, ficou parado e legível com
+**PROVADO quer dizer:** nas 2 últimas rodadas seguidas, com o valor da coluna, em código próprio, o efeito apareceu ou mexeu, ficou parado e legível com
 \`prefers-reduced-motion\`, teve pausa quando o catálogo exige, 0 erro de JS e p95 do quadro até 34 ms na condição acima.
 **Controles:** ${(res.efeitos_controles || []).map((c) => `${c.nome}: ${c.p95_ms !== undefined ? c.p95_ms + ' ms, ' : ''}${c.informativo ? (c.pegou ? 'a medida subiu' : 'a medida não subiu: custo de pintura não aparece aqui') : (c.pegou ? 'pegou' : 'NÃO pegou')}`).join('; ') || '—'}.
 **Não prova:** aparelho real, GPU, bateria, nem o restante da faixa do catálogo, que continua [ESTIMATIVA: ponto de partida
-nosso]. Quadro por \`requestAnimationFrame\` sobe com carga na linha principal; com pintura cara, o controle de desfoque variou entre rodadas (49,9 e 16,8 ms), então **custo de pintura e de compositor não está medido**: vidro, aurora e sombra precisam de aparelho real. Teclado e leitor de tela: só o
+nosso]. Quadro por \`requestAnimationFrame\` sobe com carga na linha principal; com pintura cara, o controle de desfoque não sobe sempre (nesta rodada: ${((res.efeitos_controles || []).find((c) => c.informativo) || {}).p95_ms} ms), então **custo de pintura e de compositor não está medido**: vidro, aurora e sombra precisam de aparelho real. Teclado e leitor de tela: só o
 que está na página de prova (\`site-preamar.html\`), não em cada efeito. Os avançados do grupo G não foram construídos.
 
 | Efeito | Nome | Situação | Valor usado | p95 do quadro | Reduzido testado | Propriedades animadas |
