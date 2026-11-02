@@ -542,3 +542,12 @@ Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11
 - **2ª revisão do lote** (`docs/revisao-0.8.0-sites-r2.md`): junção com a `main` antes de mexer no roteador; desempate site ×
   interface (`pacotes.json` → `desempate`, regra genérica no `roteador.js`); 160 frases na bateria; teclado comparado com a
   lista real de controles; tábua das semanas no lugar do calendário; PROVADO só com 3 rodadas estáveis.
+- **3ª revisão do lote** (`docs/revisao-0.8.0-sites-r3.md`, decisões do usuário de 2026-11-02): verbo só pontua junto do alvo
+  (`sites.pares`: verbo + artigo + "novo" + site, landing, homepage, página web ou lp = 2 pontos; os 16 verbos e "web" saíram
+  das palavras firmes); o desempate site × interface olha primeiro a âncora (site × app) e depois a soma; empate = os dois,
+  com caso; o quadro mostra a pior das 3 rodadas; a tábua das semanas marca a mais baixa por texto e forma.
+- **Correção (b-14):** a entrada da 2ª rodada acima diz "html, css, react e frontend sem site vão ao engenheiro". Isso valeu
+  só de fa570e5 a c7e7adb. Desde a A-3 da 2ª rodada, essas palavras voltaram ao pacote `interface` (designer de painéis), e o
+  caso "corrija o css e o html do botão no react → só engenheiro" saiu da bateria por isso: a frase agora vai ao designer de
+  painéis e ao engenheiro, e está na lista "o orquestrador decide". O eval de roteamento não acusa mais palavra repetida
+  entre pacotes (eram 3).
