@@ -181,7 +181,7 @@ for (const canario of ['Prova pela fonte real', 'Nunca invente dados', 'Desculpa
 // Janela piscando no Windows: toda chamada de processo em hooks/ e scripts/ leva windowsHide.
 {
   const { semWindowsHide } = require(path.join(RAIZ, 'scripts', 'chamadas-processo.js'));
-  for (const d of ['hooks', 'scripts']) {
+  for (const d of ['hooks', 'scripts', 'ferramentas', 'modelos']) {
     for (const f of listar(path.join(RAIZ, d)).filter((x) => /\.(js|mjs|cjs)$/.test(x))) {
       for (const a of semWindowsHide(fs.readFileSync(f, 'utf8'))) erros.push(`${rel(f)}:${a.linha}: ${a.nome}(...) sem windowsHide (abre janela no Windows)`);
     }

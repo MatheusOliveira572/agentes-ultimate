@@ -2,7 +2,7 @@ const fs = require('node:fs'), {execFileSync} = require('node:child_process');
 
 function has(command) {
   try {
-    execFileSync('which', [command], {stdio: 'ignore'});
+    execFileSync('which', [command], {windowsHide: true, stdio: 'ignore'});
     return true;
   } catch {
     return false;

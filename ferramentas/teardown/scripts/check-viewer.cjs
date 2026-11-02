@@ -45,7 +45,7 @@ async function check(htmlPath, outDir, {dark = false} = {}) {
   if (!fs.existsSync(page)) throw Error(`No page at ${page}`);
   fs.mkdirSync(outDir, {recursive: true});
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'drawing-check-'));
-  const browser = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`, '--window-size=1400,900', '--no-first-run', 'about:blank'], {stdio: 'ignore'});
+  const browser = spawn(chrome, ['--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`, '--window-size=1400,900', '--no-first-run', 'about:blank'], {windowsHide: true, stdio: 'ignore'});
   const problems = [], requests = [];
   try {
     const cdp = await connect(profile);

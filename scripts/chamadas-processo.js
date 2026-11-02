@@ -1,38 +1,65 @@
-// Acha chamadas de processo (spawn, spawnSync, exec, execSync, execFile, execFileSync) sem `windowsHide`. No Windows, sem
-// essa opção, cada chamada pode piscar uma janela de console na tela do usuário. Usado pelo validar.js. Só leitura.
+// Acha chamadas de processo sem windowsHide: true. No Windows, sem essa opção, cada chamada pode piscar uma janela de console.
+// Usado pelo validar.js. Só leitura. Lê o código sem comentários e sem o conteúdo de textos, e só em arquivo que usa child_process.
 'use strict';
-// Com ponto também conta (require('child_process').spawnSync); só o .exec( fica de fora, porque é o método de regex.
-const PADRAO = /(^|[^\w])(spawnSync|spawn|execSync|execFileSync|execFile|(?<!\.)exec)\(/g;
 
-// Posição do ")" que fecha o "(" em `ini`, pulando textos entre aspas e crases.
-function fechamento(t, ini) {
-  let nivel = 0;
-  let aspa = null;
-  for (let i = ini; i < t.length; i++) {
+// Troca comentários e o conteúdo de textos e regex por espaços, mantendo as posições e as quebras de linha.
+function mascarar(t) {
+  const s = t.split('');
+  const apaga = (a, b) => { for (let k = a; k < b && k < s.length; k++) if (s[k] !== '\n') s[k] = ' '; };
+  let ultimo = '';
+  for (let i = 0; i < t.length; i++) {
     const c = t[i];
-    if (aspa) {
-      if (c === '\\') i++;
-      else if (c === aspa) aspa = null;
-      continue;
+    if (c === '/' && t[i + 1] === '/') { const f = t.indexOf('\n', i); const e = f < 0 ? t.length : f; apaga(i, e); i = e - 1; continue; }
+    if (c === '/' && t[i + 1] === '*') { const f = t.indexOf('*/', i + 2); const e = f < 0 ? t.length : f + 2; apaga(i, e); i = e - 1; continue; }
+    if (c === '"' || c === "'" || c === '`') {
+      let k = i + 1;
+      for (; k < t.length && t[k] !== c; k++) { if (t[k] === '\\') k++; else if (t[k] === '\n' && c !== '`') break; }
+      apaga(i + 1, k); i = k; ultimo = c; continue;
     }
-    if (c === '"' || c === "'" || c === '`') aspa = c;
-    else if (c === '(') nivel++;
-    else if (c === ')' && --nivel === 0) return i;
+    if (c === '/' && /^[(,=:[!&|?{};\n]?$/.test(ultimo)) { // regex
+      let k = i + 1; let cl = false;
+      for (; k < t.length && t[k] !== '\n'; k++) { if (t[k] === '\\') k++; else if (t[k] === '[') cl = true; else if (t[k] === ']') cl = false; else if (t[k] === '/' && !cl) break; }
+      if (t[k] === '/') { apaga(i + 1, k); i = k; ultimo = '/'; continue; }
+    }
+    if (!/\s/.test(c)) ultimo = c;
   }
+  return s.join('');
+}
+function fechamento(m, ini) {
+  let nivel = 0;
+  for (let i = ini; i < m.length; i++) { if (m[i] === '(') nivel++; else if (m[i] === ')' && --nivel === 0) return i; }
   return -1;
 }
+const CP = /(?:require\s*\(\s*['"`](?:node:)?child_process['"`]\s*\))/;
 
-// Devolve [{ linha, nome, ini, fim }] das chamadas sem windowsHide. Definição de função não conta.
+// Devolve [{ linha, nome, ini, fim }] das chamadas sem a opção. Sem fechar o parêntese também acusa: nunca pula calado.
 function semWindowsHide(t) {
-  const achados = [];
-  for (const m of t.matchAll(PADRAO)) {
-    const ini = m.index + m[0].length - 1;
-    const antes = t.slice(Math.max(0, m.index - 12), m.index + m[1].length);
-    if (/function\s*$/.test(antes)) continue;
-    const fim = fechamento(t, ini);
-    if (fim < 0 || t.slice(ini, fim).includes('windowsHide')) continue;
-    achados.push({ linha: t.slice(0, ini).split('\n').length, nome: m[2], ini, fim });
+  if (!/child_process/.test(t)) return [];
+  const m = mascarar(t);
+  // Na máscara, o nome do módulo some de dentro das aspas: procura no texto original, na mesma posição.
+  const nomes = new Set(['spawnSync', 'spawn', 'execSync', 'execFileSync', 'execFile', 'exec']);
+  const objetos = new Set();
+  for (const x of t.matchAll(new RegExp('(?:const|let|var)\\s+([\\w$]+)\\s*=\\s*' + CP.source, 'g'))) objetos.add(x[1]);
+  for (const x of t.matchAll(new RegExp('(?:const|let|var)?\\s*\\{([^}]*)\\}\\s*=\\s*' + CP.source, 'g'))) {
+    for (const par of x[1].split(',')) { const q = par.split(':'); if (q[1] && nomes.has(q[0].trim())) nomes.add(q[1].trim()); }
   }
+  const achados = [];
+  const ver = (ini, nome) => {
+    const fim = fechamento(m, ini);
+    const args = fim < 0 ? '' : m.slice(ini, fim);
+    const boa = /\bwindowsHide\s*:\s*true\b/.test(args) || /[{,]\s*windowsHide\s*[,}]/.test(args);
+    if (!boa) achados.push({ linha: t.slice(0, ini).split('\n').length, nome: fim < 0 ? nome + ' (sem fechar o parêntese)' : nome, ini, fim });
+  };
+  const so = [...nomes].filter((n) => n !== 'exec').join('|');
+  for (const x of m.matchAll(new RegExp('(^|[^\\w$.])(' + so + '|exec)\\s*\\(', 'g'))) {
+    const antes = m.slice(Math.max(0, x.index - 12), x.index + x[1].length);
+    if (/function\s*$/.test(antes)) continue;
+    ver(x.index + x[0].length - 1, x[2]);
+  }
+  // Pelo objeto do módulo: cp.exec(...), require('child_process').spawnSync(...). exec de regex não entra.
+  const metodos = '(spawnSync|spawn|execSync|execFileSync|execFile|exec)';
+  for (const o of objetos) for (const x of m.matchAll(new RegExp('(^|[^\\w$.])' + o.replace(/\$/g, '\\$') + '\\s*\\.\\s*' + metodos + '\\s*\\(', 'g'))) ver(x.index + x[0].length - 1, x[2]);
+  for (const x of m.matchAll(new RegExp('require\\s*\\(\\s*.\\s*.\\s*\\)\\s*\\.\\s*' + metodos + '\\s*\\(', 'g'))) if (t.slice(x.index, x.index + x[0].length).includes('child_process')) ver(x.index + x[0].length - 1, x[1]);
   return achados;
 }
 
