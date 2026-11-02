@@ -22,9 +22,9 @@
    "titulos_cobertos": 0,
    "detalhe_cobertos": [],
    "camadas_fixas": 1,
-   "contraste_medidos": 170,
+   "contraste_medidos": 171,
    "contraste_falhas": 0,
-   "contraste_pior": 5.68,
+   "contraste_pior": 5.42,
    "detalhe_falhas": []
   },
   {
@@ -49,7 +49,7 @@
    "titulos_cobertos": 0,
    "detalhe_cobertos": [],
    "camadas_fixas": 1,
-   "contraste_medidos": 166,
+   "contraste_medidos": 167,
    "contraste_falhas": 0,
    "contraste_pior": 5.19,
    "detalhe_falhas": []
@@ -76,9 +76,9 @@
    "titulos_cobertos": 0,
    "detalhe_cobertos": [],
    "camadas_fixas": 1,
-   "contraste_medidos": 170,
+   "contraste_medidos": 171,
    "contraste_falhas": 0,
-   "contraste_pior": 5.68,
+   "contraste_pior": 5.74,
    "detalhe_falhas": []
   },
   {
@@ -103,7 +103,7 @@
    "titulos_cobertos": 0,
    "detalhe_cobertos": [],
    "camadas_fixas": 1,
-   "contraste_medidos": 166,
+   "contraste_medidos": 167,
    "contraste_falhas": 0,
    "contraste_pior": 5.19,
    "detalhe_falhas": []
@@ -132,14 +132,14 @@
   "com_desfoque": 0,
   "alfa_minimo": 1,
   "contraste_falhas": 0,
-  "contraste_pior": 5.68,
+  "contraste_pior": 5.74,
   "detalhe_falhas": []
  },
  "mais_contraste": {
   "media_ativa": true,
   "com_desfoque": 0,
   "contraste_falhas": 0,
-  "contraste_pior": 5.56
+  "contraste_pior": 5.64
  },
  "sem_js": {
   "h1": true,
@@ -235,7 +235,7 @@
    "pegou": true
   }
  ],
- "gerado_em": "2026-11-02T11:38:09.956Z",
+ "gerado_em": "2026-11-02T12:58:22.753Z",
  "navegador": "Edg/156.0.4314.58",
  "condicao": "Edge sem interface, uma máquina Windows; imagens renderizadas sem aparelho real",
  "efeitos": [
