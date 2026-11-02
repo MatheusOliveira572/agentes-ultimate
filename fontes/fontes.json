@@ -821,6 +821,26 @@
         {
           "origem": "skills/security-audit/SKILL.md",
           "destino": "conhecimento/seguranca/modos/orientar-ou-auditar-2.md"
+        },
+        {
+          "origem": "report-schema.json",
+          "destino": "ferramentas/auditoria/LEIA-ME.md"
+        },
+        {
+          "origem": "skills/security-audit/validate-findings.cjs",
+          "destino": "ferramentas/auditoria/LEIA-ME.md"
+        },
+        {
+          "origem": "validate-coverage-ledger.cjs",
+          "destino": "ferramentas/auditoria/LEIA-ME.md"
+        },
+        {
+          "origem": "skills/security-audit/validate-coverage-ledger.cjs",
+          "destino": "ferramentas/auditoria/validate-coverage-ledger.cjs"
+        },
+        {
+          "origem": "skills/security-audit/validate-findings.cjs",
+          "destino": "ferramentas/auditoria/validate-findings.cjs"
         }
       ]
     }

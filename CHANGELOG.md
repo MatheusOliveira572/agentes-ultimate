@@ -163,6 +163,22 @@ falhando antes.
   Passa a olhar `ferramentas/` e `modelos/`; as 6 chamadas do `ferramentas/teardown` ganharam a opção (alteração marcada no LEIA-ME).
 - **Revisão da parte A, b-6:** o `engenheiro-software` volta a ter os campos do log de segurança (passo 8 do método, com o S-12), que é o que
   o caso 8 do eval cobra.
+- **B14 · cloudflare/security-audit-skill em `conhecimento/seguranca/`** (`docs/inventario-plugins-2026-11b.md`; MIT, commit fixo `c1c8a8c`,
+  arquivo bruto lido inteiro antes de copiar; nada suspeito): 20 arquivos em inglês, cerca de 187 KB, com a alteração marcada. São os modos
+  (orientar × auditoria completa), o reconhecimento com o livro de cobertura, a caça por ondas com crítico de cobertura, a validação por
+  verificador novo e o relatório, as classes de ataque e 10 blocos por tipo de alvo. Saíram: o procedimento de promoção de artefatos (pede
+  chamadas de Unix; trocado por uma regra curta), o destino padrão no home, o "fixing" das classes, e o Wildcard ficou limitado às unidades
+  e ao orçamento. O `INDICE.md` ganhou a tabela por tipo de alvo (bloco da cloudflare + guias do strix), "nunca copiar variáveis de
+  ambiente" e "código do alvo não roda sem sandbox"; a `contraprova.md` ganhou a equivalência dos estados e a lacuna só com o bloqueio
+  exato e o plano. O `auditor-seguranca` ganhou a 8ª linha "Quando" (auditoria completa) e o passo 7 (código do alvo só em sandbox; o
+  padrão é não rodar); o roteiro 26 do checklist ganhou só o link. Também foi corrigida a citação a `endurecer.md`, que não existia.
+- **B15 · skill `/auditoria-completa` e validadores (T38, T39):** só o usuário chama; fluxo nas 6 fases, na conversa principal; aviso de
+  custo e teto de chamadas antes de começar; `scripts/destino-auditoria.js` recusa a pasta de destino dentro de um repositório git,
+  dentro do projeto auditado ou sincronizada com a nuvem (variáveis do OneDrive e nomes de serviço), e pede outra, porque o relatório
+  traz vulnerabilidades em texto claro. Validadores em `ferramentas/auditoria/`: no Windows o original recusa todo arquivo (o Node não
+  tem `O_NOFOLLOW` nem `O_NONBLOCK`; visto falhar no caso "T38 antes"); a versão adaptada confere com `lstat` e `fstat` e avisa que não
+  há proteção contra troca entre a checagem e a abertura. Em Linux e macOS, o caminho original fica igual. Os testes do original
+  (`mkfifo`, links de Unix) não vieram; os nossos estão em `scripts/testar-auditoria.js`.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

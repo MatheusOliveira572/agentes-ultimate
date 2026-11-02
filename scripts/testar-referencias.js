@@ -173,6 +173,8 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B14 roteiro 26 do checklist ganha só o link para a auditoria completa', /\/auditoria-completa/.test(ler('skills', 'checklist-lancamento', 'referencias', 'seguranca-revisao.md')) && !/cacar-por-cobertura|Wildcard/.test(ler('skills', 'checklist-lancamento', 'referencias', 'seguranca-revisao.md')), 'falta');
   caso('0.8.0 B14 crédito: licença em terceiros, linha em CREDITOS.md e registro em fontes.json com o commit fixo', fs.existsSync(path.join(RAIZ, 'terceiros', 'cloudflare-security-audit-skill', 'LICENSE')) && /cloudflare\/security-audit-skill \| c1c8a8c/.test(ler('CREDITOS.md')) &&
     JSON.parse(ler('fontes', 'fontes.json')).fontes.some((x) => x.repo === 'cloudflare/security-audit-skill' && x.commit_usado.startsWith('c1c8a8c') && x.arquivos.length >= 20), 'falta');
+  // ---- Lote 15 · skill auditoria-completa e validadores ----
+  try { require('./testar-auditoria.js')({ caso, tmp, RAIZ }); } catch (e) { caso('0.8.0 B15: scripts/testar-auditoria.js carrega e roda', false, e.message); }
   // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
   v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });
   caso('0.8.0 B fontes: linha de crédito que cita fonte fora de fontes/fontes.json é erro', v.code === 1 && /cita fulano\/projeto-x, que não está em fontes\/fontes\.json/.test(v.out), v.out.slice(-300));
