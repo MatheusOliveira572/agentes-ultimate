@@ -33,6 +33,6 @@ página; `prefers-reduced-motion` (sem deslocamento, escala, inclinação nem pa
 em peça pequena.
 
 ## Prova (provas.md)
-Prova pv94 (`docs/provas/0.8.0-design/e2e/`): lente vista na ampliação 2× (`caso-b-produto-v2-claro-1440-rolado-zoom.png`),
+Prova pv94 (`docs/provas/0.8.0-design/e2e/`): lente vista na ampliação 2× (`caso-b-produto-v2-claro-1440-rolado-zoom.webp`),
 tom que muda com a foto de trás (`medidas-v2-b.json`, campo `tons`), contraste no pior ponto ≥ 4,67:1, redução de
 movimento com 0 animação rodando. Landing completa: a cargo do `designer-sites` (próxima prova).

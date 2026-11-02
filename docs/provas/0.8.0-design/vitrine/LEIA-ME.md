@@ -56,13 +56,13 @@ mouse sobre a lente. Sem internet, sem WebGL ou com movimento reduzido, entra a 
   - A 1ª navegação num navegador recém-aberto pinta tarde em qualquer variante da página (medido: até ~4 s com a CPU 4×).
 
 ### PNGs e tiras que eu mostraria
-1. `png/vitrine-claro-1440.png`: herói em 2×, lente renderizada sobre a hora dourada desfocada.
-2. `png/vitrine-escuro-1440-q2-aberta.png`: os 7 vidros abertos no estúdio escuro (softboxes nos vidros, iridescência, etiquetas).
-3. `png/tira-lente-escuro.png`: 12 quadros de 50 ms, do herói à vista aberta; o barril sai como uma luva, o mesmo objeto em todos.
-4. `png/tira-girar-20graus.png`: o mesmo quadro a 0° e a 20°; os reflexos mudam de lugar (não é desenho).
-5. `png/tira-reserva.png` e `png/tira-revelacao.png`: a reserva com continuidade e a revelação escalonada.
-Também: `png/vitrine-claro-1440-q2-aberta.png`, `png/vitrine-claro-390.png`, `png/vitrine-escuro-1440-q4-reservar.png` (+ `-zoom`),
-`png/vitrine-claro-1440-zoom4x.png`, reduções e as imagens de reserva em `img/`.
+1. `png/vitrine-claro-1440.webp`: herói em 2×, lente renderizada sobre a hora dourada desfocada.
+2. `png/vitrine-escuro-1440-q2-aberta.webp`: os 7 vidros abertos no estúdio escuro (softboxes nos vidros, iridescência, etiquetas).
+3. `png/tira-lente-escuro.webp`: 12 quadros de 50 ms, do herói à vista aberta; o barril sai como uma luva, o mesmo objeto em todos.
+4. `png/tira-girar-20graus.webp`: o mesmo quadro a 0° e a 20°; os reflexos mudam de lugar (não é desenho).
+5. `png/tira-reserva.webp` e `png/tira-revelacao.webp`: a reserva com continuidade e a revelação escalonada.
+Também: `png/vitrine-claro-1440-q2-aberta.webp`, `png/vitrine-claro-390.webp`, `png/vitrine-escuro-1440-q4-reservar.webp` (+ `-zoom`),
+`png/vitrine-claro-1440-zoom4x.webp`, reduções e as imagens de reserva em `img/`.
 
 ## Autocrítica (régua: "parece produto real renderizado ou ilustração? o movimento parece produto premium ou site de modelo?")
 - **Lente: parece produto renderizado.** A serrilha pega luz, o vidro tem espessura e reflexo de softbox, e o revestimento dá o
@@ -89,3 +89,7 @@ Também: `png/vitrine-claro-1440-q2-aberta.png`, `png/vitrine-claro-390.png`, `p
 | `tiras.js` | tiras de quadros determinísticas + análise de curva |
 | `foto.js` | captura avulsa e geração das imagens de reserva (`img/*.webp`) |
 | (proposta do padrão HD) | aplicada em `conhecimento/design/nivel-hd.md`, `modelos/mola-linear.js` e `modelos/tiras/`; saiu daqui (histórico do git) |
+
+As capturas ficam em WebP (o plugin é baixado inteiro por quem instala). Os verificadores gravam PNG; antes do commit, rode
+`node scripts/comprimir-provas.js docs/provas/0.8.0-design/vitrine/png` (Edge ou Chrome sem interface; converte e apaga o PNG)
+e apague as capturas que este LEIA-ME não cita.

@@ -1,9 +1,9 @@
 {
-  "data": "2026-11-02T21:48:29.226Z",
+  "data": "2026-11-02T22:11:33.020Z",
   "totalErros": 0,
   "relatorio": [
     {
-      "gl": 6529,
+      "gl": 7170,
       "caso": "vitrine-claro-1440",
       "erros": [],
       "avisos": [],
@@ -19,7 +19,7 @@
         },
         {
           "txt": "Lente",
-          "pior": 17.58,
+          "pior": 17.68,
           "min": 4.5
         },
         {
@@ -34,12 +34,12 @@
         },
         {
           "txt": "Sete vidros entre você e a luz",
-          "pior": 12.11,
+          "pior": 12.1,
           "min": 3
         },
         {
           "txt": "Clara 35 é uma câmera compacta",
-          "pior": 10.12,
+          "pior": 10.09,
           "min": 4.5
         },
         {
@@ -57,7 +57,7 @@
       "png": "vitrine-claro-1440.png"
     },
     {
-      "gl": 4505,
+      "gl": 5350,
       "caso": "vitrine-claro-390",
       "erros": [],
       "avisos": [],
@@ -83,12 +83,12 @@
         },
         {
           "txt": "Sete vidros entre você e a luz",
-          "pior": 13.97,
+          "pior": 14,
           "min": 3
         },
         {
           "txt": "Clara 35 é uma câmera compacta",
-          "pior": 11.12,
+          "pior": 11.22,
           "min": 4.5
         },
         {
@@ -106,7 +106,7 @@
       "png": "vitrine-claro-390.png"
     },
     {
-      "gl": 1114,
+      "gl": 1786,
       "caso": "vitrine-escuro-1440",
       "erros": [],
       "avisos": [],
@@ -122,12 +122,12 @@
         },
         {
           "txt": "Lente",
-          "pior": 13.63,
+          "pior": 13.65,
           "min": 4.5
         },
         {
           "txt": "Abertura",
-          "pior": 14.79,
+          "pior": 14.78,
           "min": 4.5
         },
         {
@@ -152,7 +152,7 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 10.47,
+          "pior": 10.41,
           "min": 4.5
         }
       ],
@@ -160,7 +160,7 @@
       "png": "vitrine-escuro-1440.png"
     },
     {
-      "gl": 0,
+      "gl": 699,
       "caso": "vitrine-escuro-390",
       "erros": [],
       "avisos": [],
@@ -201,7 +201,7 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 9.96,
+          "pior": 9.88,
           "min": 4.5
         }
       ],
@@ -209,7 +209,7 @@
       "png": "vitrine-escuro-390.png"
     },
     {
-      "gl": 1366,
+      "gl": 1212,
       "caso": "vitrine-claro-1440-q1-girando",
       "erros": [],
       "avisos": [],
@@ -225,7 +225,7 @@
         },
         {
           "txt": "Lente",
-          "pior": 17.66,
+          "pior": 17.54,
           "min": 4.5
         },
         {
@@ -240,12 +240,12 @@
         },
         {
           "txt": "Sete vidros entre você e a luz",
-          "pior": 10.58,
+          "pior": 10.56,
           "min": 3
         },
         {
           "txt": "Clara 35 é uma câmera compacta",
-          "pior": 10.09,
+          "pior": 10.12,
           "min": 4.5
         },
         {
@@ -255,7 +255,7 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 5.9,
+          "pior": 5.89,
           "min": 4.5
         }
       ],
@@ -263,7 +263,7 @@
       "png": "vitrine-claro-1440-q1-girando.png"
     },
     {
-      "gl": 1001,
+      "gl": 990,
       "caso": "vitrine-claro-1440-q2-aberta",
       "erros": [],
       "avisos": [],
@@ -339,7 +339,7 @@
       "png": "vitrine-claro-1440-q2-aberta.png"
     },
     {
-      "gl": 1242,
+      "gl": 2236,
       "caso": "vitrine-escuro-1440-q2-aberta",
       "erros": [],
       "avisos": [],
@@ -460,7 +460,7 @@
       "png": "vitrine-escuro-1440-q2-aberta.png"
     },
     {
-      "gl": 1392,
+      "gl": 899,
       "caso": "vitrine-claro-1440-q3-abertura",
       "erros": [],
       "avisos": [],
@@ -496,7 +496,7 @@
       "png": "vitrine-claro-1440-q3-abertura.png"
     },
     {
-      "gl": 1137,
+      "gl": 1087,
       "caso": "vitrine-claro-1440-q3b-barra-sobre-foto",
       "erros": [],
       "avisos": [],
@@ -542,7 +542,7 @@
       "png": "vitrine-claro-1440-q3b-barra-sobre-foto.png"
     },
     {
-      "gl": 1295,
+      "gl": 1151,
       "caso": "vitrine-escuro-1440-q4-reservar",
       "erros": [],
       "avisos": [],
@@ -611,7 +611,7 @@
       "png": "vitrine-escuro-1440-q4-reservar.png"
     },
     {
-      "gl": 1498,
+      "gl": 1141,
       "caso": "vitrine-claro-1440-q4-reservar",
       "erros": [],
       "avisos": [],
@@ -681,7 +681,7 @@
       "reserva": "reservar → \"Reservada\" + ✓ + aviso + Desfazer; desfazer → volta e devolve o foco"
     },
     {
-      "gl": 870,
+      "gl": 685,
       "caso": "vitrine-claro-390-q2-aberta",
       "erros": [],
       "avisos": [],
@@ -737,7 +737,7 @@
       "png": "vitrine-claro-390-q2-aberta.png"
     },
     {
-      "gl": 820,
+      "gl": 693,
       "caso": "vitrine-escuro-390-q4-reservar",
       "erros": [],
       "avisos": [],
@@ -877,7 +877,7 @@
       "png": "vitrine-claro-1440-reduzido-aberta.png"
     },
     {
-      "gl": 1679,
+      "gl": 1215,
       "caso": "vitrine-claro-1440-transparencia-reduzida",
       "erros": [],
       "avisos": [],
@@ -946,7 +946,7 @@
       "png": "vitrine-claro-1440-transparencia-reduzida.png"
     },
     {
-      "gl": 5131,
+      "gl": 791,
       "caso": "largura-320",
       "erros": [],
       "avisos": [],
@@ -987,14 +987,14 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 5.59,
+          "pior": 5.57,
           "min": 4.5
         }
       ],
       "vidro": "nav:claro(0.80) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1052,
+      "gl": 751,
       "caso": "largura-320-rolado",
       "erros": [],
       "avisos": [],
@@ -1079,7 +1079,7 @@
       "vidro": "nav:tema(-) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1076,
+      "gl": 610,
       "caso": "largura-320-rolado",
       "erros": [],
       "avisos": [],
@@ -1142,7 +1142,7 @@
       "vidro": "nav:claro(0.62) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1470,
+      "gl": 1002,
       "caso": "largura-768",
       "erros": [],
       "avisos": [],
@@ -1163,7 +1163,7 @@
         },
         {
           "txt": "Abertura",
-          "pior": 17.87,
+          "pior": 17.76,
           "min": 4.5
         },
         {
@@ -1178,7 +1178,7 @@
         },
         {
           "txt": "Clara 35 é uma câmera compacta",
-          "pior": 13.04,
+          "pior": 13.07,
           "min": 4.5
         },
         {
@@ -1195,7 +1195,7 @@
       "vidro": "nav:claro(0.80) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1422,
+      "gl": 779,
       "caso": "largura-768-rolado",
       "erros": [],
       "avisos": [],
@@ -1325,7 +1325,7 @@
       "vidro": "nav:tema(-) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1469,
+      "gl": 810,
       "caso": "largura-768-rolado",
       "erros": [],
       "avisos": [],
@@ -1395,7 +1395,7 @@
       "vidro": "nav:claro(0.62) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1435,
+      "gl": 946,
       "caso": "largura-1024",
       "erros": [],
       "avisos": [],
@@ -1441,14 +1441,14 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 5.36,
+          "pior": 5.37,
           "min": 4.5
         }
       ],
       "vidro": "nav:claro(0.80) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1456,
+      "gl": 948,
       "caso": "largura-1024-rolado",
       "erros": [],
       "avisos": [],
@@ -1523,7 +1523,7 @@
       "vidro": "nav:tema(-) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1476,
+      "gl": 855,
       "caso": "largura-1024-rolado",
       "erros": [],
       "avisos": [],
@@ -1591,7 +1591,7 @@
       "vidro": "nav:claro(0.62) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 2376,
+      "gl": 1811,
       "caso": "largura-1920",
       "erros": [],
       "avisos": [],
@@ -1602,7 +1602,7 @@
       "pixel": [
         {
           "txt": "Clara",
-          "pior": 17.74,
+          "pior": 17.7,
           "min": 4.5
         },
         {
@@ -1622,7 +1622,7 @@
         },
         {
           "txt": "Sete vidros entre você e a luz",
-          "pior": 11.19,
+          "pior": 11.21,
           "min": 3
         },
         {
@@ -1637,14 +1637,14 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 6.92,
+          "pior": 6.91,
           "min": 4.5
         }
       ],
       "vidro": "nav:claro(0.80) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 2373,
+      "gl": 1152,
       "caso": "largura-1920-rolado",
       "erros": [],
       "avisos": [],
@@ -1719,7 +1719,7 @@
       "vidro": "nav:tema(-) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 2091,
+      "gl": 1323,
       "caso": "largura-1920-rolado",
       "erros": [],
       "avisos": [],
@@ -1787,7 +1787,7 @@
       "vidro": "nav:claro(0.62) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")"
     },
     {
-      "gl": 1729,
+      "gl": 1124,
       "caso": "teclado-escuro-1440",
       "erros": [],
       "avisos": [],
@@ -1808,7 +1808,7 @@
         },
         {
           "txt": "Abertura",
-          "pior": 14.78,
+          "pior": 14.79,
           "min": 4.5
         },
         {
@@ -1833,7 +1833,7 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 10.41,
+          "pior": 10.42,
           "min": 4.5
         }
       ],
@@ -1841,7 +1841,7 @@
       "teclado": "Pular para o conteúdo → Clara, início[escuro] → Lente[escuro] → Abertura[escuro] → Reservar[escuro] → Reservar → Ver a lente por dentro → abertura-faixa → ReservarReservada[escuro] → Pular para o conteúdo Clara Lente  → Pular para o conteúdo → Clara, início[escuro] → Lente[escuro] ⟵ Clara, início"
     },
     {
-      "gl": 1789,
+      "gl": 1013,
       "caso": "coerencia-claro-1440",
       "erros": [],
       "avisos": [],
@@ -1857,7 +1857,7 @@
         },
         {
           "txt": "Lente",
-          "pior": 17.58,
+          "pior": 17.68,
           "min": 4.5
         },
         {
@@ -1872,12 +1872,12 @@
         },
         {
           "txt": "Sete vidros entre você e a luz",
-          "pior": 12.1,
+          "pior": 12.13,
           "min": 3
         },
         {
           "txt": "Clara 35 é uma câmera compacta",
-          "pior": 10.09,
+          "pior": 10.02,
           "min": 4.5
         },
         {
@@ -1887,7 +1887,7 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 5.94,
+          "pior": 5.89,
           "min": 4.5
         }
       ],
@@ -1969,7 +1969,7 @@
       "reduzido": "animações rodando: 0; lente aberta (sem movimento): true"
     },
     {
-      "gl": 1761,
+      "gl": 1173,
       "caso": "contraste-mais-escuro-1440",
       "erros": [],
       "avisos": [],
@@ -2091,7 +2091,7 @@
       "semGl": "sem WebGL: imagem de reserva à vista = true"
     },
     {
-      "gl": 1745,
+      "gl": 1612,
       "caso": "objeto-3d-1440",
       "erros": [],
       "avisos": [],
@@ -2127,7 +2127,7 @@
         },
         {
           "txt": "Clara 35 é uma câmera compacta",
-          "pior": 10.1,
+          "pior": 10.09,
           "min": 4.5
         },
         {
@@ -2137,12 +2137,12 @@
         },
         {
           "txt": "Ver a lente por dentro",
-          "pior": 5.94,
+          "pior": 5.9,
           "min": 4.5
         }
       ],
       "vidro": "nav:claro(0.80) url(\"#lg-1\") | cartao:claro(0.62) url(\"#lg-2\")",
-      "objeto3d": "lente: 0.000% de pixels saturados em 2558864 (limite 1%); WebGL ativo em 1745 ms"
+      "objeto3d": "lente: 0.000% de pixels saturados em 2558864 (limite 1%); WebGL ativo em 1612 ms"
     },
     {
       "caso": "sem-js-1440",
@@ -2199,49 +2199,47 @@
       "semJs": "sem JS: 0 de 23 textos escondidos no meio da tela"
     },
     {
-      "gl": 3082,
+      "gl": 2382,
       "caso": "desempenho-cpu4x-1440",
       "erros": [],
       "avisos": [
-        "p95 de quadro 166.7 ms com CPU 4× (headless, sem GPU real)"
+        "p95 de quadro 100.1 ms com CPU 4× (headless, sem GPU real)"
       ],
-      "desempenho": "LCP 164 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 83.2 ms, p95 166.7 ms, 72 de 90 acima de 50 ms (CPU 4×)"
+      "desempenho": "LCP 260 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 66.6 ms, p95 100.1 ms, 61 de 90 acima de 50 ms (CPU 4×)"
     },
     {
-      "gl": 1368,
+      "gl": 1569,
       "caso": "desempenho-1440",
       "erros": [],
       "avisos": [
-        "p95 de quadro 83.3 ms com CPU 4× (headless, sem GPU real)"
+        "p95 de quadro 50.2 ms com CPU 4× (headless, sem GPU real)"
       ],
-      "desempenho": "LCP 320 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 17.2 ms, p95 83.3 ms, 7 de 90 acima de 50 ms (CPU 1×)"
+      "desempenho": "LCP 308 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 16.9 ms, p95 50.2 ms, 7 de 90 acima de 50 ms (CPU 1×)"
     },
     {
       "gl": 0,
       "caso": "desempenho-cpu4x-1440-semgl",
       "erros": [],
-      "avisos": [
-        "p95 de quadro 50.1 ms com CPU 4× (headless, sem GPU real)"
-      ],
-      "desempenho": "LCP 740 ms (IMG.), CLS 0.000, quadros na abertura: mediana 33.3 ms, p95 50.1 ms, 6 de 90 acima de 50 ms (CPU 4×)"
+      "avisos": [],
+      "desempenho": "LCP 1088 ms (IMG.), CLS 0.000, quadros na abertura: mediana 33.2 ms, p95 50 ms, 4 de 90 acima de 50 ms (CPU 4×)"
     },
     {
-      "gl": 2293,
+      "gl": 2600,
       "caso": "desempenho-cpu4x-1440-1x",
       "erros": [],
       "avisos": [
-        "p95 de quadro 133.3 ms com CPU 4× (headless, sem GPU real)"
+        "p95 de quadro 83.9 ms com CPU 4× (headless, sem GPU real)"
       ],
-      "desempenho": "LCP 212 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 66.6 ms, p95 133.3 ms, 57 de 90 acima de 50 ms (CPU 4×)"
+      "desempenho": "LCP 184 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 50 ms, p95 83.9 ms, 38 de 90 acima de 50 ms (CPU 4×)"
     },
     {
-      "gl": 2225,
+      "gl": 2079,
       "caso": "desempenho-cpu4x-390",
       "erros": [],
       "avisos": [
-        "p95 de quadro 100 ms com CPU 4× (headless, sem GPU real)"
+        "p95 de quadro 83.4 ms com CPU 4× (headless, sem GPU real)"
       ],
-      "desempenho": "LCP 580 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 50 ms, p95 100 ms, 32 de 90 acima de 50 ms (CPU 4×)"
+      "desempenho": "LCP 388 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 49.9 ms, p95 83.4 ms, 30 de 90 acima de 50 ms (CPU 4×)"
     }
   ]
 }

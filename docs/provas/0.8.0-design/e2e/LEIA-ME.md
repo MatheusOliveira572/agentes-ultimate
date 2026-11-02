@@ -25,7 +25,7 @@ Ninguém pediu as referências: elas vieram do roteador. O designer, pela seçã
 | Movimento | `design/movimento/INDICE.md` | uma entrada rara no detalhe (180 ms, ease-out, de 0,97, sem `scale(0)`), com redução de movimento; pressionar 0,97 em 160 ms |
 | Polir | `design/detalhes-interface.md` | sombra para elevação e borda para estrutura; hover só com `@media (hover: hover)`; foco visível; raio 12–16 px |
 
-PNGs: `png/caso-a-antes-claro-1440.png` e `png/caso-a-depois-claro-1440.png` (um par antes e depois; os outros da v1 saíram na
+PNGs: `png/caso-a-antes-claro-1440.webp` e `png/caso-a-depois-claro-1440.webp` (um par antes e depois; os outros da v1 saíram na
 limpeza da 0.8.0 e continuam no histórico do git).
 
 ## 3. Caso B: "um card com efeito vidro estilo Apple" (`caso-b-landing.html`, `caso-b-produto.html`)
@@ -95,9 +95,9 @@ arquivos da v1 ficam para comparação.
   data quebrada no celular; estado incoerente ao concluir; grupos com o mesmo arranjo; faixa cinza na lagoa.
 
 ## PNGs v2 (`png/`)
-`caso-a-v2-{claro,escuro}-{1440,390}.png`, `caso-a-v2-claro-1440-concluir.png`, `caso-a-v2-claro-1440-vazio.png`;
-`caso-b-produto-v2-{claro,escuro}-{1440,390}.png`, `caso-b-produto-v2-claro-1440-rolado.png` (+ `-zoom.png`, lente ampliada
-2×), `caso-b-produto-v2-escuro-390-rolado.png` (abas recolhidas), `caso-b-produto-v2-claro-1440-transparencia-reduzida.png`.
+`caso-a-v2-{claro,escuro}-{1440,390}.webp`, `caso-a-v2-claro-1440-concluir.webp`, `caso-a-v2-claro-1440-vazio.webp`;
+`caso-b-produto-v2-{claro,escuro}-{1440,390}.webp`, `caso-b-produto-v2-claro-1440-rolado.webp` (+ `-zoom.webp`, lente ampliada
+2×), `caso-b-produto-v2-escuro-390-rolado.webp` (abas recolhidas), `caso-b-produto-v2-claro-1440-transparencia-reduzida.webp`.
 
 ## Autocrítica pela régua (`conhecimento/design/impressionar.md`, camada 2)
 | Item | A | B |
@@ -133,12 +133,12 @@ Apontado: a barra lateral terminava num corte seco onde a capa acaba, e o vidro 
   e a capa passou a ter a grade.
 - **Medida:** o contraste sobre o vidro passou a ser medido na caixa das letras (`Range`), não no recuo do botão; ainda
   pega vidro ruim (mutação com tinta escura 0,10: 4 casos reprovados).
-- Novo: `png/caso-b-produto-v2-escuro-1440-rolado.png` e `-zoom.png` (barra lateral ampliada 2×).
+- Novo: `png/caso-b-produto-v2-escuro-1440-rolado.webp` e `-zoom.webp` (barra lateral ampliada 2×).
 - `node verificar-v2.js b`: 9 casos ok; `node verificar-v2.js a`: 8 casos ok (o vidro de A usa o mesmo modelo). Depois da limpeza, com as páginas no
   `modelos/liquid-glass/`: `b` 9 casos ok e `a` 8 casos ok de novo (2026-11-02).
 
-**PNGs para mostrar ao usuário:** `png/caso-a-v2-claro-1440.png`, `png/caso-b-produto-v2-claro-1440-rolado.png` e
-`png/caso-b-produto-v2-escuro-1440-rolado-zoom.png`.
+**PNGs para mostrar ao usuário:** `png/caso-a-v2-claro-1440.webp`, `png/caso-b-produto-v2-claro-1440-rolado.webp` e
+`png/caso-b-produto-v2-escuro-1440-rolado-zoom.webp`.
 
 ---
 
@@ -185,10 +185,10 @@ luminância em `img/fotos-lum.js` (o `file://` bloqueia ler pixels de imagem). A
   quadradas; luminárias do píer somando um borrão branco; morros chapados; cápsula do visor lendo a luminância das fotos escondidas.
 
 ## PNGs e tiras (`png/`, todos a 2×)
-- A: `caso-a-v2-{claro,escuro}-{1440,390}.png`, `-claro-1440-concluir.png`, `-claro-1440-vazio.png`; tiras
-  `tira-a-lista-ficha-claro.png`, `tira-a-concluir-claro.png`, `tira-a-interrupcao-escuro.png`.
-- B: `caso-b-produto-v2-{claro,escuro}-{1440,390}.png`, rolados, `-escuro-1440-visor.png`, `-claro-390-visor.png`,
-  `-claro-1440-transparencia-reduzida.png`, ampliações `-rolado-zoom.png`; tiras `tira-b-abrir-foto-escuro.png`, `tira-b-fechar-foto-claro.png`.
+- A: `caso-a-v2-{claro,escuro}-{1440,390}.webp`, `-claro-1440-concluir.webp`, `-claro-1440-vazio.webp`; tiras
+  `tira-a-lista-ficha-claro.webp`, `tira-a-concluir-claro.webp`, `tira-a-interrupcao-escuro.webp`.
+- B: `caso-b-produto-v2-{claro,escuro}-{1440,390}.webp`, rolados, `-escuro-1440-visor.webp`, `-claro-390-visor.webp`,
+  `-claro-1440-transparencia-reduzida.webp`, ampliações `-rolado-zoom.webp`; tiras `tira-b-abrir-foto-escuro.webp`, `tira-b-fechar-foto-claro.webp`.
 
 ## O que ainda não está no nível
 - Os morros da "Trilha" e a "Areia branca" são as cenas mais fracas: névoa de vale exagerada, areia sem textura visível.
@@ -197,3 +197,7 @@ luminância em `img/fotos-lum.js` (o `file://` bloqueia ler pixels de imagem). A
 - Em B, a barra lateral ainda mostra uma passagem suave onde a capa termina.
 - A tira mede posições e a interrupção, mas o "parece app da Apple ou template?" continua no olho.
 - As abas que se recolhem no celular (B) animam `flex-grow` (layout), fora da regra de só `transform`/`opacity`.
+
+As capturas ficam em WebP (o plugin é baixado inteiro por quem instala). Os verificadores gravam PNG; antes do commit, rode
+`node scripts/comprimir-provas.js docs/provas/0.8.0-design/e2e/png` (Edge ou Chrome sem interface; converte e apaga o PNG)
+e apague as capturas que este LEIA-ME não cita.

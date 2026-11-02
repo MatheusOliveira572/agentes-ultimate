@@ -164,9 +164,9 @@ público: as menções à empresa (M-2), o peso dos PNGs (M-3) e o CHANGELOG (M-
   "não via as nuvens".
 - **b-5** Régua aplicada por mim aos PNGs (camada 2, item 15, acabamento): 1 "não" em cada prova, nenhum declarado. Pela régua, é
   AMARELO. Dono: designer.
-  - **Vitrine** (`vitrine-claro-1440.png`, `vitrine-escuro-1440.png`): a coluna de brilho sob a lente é um retângulo de bordas
+  - **Vitrine** (`vitrine-claro-1440.webp`, `vitrine-escuro-1440.webp`): a coluna de brilho sob a lente é um retângulo de bordas
     retas, mais visível no escuro. Há também uma fresta castanha na base da lente (ampliação 4×).
-  - **Caso B v2** (`caso-b-produto-v2-claro-1440.png` e `-rolado.png`): a extensão de fundo vaza cerca de 20 px à direita da barra
+  - **Caso B v2** (`caso-b-produto-v2-claro-1440.webp` e `-rolado.webp`): a extensão de fundo vaza cerca de 20 px à direita da barra
     lateral, numa faixa borrada entre a barra e o mosaico. O `materiais.md` pede "máscara antes da borda do conteúdo".
   - **Caso A v2:** passou nos 8 itens da camada 2. A coerência confere (5 de 12 = 42%; "Hoje 5 de 8"; projetos 2+1+3+1 = 7
     abertas). Medi o contraste das tarefas feitas: 5,35:1.
@@ -217,7 +217,7 @@ Pegou 4 de 15. O controle sem mutação passou nos 4 testes. A lista dos que esc
 ## Lista do usuário (o que só você prova)
 1. Na 1ª sessão do dia, veja se abre uma janela preta de console por alguns segundos (A-2). Depois da correção, não deve abrir.
 2. Decida o peso (M-3: a, b ou c) e as menções (M-2) **antes** do push: depois, ficam no histórico público.
-3. Abra `docs/provas/0.8.0-design/vitrine/png/vitrine-escuro-1440.png` e `docs/provas/0.8.0-design/e2e/png/caso-b-produto-v2-claro-1440-rolado.png`.
+3. Abra `docs/provas/0.8.0-design/vitrine/png/vitrine-escuro-1440.webp` e `docs/provas/0.8.0-design/e2e/png/caso-b-produto-v2-claro-1440-rolado.webp`.
    A coluna retangular de brilho e a faixa borrada à direita da barra incomodam (b-5)?
 4. No push, a trava vai perguntar sobre publicar. Veja se a resposta vem em menos de 7 s com os 144 commits. Não medi: a trava
    deste projeto barra qualquer comando com o texto do push. Se passar de 7 s, aparece "não deu para conferir" (limite declarado M-11).
