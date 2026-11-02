@@ -95,6 +95,32 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   q5 = repo(); let ligou = true;
   try { fs.symlinkSync(path.join(q5, 'nao-existe.js'), path.join(q5, 'quebrado.js')); } catch (e) { ligou = false; }
   if (ligou) { x5 = trava('git add -A && git commit -m x', q5); caso('0.8.0 2ª rodada trava: arquivo novo que não abre pergunta, não passa como limpo', x5.code === 0 && pede(x5), `code ${x5.code} ${x5.out}`); }
+  const depois = (command, cwd) => hook('trava-depois.js', { tool_name: 'Bash', tool_input: { command }, cwd, hook_event_name: 'PostToolUse' });
+  // ---- A-4 (3ª rodada): push junto de algo que cria ou muda commit → pergunta que o segredo não foi conferido; depois diz "já publicado" ----
+  const comRemoto = () => { const q = repo(); const nu = path.join(tmp, 'nu-' + (++n)); git('git init -q --bare "' + nu + '"', tmp); git('git remote add origin "' + nu + '"', q); git('git push -q -u origin HEAD:refs/heads/main', q); git('git branch -q --set-upstream-to=origin/main', q); return q; };
+  const AWS4 = 'AK' + 'IAZ7QK3LMN4PRS5TUV';
+  for (const [nomeA4, cmdA4, prepA4] of [
+    ['echo no arquivo, commit e push', "echo 'k = \"" + AWS4 + "\"' >> a.js && git commit -am x && git push", null],
+    ['script e push', 'sh salvar.sh && git push', (q) => fs.writeFileSync(path.join(q, 'salvar.sh'), 'git commit -am x\n')],
+    ['alias que já existia e push', 'git ci -am x && git push', (q) => git('git config alias.ci commit', q)],
+    ['eval e push', 'eval "git commit -am x" && git push', null],
+    ['gh repo create --push', 'gh repo create teste --private --source=. --push', null],
+    ['gh com --push', 'gh pr create --fill --push', null],
+    ['npm run deploy', 'npm run deploy', null],
+  ]) {
+    const q = comRemoto(); if (prepA4) prepA4(q);
+    const y = trava(cmdA4, q);
+    caso('0.8.0 A-4 trava: ' + nomeA4 + ' → pergunta dizendo que o segredo não pôde ser conferido antes de publicar', y.code === 0 && pede(y) && /não pôde ser conferido antes de publicar/.test(y.out), `code ${y.code} ${y.err} ${y.out}`);
+  }
+  let qA4 = comRemoto(); fs.writeFileSync(path.join(qA4, 'limpo.js'), 'base\nok\n');
+  x5 = trava('git add -A && git commit -m x && git push', qA4);
+  caso('0.8.0 A-4 trava: forma comum com commit e push, sem segredo, só pergunta sobre publicar (o commit foi lido)', x5.code === 0 && pede(x5) && !/não pôde ser conferido/.test(x5.out) && /checklist-lancamento/.test(x5.out), x5.out);
+  qA4 = comRemoto(); depois('git status', qA4); muda(qA4); git('git commit -qam s', qA4); git('git push -q origin HEAD:main', qA4);
+  let dA4 = depois('git commit -am s && git push', qA4);
+  caso('0.8.0 A-4 trava depois: commit com segredo que já foi para o remoto → "já foi publicado: troque a chave"', /Já foi publicado/.test(dA4.out) && /troque a chave/.test(dA4.out) && !/Desfaça ANTES do push/.test(dA4.out), dA4.out);
+  qA4 = comRemoto(); depois('git status', qA4); muda(qA4); git('git commit -qam s', qA4);
+  dA4 = depois('git commit -am s', qA4);
+  caso('0.8.0 A-4 trava depois: sem push, continua "desfaça antes do push"', /Desfaça ANTES do push/.test(dA4.out), dA4.out);
   // ---- B-2 (3ª rodada): nenhum git roda fora da pasta da sessão; dentro, as opções desligam o que a configuração executaria ----
   const montarX = (onde) => {
     const p = path.join(onde, 'projeto-baixado-' + (++n)); fs.mkdirSync(p, { recursive: true });
@@ -145,7 +171,6 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   x5 = trava('git commit -m x', q5);
   caso('0.8.0 A-3 trava: espaço no nome também é lido', x5.code === 2 && x5.err.includes('a b.js:1'), x5.err);
   // ---- Depois do comando e barreira do push ----
-  const depois = (command, cwd) => hook('trava-depois.js', { tool_name: 'Bash', tool_input: { command }, cwd, hook_event_name: 'PostToolUse' });
   q5 = muda(repo()); depois('git status', q5);
   let d5 = depois('git status', q5);
   caso('0.8.0 trava depois: HEAD parado, silêncio', d5.code === 0 && !d5.out, d5.out);

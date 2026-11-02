@@ -12,6 +12,9 @@
 const { lerComando, pastasCitadas, naSessao } = require('./trava-comando');
 const { lerComPrazo } = require('./leitor-segredos');
 
+const NAO_CONFERIDO = 'este comando publica e também pode criar ou mudar commits antes disso: o segredo não pôde ser conferido antes de publicar. Separe: faça o commit num comando e o push em outro, para a trava ler o que vai sair.';
+// Publicação sem a palavra git push: gh com --push ou repo create, e os scripts de publicar.
+const OUTRO_PUBLICA = /\bgh\b[^\n;&|]*\s--push\b|\bgh\s+repo\s+create\b|\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?(?:deploy|publish|release)\b/i;
 const PUBLICAR = 'publicar é visível a outros. Confirme que quer enviar agora. Se for um lançamento ou abrir para mais gente, rodou o /checklist-lancamento?';
 const curta = (l) => l.join('\n  ');
 const bloquear = (msg) => { process.stderr.write(msg + '\n'); process.exit(2); };
@@ -31,9 +34,11 @@ function decidir(d) {
   // Aspas e barras no meio da palavra não escondem: com''mit também é commit.
   const plano = cmd.replace(/['"\\`^]/g, '');
   const temCommit = /\bcommit\b/i.test(plano);
-  const temPush = /\bpush\b/i.test(plano) && /\bgit\b/i.test(plano);
+  const outroPublica = OUTRO_PUBLICA.test(plano);
+  const temPush = (/\bpush\b/i.test(plano) && /\bgit\b/i.test(plano)) || outroPublica;
   if (!temCommit && !temPush) sair(pede);
-  const c = lerComando(cmd, cwd, d.tool_name);
+  let c = lerComando(cmd, cwd, d.tool_name);
+  if (outroPublica && c.tipo !== 'incerto') c = { tipo: 'incerto', motivo: 'publicação fora do git push' };
   if (c.tipo === 'inofensivo') sair(pede);
   const pedidos = [];
   const fora = new Set(); // pastas fora da sessão: nenhum git roda lá antes da permissão
@@ -48,6 +53,7 @@ function decidir(d) {
       for (const p of [...new Set([...pastasCitadas(cmd, cwd), ...(c.pushes || [])])]) { if (naSessao(p, cwd)) pedidos.push({ tipo: 'naoEnviados', cwd: p }); else fora.add(p); }
       for (const p of pastasCitadas(cmd, cwd, true)) fora.add(p);
     }
+    if (temPush) pede.push(NAO_CONFERIDO);
     if (temCommit) pede.push(`este comando pode criar um commit de um jeito que não dá para ler com certeza (${c.motivo}). Confirme só se souber o que ele leva: segredo ou arquivo sensível não pode ir.`);
   }
   if (fora.size) pede.push(`não conferido: pasta fora da sessão (${[...fora].join(', ')}). Nenhum git rodou lá; o que vai ser publicado não foi lido.`);

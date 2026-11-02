@@ -24,8 +24,8 @@ function normalizar(cmd) {
 
 // Palavras e operadores, respeitando aspas. Qualquer coisa que o shell interpretaria e não está aqui: devolve o motivo.
 function tokens(cmd, ps) {
-  const toks = []; let w = ''; let tem = false; let alvo = false;
-  const fecha = () => { if (tem) { if (alvo) alvo = false; else toks.push({ w }); } w = ''; tem = false; };
+  const toks = []; let w = ''; let tem = false; let alvo = false; let escreve = false;
+  const fecha = () => { if (tem) { if (alvo) { alvo = false; if (!/^(\/dev\/null|nul)$/i.test(w)) escreve = true; } else toks.push({ w }); } w = ''; tem = false; };
   for (let i = 0; i < cmd.length; i++) {
     const c = cmd[i];
     if (c === "'") {
@@ -67,7 +67,7 @@ function tokens(cmd, ps) {
   }
   fecha();
   if (alvo) return { motivo: 'redirecionamento sem destino' };
-  return { toks };
+  return { toks, escreve };
 }
 
 // Flags do commit: só as da lista. Opção fora dela (--fixup, -C, --pathspec-from-file...) deixa a forma incerta.
@@ -126,6 +126,7 @@ function lerComando(cmd, sessao, ferramenta) {
   const incerto = (motivo) => ({ tipo: 'incerto', motivo });
   const t = tokens(normalizar(cmd), ferramenta === 'PowerShell');
   if (t.motivo) return incerto(t.motivo);
+  if (t.escreve) return incerto('o comando grava em arquivo antes ou junto do git');
   const canos = [[[]]];
   for (const x of t.toks) {
     const cano = canos[canos.length - 1];
