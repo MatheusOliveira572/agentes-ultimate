@@ -141,6 +141,12 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
     caso('0.8.0 B-2 trava: pasta fora da sessão não roda a configuração dela (' + nomeB2 + ')', !fs.existsSync(xFora.marca), fs.existsSync(xFora.marca) ? fs.readFileSync(xFora.marca, 'utf8').slice(0, 120) : '');
     if (gancho === 'travas.js') caso('0.8.0 B-2 trava: push fora da sessão pergunta sem ler e diz qual pasta (' + nomeB2 + ')', y.code === 0 && pede(y) && /fora da sessão/.test(y.out), y.out);
   }
+  // M-13 (4ª rodada): o registro do HEAD (agentes-ultimate-head/<sha1 do topo>) só existe se o git rodou na pasta; da pasta de fora, nunca.
+  const topoFora = require('child_process').execFileSync('git', ['rev-parse', '--show-toplevel'], { windowsHide: true, cwd: xFora.p, encoding: 'utf8' }).trim();
+  const regFora = path.join(require('os').tmpdir(), 'agentes-ultimate-head', require('crypto').createHash('sha1').update(topoFora).digest('hex'));
+  fs.rmSync(regFora, { force: true });
+  for (const cmdM13 of ['cd "<X>" && ls', 'git -C "<X>" log -1', 'pushd "<X>"']) hook('trava-depois.js', { tool_name: 'Bash', tool_input: { command: cmdM13.replace('<X>', xFora.p) }, cwd: sessaoB2, hook_event_name: 'PostToolUse' });
+  caso('0.8.0 M-13 trava depois: nenhum git roda na pasta de fora (o registro do HEAD dela não é criado)', !fs.existsSync(regFora), regFora);
   const xDentro = montarX(sessaoB2);
   for (const [nomeB2, cmdB2, gancho] of [['antes, cd e push', 'cd "<X>" && git push', 'travas.js'], ['depois, cd e ls', 'cd "<X>" && ls', 'trava-depois.js']]) {
     hook(gancho, { tool_name: 'Bash', tool_input: { command: cmdB2.replace('<X>', xDentro.p) }, cwd: sessaoB2, hook_event_name: gancho === 'travas.js' ? 'PreToolUse' : 'PostToolUse' });
