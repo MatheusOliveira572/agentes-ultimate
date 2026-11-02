@@ -452,12 +452,16 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const va = rotRef('redesenhe meu app com visual premium que impressione');
   caso('revisão final M-5: app premium → a régua impressionar.md vai ao designer-interface',
     va.refs.some((y) => y.arquivo === 'conhecimento/design/impressionar.md' && y.agente === 'designer-interface'), JSON.stringify(va.refs));
+  // Mundos (2026-11-02): premium sem estilo pedido não puxa a Apple nem o vidro; pedido de Apple puxa o mundo Apple.
+  caso('mundos: "redesenhe meu app com visual premium que impressione" → mundos/INDICE.md, sem apple/INDICE.md nem apple/materiais.md',
+    va.refs.some((y) => y.arquivo === 'conhecimento/design/mundos/INDICE.md') && !va.refs.some((y) => /conhecimento\/design\/apple\//.test(y.arquivo)), JSON.stringify(va.refs));
 
   // Ponta a ponta (critério do usuário): pedido amplo aciona tudo sozinho. Liga no lote 3 (conteúdo de design).
   const E2E = existe('conhecimento', 'design', 'metodo.md');
   const espera = [
     ['conhecimento/design/metodo.md', 'DESIGNER', 'método do impeccable'],
-    ['conhecimento/design/apple/INDICE.md', 'DESIGNER', 'regras da Apple'],
+    // Pedido premium sem estilo vai aos mundos visuais, não à Apple (correção do usuário, 2026-11-02: Apple não é o padrão).
+    ['conhecimento/design/mundos/INDICE.md', 'DESIGNER', 'mundos visuais'],
     ['conhecimento/design/detalhes-interface.md', 'DESIGNER', 'detalhes de interface do Jakub'],
     ['conhecimento/design/movimento/INDICE.md', 'engenheiro-software', 'animação do Emil'],
     ['conhecimento/design/revisao-tela.md', 'revisor', 'revisão de design (Superfuture)'],

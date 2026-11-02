@@ -1,4 +1,4 @@
-// Casos do padrão "impressiona" (revisão final, M-4 e M-6): a régua conhecimento/design/impressionar.md, o teste de junção
+// Casos do padrão "impressiona" (revisão final, M-4 e M-6; mundos em 2026-11-02): a régua conhecimento/design/impressionar.md, o teste de junção
 // nos 4 designers e no revisor, o VERMELHO do revisor, e licença, texto alternativo e "não imitar a referência" nos designers.
 // Lê o texto gerado em agents/ (o que o Claude Code carrega). Chamado pelo testar-referencias.js; sozinho:
 // node scripts/testar-impressionar.js [raiz do plugin]
@@ -52,6 +52,60 @@ function testar({ caso, RAIZ }) {
     /régua `impressionar\.md` \*\*antes\*\* de ler a autocrítica/.test(secao(rv, 'Responsabilidades')), 'falta nas Responsabilidades');
   caso('impressiona: revisor, entrega visual: camada 1 falhou ou 2+ itens da camada 2 = VERMELHO; junção',
     /Entrega visual: camadas 1 e 2 da régua, junção/.test(rv) && /falhou ou 2\+ itens da camada 2 = VERMELHO/.test(rv), 'falta no Método');
+
+  // Régua independente de estilo (correção do usuário, 2026-11-02): o mundo vem do briefing, nenhum é o padrão, o gosto
+  // fica no projeto; a junção é a do mundo escolhido; o teste "parece Apple" só vale no mundo Apple ou com vidro.
+  caso('impressiona: a régua mede o nível, o mundo vem antes (marca/projeto → briefing → 2 ou 3 propostos) e nenhum é o padrão',
+    /## O mundo vem antes da régua/.test(im) && /Nenhum mundo é o padrão do plugin/.test(im) && /PROJETO\.md`, seção "Gosto visual"/.test(im) &&
+    /propõe 2 ou 3 mundos/.test(im) && /`mundos\/INDICE\.md`/.test(im), 'falta a seção do mundo');
+  caso('impressiona: a junção é a combinação do mundo escolhido, sem Apple + vidro como padrão',
+    /## A junção \(a combinação do mundo escolhido/.test(im) && /dentro do mundo escolhido/.test(secao(im, 'A junção')) &&
+    !/cara de Apple \(tipo do sistema/.test(im) && !/entram \*\*por padrão\*\*/.test(im), 'a junção ainda prende a um estilo');
+  caso('impressiona: "parece Apple" só no mundo Apple ou com vidro, na régua e no revisor da régua',
+    (im.match(/[^\n]*parece Apple[^\n]*/g) || []).every((l) => /mundo Apple|com vidro|vidro pedido/.test(l)) && /teste do mundo/.test(secao(im, 'Autocrítica')) &&
+    /coerência com o mundo\s+declarado/.test(secao(im, 'O revisor')), 'teste "parece Apple" incondicional');
+  // Por item (tópico ou passo inteiro, que pode ocupar várias linhas), não por linha.
+  const vidroLivre = (n) => corpo(n).split(/\n(?=\s*(?:- |\d+\. ))/).filter((l) => /parece\s+Apple/.test(l) && !/mundo Apple|se houver|com vidro|vidro pedido|ou vidro|houver vidro/.test(l)).map((l) => l.trim().slice(0, 90));
+  for (const n of DESIGNERS.concat(['revisor'])) {
+    caso(`impressiona: ${n} só aplica "parece Apple" no mundo Apple ou com vidro`, !vidroLivre(n).length, vidroLivre(n).join(' | ') || '-');
+  }
+  for (const n of DESIGNERS) {
+    caso(`impressiona: ${n} escolhe o mundo no método (marca, projeto ou 2–3 propostos)`,
+      /^\d+\. \*\*Ambição[^]*?\b(o mundo|\*\*o mundo\*\*)/m.test(secao(corpo(n), 'Método de trabalho')) && /2–3\s+propostos/.test(secao(corpo(n), 'Método de trabalho')), 'falta o mundo no método');
+    caso(`impressiona: ${n} lê mundos/INDICE.md nas referências sob demanda`,
+      /conhecimento\/design\/mundos\/INDICE\.md/.test(secao(ler('agents', n + '.md'), 'Referências sob demanda')), 'falta a leitura');
+  }
+  caso('impressiona: revisor julga o nível e a coerência com o mundo declarado, e roda o teste do mundo',
+    /coerência com o mundo declarado, nunca o seu gosto/.test(secao(rv, 'Responsabilidades')) && /Entrega visual: [^\n]*teste do mundo declarado/.test(rv), 'falta no revisor');
+
+  // Os mundos: índice com 8 a 10 mundos, cada arquivo no mesmo nível de exigência (mesmas seções, 3 sinais de amador,
+  // referência pública com fonte aberta, fontes livres, ≤ 15 KB).
+  const mi = ler('conhecimento', 'design', 'mundos', 'INDICE.md');
+  const arqMundos = [...mi.matchAll(/\| `([a-z-]+\.md)` \|/g)].map((m) => m[1]);
+  caso('impressiona: mundos/INDICE.md lista 8 a 10 mundos, com o Apple entre eles, e diz que nenhum é o padrão',
+    arqMundos.length >= 8 && arqMundos.length <= 10 && arqMundos.includes('apple-liquid-glass.md') && /Nenhum mundo é o padrão do plugin/.test(mi), `${arqMundos.length} mundo(s)`);
+  const SECOES = ['Quando usar / quando não', 'Tipografia', 'Cor', 'Material e profundidade', 'Movimento', 'Forma', 'Imagem e 3D', '3 sinais de amador'];
+  for (const a of arqMundos) {
+    const m = ler('conhecimento', 'design', 'mundos', a);
+    const faltam = SECOES.filter((s) => !m.includes('\n## ' + s));
+    const sinais = secao(m, '3 sinais de amador');
+    const refs = (m.split(/\n## Referências? /)[1] || '');
+    const prob = [];
+    if (!m) prob.push('arquivo não existe');
+    if (faltam.length) prob.push('seções: ' + faltam.join(', '));
+    if (!/^1\. \S/m.test(sinais) || !/^2\. \S/m.test(sinais) || !/^3\. \S/m.test(sinais)) prob.push('3 sinais de amador');
+    if (!/\*\*Sim:\*\*/.test(m) || !/\*\*Não:\*\*/.test(m)) prob.push('quando usar e quando não');
+    if (!/https:\/\/\S+ \(aberta em 20\d\d-\d\d-\d\d/.test(refs) || !/só ideia, nada copiado/.test(m)) prob.push('referência com fonte aberta');
+    if (!/Pares \(OFL\)|licença/i.test(secao(m, 'Tipografia'))) prob.push('fontes com licença');
+    if (!/quique|sem curva|corte seco|steps\(\)/.test(secao(m, 'Movimento'))) prob.push('curva própria');
+    if (Buffer.byteLength(m) > 15 * 1024) prob.push('acima de 15 KB');
+    caso(`impressiona: mundo ${a} no mesmo nível de exigência`, !prob.length, prob.join('; '));
+  }
+
+  // A vitrine Apple é receita do mundo Apple, não padrão de landing.
+  const vt = ler('conhecimento', 'design', 'sites-premium', 'efeitos', 'vitrine-apple.md');
+  caso('impressiona: vitrine-apple.md é do mundo Apple; 3D e revelação quando o mundo pede; vidro só no mundo Apple ou a pedido',
+    /não é o padrão do plugin/.test(vt) && /quando o mundo e a ideia pedem/.test(vt) && /\*\*vidro\*\* só no mundo Apple ou quando pedido/.test(vt) && !/entram por padrão/.test(vt), 'vitrine ainda é padrão');
 
   // O índice de efeitos traz a vitrine Apple, e o arquivo existe.
   const ix = ler('conhecimento', 'design', 'sites-premium', 'efeitos', 'INDICE.md');

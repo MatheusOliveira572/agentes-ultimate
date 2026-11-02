@@ -428,6 +428,21 @@ Fontes: `docs/pesquisas/referencias-visuais-2026-11.md`, `docs/pesquisas/referen
   plugin) e a tela de app → `interface`.
 - **Fontes:** a correção do emilkowalski/skills (Motion 14.2 acelera x/y/scale) e as 4 fontes conferidas.
 
+### Mundos visuais: a régua mede o nível, não o estilo (mv104)
+Correção do usuário: "não é tudo que vai ser padrão Apple ou com vidro"; "o mínimo é o máximo bem feito".
+- **Régua `impressionar.md` independente de estilo:** o mundo vem antes (marca e `PROJETO.md` › "Gosto visual" → briefing →
+  2 ou 3 mundos propostos); a junção é "a combinação do mundo escolhido"; "parece Apple" só no mundo Apple ou com vidro;
+  nível universal dos itens ABERTA da pesquisa de acabamento. Camada 1 (acessibilidade, contraste, teclado, estados) igual.
+- **`conhecimento/design/mundos/`:** índice e 10 mundos no mesmo nível (Apple / Liquid Glass, editorial, suíço, quente e
+  tátil, escuro técnico, lúdico, luxo sóbrio, brutalista, corporativo de confiança, retrô): quando usar e quando não,
+  fontes livres conferidas (OFL), cor, material, curva própria (molas em `linear()` calculadas), forma, o que é "real",
+  3 sinais de amador e referências públicas abertas.
+- **Agentes:** os 4 designers escolhem o mundo no método e leem `mundos/`; vidro e "parece Apple" só no mundo Apple ou a
+  pedido; o revisor julga o nível e a coerência com o mundo declarado. `vitrine-apple.md` vira receita do mundo Apple.
+- **Roteamento:** pedido premium sem estilo puxa `mundos/INDICE.md`, não mais a HIG da Apple; o modelo de `PROJETO.md`
+  ganha a seção "Gosto visual". Casos novos em `testar-impressionar.js` (vistos pegando 9 de 9 mutantes) e evals de
+  regressão nos designers e no revisor.
+
 ### Revisão final antes de publicar (`docs/historico/revisao-0.8.0-final.md`)
 - **A-1:** versão 0.8.0 no `plugin.json` (sem subir o número, quem tem a 0.7.0 não recebe a nova).
 - **A-2:** a atualização diária não abre mais janela de console: um `node` destacado, sem shell, roda o `claude` com
