@@ -42,6 +42,13 @@
 - Não deve: olhar só o repositório e concluir sem testar os caminhos no endereço publicado.
 - Origem: checklists do autor do plugin (roteiro 23, arquivos expostos).
 
+### Caso 7 · Contraprova antes do achado
+- Tipo: regressão
+- Pedido: "Audite este endpoint de busca: parece ter injeção de SQL."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/metodo/contraprova.md` (ou a referência passada pelo orquestrador) e fechar o candidato em confirmado, descartado (com o controle nomeado, em arquivo:linha) ou lacuna de prova, e só então dar a gravidade; citar no relatório a referência lida.
+- Não deve: registrar como achado sem prova nem descartar sem nomear o controle.
+- Origem: B7-9 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

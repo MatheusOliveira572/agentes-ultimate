@@ -1963,6 +1963,58 @@
       }
     },
     {
+      "arquivo": "conhecimento/metodo/revisar-codigo.md",
+      "tema": "revisar-codigo",
+      "palavras": [
+        "revisao de codigo",
+        "code review",
+        "revisar o codigo",
+        "revise o codigo",
+        "revisar a entrega",
+        "pull request",
+        "qualidade do codigo"
+      ],
+      "agentes": [
+        "revisor",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça a revisão de código deste pull request",
+          "revise o código da entrega quanto à qualidade"
+        ],
+        "nao": [
+          "defina a meta de vendas do trimestre"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/revisar-mudanca.md",
+      "tema": "revisar-mudanca",
+      "palavras": [
+        "revisar a mudanca",
+        "revisar o diff",
+        "revisar so a mudanca",
+        "revisao do pr",
+        "segunda revisao",
+        "passe de veredito",
+        "linhas apagadas",
+        "regressao da mudanca"
+      ],
+      "agentes": [
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "revise só a mudança deste PR, olhando também as linhas apagadas",
+          "faça o passe de veredito da segunda revisão desta entrega"
+        ],
+        "nao": [
+          "calcule o preço de venda do produto"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/plataformas/android.md",
       "tema": "android",
       "palavras": [
@@ -2102,6 +2154,1567 @@
         ],
         "nao": [
           "calcule o custo de frete por região"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/INDICE.md",
+      "tema": "seguranca-indice",
+      "palavras": [
+        "auditoria de seguranca",
+        "auditar seguranca",
+        "vulnerabilidade",
+        "vulnerabilidades",
+        "pentest",
+        "owasp",
+        "seguranca do codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça a auditoria de segurança do sistema, vulnerabilidades e OWASP",
+          "audite as vulnerabilidades deste código"
+        ],
+        "nao": [
+          "monte a escala de plantão da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/dependencias/api-spec-testing.md",
+      "tema": "seg-dependencias-api-spec-testing",
+      "palavras": [
+        "teste de especificacao de api",
+        "openapi seguranca",
+        "teste de especificacao de api no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a teste de especificacao de api",
+          "o código pode ter openapi seguranca, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/dependencias/dependency-cve-scanning-1.md",
+      "tema": "seg-dependencias-dependency-cve-scanning-1",
+      "palavras": [
+        "cve de dependencia",
+        "dependencia vulneravel",
+        "cve de dependencia no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a cve de dependencia",
+          "o código pode ter dependencia vulneravel, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/dependencias/dependency-cve-scanning-2.md",
+      "tema": "seg-dependencias-dependency-cve-scanning-2",
+      "palavras": [
+        "cve de dependencia parte 2",
+        "dependencia vulneravel parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia cve de dependencia parte 2 do guia",
+          "leia dependencia vulneravel parte 2 do guia"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/dependencias/npx-confusion-1.md",
+      "tema": "seg-dependencias-npx-confusion-1",
+      "palavras": [
+        "confusao de pacote",
+        "npx confusion",
+        "confusao de pacote no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a confusao de pacote",
+          "o código pode ter npx confusion, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/dependencias/npx-confusion-2.md",
+      "tema": "seg-dependencias-npx-confusion-2",
+      "palavras": [
+        "confusao de pacote parte 2",
+        "npx confusion parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia confusao de pacote parte 2 do guia",
+          "leia npx confusion parte 2 do guia"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/dependencias/source-aware-sast.md",
+      "tema": "seg-dependencias-source-aware-sast",
+      "palavras": [
+        "sast",
+        "analise estatica de seguranca",
+        "sast no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a sast",
+          "o código pode ter analise estatica de seguranca, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/frameworks/django.md",
+      "tema": "seg-frameworks-django",
+      "palavras": [
+        "seguranca django",
+        "app django",
+        "seguranca django no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca django",
+          "o código pode ter app django, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/frameworks/fastapi.md",
+      "tema": "seg-frameworks-fastapi",
+      "palavras": [
+        "seguranca fastapi",
+        "api fastapi",
+        "seguranca fastapi no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca fastapi",
+          "o código pode ter api fastapi, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/frameworks/nestjs.md",
+      "tema": "seg-frameworks-nestjs",
+      "palavras": [
+        "seguranca nestjs",
+        "api nestjs",
+        "seguranca nestjs no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca nestjs",
+          "o código pode ter api nestjs, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/frameworks/nextjs.md",
+      "tema": "seg-frameworks-nextjs",
+      "palavras": [
+        "seguranca nextjs",
+        "seguranca next.js",
+        "seguranca nextjs no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca nextjs",
+          "o código pode ter seguranca next.js, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/lista.md",
+      "tema": "lista-de-seguranca",
+      "palavras": [
+        "lista de seguranca",
+        "endurecer a aplicacao",
+        "modelagem de ameacas",
+        "stride",
+        "cabecalhos de seguranca",
+        "cors",
+        "hash de senha",
+        "cookie de sessao",
+        "top 10 para llm"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça a modelagem de ameaças com STRIDE e confira os cabeçalhos de segurança e o CORS",
+          "revise o hash de senha, o cookie de sessão e endureça a aplicação"
+        ],
+        "nao": [
+          "prepare a pauta da reunião semanal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/metodo/contraprova.md",
+      "tema": "seg-metodo-counterevidence",
+      "palavras": [
+        "contraprova",
+        "descartar falso positivo",
+        "contraprova no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a contraprova",
+          "o código pode ter descartar falso positivo, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/metodo/fix-verification.md",
+      "tema": "seg-metodo-fix-verification",
+      "palavras": [
+        "verificar a correcao de seguranca",
+        "corrigir vulnerabilidade",
+        "verificar a correcao de seguranca no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a verificar a correcao de seguranca",
+          "o código pode ter corrigir vulnerabilidade, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/metodo/severity-calibration.md",
+      "tema": "seg-metodo-severity-calibration",
+      "palavras": [
+        "gravidade da vulnerabilidade",
+        "cvss",
+        "gravidade da vulnerabilidade no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a gravidade da vulnerabilidade",
+          "o código pode ter cvss, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/metodo/source-aware-discovery.md",
+      "tema": "seg-metodo-source-aware-discovery",
+      "palavras": [
+        "varredura no codigo fonte",
+        "achar vulnerabilidades no codigo",
+        "varredura no codigo fonte no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a varredura no codigo fonte",
+          "o código pode ter achar vulnerabilidades no codigo, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/modos/deep.md",
+      "tema": "seg-modos-deep",
+      "palavras": [
+        "auditoria profunda",
+        "varredura profunda",
+        "auditoria profunda no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a auditoria profunda",
+          "o código pode ter varredura profunda, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/modos/diff.md",
+      "tema": "seg-modos-diff",
+      "palavras": [
+        "auditoria da mudanca",
+        "seguranca do diff",
+        "auditoria da mudanca no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a auditoria da mudanca",
+          "o código pode ter seguranca do diff, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/modos/quick.md",
+      "tema": "seg-modos-quick",
+      "palavras": [
+        "auditoria rapida",
+        "varredura rapida",
+        "auditoria rapida no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a auditoria rapida",
+          "o código pode ter varredura rapida, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/modos/standard.md",
+      "tema": "seg-modos-standard",
+      "palavras": [
+        "auditoria padrao",
+        "varredura padrao",
+        "auditoria padrao no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a auditoria padrao",
+          "o código pode ter varredura padrao, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/nuvem/aws.md",
+      "tema": "seg-nuvem-aws",
+      "palavras": [
+        "seguranca aws",
+        "iam da aws",
+        "seguranca aws no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca aws",
+          "o código pode ter iam da aws, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/nuvem/azure-1.md",
+      "tema": "seg-nuvem-azure-1",
+      "palavras": [
+        "seguranca azure",
+        "azure ad",
+        "seguranca azure no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca azure",
+          "o código pode ter azure ad, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/nuvem/azure-2.md",
+      "tema": "seg-nuvem-azure-2",
+      "palavras": [
+        "seguranca azure parte 2",
+        "azure ad parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia seguranca azure parte 2 do guia",
+          "leia azure ad parte 2 do guia"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/nuvem/gcp.md",
+      "tema": "seg-nuvem-gcp",
+      "palavras": [
+        "seguranca gcp",
+        "google cloud iam",
+        "seguranca gcp no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca gcp",
+          "o código pode ter google cloud iam, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/nuvem/kubernetes.md",
+      "tema": "seg-nuvem-kubernetes",
+      "palavras": [
+        "seguranca kubernetes",
+        "rbac do kubernetes",
+        "seguranca kubernetes no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca kubernetes",
+          "o código pode ter rbac do kubernetes, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/protocolos/graphql.md",
+      "tema": "seg-protocolos-graphql",
+      "palavras": [
+        "seguranca graphql",
+        "graphql introspection",
+        "seguranca graphql no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca graphql",
+          "o código pode ter graphql introspection, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/protocolos/oauth.md",
+      "tema": "seg-protocolos-oauth",
+      "palavras": [
+        "fluxo oauth",
+        "seguranca oauth",
+        "fluxo oauth no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a fluxo oauth",
+          "o código pode ter seguranca oauth, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/active-directory-1.md",
+      "tema": "seg-tecnologias-active-directory-1",
+      "palavras": [
+        "active directory",
+        "seguranca do ad",
+        "active directory no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a active directory",
+          "o código pode ter seguranca do ad, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/active-directory-2.md",
+      "tema": "seg-tecnologias-active-directory-2",
+      "palavras": [
+        "active directory parte 2",
+        "seguranca do ad parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia active directory parte 2 do guia",
+          "leia seguranca do ad parte 2 do guia"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/auth0.md",
+      "tema": "seg-tecnologias-auth0",
+      "palavras": [
+        "auth0",
+        "seguranca auth0",
+        "auth0 no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a auth0",
+          "o código pode ter seguranca auth0, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/electron-desktop-apps.md",
+      "tema": "seg-tecnologias-electron-desktop-apps",
+      "palavras": [
+        "seguranca electron",
+        "app electron",
+        "seguranca electron no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca electron",
+          "o código pode ter app electron, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/firebase.md",
+      "tema": "seg-tecnologias-firebase",
+      "palavras": [
+        "seguranca firebase",
+        "firebase",
+        "seguranca firebase no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca firebase",
+          "o código pode ter firebase, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/grafana-prometheus-1.md",
+      "tema": "seg-tecnologias-grafana-prometheus-1",
+      "palavras": [
+        "seguranca grafana",
+        "prometheus exposto",
+        "seguranca grafana no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca grafana",
+          "o código pode ter prometheus exposto, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/grafana-prometheus-2.md",
+      "tema": "seg-tecnologias-grafana-prometheus-2",
+      "palavras": [
+        "seguranca grafana parte 2",
+        "prometheus exposto parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia seguranca grafana parte 2 do guia",
+          "leia prometheus exposto parte 2 do guia"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/llm-applications-1.md",
+      "tema": "seg-tecnologias-llm-applications-1",
+      "palavras": [
+        "aplicacao com llm",
+        "seguranca de llm",
+        "aplicacao com llm no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a aplicacao com llm",
+          "o código pode ter seguranca de llm, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/llm-applications-2.md",
+      "tema": "seg-tecnologias-llm-applications-2",
+      "palavras": [
+        "aplicacao com llm parte 2",
+        "seguranca de llm parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia aplicacao com llm parte 2 do guia",
+          "leia seguranca de llm parte 2 do guia"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/tecnologias/supabase.md",
+      "tema": "seg-tecnologias-supabase",
+      "palavras": [
+        "seguranca supabase",
+        "supabase rls",
+        "seguranca supabase no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca supabase",
+          "o código pode ter supabase rls, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/agentic-system-security-1.md",
+      "tema": "seg-vulnerabilidades-agentic-system-security-1",
+      "palavras": [
+        "sistema de agentes",
+        "seguranca de agentes de ia",
+        "sistema de agentes no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a sistema de agentes",
+          "o código pode ter seguranca de agentes de ia, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/agentic-system-security-2.md",
+      "tema": "seg-vulnerabilidades-agentic-system-security-2",
+      "palavras": [
+        "sistema de agentes parte 2",
+        "seguranca de agentes de ia parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia sistema de agentes parte 2 do guia",
+          "leia seguranca de agentes de ia parte 2 do guia"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/argument-injection.md",
+      "tema": "seg-vulnerabilidades-argument-injection",
+      "palavras": [
+        "injecao de argumento",
+        "argument injection",
+        "injecao de argumento no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a injecao de argumento",
+          "o código pode ter argument injection, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/authentication-jwt.md",
+      "tema": "seg-vulnerabilidades-authentication-jwt",
+      "palavras": [
+        "jwt",
+        "token jwt",
+        "jwt no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a jwt",
+          "o código pode ter token jwt, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/broken-function-level-authorization.md",
+      "tema": "seg-vulnerabilidades-broken-function-level-authorization",
+      "palavras": [
+        "autorizacao por funcao",
+        "bfla",
+        "autorizacao por funcao no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a autorizacao por funcao",
+          "o código pode ter bfla, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/browser-security-1.md",
+      "tema": "seg-vulnerabilidades-browser-security-1",
+      "palavras": [
+        "seguranca do navegador",
+        "cors",
+        "seguranca do navegador no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca do navegador",
+          "o código pode ter cors, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/browser-security-2.md",
+      "tema": "seg-vulnerabilidades-browser-security-2",
+      "palavras": [
+        "seguranca do navegador parte 2",
+        "cors parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia seguranca do navegador parte 2 do guia",
+          "leia cors parte 2 do guia"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/business-logic.md",
+      "tema": "seg-vulnerabilidades-business-logic",
+      "palavras": [
+        "falha de logica de negocio",
+        "abuso de regra de negocio",
+        "falha de logica de negocio no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a falha de logica de negocio",
+          "o código pode ter abuso de regra de negocio, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/csrf.md",
+      "tema": "seg-vulnerabilidades-csrf",
+      "palavras": [
+        "csrf",
+        "falsificacao de requisicao",
+        "csrf no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a csrf",
+          "o código pode ter falsificacao de requisicao, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/header-injection-1.md",
+      "tema": "seg-vulnerabilidades-header-injection-1",
+      "palavras": [
+        "injecao de cabecalho",
+        "header injection",
+        "injecao de cabecalho no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a injecao de cabecalho",
+          "o código pode ter header injection, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/header-injection-2.md",
+      "tema": "seg-vulnerabilidades-header-injection-2",
+      "palavras": [
+        "injecao de cabecalho parte 2",
+        "header injection parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia injecao de cabecalho parte 2 do guia",
+          "leia header injection parte 2 do guia"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/http-request-smuggling.md",
+      "tema": "seg-vulnerabilidades-http-request-smuggling",
+      "palavras": [
+        "request smuggling",
+        "contrabando de requisicao",
+        "request smuggling no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a request smuggling",
+          "o código pode ter contrabando de requisicao, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/idor.md",
+      "tema": "seg-vulnerabilidades-idor",
+      "palavras": [
+        "idor",
+        "acesso a objeto de outro usuario",
+        "idor no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a idor",
+          "o código pode ter acesso a objeto de outro usuario, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/information-disclosure.md",
+      "tema": "seg-vulnerabilidades-information-disclosure",
+      "palavras": [
+        "vazamento de informacao",
+        "information disclosure",
+        "vazamento de informacao no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a vazamento de informacao",
+          "o código pode ter information disclosure, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/insecure-deserialization.md",
+      "tema": "seg-vulnerabilidades-insecure-deserialization",
+      "palavras": [
+        "desserializacao insegura",
+        "deserialization",
+        "desserializacao insegura no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a desserializacao insegura",
+          "o código pode ter deserialization, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/insecure-file-uploads.md",
+      "tema": "seg-vulnerabilidades-insecure-file-uploads",
+      "palavras": [
+        "upload de arquivo inseguro",
+        "upload malicioso",
+        "upload de arquivo inseguro no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a upload de arquivo inseguro",
+          "o código pode ter upload malicioso, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/llm-prompt-injection.md",
+      "tema": "seg-vulnerabilidades-llm-prompt-injection",
+      "palavras": [
+        "injecao de prompt",
+        "prompt injection",
+        "injecao de prompt no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a injecao de prompt",
+          "o código pode ter prompt injection, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/mass-assignment.md",
+      "tema": "seg-vulnerabilidades-mass-assignment",
+      "palavras": [
+        "mass assignment",
+        "atribuicao em massa",
+        "mass assignment no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a mass assignment",
+          "o código pode ter atribuicao em massa, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/nosql-injection-1.md",
+      "tema": "seg-vulnerabilidades-nosql-injection-1",
+      "palavras": [
+        "injecao nosql",
+        "nosql injection",
+        "injecao nosql no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a injecao nosql",
+          "o código pode ter nosql injection, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/nosql-injection-2.md",
+      "tema": "seg-vulnerabilidades-nosql-injection-2",
+      "palavras": [
+        "injecao nosql parte 2",
+        "nosql injection parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia injecao nosql parte 2 do guia",
+          "leia nosql injection parte 2 do guia"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/open-redirect.md",
+      "tema": "seg-vulnerabilidades-open-redirect",
+      "palavras": [
+        "redirecionamento aberto",
+        "open redirect",
+        "redirecionamento aberto no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a redirecionamento aberto",
+          "o código pode ter open redirect, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/path-traversal-lfi-rfi.md",
+      "tema": "seg-vulnerabilidades-path-traversal-lfi-rfi",
+      "palavras": [
+        "path traversal",
+        "inclusao de arquivo",
+        "path traversal no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a path traversal",
+          "o código pode ter inclusao de arquivo, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/prototype-pollution.md",
+      "tema": "seg-vulnerabilidades-prototype-pollution",
+      "palavras": [
+        "prototype pollution",
+        "poluicao de prototipo",
+        "prototype pollution no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a prototype pollution",
+          "o código pode ter poluicao de prototipo, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/race-conditions.md",
+      "tema": "seg-vulnerabilidades-race-conditions",
+      "palavras": [
+        "condicao de corrida",
+        "race condition",
+        "condicao de corrida no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a condicao de corrida",
+          "o código pode ter race condition, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/rce.md",
+      "tema": "seg-vulnerabilidades-rce",
+      "palavras": [
+        "execucao remota de codigo",
+        "rce",
+        "execucao remota de codigo no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a execucao remota de codigo",
+          "o código pode ter rce, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/semantic-confusion.md",
+      "tema": "seg-vulnerabilidades-semantic-confusion",
+      "palavras": [
+        "confusao semantica",
+        "semantic confusion",
+        "confusao semantica no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a confusao semantica",
+          "o código pode ter semantic confusion, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/sql-injection.md",
+      "tema": "seg-vulnerabilidades-sql-injection",
+      "palavras": [
+        "injecao de sql",
+        "sql injection",
+        "injecao de sql no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a injecao de sql",
+          "o código pode ter sql injection, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/ssrf.md",
+      "tema": "seg-vulnerabilidades-ssrf",
+      "palavras": [
+        "ssrf",
+        "requisicao forjada no servidor",
+        "ssrf no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a ssrf",
+          "o código pode ter requisicao forjada no servidor, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/ssti-1.md",
+      "tema": "seg-vulnerabilidades-ssti-1",
+      "palavras": [
+        "ssti",
+        "injecao de template",
+        "ssti no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a ssti",
+          "o código pode ter injecao de template, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/ssti-2.md",
+      "tema": "seg-vulnerabilidades-ssti-2",
+      "palavras": [
+        "ssti parte 2",
+        "injecao de template parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "leia ssti parte 2 do guia",
+          "leia injecao de template parte 2 do guia"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/subdomain-takeover.md",
+      "tema": "seg-vulnerabilidades-subdomain-takeover",
+      "palavras": [
+        "subdomain takeover",
+        "tomada de subdominio",
+        "subdomain takeover no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a subdomain takeover",
+          "o código pode ter tomada de subdominio, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/weak-password-detection.md",
+      "tema": "seg-vulnerabilidades-weak-password-detection",
+      "palavras": [
+        "senha fraca",
+        "politica de senha",
+        "senha fraca no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a senha fraca",
+          "o código pode ter politica de senha, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/xss.md",
+      "tema": "seg-vulnerabilidades-xss",
+      "palavras": [
+        "xss",
+        "cross site scripting",
+        "xss no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a xss",
+          "o código pode ter cross site scripting, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/vulnerabilidades/xxe.md",
+      "tema": "seg-vulnerabilidades-xxe",
+      "palavras": [
+        "xxe",
+        "xml externo",
+        "xxe no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a xxe",
+          "o código pode ter xml externo, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
         ]
       }
     },

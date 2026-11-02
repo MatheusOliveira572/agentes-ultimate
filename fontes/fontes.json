@@ -104,6 +104,10 @@
           "destino": "conhecimento/escrita/texto-de-interface.md"
         },
         {
+          "origem": "skills/interface-review/SKILL.md",
+          "destino": "conhecimento/metodo/revisar-mudanca.md"
+        },
+        {
           "origem": "skills/teardown/assets",
           "destino": "ferramentas/teardown/LEIA-ME.md"
         },
@@ -244,6 +248,18 @@
           "destino": "conhecimento/metodo/refinar-ideia.md"
         },
         {
+          "origem": "skills/code-review-and-quality/SKILL.md",
+          "destino": "conhecimento/metodo/revisar-codigo.md"
+        },
+        {
+          "origem": "skills/doubt-driven-development/SKILL.md",
+          "destino": "conhecimento/metodo/revisar-codigo.md"
+        },
+        {
+          "origem": "references/security-checklist.md",
+          "destino": "conhecimento/seguranca/lista.md"
+        },
+        {
           "origem": "skills/constraint-driven-development/SKILL.md",
           "destino": "fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md"
         },
@@ -290,6 +306,282 @@
       "conferido_em": "2026-11-01",
       "vigiar": true,
       "arquivos": [
+        {
+          "origem": "strix/skills/custom/api_spec_testing.md",
+          "destino": "conhecimento/seguranca/dependencias/api-spec-testing.md"
+        },
+        {
+          "origem": "strix/skills/custom/dependency_cve_scanning.md",
+          "destino": "conhecimento/seguranca/dependencias/dependency-cve-scanning-1.md"
+        },
+        {
+          "origem": "strix/skills/custom/dependency_cve_scanning.md",
+          "destino": "conhecimento/seguranca/dependencias/dependency-cve-scanning-2.md"
+        },
+        {
+          "origem": "strix/skills/custom/npx_confusion.md",
+          "destino": "conhecimento/seguranca/dependencias/npx-confusion-1.md"
+        },
+        {
+          "origem": "strix/skills/custom/npx_confusion.md",
+          "destino": "conhecimento/seguranca/dependencias/npx-confusion-2.md"
+        },
+        {
+          "origem": "strix/skills/custom/source_aware_sast.md",
+          "destino": "conhecimento/seguranca/dependencias/source-aware-sast.md"
+        },
+        {
+          "origem": "strix/skills/frameworks/django.md",
+          "destino": "conhecimento/seguranca/frameworks/django.md"
+        },
+        {
+          "origem": "strix/skills/frameworks/fastapi.md",
+          "destino": "conhecimento/seguranca/frameworks/fastapi.md"
+        },
+        {
+          "origem": "strix/skills/frameworks/nestjs.md",
+          "destino": "conhecimento/seguranca/frameworks/nestjs.md"
+        },
+        {
+          "origem": "strix/skills/frameworks/nextjs.md",
+          "destino": "conhecimento/seguranca/frameworks/nextjs.md"
+        },
+        {
+          "origem": "strix/skills/analysis/counterevidence.md",
+          "destino": "conhecimento/seguranca/metodo/contraprova.md"
+        },
+        {
+          "origem": "strix/skills/analysis/fix_verification.md",
+          "destino": "conhecimento/seguranca/metodo/fix-verification.md"
+        },
+        {
+          "origem": "strix/skills/analysis/severity_calibration.md",
+          "destino": "conhecimento/seguranca/metodo/severity-calibration.md"
+        },
+        {
+          "origem": "strix/skills/analysis/source_aware_discovery.md",
+          "destino": "conhecimento/seguranca/metodo/source-aware-discovery.md"
+        },
+        {
+          "origem": "strix/skills/scan_modes/deep.md",
+          "destino": "conhecimento/seguranca/modos/deep.md"
+        },
+        {
+          "origem": "strix/skills/scan_modes/diff.md",
+          "destino": "conhecimento/seguranca/modos/diff.md"
+        },
+        {
+          "origem": "strix/skills/scan_modes/quick.md",
+          "destino": "conhecimento/seguranca/modos/quick.md"
+        },
+        {
+          "origem": "strix/skills/scan_modes/standard.md",
+          "destino": "conhecimento/seguranca/modos/standard.md"
+        },
+        {
+          "origem": "strix/skills/cloud/aws.md",
+          "destino": "conhecimento/seguranca/nuvem/aws.md"
+        },
+        {
+          "origem": "strix/skills/cloud/azure.md",
+          "destino": "conhecimento/seguranca/nuvem/azure-1.md"
+        },
+        {
+          "origem": "strix/skills/cloud/azure.md",
+          "destino": "conhecimento/seguranca/nuvem/azure-2.md"
+        },
+        {
+          "origem": "strix/skills/cloud/gcp.md",
+          "destino": "conhecimento/seguranca/nuvem/gcp.md"
+        },
+        {
+          "origem": "strix/skills/cloud/kubernetes.md",
+          "destino": "conhecimento/seguranca/nuvem/kubernetes.md"
+        },
+        {
+          "origem": "strix/skills/protocols/graphql.md",
+          "destino": "conhecimento/seguranca/protocolos/graphql.md"
+        },
+        {
+          "origem": "strix/skills/protocols/oauth.md",
+          "destino": "conhecimento/seguranca/protocolos/oauth.md"
+        },
+        {
+          "origem": "strix/skills/technologies/active_directory.md",
+          "destino": "conhecimento/seguranca/tecnologias/active-directory-1.md"
+        },
+        {
+          "origem": "strix/skills/technologies/active_directory.md",
+          "destino": "conhecimento/seguranca/tecnologias/active-directory-2.md"
+        },
+        {
+          "origem": "strix/skills/technologies/auth0.md",
+          "destino": "conhecimento/seguranca/tecnologias/auth0.md"
+        },
+        {
+          "origem": "strix/skills/technologies/electron_desktop_apps.md",
+          "destino": "conhecimento/seguranca/tecnologias/electron-desktop-apps.md"
+        },
+        {
+          "origem": "strix/skills/technologies/firebase.md",
+          "destino": "conhecimento/seguranca/tecnologias/firebase.md"
+        },
+        {
+          "origem": "strix/skills/technologies/grafana_prometheus.md",
+          "destino": "conhecimento/seguranca/tecnologias/grafana-prometheus-1.md"
+        },
+        {
+          "origem": "strix/skills/technologies/grafana_prometheus.md",
+          "destino": "conhecimento/seguranca/tecnologias/grafana-prometheus-2.md"
+        },
+        {
+          "origem": "strix/skills/technologies/llm_applications.md",
+          "destino": "conhecimento/seguranca/tecnologias/llm-applications-1.md"
+        },
+        {
+          "origem": "strix/skills/technologies/llm_applications.md",
+          "destino": "conhecimento/seguranca/tecnologias/llm-applications-2.md"
+        },
+        {
+          "origem": "strix/skills/technologies/supabase.md",
+          "destino": "conhecimento/seguranca/tecnologias/supabase.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/agentic_system_security.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/agentic-system-security-1.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/agentic_system_security.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/agentic-system-security-2.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/argument_injection.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/argument-injection.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/authentication_jwt.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/authentication-jwt.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/broken_function_level_authorization.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/broken-function-level-authorization.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/browser_security.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/browser-security-1.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/browser_security.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/browser-security-2.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/business_logic.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/business-logic.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/csrf.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/csrf.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/header_injection.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/header-injection-1.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/header_injection.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/header-injection-2.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/http_request_smuggling.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/http-request-smuggling.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/idor.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/idor.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/information_disclosure.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/information-disclosure.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/insecure_deserialization.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/insecure-deserialization.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/insecure_file_uploads.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/insecure-file-uploads.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/llm_prompt_injection.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/llm-prompt-injection.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/mass_assignment.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/mass-assignment.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/nosql_injection.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/nosql-injection-1.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/nosql_injection.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/nosql-injection-2.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/open_redirect.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/open-redirect.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/path_traversal_lfi_rfi.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/path-traversal-lfi-rfi.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/prototype_pollution.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/prototype-pollution.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/race_conditions.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/race-conditions.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/rce.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/rce.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/semantic_confusion.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/semantic-confusion.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/sql_injection.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/sql-injection.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/ssrf.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/ssrf.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/ssti.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/ssti-1.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/ssti.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/ssti-2.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/subdomain_takeover.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/subdomain-takeover.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/weak_password_detection.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/weak-password-detection.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/xss.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/xss.md"
+        },
+        {
+          "origem": "strix/skills/vulnerabilities/xxe.md",
+          "destino": "conhecimento/seguranca/vulnerabilidades/xxe.md"
+        },
         {
           "origem": "strix/skills/analysis/severity_calibration.md",
           "destino": "fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md"
@@ -401,6 +693,10 @@
         {
           "origem": "skill/reference/visualize.md",
           "destino": "conhecimento/design/tela-nova/INDICE.md"
+        },
+        {
+          "origem": "skill/agents/impeccable-finish-reviewer.md",
+          "destino": "conhecimento/metodo/revisar-mudanca.md"
         },
         {
           "origem": "skill/reference/android.md",
