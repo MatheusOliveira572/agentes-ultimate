@@ -177,6 +177,12 @@ pública. Licenças em `terceiros/`, commits em [CREDITOS.md](CREDITOS.md), regr
 Antes de depender de uma ferramenta externa, o agente roda `node scripts/checar-ferramenta.js <nome>`: ela diz se está
 instalada e a versão, e **nunca instala nada**. Sem a ferramenta, o agente avisa e segue sem ela.
 
+## Integrações opcionais
+
+context7, 21st, strix, semgrep, Chrome DevTools MCP e o detector de interface são opcionais: **o plugin não instala nada**. A skill
+`/integracoes` diz, por ferramenta, o que faz, que dado sai e para onde, como ligar, como desligar e o risco. Verificador do projeto
+(comando que roda a cada edição, 5 s, e ao parar, 30 s): `"verificador"` em `.claude/base/config.json`.
+
 ## Configuração
 
 - `"modelo_por_tarefa": true` em `~/.claude/agentes-ultimate/config.json` (todos os projetos) ou em
