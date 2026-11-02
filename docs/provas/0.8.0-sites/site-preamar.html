@@ -105,13 +105,15 @@ tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 .almanaque { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 64px; align-items: start; }
 .almanaque .txt p { color: var(--texto-2); margin-top: 16px; }
 .unidade { font-size: 14px; color: var(--texto-2); margin: 0 0 10px; }
-.semana, .dias { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; list-style: none; padding: 0; margin: 0; }
-.semana { font-size: 13px; color: var(--texto-2); margin-bottom: 6px; }
-.dia { position: relative; min-height: 76px; padding: 8px 10px; border-radius: 8px; color: var(--n-txt); display: flex; flex-direction: column; justify-content: space-between; }
-.dia .d { font-size: 13px; } .dia .v { font: 600 19px/1 var(--sans); font-variant-numeric: tabular-nums; }
-.n1 { background: var(--n1); } .n2 { background: var(--n2); } .n3 { background: var(--n3); } .n4 { background: var(--n4); } .n5 { background: var(--n5); }
-.baixa.dia { outline: 2px solid var(--acento-forte); outline-offset: 1px; }
-.tag { position: absolute; right: 8px; top: 8px; font-size: 12px; font-weight: 600; line-height: 1.1; }
+.semanas { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.semanas th, .semanas td { text-align: left; padding: 14px 12px 14px 0; border-bottom: 1px solid var(--regua); vertical-align: top; font-size: 16px; }
+.semanas thead th { font-size: 13px; font-weight: 500; color: var(--texto-2); border-bottom: 1px solid var(--regua-forte); padding-top: 0; }
+.semanas tbody th { font: 500 19px/1.2 var(--serif); }
+.semanas tr.baixa td { color: inherit; font-weight: 400; } .semanas tr.baixa td:nth-child(3) { color: var(--acento-forte); font-weight: 600; }
+.semanas tbody tr:last-child th, .semanas tbody tr:last-child td { border-bottom: 0; }
+.dia-m { display: block; font-size: 13px; color: var(--texto-2); font-weight: 400; }
+.amp { min-width: 110px; }
+.amp-barra { display: block; height: 6px; border-radius: 99px; background: var(--mar); margin: 6px 0 6px; }
 
 /* Como ler */
 .passos { list-style: none; counter-reset: p; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; margin: 48px 0 0; padding: 40px 0 0; position: relative; }
@@ -245,8 +247,7 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
   .bento { grid-template-columns: minmax(0, 1fr); margin-top: 32px; }
   .bento > * { grid-column: auto; grid-row: auto; }
   .vidro { padding: 22px; border-radius: 18px; }
-  .dia { min-height: 62px; padding: 6px; } .dia .v { font-size: 16px; } .semana { font-size: 12px; } .semana, .dias { gap: 4px; }
-  .tag { position: static; order: 3; font-size: 12px; } .baixa.dia { min-height: 76px; }
+  .semanas th, .semanas td { padding-right: 8px; font-size: 15px; } .semanas tbody th { font-size: 16px; } .amp { min-width: 0; }
   .dados { border-left: 0; padding-left: 0; border-top: 2px solid var(--regua-forte); padding-top: 22px; }
   .fim .btn { width: 100%; }
   .fim { padding-top: 64px; } .subida { height: 150px; } .fio { height: 72px; }
@@ -332,44 +333,22 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
 <section class="bloco" id="almanaque-s">
   <div class="grade almanaque">
     <div class="txt">
-      <h2 id="almanaque">Um mês inteiro, de relance.</h2>
-      <p>Cada dia traz o saldo que deve sobrar. Quanto mais fundo o tom, mais folga; o dia mais apertado vem marcado, com o nome escrito.</p>
+      <h2 id="almanaque">O mês em cinco linhas de tábua.</h2>
+      <p>Como num almanaque de marinheiro: para cada semana, a maior e a menor maré do saldo, e a distância entre as duas.
+        A linha em vermelho é a semana em que a água baixa mais.</p>
     </div>
     <div>
-      <p class="unidade">Novembro de 2026 · saldo previsto em R$ mil (exemplo fictício)</p>
-      <ul class="semana" aria-hidden="true"><li>dom</li><li>seg</li><li>ter</li><li>qua</li><li>qui</li><li>sex</li><li>sáb</li></ul>
-      <ul class="dias">
-          <li class="dia n3"><span class="d">1</span><span class="v">2,0</span></li>
-          <li class="dia n3"><span class="d">2</span><span class="v">1,9</span></li>
-          <li class="dia n3"><span class="d">3</span><span class="v">1,9</span></li>
-          <li class="dia n3"><span class="d">4</span><span class="v">1,9</span></li>
-          <li class="dia n5"><span class="d">5</span><span class="v">4,8</span></li>
-          <li class="dia n5"><span class="d">6</span><span class="v">4,8</span></li>
-          <li class="dia n5"><span class="d">7</span><span class="v">4,7</span></li>
-          <li class="dia n5"><span class="d">8</span><span class="v">4,6</span></li>
-          <li class="dia n5"><span class="d">9</span><span class="v">4,6</span></li>
-          <li class="dia n4"><span class="d">10</span><span class="v">2,6</span></li>
-          <li class="dia n4"><span class="d">11</span><span class="v">2,6</span></li>
-          <li class="dia n4"><span class="d">12</span><span class="v">2,5</span></li>
-          <li class="dia n3"><span class="d">13</span><span class="v">2,4</span></li>
-          <li class="dia n3"><span class="d">14</span><span class="v">2,4</span></li>
-          <li class="dia n3"><span class="d">15</span><span class="v">2,3</span></li>
-          <li class="dia n3"><span class="d">16</span><span class="v">2,2</span></li>
-          <li class="dia n3"><span class="d">17</span><span class="v">2,2</span></li>
-          <li class="dia n3"><span class="d">18</span><span class="v">2,1</span></li>
-          <li class="dia n3"><span class="d">19</span><span class="v">2,0</span></li>
-          <li class="dia n3"><span class="d">20</span><span class="v">2,0</span></li>
-          <li class="dia n3"><span class="d">21</span><span class="v">1,9</span></li>
-          <li class="dia n1 baixa"><span class="d">22</span><span class="v">0,3</span><span class="tag">baixa</span></li>
-          <li class="dia n2"><span class="d">23</span><span class="v">1,3</span></li>
-          <li class="dia n2"><span class="d">24</span><span class="v">1,3</span></li>
-          <li class="dia n2"><span class="d">25</span><span class="v">1,2</span></li>
-          <li class="dia n2"><span class="d">26</span><span class="v">1,2</span></li>
-          <li class="dia n2"><span class="d">27</span><span class="v">1,2</span></li>
-          <li class="dia n2"><span class="d">28</span><span class="v">1,2</span></li>
-          <li class="dia n2"><span class="d">29</span><span class="v">1,2</span></li>
-          <li class="dia n2"><span class="d">30</span><span class="v">1,1</span></li>
-      </ul>
+      <p class="unidade">Novembro de 2026 · saldo previsto em R$ (exemplo fictício)</p>
+      <table class="semanas">
+        <thead><tr><th scope="col">Semana</th><th scope="col">Preamar</th><th scope="col">Baixa-mar</th><th scope="col">Amplitude</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">1 a 7</th><td><span class="dia-m">dia 5</span> 4.820,00</td><td><span class="dia-m">dia 4</span> 1.850,00</td><td class="amp"><span class="amp-barra" style="width:100.0%"></span><span class="num">2.970,00</span></td></tr>
+          <tr><th scope="row">8 a 14</th><td><span class="dia-m">dia 8</span> 4.610,00</td><td><span class="dia-m">dia 14</span> 2.380,00</td><td class="amp"><span class="amp-barra" style="width:75.1%"></span><span class="num">2.230,00</span></td></tr>
+          <tr><th scope="row">15 a 21</th><td><span class="dia-m">dia 15</span> 2.290,00</td><td><span class="dia-m">dia 21</span> 1.890,00</td><td class="amp"><span class="amp-barra" style="width:13.5%"></span><span class="num">400,00</span></td></tr>
+          <tr class="baixa"><th scope="row">22 a 28</th><td><span class="dia-m">dia 23</span> 1.290,00</td><td><span class="dia-m">dia 22</span> 312,40</td><td class="amp"><span class="amp-barra" style="width:32.9%"></span><span class="num">977,60</span></td></tr>
+          <tr><th scope="row">29 a 30</th><td><span class="dia-m">dia 29</span> 1.170,00</td><td><span class="dia-m">dia 30</span> 1.148,90</td><td class="amp"><span class="amp-barra" style="width:6.0%"></span><span class="num">21,10</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
@@ -388,8 +367,8 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
 <section class="bloco mar-calmo">
   <div class="grade">
     <div class="cab">
-      <h2 id="recursos">Feito para quem prefere saber antes.</h2>
-      <p>Nada de relatório no fim do mês, quando já passou. Tudo aqui olha para a frente.</p>
+      <h2 id="recursos">O que a tábua mostra além da maré.</h2>
+      <p>Cada peça responde a uma pergunta de quem atravessa o mês: o que entrou, quando avisa e se ainda dá para mudar o rumo.</p>
     </div>
     <div class="bento">
       <article class="vidro b-a">
