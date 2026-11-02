@@ -175,6 +175,8 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     JSON.parse(ler('fontes', 'fontes.json')).fontes.some((x) => x.repo === 'cloudflare/security-audit-skill' && x.commit_usado.startsWith('c1c8a8c') && x.arquivos.length >= 20), 'falta');
   // ---- im99 · modelo modelos/liquid-glass/ ----
   try { require('./testar-liquid-glass.js')({ caso, RAIZ }); } catch (e) { caso('im99: scripts/testar-liquid-glass.js carrega e roda', false, e.message); }
+  // ---- Revisão final M-4 · padrão "impressiona" (régua, junção, VERMELHO, licença, texto alternativo, não imitar) ----
+  try { require('./testar-impressionar.js')({ caso, RAIZ }); } catch (e) { caso('revisão final M-4: scripts/testar-impressionar.js carrega e roda', false, e.message); }
   // ---- Lote 15 · skill auditoria-completa e validadores ----
   try { require('./testar-auditoria.js')({ caso, tmp, RAIZ }); } catch (e) { caso('0.8.0 B15: scripts/testar-auditoria.js carrega e roda', false, e.message); }
   // ---- Lote 13 · ponytail: regras como orientação, sem ganchos ----
