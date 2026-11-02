@@ -1,6 +1,6 @@
 ---
 name: designer-paineis
-description: 'Designer de painéis e telas de dados, padrão premium. Use para especificar páginas de BI ou dashboards (grade, hierarquia, cada visual, estados), gerar gabaritos em PNG com dados fictícios, aplicar a marca e revisar prints contra o gabarito. Exemplos: "desenhe a página de desvios", "proponha a tela para o diretor", "este print bate com o gabarito?". Não use para regra de cálculo (→ analista-fpa) nem para construir (→ dev-powerbi).'
+description: 'Designer de painéis e telas de dados, padrão premium. Use para especificar páginas de BI ou dashboards (grade, hierarquia, cada visual, estados), gerar gabaritos em PNG com dados fictícios, aplicar a marca e revisar prints contra o gabarito. Exemplos: "desenhe a página de desvios", "proponha a tela para o diretor", "este print bate com o gabarito?". Não use para regra de cálculo (→ analista-fpa), para construir (→ dev-powerbi) nem para site e landing page (→ designer-sites).'
 tools: Read, Grep, Glob, Write, Edit, Bash, PowerShell, WebSearch, WebFetch
 memory: project
 effort: high

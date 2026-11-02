@@ -158,7 +158,7 @@
       "lancamento": true
     },
     "interface": {
-      "nome": "Interface (app e site)",
+      "nome": "Interface (app)",
       "agentes": [
         "designer-paineis",
         "engenheiro-software"
@@ -167,9 +167,6 @@
       "palavras": [
         "app",
         "aplicativo",
-        "site",
-        "site institucional",
-        "landing page",
         "pagina web",
         "interface",
         "ux",
@@ -192,6 +189,39 @@
         "tailwind",
         "react",
         "tela do app"
+      ]
+    },
+    "sites": {
+      "nome": "Sites e landing pages",
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "lancamento": true,
+      "palavras": [
+        "landing page",
+        "landing pages",
+        "pagina de vendas",
+        "pagina de captura",
+        "pagina de campanha",
+        "site institucional",
+        "site premium",
+        "site de vendas",
+        "site bonito",
+        "novo site",
+        "crie um site",
+        "criar um site",
+        "faca um site",
+        "fazer um site",
+        "monte um site",
+        "desenhe o site",
+        "redesenhe o site",
+        "redesenhar o site",
+        "redesenho do site",
+        "site do produto",
+        "portfolio online",
+        "site",
+        "landing"
       ]
     },
     "documentos": {

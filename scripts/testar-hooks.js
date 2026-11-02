@@ -1075,6 +1075,9 @@ caso('0.8.0 D-i engenheiro de dados: com banco próprio, backup provado por rest
 caso('0.8.0 D-i eval do engenheiro de dados: backup sem teste de restauração', /restaura/.test(evV8('engenheiro-dados')), 'falta');
 caso('0.8.0 D-i checklist S-13 e roteiro B3 (restaurar o backup)', /S-13 ·[^\n]*(\n\s+[^\n]*)*Verificar:/.test(skV8('itens.md')) && /## B3/.test(skV8('referencias', 'seguranca-extras.md')), 'falta');
 
+// ==== 0.8.0 lote sites-premium (casos em scripts/testar-sites.js) ====
+try { require('./testar-sites.js')({ caso, tmp, RAIZ, rot, ctx }); } catch (e) { caso('0.8.0 sites: scripts/testar-sites.js carrega e roda', false, e.message); }
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(falhas ? `${falhas} caso(s) falharam` : 'todos os casos passaram');
 process.exit(falhas ? 1 : 0);
