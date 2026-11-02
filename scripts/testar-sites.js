@@ -368,10 +368,10 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const ctrl = (res.efeitos_controles || []).filter((c) => !c.informativo);
     caso('0.8.0 sites efeitos: os controles da bancada falham no caso errado (quadros, mexeu, reduzido)', ctrl.length >= 3 && ctrl.every((c) => c.pegou === true), JSON.stringify(res.efeitos_controles));
     const rods = res.efeitos_rodadas || [];
-    const r2 = rods.filter((x) => x.ids).slice(-2);
-    caso('0.8.0 sites M-1: 2 rodadas seguidas e nenhuma reprovação por comparação de imagem (só tempo de quadro pode oscilar)', r2.length === 2 && r2.every((x) => x.falhas.every((f) => f.motivo.every((m) => /^quadro/.test(m)))), JSON.stringify(r2.map((x) => x.falhas)));
-    const est = IDS.filter((id) => r2.length === 2 && r2.every((x) => x.ids.includes(id)));
-    caso('0.8.0 sites M-1: PROVADO no quadro só o que passou nas 2 rodadas', IDS.every((id) => new RegExp('^\\| ' + id + ' \\|.*\\| PROVADO( \\(perto do limite[^|]*)? \\|', 'm').test(quadro) === est.includes(id)), IDS.filter((id) => new RegExp('^\\| ' + id + ' \\|.*\\| PROVADO( \\(perto do limite[^|]*)? \\|', 'm').test(quadro) !== est.includes(id)).join(', '));
+    const r2 = rods.filter((x) => x.ids && x.p95).slice(-3);
+    caso('0.8.0 sites M-1: 3 rodadas seguidas e nenhuma reprovação por comparação de imagem (só tempo de quadro pode oscilar)', r2.length === 3 && r2.every((x) => x.falhas.every((f) => f.motivo.every((m) => /^quadro/.test(m)))), JSON.stringify(r2.map((x) => x.falhas)));
+    const est = IDS.filter((id) => { const v = r2.map((x) => x.p95[id]).filter((n) => n > 0); return r2.length === 3 && r2.every((x) => x.ids.includes(id)) && v.length && Math.max(...v) <= 2 * Math.min(...v); });
+    caso('0.8.0 sites M-1: b-10: PROVADO no quadro só o que passou nas 3 rodadas com tempo estável (≤ 2×)', IDS.every((id) => new RegExp('^\\| ' + id + ' \\|.*\\| PROVADO( \\(perto do limite[^|]*)? \\|', 'm').test(quadro) === est.includes(id)), IDS.filter((id) => new RegExp('^\\| ' + id + ' \\|.*\\| PROVADO( \\(perto do limite[^|]*)? \\|', 'm').test(quadro) !== est.includes(id)).join(', '));
     caso('0.8.0 sites b-2: quadro sem número fixo no texto e sem "sem animação" em efeito animado', !/49,9 e 16,8/.test(quadro) && !(res.efeitos || []).some((e) => e.tipo !== 'estatico' && new RegExp('^\\| ' + e.id + ' \\|.*sem animação \\|$', 'm').test(quadro)), 'texto antigo');
     const provados = pe.filter((e) => e.provado);
     caso('0.8.0 sites efeitos: cada provado foi visto mexendo, parou com movimento reduzido e teve quadros medidos', provados.length > 0 && provados.every((e) => e.mexeu === true && e.reduzido_ok === true && (e.p95_ms > 0 || e.tipo === 'estatico')), JSON.stringify(provados.filter((e) => !(e.mexeu === true && e.reduzido_ok === true && (e.p95_ms > 0 || e.tipo === 'estatico'))).map((e) => e.id)));

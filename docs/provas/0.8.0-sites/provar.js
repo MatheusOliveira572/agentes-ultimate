@@ -633,7 +633,7 @@ async function provarEfeitos() {
   const a1 = await foto(b, clipDe(ce)); await espera(1000); const a2 = await foto(b, clipDe(ce));
   controles.push({ nome: 'marquee sem a animação (o "mexeu" tem de dar falso)', pegou: parecidas(a1, a2) });
   console.log(JSON.stringify(controles));
-  const rodadas = [...(lerRes().efeitos_rodadas || []), { em: new Date().toISOString(), provados: saida.filter((r) => r.provado).length, total: saida.length, ids: saida.filter((r) => r.provado).map((r) => r.id),
+  const rodadas = [...(lerRes().efeitos_rodadas || []), { em: new Date().toISOString(), provados: saida.filter((r) => r.provado).length, total: saida.length, ids: saida.filter((r) => r.provado).map((r) => r.id), p95: Object.fromEntries(saida.map((r) => [r.id, r.p95_ms])),
     falhas: saida.filter((r) => !r.provado).map((r) => ({ id: r.id, motivo: [!r.mexeu && 'não mexeu', !r.reduzido_ok && 'reduzido', r.pausa && !r.pausa_ok && 'pausa', !(r.p95_ms > 0 && r.p95_ms <= 34) && 'quadro ' + r.p95_ms + ' ms', r.erros_js && 'js', r.texto_invisivel_no_fim && 'texto'].filter(Boolean) })) }].slice(-3);
   gravarRes({ efeitos_rodadas: rodadas, efeitos: saida, efeitos_controles: controles, efeitos_condicao: `${versao}, sem interface, 390 px, CPU freada 4×; quadros por requestAnimationFrame em 1,5 s. Sem aparelho real.` });
   const ruins = saida.filter((r) => !r.provado);
@@ -644,14 +644,16 @@ async function provarEfeitos() {
 // ---- Quadro de provas ----
 function gravarQuadro() {
   const res = lerRes(); const e = res.efeitos || [];
-  const ult = (res.efeitos_rodadas || []).filter((x) => x.ids).slice(-2);
-  const estavel = (id) => ult.length === 2 && ult.every((x) => x.ids.includes(id));
+  const ult = (res.efeitos_rodadas || []).filter((x) => x.ids && x.p95).slice(-3);
+  const tempos = (id) => ult.map((x) => x.p95[id]).filter((v) => v > 0);
+  const variou = (id) => { const v = tempos(id); return v.length && Math.max(...v) > 2 * Math.min(...v); };
+  const estavel = (id) => ult.length === 3 && ult.every((x) => x.ids.includes(id)) && !variou(id);
   const oscila = (id) => ult.some((x) => x.ids.includes(id)) && !estavel(id);
   const IDS = [...'ABCDEF'].flatMap((g) => Array.from({ length: { A: 7, B: 7, C: 6, D: 6, E: 5, F: 8 }[g] }, (_, i) => g + (i + 1)));
   const linhas = IDS.map((id) => {
     const r = e.find((x) => x.id === id);
-    if (!r || !estavel(id)) return `| ${id} | ${r ? r.nome : '—'} | [ESTIMATIVA: ${oscila(id) ? 'passou numa rodada e não na outra (' + ult.map((x) => ((x.falhas.find((f) => f.id === id) || {}).motivo || ['ok']).join(' ')).join(' × ') + ')' : 'não provado na bancada'}] | ${r ? r.valor : '—'} | ${r ? r.p95_ms + ' ms' : '—'} | ${r && r.reduzido_ok ? 'sim' : 'não'} | ${r && r.props && r.props.length ? r.props.join(', ') : '—'} |`;
-    return `| ${id} | ${r.nome} | PROVADO${r.p95_ms > 30 ? " (perto do limite: o quadro oscila entre rodadas)" : ""} | ${r.valor} | ${r.p95_ms} ms | sim | ${r.props && r.props.length ? r.props.join(', ') : r.tipo === 'estatico' ? 'sem animação (efeito parado)' : 'por JS (requestAnimationFrame) ou transição já encerrada na medida'} |`;
+    if (!r || !estavel(id)) return `| ${id} | ${r ? r.nome : '—'} | [ESTIMATIVA: ${oscila(id) ? 'oscila entre rodadas: p95 ' + tempos(id).join(' / ') + ' ms' + (ult.some((x) => !x.ids.includes(id)) ? '; reprovou em ' + ult.filter((x) => !x.ids.includes(id)).length + ' de ' + ult.length : '') : 'não provado na bancada'}] | ${r ? r.valor : '—'} | ${r ? r.p95_ms + ' ms' : '—'} | ${r && r.reduzido_ok ? 'sim' : 'não'} | ${r && r.props && r.props.length ? r.props.join(', ') : '—'} |`;
+    return `| ${id} | ${r.nome} | PROVADO${r.p95_ms > 30 ? " (perto do limite de 34 ms)" : ""} | ${r.valor} | ${r.p95_ms} ms | sim | ${r.props && r.props.length ? r.props.join(', ') : r.tipo === 'estatico' ? 'sem animação (efeito parado)' : 'por JS (requestAnimationFrame) ou transição já encerrada na medida'} |`;
   }).join('\n');
   const provados = IDS.filter(estavel).length;
   const txt = `<!-- Texto próprio do agentes-ultimate. Gerado por docs/provas/0.8.0-sites/provar.js a partir de resultado.json. -->
@@ -662,7 +664,7 @@ function gravarQuadro() {
 ${provados} de ${IDS.length} efeitos passaram na bancada (rodadas seguidas: ${(res.efeitos_rodadas || []).map((x) => x.provados + '/' + x.total).join(', ') || '1'}) (\`docs/provas/0.8.0-sites/bancada-efeitos.html\`; folha de contato em \`png/bancada-efeitos.png\`).
 **Condição:** ${res.efeitos_condicao || 'sem medição'}
 
-**PROVADO quer dizer:** nas 2 últimas rodadas seguidas, com o valor da coluna, em código próprio, o efeito apareceu ou mexeu, ficou parado e legível com
+**PROVADO quer dizer:** nas 3 últimas rodadas seguidas, com p95 do quadro que não variou mais de 2× entre elas, com o valor da coluna, em código próprio, o efeito apareceu ou mexeu, ficou parado e legível com
 \`prefers-reduced-motion\`, teve pausa quando o catálogo exige, 0 erro de JS e p95 do quadro até 34 ms na condição acima.
 **Controles:** ${(res.efeitos_controles || []).map((c) => `${c.nome}: ${c.p95_ms !== undefined ? c.p95_ms + ' ms, ' : ''}${c.informativo ? (c.pegou ? 'a medida subiu' : 'a medida não subiu: custo de pintura não aparece aqui') : (c.pegou ? 'pegou' : 'NÃO pegou')}`).join('; ') || '—'}.
 **Não prova:** aparelho real, GPU, bateria, nem o restante da faixa do catálogo, que continua [ESTIMATIVA: ponto de partida
