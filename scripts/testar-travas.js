@@ -252,6 +252,10 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   p = repo(); fs.writeFileSync(path.join(p, 'grande.txt'), 'linha comum\n'.repeat(4000));
   x = comTeto('git add -A && git commit -m x', p, 1000);
   caso('0.8.0 M-1 trava: arquivo novo acima do teto também pergunta', x.code === 0 && pede(x) && /grande demais/.test(x.out), `code ${x.code} ${x.out}`);
+  // im99: arquivo binário (PNG das provas) não é lido pelas regras e não conta no teto: a árvore com imagens grandes passa.
+  p = repo(); fs.writeFileSync(path.join(p, 'imagem.png'), Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0, 0]), Buffer.alloc(60000, 7)]));
+  x = comTeto('git add -A && git commit -m x', p, 1000);
+  caso('0.8.0 M-1 trava: binário acima do teto não vira "grande demais" (não é lido pelas regras)', x.code === 0 && !x.out, `code ${x.code} ${x.out}`);
   p = repo(); fs.writeFileSync(path.join(p, 'muitos.json'), ('{"tok' + 'en": "abc123def456ghi"}\n').repeat(40000)); git('git add muitos.json', p);
   let t0 = Date.now(); x = trava('git commit -m x', p); let ms = Date.now() - t0;
   caso('0.8.0 M-1 trava: 40 mil linhas com achado levam menos de 6 s (era 48 s: custo quadrático)', ms < 6000 && pede(x), `${ms} ms ${x.out.slice(0, 120)}`);

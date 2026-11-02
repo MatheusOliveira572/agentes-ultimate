@@ -161,10 +161,13 @@ function ler(p, r) {
     try {
       const abs = path.resolve(p.cwd, f);
       const tam = fs.statSync(abs).size;
+      // Binário (imagem, PDF) não é lido pelas regras: olha só o começo e não conta no teto.
+      const ini = Buffer.alloc(Math.min(8000, tam));
+      const fd = fs.openSync(abs, 'r'); try { fs.readSync(fd, ini, 0, ini.length, 0); } finally { fs.closeSync(fd); }
+      if (ini.includes(0)) continue;
       if (lidos + tam > TETO_BYTES) { r.incompleta = true; continue; }
       lidos += tam;
       const b = fs.readFileSync(abs);
-      if (b.subarray(0, 8000).includes(0)) continue;
       b.toString('utf8').split('\n').forEach((texto, n) => linhas.push({ arq: f, linha: n + 1, texto }));
     } catch (e) { r.incompleta = true; } // não ler nunca é o mesmo que estar limpo
   }
