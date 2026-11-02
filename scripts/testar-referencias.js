@@ -173,6 +173,8 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B14 roteiro 26 do checklist ganha só o link para a auditoria completa', /\/auditoria-completa/.test(ler('skills', 'checklist-lancamento', 'referencias', 'seguranca-revisao.md')) && !/cacar-por-cobertura|Wildcard/.test(ler('skills', 'checklist-lancamento', 'referencias', 'seguranca-revisao.md')), 'falta');
   caso('0.8.0 B14 crédito: licença em terceiros, linha em CREDITOS.md e registro em fontes.json com o commit fixo', fs.existsSync(path.join(RAIZ, 'terceiros', 'cloudflare-security-audit-skill', 'LICENSE')) && /cloudflare\/security-audit-skill \| c1c8a8c/.test(ler('CREDITOS.md')) &&
     JSON.parse(ler('fontes', 'fontes.json')).fontes.some((x) => x.repo === 'cloudflare/security-audit-skill' && x.commit_usado.startsWith('c1c8a8c') && x.arquivos.length >= 20), 'falta');
+  // ---- im99 · modelo modelos/liquid-glass/ ----
+  try { require('./testar-liquid-glass.js')({ caso, RAIZ }); } catch (e) { caso('im99: scripts/testar-liquid-glass.js carrega e roda', false, e.message); }
   // ---- Lote 15 · skill auditoria-completa e validadores ----
   try { require('./testar-auditoria.js')({ caso, tmp, RAIZ }); } catch (e) { caso('0.8.0 B15: scripts/testar-auditoria.js carrega e roda', false, e.message); }
   // ---- Lote 13 · ponytail: regras como orientação, sem ganchos ----

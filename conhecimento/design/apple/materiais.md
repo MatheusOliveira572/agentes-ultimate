@@ -41,7 +41,8 @@ O usuário quer o vidro da Apple, **não uma tentativa**. O fosco antigo (desfoq
 | **Barra lateral sempre sobre conteúdo** (extensão de fundo do macOS 26) | camada atrás da barra lateral com a foto vizinha espelhada e desfocada (10 px), a cor do pé da capa esmaecendo no topo, máscara antes da borda do conteúdo; no escuro, brilho 0,72 | sem ela, a barra termina num corte seco onde a capa acaba (visto na prova pv94) |
 | **Camadas que se separam e se juntam** | ex.: abas que se recolhem na selecionada ao rolar para baixo e a busca que se aproxima, com a mola do projeto | 520 ms, mola curta |
 
-Reserva honesta: a lente só existe no Chromium (o `url()` no `backdrop-filter`); nos outros, o material regular
+**Módulo pronto:** `<plugin>/modelos/liquid-glass/` (`liquido.css` e `liquido.js`, com o LEIA-ME): lente, aro de luz, tinta que se
+adapta (sem somar `[data-lum]` aninhados) e as preferências. Reserva honesta: a lente só existe no Chromium (o `url()` no `backdrop-filter`); nos outros, o material regular
 (`blur(14px) saturate(180%)`) **sem fingir refração**, e o relatório diz qual navegador viu o quê.
 
 ## Teste "parece Apple ou parece tentativa?" (com o PNG e uma ampliação 2× do vidro)
