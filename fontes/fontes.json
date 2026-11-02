@@ -732,5 +732,17 @@
       "uso": "só a lista do que cobrir; texto nosso a partir da HIG pública; nada copiado",
       "arquivos": []
     }
+  ],
+  "paginas": [
+    {
+      "nome": "Apple Human Interface Guidelines",
+      "pagina": "https://developer.apple.com/design/human-interface-guidelines",
+      "url_dados": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines.json",
+      "licenca": null,
+      "uso": "Sem licença de reuso: nada é copiado; o texto de conhecimento/design/apple/ é nosso, com a regra citando a página. Ao mudar, roda o teste de equivalência (scripts/equivalencia-apple.js).",
+      "assinatura": "c54a7ca71bd13e36377b492084edd893a925b5d529d30a1a7fdb6ab79dfe13ef",
+      "conferido_em": "2026-11-02",
+      "vigiar": true
+    }
   ]
 }
