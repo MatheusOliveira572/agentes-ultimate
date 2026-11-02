@@ -455,6 +455,9 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     caso('0.8.0 sites M-12 (controle): a correção não muda um pedido de site diferente', /designer-sites/.test(ctl) && !/designer-paineis/.test(ctl), ctl);
     fs.rmSync(casaM12, { recursive: true, force: true });
   }
+  // b-18: "página inicial" fora das âncoras e dos alvos; um painel administrativo com formulário de contato não é site.
+  const pi = agentesDe('refaça a página inicial do painel administrativo com o formulário de contato');
+  caso('0.8.0 sites b-18: "página inicial" de painel não é âncora nem alvo de site', !/designer-sites/.test(pi.ag) && !/sites-premium/.test(pi.refs), pi.ag);
   // b-15: âncora negada ('não é um app') não conta; sem o !negado da âncora, o pedido iria aos dois designers.
   const neg = agentesDe('não é um app: crie o site com react e efeito vidro');
   caso('0.8.0 sites b-15: âncora negada ("não é um app") não conta no desempate', /designer-sites/.test(neg.ag) && !/designer-paineis/.test(neg.ag), neg.ag);
