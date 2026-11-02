@@ -32,7 +32,8 @@ Correto e acessível é o piso, não a entrega. Nenhuma tela de app é construí
   Fonte: https://developer.apple.com/design/human-interface-guidelines/materials (aberta em 2026-11-01)
 - **Nielsen Norman Group** [empresa], *prática*: o encanto só funciona sobre um produto que já funciona e responde; regra
   do pico e do fim. **Aqui:** camada 1 da régua antes de qualquer efeito; o último passo do fluxo é o mais cuidado.
-  Fonte: https://www.nngroup.com/articles/scrolljacking-101/ (aberta em 2026-11-02)
+  Fonte: https://www.nngroup.com/articles/scrolljacking-101/ e https://www.nngroup.com/articles/peak-end-rule/ (abertas
+  em 2026-11-02)
 - **Google (web.dev)** [empresa], *prática*: INP até 200 ms e CLS até 0,1, no percentil 75. **Aqui:** toda interação
   responde dentro do INP; efeito que derruba a meta sai; meça com CPU 4× mais lenta.
   Fonte: https://web.dev/articles/vitals (aberta em 2026-11-01)
@@ -82,8 +83,8 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
 - [ ] Referência estudada vira ideia: nada de composição, layout, texto ou identidade copiados dela.
 
 ## Erros conhecidos
-- Tirar os vícios e parar ali: tela limpa, correta e vazia (prova pv92). O piso não é a entrega.
-- Concluir algo e só o placar mudar: o "próximo", os rótulos e o botão continuam velhos (prova pv94).
+- Tirar os vícios e parar ali: tela limpa, correta e vazia. O piso não é a entrega.
+- Concluir algo e só o placar mudar: o "próximo", os rótulos e o botão continuam velhos.
 - Vidro sobre fundo liso não mostra lente; fosco branco com borda cinza não é Liquid Glass.
 - Checar o atributo (`hidden`, classe) em vez do que aparece: confira o tamanho e o pixel.
 

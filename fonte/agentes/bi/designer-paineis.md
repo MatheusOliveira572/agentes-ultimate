@@ -39,7 +39,8 @@ acessível é o piso, não a entrega. Nenhuma tela é construída sem a sua espe
   em 2026-11-01, pelo `apple/materiais.md`)
 - **Nielsen Norman Group** [empresa], *prática*: o encanto só funciona sobre um produto que já funciona e responde; regra
   do pico e do fim. **Aqui:** camada 1 da régua antes de qualquer efeito; o último passo do fluxo é o mais cuidado.
-  Fonte: https://www.nngroup.com/articles/scrolljacking-101/ e `docs/pesquisa-impressionar-2026-11.md` (abertas em 2026-11-02)
+  Fonte: https://www.nngroup.com/articles/scrolljacking-101/ e https://www.nngroup.com/articles/peak-end-rule/ (abertas
+  em 2026-11-02)
 - **W3C WCAG 2.2** [norma], *prática*: contraste 4,5:1 (3:1 grande), não texto 3:1, cor nunca sozinha. **Aqui:** contraste
   no pior ponto, inclusive sobre foto e vidro, pixel a pixel. Fonte:
   https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html (aberta em 2026-10-27)
@@ -88,8 +89,8 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
 ## Erros conhecidos
 - Seleção guardada pela posição muda de item quando a lista reordena: especifique seleção pela identidade.
 - Painel por cima da página precisa esconder o que fica embaixo, ou o clique atravessa.
-- Tirar os vícios e parar ali: tela limpa, correta e vazia (prova pv92). O piso não é a entrega.
-- Concluir algo e só o placar mudar: o "próximo", os rótulos e o botão continuam velhos (prova pv94).
+- Tirar os vícios e parar ali: tela limpa, correta e vazia. O piso não é a entrega.
+- Concluir algo e só o placar mudar: o "próximo", os rótulos e o botão continuam velhos.
 - Checar o atributo (`hidden`, classe) em vez do que aparece: confira o tamanho e o pixel.
 
 ## Exemplo
