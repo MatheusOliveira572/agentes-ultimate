@@ -262,6 +262,26 @@ a = atualizar(envAt);
 caso('avisa quando a versão mudou', /0\.0\.1 →/.test(a.stdout), a.stdout);
 a = atualizar({ ...envAt, AGENTES_ULTIMATE_FORCAR_ATUALIZAR: '' });
 caso('cópia de desenvolvimento não se atualiza', a.status === 0 && !a.stdout, a.stdout);
+// Revisão final A-2: o "claude" chamado pela atualização não ganha janela visível (Windows). O "claude" aqui é o powershell, que
+// grava se o próprio console existe e se está visível.
+if (process.platform === 'win32') {
+  const ps1 = path.join(tmp, 'janela.ps1'); const saidaJ = path.join(tmp, 'janela.txt');
+  const L2 = '$h = [JanelaAU.W]::GetConsoleWindow()\n"janela=$h visivel=$([JanelaAU.W]::IsWindowVisible($h))" | Out-File -FilePath $env:AU_JANELA -Encoding ascii\n';
+  fs.writeFileSync(ps1, 'Add-Type -MemberDefinition \'[DllImport("kernel32.dll")] public static extern IntPtr GetConsoleWindow(); [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);\' -Name W -Namespace JanelaAU\n' + L2);
+  const estJ = path.join(casa, '.claude', 'agentes-ultimate', 'atualizacao.json'); try { fs.unlinkSync(estJ); } catch (e) { /* */ }
+  try { fs.unlinkSync(saidaJ); } catch (e) { /* */ }
+  atualizar({ ...envAt, AU_JANELA: saidaJ, AGENTES_ULTIMATE_CLAUDE_CMD: 'powershell -NoProfile -ExecutionPolicy Bypass -File "' + ps1 + '"' });
+  const fimJ = Date.now() + 20000; while (Date.now() < fimJ && !(fs.existsSync(saidaJ) && /visivel=[A-Za-z]/.test(fs.readFileSync(saidaJ, 'utf8')))) { /* espera o 2º plano */ }
+  const viu = fs.existsSync(saidaJ) ? fs.readFileSync(saidaJ, 'utf8').trim() : 'sem saída';
+  caso('revisão final A-2: o claude chamado pela atualização diária não abre janela visível', /visivel=False/.test(viu), viu);
+}
+{
+  const shellDestacado = require(path.join(RAIZ, 'scripts', 'chamadas-processo.js')).shellDestacado || (() => []);
+  const CPf = "require('child_" + "process')";
+  caso('revisão final A-2: o detector acusa shell + detached e respeita a exceção marcada', shellDestacado(`const { spawn } = ${CPf}; spawn('x', { shell: true, detached: true, windowsHide: true });`).length === 1 &&
+    shellDestacado(`const { spawn } = ${CPf};\n// janela de propósito\nspawn('x', { shell: true, detached: true, windowsHide: true });`).length === 0 &&
+    shellDestacado(`const { spawn } = ${CPf}; spawn(process.execPath, ['a'], { detached: true, windowsHide: true });`).length === 0, 'detector');
+}
 
 // ---- 0.7.0 · registro de cada execução e da faixa estimada ----
 const p7 = path.join(tmp, 'projeto7');

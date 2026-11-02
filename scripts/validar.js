@@ -184,6 +184,7 @@ for (const canario of ['Prova pela fonte real', 'Nunca invente dados', 'Desculpa
   for (const d of ['hooks', 'scripts', 'ferramentas', 'modelos']) {
     for (const f of listar(path.join(RAIZ, d)).filter((x) => /\.(js|mjs|cjs)$/.test(x))) {
       for (const a of semWindowsHide(fs.readFileSync(f, 'utf8'))) erros.push(`${rel(f)}:${a.linha}: ${a.nome}(...) sem windowsHide (abre janela no Windows)`);
+      for (const a of require(path.join(RAIZ, 'scripts', 'chamadas-processo.js')).shellDestacado(fs.readFileSync(f, 'utf8'))) erros.push(`${rel(f)}:${a.linha}: ${a.nome}(...) com shell e detached (o Windows abre janela visível para o programa chamado; use node destacado sem shell)`);
     }
   }
 }

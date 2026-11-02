@@ -27,6 +27,7 @@ function abrir(url) {
   // AGENTES_ULTIMATE_ABRIR_CMD troca o navegador por outro comando (os testes usam um que só anota).
   const troca = process.env.AGENTES_ULTIMATE_ABRIR_CMD;
   try {
+    // janela de propósito: o comando de teste no lugar do navegador, que é janela por definição.
     if (troca) spawn(`${troca} "${url}"`, { shell: true, detached: true, stdio: 'ignore', windowsHide: true }).unref();
     else {
       const c = process.platform === 'win32' ? ['cmd', ['/c', 'start', '""', url]] : process.platform === 'darwin' ? ['open', [url]] : ['xdg-open', [url]];

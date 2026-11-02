@@ -63,4 +63,23 @@ function semWindowsHide(t) {
   return achados;
 }
 
-module.exports = { semWindowsHide };
+// shell + detached: no Windows, cada programa de console chamado pelo cmd ganha console novo e visível, mesmo com windowsHide
+// (revisão final, A-2). Devolve [{ linha, nome }]. Exceção marcada com o comentário "janela de propósito" na linha de cima.
+function shellDestacado(t) {
+  if (!/child_process/.test(t)) return [];
+  const m = mascarar(t);
+  const linhas = t.split('\n');
+  const achados = [];
+  for (const x of m.matchAll(/(^|[^\w$.])(spawnSync|spawn|execFileSync|execFile|execSync|exec)\s*\(/g)) {
+    const ini = x.index + x[0].length - 1;
+    const fim = fechamento(m, ini);
+    const args = fim < 0 ? '' : m.slice(ini, fim);
+    if (!/\bshell\s*:\s*true\b/.test(args) || !/\bdetached\s*:\s*true\b/.test(args)) continue;
+    const linha = t.slice(0, ini).split('\n').length;
+    if (/janela de propósito/.test(linhas[linha - 2] || '')) continue;
+    achados.push({ linha, nome: x[2] });
+  }
+  return achados;
+}
+
+module.exports = { semWindowsHide, shellDestacado };

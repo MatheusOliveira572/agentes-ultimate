@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 // Atualização automática (SessionStart). No máximo 1 vez por dia, em segundo plano e sem travar a sessão:
-//   claude plugin marketplace update agentes-ultimate && claude plugin update agentes-ultimate@agentes-ultimate
+//   claude plugin marketplace update agentes-ultimate, e, se der certo, claude plugin update agentes-ultimate@agentes-ultimate
 // Se a versão mudou, avisa na próxima sessão (o Claude Code só aplica depois de reiniciar).
 // Desligar: AGENTES_ULTIMATE_SEM_AUTOATUALIZAR=1. Só roda quando instalado pelo marketplace (não com --plugin-dir).
 'use strict';
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 
 const RAIZ = path.resolve(__dirname, '..');
 const DIR = path.join(os.homedir(), '.claude', 'agentes-ultimate');
@@ -46,14 +46,29 @@ function main() {
     fs.writeFileSync(ESTADO, JSON.stringify({ ...est, versaoVista: versao, ultimaTentativa: new Date(agora).toISOString() }, null, 2));
   } catch (e) { sair(aviso); }
 
-  const claude = process.env.AGENTES_ULTIMATE_CLAUDE_CMD || 'claude';
-  const cmd = `${claude} plugin marketplace update agentes-ultimate && ${claude} plugin update agentes-ultimate@agentes-ultimate`;
+  // Um node destacado, sem shell, roda o claude com spawnSync + windowsHide. Com shell + detached, o Windows dá console novo e
+  // visível a cada programa de console que o cmd chama (janela preta no início do dia; revisão final, A-2).
   try {
     const log = fs.openSync(LOG, 'w');
-    const p = spawn(cmd, { shell: true, detached: true, stdio: ['ignore', log, log], windowsHide: true });
+    const p = spawn(process.execPath, [__filename, '--executar'], { detached: true, stdio: ['ignore', log, log], windowsHide: true });
     p.unref();
-  } catch (e) { /* sem rede ou sem claude no PATH: tenta amanhã */ }
+  } catch (e) { /* tenta amanhã */ }
   sair(aviso);
 }
 
-try { main(); } catch (e) { sair(); }
+// Programa e argumentos iniciais do claude: AGENTES_ULTIMATE_CLAUDE_CMD (texto com aspas, para os testes) ou "claude".
+function programaClaude() {
+  const t = process.env.AGENTES_ULTIMATE_CLAUDE_CMD;
+  if (!t) return ['claude', []];
+  const partes = [...t.matchAll(/"([^"]*)"|(\S+)/g)].map((m) => (m[1] !== undefined ? m[1] : m[2]));
+  return [partes[0], partes.slice(1)];
+}
+function executar() {
+  const [prog, ini] = programaClaude();
+  const roda = (args) => spawnSync(prog, [...ini, ...args], { windowsHide: true, stdio: 'inherit', timeout: 5 * 60 * 1000 });
+  const r = roda(['plugin', 'marketplace', 'update', 'agentes-ultimate']);
+  if (r.status === 0) roda(['plugin', 'update', 'agentes-ultimate@agentes-ultimate']);
+  process.exit(0);
+}
+
+if (process.argv.includes('--executar')) { try { executar(); } catch (e) { process.exit(0); } } else { try { main(); } catch (e) { sair(); } }
