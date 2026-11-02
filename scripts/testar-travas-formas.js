@@ -33,8 +33,13 @@ function rodarTabela(RAIZ) {
     fs.writeFileSync(path.join(p, 'a.js'), 'base\n'); fs.writeFileSync(path.join(p, 'limpo.js'), 'base\n');
     fs.mkdirSync(path.join(p, 'sub')); fs.writeFileSync(path.join(p, 'sub', 'k.js'), 'base\n');
     git('git add -A', p); git('git commit -q -m base', p);
+    // Remoto local (repositório nu), para o push do mesmo comando rodar de verdade sem sair da máquina.
+    const nu = p + '.remoto.git'; git('git init -q --bare "' + nu + '"', base);
+    git('git remote add origin "' + nu + '"', p); git('git push -q origin HEAD:refs/heads/main', p);
+    git('git branch -q --set-upstream-to=origin/main', p); git('git config push.default upstream', p);
     return p;
   };
+  const noRemoto = (p) => { try { return execSync('git log --all -p', { cwd: p + '.remoto.git', encoding: 'utf8', windowsHide: true, stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 1 << 26 }).includes(AWS); } catch (e) { return false; } };
   const fora = path.join(base, 'fora'); fs.mkdirSync(fora);
   const posix = (p) => p.replace(/\\/g, '/');
   const novo = (p) => fs.writeFileSync(path.join(p, 'novo.js'), COM);
@@ -97,6 +102,12 @@ function rodarTabela(RAIZ) {
     ['L alias que já existia', 'git ci -am x', aliasAntigo, null, 'bash', null, 'limite'],
     ['L script que faz o commit', 'sh salvar.sh', script, null, 'bash', null, 'limite'],
     ['L palavra montada em variável', 'P=com; git add -A; git ${P}mit -m x', novo, null, 'bash', null, 'limite'],
+    // Fluxo real (M-7): push no mesmo comando e comando que falha depois do commit.
+    ['M7 alias e push no mesmo comando', 'git ci -am x && git push', aliasAntigo],
+    ['M7 script e push no mesmo comando', 'sh salvar.sh && git push', script],
+    ['M7 eval e push no mesmo comando', 'eval "git add -A && git commit -m x" && git push', novo],
+    ['M7 cd com aspas e push, de fora', 'cd "<R>" && git commit -am x && git push', muda, 'fora'],
+    ['L script que faz o commit e falha', 'sh salvar.sh; exit 3', script, null, 'bash', null, 'limite'],
     // Palavra partida por aspas: ainda é a palavra.
     ['F7 palavra partida por aspas', "git com''mit -am x", muda],
   ];
@@ -113,31 +124,42 @@ function rodarTabela(RAIZ) {
     const r = hook('travas.js', { tool_name: tool, tool_input: { command: cmd }, cwd, hook_event_name: 'PreToolUse' });
     const dec = r.status === 2 ? 'bloqueia' : /"ask"/.test(r.stdout) ? 'pergunta' : 'passa';
     let levou = false; let aviso = null; let push = null; let semValor = !(r.stderr + r.stdout).includes(AWS);
+    let remoto = false;
     if (dec !== 'bloqueia') {
       const antes = git('git rev-parse HEAD', p).trim();
-      if (temDepois) hook('trava-depois.js', { tool_name: tool, tool_input: { command: 'git status' }, cwd: p, hook_event_name: 'PostToolUse' }); // o registro do HEAD anterior
-      const sem = cmd.replace(/ && git push$/, ''); // nada neste repositório tem remoto; o push não é o que está em prova aqui
-      if (shell === 'ps') spawnSync('powershell', ['-NoProfile', '-Command', sem], { cwd, windowsHide: true, encoding: 'utf8', timeout: 30000 });
-      else spawnSync(BASH, ['-c', sem], { cwd, windowsHide: true, encoding: 'utf8', timeout: 30000 });
+      // O registro do HEAD anterior, do jeito do Claude Code: a pasta da sessão.
+      if (temDepois) hook('trava-depois.js', { tool_name: tool, tool_input: { command: 'git status' }, cwd, hook_event_name: 'PostToolUse' });
+      const run = shell === 'ps' ? spawnSync('powershell', ['-NoProfile', '-Command', cmd], { cwd, windowsHide: true, encoding: 'utf8', timeout: 30000 })
+        : spawnSync(BASH, ['-c', cmd], { cwd, windowsHide: true, encoding: 'utf8', timeout: 30000 });
+      const falhou = run.status !== 0;
       const depois = git('git rev-parse HEAD', p).trim();
       if (antes !== depois) {
         const dif = execSync(`git diff --name-only ${antes} ${depois}`, { cwd: p, encoding: 'utf8', windowsHide: true, stdio: ['ignore', 'pipe', 'ignore'] });
         const conteudo = execSync(`git diff ${antes} ${depois}`, { cwd: p, encoding: 'utf8', windowsHide: true, stdio: ['ignore', 'pipe', 'ignore'] });
         levou = conteudo.split('\n').some((l) => l.startsWith('+') && l.includes(AWS)) || /\.env/.test(dif);
       }
+      remoto = noRemoto(p);
       if (levou && temDepois) {
-        const d = hook('trava-depois.js', { tool_name: tool, tool_input: { command: cmd }, cwd: p, hook_event_name: 'PostToolUse' });
-        aviso = /desfa[cç]a antes do push/i.test(d.stdout) && !d.stdout.includes(AWS);
-        const x = hook('travas.js', { tool_name: 'Bash', tool_input: { command: 'git push origin main' }, cwd: p, hook_event_name: 'PreToolUse' });
-        push = conteudoTemAltaCerteza(COM, cmd0, monta, envAcento) ? x.status === 2 : /"ask"/.test(x.stdout) && /\.env/.test(x.stdout);
+        // O mesmo comando, na pasta da sessão, pelo evento certo (o comando que falha chega no PostToolUseFailure).
+        const d = hook('trava-depois.js', { tool_name: tool, tool_input: { command: cmd }, cwd, hook_event_name: falhou ? 'PostToolUseFailure' : 'PostToolUse' });
+        aviso = /ATENÇÃO/.test(d.stdout) && !d.stdout.includes(AWS) && (!remoto || /Já foi publicado/.test(d.stdout));
+        // O push seguinte, do mesmo jeito que o commit chegou ao repositório.
+        const comandoPush = onde === 'fora' ? `cd "${R}" && git push` : 'git push';
+        const x = hook('travas.js', { tool_name: 'Bash', tool_input: { command: comandoPush }, cwd, hook_event_name: 'PreToolUse' });
+        if (onde === 'fora') push = /"ask"/.test(x.stdout) && /fora da sessão/.test(x.stdout);
+        else push = conteudoTemAltaCerteza(COM, cmd0, monta, envAcento) ? x.status === 2 : /"ask"/.test(x.stdout) && /\.env/.test(x.stdout);
         semValor = semValor && !(x.stderr + x.stdout).includes(AWS);
       }
     }
+    // Segredo no remoto só depois de uma pergunta que disse que ele não foi conferido (ou que a pasta é de fora).
+    const avisouPublicar = /não pôde ser conferido antes de publicar|fora da sessão/.test(r.stdout);
     let ok;
     if (esperado === 'passa') ok = dec === 'passa' && !levou;
-    else if (esperado === 'limite') ok = temDepois ? levou && aviso === true && push === true : !levou || dec !== 'passa';
-    else ok = (!levou || dec === 'pergunta') && (!levou || !temDepois || (aviso === true && push === true));
-    res.push({ nome, dec, levou, aviso, push, esperado, ok: ok && semValor });
+    else if (esperado === 'limite') ok = temDepois ? levou && aviso === true && push === true && !remoto : !levou || dec !== 'passa';
+    // De fora da sessão, o depois não roda git lá (B-2): vale a pergunta antes e a pergunta no push.
+    else if (onde === 'fora') ok = (!levou || dec === 'pergunta') && (!levou || !temDepois || push === true) && (!remoto || avisouPublicar);
+    else ok = (!levou || dec === 'pergunta') && (!levou || !temDepois || (aviso === true && (push === true || remoto))) && (!remoto || avisouPublicar);
+    res.push({ nome, dec, levou, aviso, push, remoto, esperado, ok: ok && semValor });
   }
   try { fs.rmSync(base, { recursive: true, force: true }); } catch (e) { /* antivírus segura arquivo */ }
   return { res, semShell: !BASH };
@@ -194,7 +216,7 @@ if (require.main === module) {
   const RAIZ = path.resolve(process.argv[2] || path.join(__dirname, '..'));
   const t0 = Date.now();
   const { res } = rodarTabela(RAIZ);
-  for (const x of res) console.log(`${x.ok ? 'ok   ' : 'FURO '} ${x.nome.padEnd(42)} ${x.dec.padEnd(9)} ${x.levou ? 'SEGREDO NO COMMIT' : '-'.padEnd(17)} depois=${x.aviso} push=${x.push}`);
+  for (const x of res) console.log(`${x.ok ? 'ok   ' : 'FURO '} ${x.nome.padEnd(42)} ${x.dec.padEnd(9)} ${x.levou ? 'SEGREDO NO COMMIT' : '-'.padEnd(17)} depois=${x.aviso} push=${x.push} remoto=${x.remoto}`);
   const simples = rodarSimples(RAIZ);
   for (const x of simples) if (!x.ok) console.log(`FALSO POSITIVO: ${x.forma.split('\n')[0]} → ${x.saida}`);
   const semPergunta = res.filter((x) => x.levou && x.dec === 'passa' && x.esperado !== 'limite').length;

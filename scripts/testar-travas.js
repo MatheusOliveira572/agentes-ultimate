@@ -205,7 +205,7 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
     const Tab = require(path.join(RAIZ, 'scripts', 'testar-travas-formas.js'));
     const { res } = Tab.rodarTabela(RAIZ);
     const furos = res.filter((f) => !f.ok);
-    caso(`0.8.0 2ª rodada tabela: ${res.length} formas rodadas; segredo no commit só depois de pergunta ou em limite declarado, sempre com aviso depois e barra no push`, res.length >= 47 && !furos.length, furos.map((f) => f.nome).join('; '));
+    caso(`0.8.0 2ª rodada tabela: ${res.length} formas rodadas; segredo no commit só depois de pergunta ou em limite declarado, sempre com aviso depois e barra no push`, res.length >= 52 && !furos.length, furos.map((f) => f.nome).join('; '));
     const simples = Tab.rodarSimples(RAIZ);
     const fp = simples.filter((f) => !f.ok);
     caso(`0.8.0 2ª rodada tabela: ${simples.length} formas simples sem segredo nunca perguntam, e o commit acontece`, simples.length >= 17 && !fp.length, fp.map((f) => f.forma + ' → ' + f.saida).join('; '));
