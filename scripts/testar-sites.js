@@ -460,6 +460,10 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const nomesM = ['foco invisível', 'pergunta fora do Tab (tabindex -1)', 'botão de pausa escondido', 'anel de foco sem contraste no rodapé', 'barra alta sem scroll-padding (foco sob a barra)', 'menu do celular não fecha ao seguir link', 'vidro a 45% sem desfoque', 'valor longo só na 3ª cena', 'ponto da maré baixa solto da curva', 'tábua de preços sem empilhar (320 px)'];
     caso('0.8.0 sites M-5: os pontos cegos da revisão viraram mutantes, todos pegos', nomesM.every((n) => (res.mutantes || []).some((m) => m.nome === n && m.pegou)), nomesM.filter((n) => !(res.mutantes || []).some((m) => m.nome === n && m.pegou)).join(', '));
     const html = ler(...PROVA, 'site-preamar.html');
+    const barras = [...html.matchAll(/class="amp-barra" style="width:([\d.]+)%"><\/span><span class="num">([\d.,]+)/g)].map((m) => [+m[1], +m[2].replace(/\./g, '').replace(',', '.')]);
+    const maxAmp = Math.max(...barras.map((b) => b[1]));
+    caso('0.8.0 sites b-13: Solo sem "calendário", semana mais baixa com aviso escrito, texto sem "linha em vermelho" e barras na proporção', !/Tábua, calendário/.test(html) && /▼ mínima/.test(html) && !/linha em vermelho/.test(html) &&
+      barras.length === 5 && barras.every(([w, v]) => Math.abs(w - (v / maxAmp) * 100) < 0.1), JSON.stringify(barras));
     caso('0.8.0 sites b-9: sem o calendário de calor nem o "saber antes"', !/saber antes|class="dias"|class="dia n\d/.test(html) && /Baixa-mar/.test(html), 'sobrou');
     caso('0.8.0 sites M-2: sem o bloco e os títulos parecidos com os de uma referência', !/Por que é pago|quanto sobra|Perguntas de quem/i.test(html), 'sobrou');
     caso('0.8.0 sites b-7: botões de plano levam ao fim da página, sem aria-label em parágrafo, pausa muda só o nome', /href="#fim">Testar o Solo/.test(html) && !/<p[^>]*aria-label/.test(html) && !/id="pausa" aria-pressed/.test(html), 'falta');
