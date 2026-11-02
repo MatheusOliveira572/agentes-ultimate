@@ -307,8 +307,11 @@ function out(contexto, mensagem) {
   sair();
 }
 
-let entrada = '';
-process.stdin.on('data', (c) => { entrada += c; });
-process.stdin.on('end', () => {
-  try { main(JSON.parse(entrada || '{}')); } catch (e) { sair(); }
-});
+if (require.main === module) {
+  let entrada = '';
+  process.stdin.on('data', (c) => { entrada += c; });
+  process.stdin.on('end', () => {
+    try { main(JSON.parse(entrada || '{}')); } catch (e) { sair(); }
+  });
+}
+module.exports = { referenciasDoPedido, normalizar };

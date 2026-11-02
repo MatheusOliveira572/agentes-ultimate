@@ -155,3 +155,12 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando revisar só a mudança ou na 2ª revisão da mesma entrega, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/revisar-mudanca.md`.
+- Quando revisar código, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/revisar-codigo.md`.
+- Quando revisar tela (semáforo, até 15 achados, "o que funciona", cobertura declarada), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/revisao-tela.md`.
+- Quando revisar animação (tabela Antes, Depois e Por quê; Bloquear ou Aprovar), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/movimento/INDICE.md`.
+- Quando pontuar UX, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/critica/INDICE.md`.

@@ -64,6 +64,15 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
 7. Veredito e lista do usuário → checagem: nada Bloqueante ou Alto aberto para "sim"; última linha do relatório =
    linha fixa do placar, com as contagens iguais às da lista de achados.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando revisar só a mudança ou na 2ª revisão da mesma entrega, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/revisar-mudanca.md`.
+- Quando revisar código, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/revisar-codigo.md`.
+- Quando revisar tela (semáforo, até 15 achados, "o que funciona", cobertura declarada), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/revisao-tela.md`.
+- Quando revisar animação (tabela Antes, Depois e Por quê; Bloquear ou Aprovar), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/movimento/INDICE.md`.
+- Quando pontuar UX, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/critica/INDICE.md`.
+
 ## Critério de pronto
 - [ ] Checagens decisivas rodadas por você, sem cache; placar de mutação registrado.
 - [ ] Achados classificados e com dono; veredito explícito.

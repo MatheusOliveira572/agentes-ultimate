@@ -147,6 +147,12 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B6 gerador: "Referências sob demanda" vem depois do protocolo comum, fora das 90 linhas', seisAg.indexOf('## Referências sob demanda') > seisAg.indexOf('## Protocolo comum'), 'seção antes do protocolo');
   caso('0.8.0 B6 licenças: sem licença não se copia; Apache pede marcar alterados e levar o NOTICE', /Sem licença\*\* \| \*\*não\*\*/.test(ler(...b6['advogado-contratos'].split('/'))) && /NOTICE/.test(ler(...b6['advogado-contratos'].split('/'))), 'falta');
 
+  // ---- Lotes 7 a 9 · designer-paineis, auditor-seguranca e revisor ----
+  for (const [ag, arqs] of Object.entries({ 'designer-paineis': ['design/metodo.md', 'design/INDICE.md', 'design/piso-de-qualidade.md', 'design/revisao-tela.md', 'design/visualizacao.md', 'design/movimento/INDICE.md', 'design/pior-caso.md', 'design/apple/INDICE.md'], 'auditor-seguranca': ['seguranca/INDICE.md', 'seguranca/metodo/contraprova.md', 'seguranca/metodo/source-aware-discovery.md', 'seguranca/metodo/fix-verification.md', 'seguranca/modos/diff.md'], revisor: ['metodo/revisar-mudanca.md', 'metodo/revisar-codigo.md', 'design/revisao-tela.md', 'design/critica/INDICE.md'] })) {
+    caso('0.8.0 B7-9 ' + ag + ': seção cita as referências do método', arqs.every((a) => secRef(ag).includes('/conhecimento/' + a)), arqs.filter((a) => !secRef(ag).includes('/conhecimento/' + a)).join(', ') || 'falta');
+  }
+  caso('0.8.0 B8 strix: guias com a alteração marcada e sem comando da ferramenta (record_coverage, agent_finish, jinja)', fs.readdirSync(path.join(RAIZ, 'conhecimento', 'seguranca', 'vulnerabilidades')).every((n) => { const s = ler('conhecimento', 'seguranca', 'vulnerabilidades', n); return /^<!-- Adaptado de usestrix\/strix\/[^\n]*alterado por agentes-ultimate/.test(s) && !/record_coverage|agent_finish|\{%/.test(s); }), 'guia sem marca ou com comando');
+  caso('0.8.0 B8 strix: as 29 classes de vulnerabilidade estão lá', ['sql-injection', 'xss', 'ssrf', 'idor', 'csrf', 'rce', 'llm-prompt-injection', 'agentic-system-security'].every((c) => fs.readdirSync(path.join(RAIZ, 'conhecimento', 'seguranca', 'vulnerabilidades')).some((n) => n.startsWith(c))), 'falta classe');
   // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
   v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });
   caso('0.8.0 B fontes: linha de crédito que cita fonte fora de fontes/fontes.json é erro', v.code === 1 && /cita fulano\/projeto-x, que não está em fontes\/fontes\.json/.test(v.out), v.out.slice(-300));
@@ -225,7 +231,14 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B índice: validar acusa referência sem os 2+1 pedidos de teste e o indice.json desatualizado', v.code === 1 && /sem-teste\.md: 3ª linha sem/.test(v.out) && /indice\.json desatualizado/.test(v.out), v.out.slice(-300));
   // Acionamento: para cada tema, 2 pedidos que puxam a referência e 1 que não puxa, contra o roteador real.
   let falhasAcion = [];
-  for (const r of ind.referencias) {
+  const Rot = require(path.join(RAIZ, 'hooks', 'roteador.js'));
+  for (const r of ind.referencias.filter((x) => x.arquivo.startsWith('conhecimento/seguranca/') && !x.arquivo.endsWith('INDICE.md') && !x.arquivo.endsWith('lista.md'))) {
+    // 69 guias: a mesma função do roteador, dentro do processo (abrir 200 processos levava minutos e pisca janela).
+    const puxa = (p) => Rot.referenciasDoPedido(Rot.normalizar(p), ['auditor-seguranca', 'engenheiro-software', 'revisor'], []).some((y) => y.arquivo === r.arquivo);
+    for (const p of r.teste.sim) if (!puxa(p)) falhasAcion.push(`"${p}" não puxou ${r.arquivo}`);
+    for (const p of r.teste.nao) if (puxa(p)) falhasAcion.push(`"${p}" puxou ${r.arquivo} sem dever`);
+  }
+  for (const r of ind.referencias.filter((x) => !(x.arquivo.startsWith('conhecimento/seguranca/') && !x.arquivo.endsWith('INDICE.md') && !x.arquivo.endsWith('lista.md')))) {
     // Referência de integração opcional (requer=…) só é testada com a integração ligada no config do projeto.
     fs.writeFileSync(cfgRef, JSON.stringify(r.requer ? { integracoes: [r.requer] } : {}));
     for (const p of (r.teste || {}).sim || []) { const x = rotRef(p); if (!x.refs.some((y) => y.arquivo === r.arquivo)) falhasAcion.push(`"${p}" não puxou ${r.arquivo}`); }
@@ -302,6 +315,10 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     /prefers-reduced-motion/.test(vidro) && /prefers-contrast/.test(vidro) && /pior fundo/i.test(vidro) && /no máximo 2–3 superfícies/.test(vidro) && /Power BI\*\* \| \*\*não há desfoque/.test(vidro) && /imagem de fundo pronta/.test(vidro), 'falta item');
   caso('0.8.0 B3 evals: designer-paineis e designer-documentos com os casos de equivalência Apple e o efeito vidro',
     /equivalência Apple/i.test(ler('evals', 'designer-paineis.md')) && /Efeito vidro/i.test(ler('evals', 'designer-paineis.md')) && /equivalência Apple/i.test(ler('evals', 'designer-documentos.md')), 'falta caso');
+
+  fs.writeFileSync(cfgRef, '{}');
+  const vd = rotRef('um card com efeito vidro estilo Apple');
+  caso('0.8.0 ponta a ponta: "um card com efeito vidro estilo Apple" → designer e engenheiro, materiais e Apple, e o /checklist-lancamento', /designer-paineis/.test(vd.agentes) && /engenheiro-software/.test(vd.agentes) && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/materiais.md') && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/INDICE.md') && /\/checklist-lancamento/.test(vd.t), JSON.stringify(vd.refs));
 
   // Ponta a ponta (critério do usuário): pedido amplo aciona tudo sozinho. Liga no lote 3 (conteúdo de design).
   const E2E = existe('conhecimento', 'design', 'metodo.md');

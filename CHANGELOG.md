@@ -121,6 +121,12 @@ falhando antes.
 - **B6 · `analista-compliance`, `especialista-lgpd`, `advogado-contratos`, `engenheiro-dados`, `dev-powerbi`** (~7 KB): gravidade calibrada e exceções
   com dono e validade (strix Apache-2.0, addy MIT), dado para serviço externo e licenças abertas (texto nosso); seção e caso de eval nos 5.
   `gerar-agentes.js` passa a pôr "Referências sob demanda" depois do protocolo comum: é índice e não conta nas 90 linhas (os 3 primeiros estavam em 89).
+- **B7 · `designer-paineis`:** seção de referências (método amplo, carga por assunto com teto, piso, revisão com semáforo, gráficos, movimento, pior
+  caso, Apple) e caso de eval.
+- **B8 · `auditor-seguranca` e `conhecimento/seguranca/`** (~640 KB, sob demanda): guias do strix (Apache-2.0, 69 arquivos, em inglês, com a alteração marcada,
+  sem cabeçalho, jinja e comandos da ferramenta): 29 classes de vulnerabilidade, frameworks, tecnologias, protocolos, nuvem, dependências, método (contraprova,
+  gravidade, verificar correção, varredura) e modos; índice em português; lista de construção (addy, MIT). Varredura ofensiva não entra.
+- **B9, parte de revisão · `revisor`:** revisar só a mudança e passe de veredito (Jakub, impeccable), revisão de código com 5 eixos e rótulos (addy).
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
