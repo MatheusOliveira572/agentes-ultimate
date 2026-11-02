@@ -1,5 +1,7 @@
 // Verificador do projeto e sugestão de compactar, chamados pelo hooks/atividade.js (sem abrir processo de gancho a mais).
-// Verificador: .claude/base/config.json → "verificador": { "comando": ["node", "regras.js", "{arquivo}"], "extensoes": [".js"], "aoParar": ["npm.cmd", "test"] }.
+// Verificador: .claude/base/config.json → "verificador": { "comando": ["node", "node_modules/eslint/bin/eslint.js", "{arquivo}"], "extensoes": [".js"],
+// "aoParar": ["node", "scripts/testes.js"] }. No Windows, programa .cmd (npm, npx, eslint, prettier) não roda sem shell: chame o .js
+// dele com o node, como acima. Nome de arquivo que começa com "-" vai como "./-nome", para não virar opção do programa.
 // O comando é uma lista e roda sem shell: o nome do arquivo editado vai como argumento e nunca é interpretado (%VAR%, $(...), aspas).
 // Comando em texto, na edição, não roda (só avisa para usar a lista). "aoParar" em texto roda pelo shell: é fixo, sem nome de arquivo.
 // Sem config, silêncio. Falhou → aviso. Passou do tempo (5 s na edição, 30 s ao parar) → corta e avisa; nunca trava o trabalho.
@@ -27,7 +29,8 @@ function aoEditar(cwd, rel) {
   if (!c || !c.comando || !rel) return null;
   if (Array.isArray(c.extensoes) && !c.extensoes.includes(path.extname(rel))) return null;
   if (!Array.isArray(c.comando)) return 'verificador não rodou: "comando" precisa ser uma lista, como ["node", "regras.js", "{arquivo}"] (em texto, o nome do arquivo passaria por um shell)';
-  return rodar(c.comando.map((a) => String(a).split('{arquivo}').join(rel)), cwd, 5000);
+  const arg = rel.startsWith('-') ? './' + rel : rel;
+  return rodar(c.comando.map((a) => String(a).split('{arquivo}').join(arg)), cwd, 5000);
 }
 function aoParar(cwd) {
   const c = config(cwd);

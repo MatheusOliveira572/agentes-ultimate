@@ -116,6 +116,13 @@ module.exports = function testarPainel({ caso, tmp, RAIZ, hook }) {
     const viu = fs.existsSync(recebido) ? fs.readFileSync(recebido, 'utf8') : '(nada)';
     caso('0.8.0 A-5 verificador: o nome "' + nomeA5 + '" chega literal, sem shell', viu === nomeA5, viu);
   }
+  // b-14: nome que começa com "-" chega como "./-nome", e não vira opção do programa.
+  try { fs.unlinkSync(recebido); } catch (e) { /* */ }
+  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: ['node', sonda, '{arquivo}', recebido] } }));
+  hook('atividade.js', { hook_event_name: 'PostToolUse', cwd: pv, session_id: 'V', tool_name: 'Edit', tool_input: { file_path: path.join(pv, '--x.js') } });
+  const viuB14 = fs.existsSync(recebido) ? fs.readFileSync(recebido, 'utf8') : '(nada)';
+  caso('0.8.0 b-14 verificador: nome que começa com "-" chega como "./--x.js"', viuB14 === './--x.js', viuB14);
+  caso('0.8.0 b-14 verificador: o comentário traz exemplo que roda no Windows e avisa que .cmd não roda sem shell', /\["node", "node_modules\/eslint\/bin\/eslint\.js", "\{arquivo\}"\]/.test(fs.readFileSync(path.join(RAIZ, 'hooks', 'verificador.js'), 'utf8')) && /\.cmd[^\n]*não roda sem shell/.test(fs.readFileSync(path.join(RAIZ, 'hooks', 'verificador.js'), 'utf8')), 'comentário');
   fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: 'node ' + sonda + ' {arquivo} ' + recebido } }));
   try { fs.unlinkSync(recebido); } catch (e) { /* */ }
   xv = edita();
