@@ -26,11 +26,11 @@ Na dúvida se a página é uma coisa ou outra: a pessoa veio ler e decidir (land
 - Texto sobre material com os níveis de vibração do sistema: normal para texto padrão, secundário para nota e subtítulo,
   terciário só para inativo que não precisa ser muito legível. (HIG › Materials › visionOS)
 - O piso de qualidade recusa **vidro como enfeite** (`../piso-de-qualidade.md`): se o vidro não separa controle de
-  conteúdo, tire.
+  conteúdo, tire, em tela de produto. Em landing page vale a seção "Cartão de vidro em landing page".
 
 ## Como fazer na web (CSS; MDN: `backdrop-filter`, `@supports`, `prefers-reduced-transparency`)
 ```css
-.vidro {                               /* barra ou cartão FLUTUANTE sobre conteúdo */
+.vidro {                               /* barra, menu ou controle FLUTUANTE (cartão de landing: receita abaixo) */
   background: rgb(255 255 255 / 0.55); /* fundo translúcido (escuro: rgb(28 28 30 / 0.55)) */
   -webkit-backdrop-filter: blur(16px) saturate(170%);
   backdrop-filter: blur(16px) saturate(170%);
@@ -60,10 +60,9 @@ cor única ou luz larga, sem foto, sem texto e sem nada em movimento por trás.
 ```
 - **[ESTIMATIVA: ponto de partida nosso]** fundo 72–88% de opacidade, desfoque 8–12 px, borda a 10–15%. O valor exato acima
   (82%, 10 px) foi usado e medido em `docs/provas/0.8.0-sites/`; a faixa não foi medida.
-- **Superfície tonal** (visto nas referências estudadas, [MEDIDO]): branco a 3–10%, borda a 10–15% e desfoque de 4 px sobre
-  escuro homogêneo. O número é transparente, mas quem trabalha é a cor: só serve com fundo que não varia. Na dúvida, use o
-  cartão acima.
-- **Não serve em landing:** sobre foto ou vídeo sem o véu de 35–60%, vidro sobre vidro, tabela ou texto longo.
+- **Superfície tonal** (visto nas referências estudadas, [MEDIDO]): branco a 3–10% sobre escuro homogêneo. É o
+  contrário de pouca transparência: não use no cartão. Fica registrada como medida, não como opção.
+- **Não serve em landing:** sobre foto ou vídeo, sobre gradiente em movimento, vidro sobre vidro, tabela ou texto longo.
 
 ## Variantes [ESTIMATIVA: ponto de partida nosso]
 | Variante | Cor | Desfoque e saturação | Borda | Sombra | Uso |

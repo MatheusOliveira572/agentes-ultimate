@@ -8,8 +8,9 @@ Repertório, não lista de compras. Origem: [VISTO] nas referências estudadas, 
 ## A. Superfície e luz
 
 ### A1. Vidro [VISTO]
-Ver `../../apple/materiais.md`. Desfoque e translucidez sobre fundo variado. **Exagera:** em tudo; sobre texto em
-movimento. **Reduzido:** sem reflexo animado.
+Ver `../../apple/materiais.md`. Em landing page, só cartão com pouca transparência (72–88%) sobre fundo calmo: cor única ou
+luz larga, sem foto nem movimento atrás. Em tela de produto, só navegação e controles. **Exagera:** em tudo; sobre texto em
+movimento; translúcido sem desfoque. **Reduzido:** sem reflexo animado; com transparência reduzida, opaco.
 
 ### A2. Brilho que segue o mouse (spotlight) [MERCADO]
 - **O que é:** luz radial suave sobre uma grade de cartões, ou na borda deles, onde o ponteiro está.

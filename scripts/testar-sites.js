@@ -135,6 +135,27 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   caso('0.8.0 sites vidro: acréscimos do estudo (sem desfoque é defeito, raiz do fundo, opaco não desfoca, luz de 1 px, suporte)',
     /sem desfoque é defeito/i.test(vid) && /mix-blend-mode/.test(vid) && /superfície opaca/.test(vid) && /luz/.test(vid) && /Baseline 2024/.test(vid), 'falta acréscimo');
 
+  // M-3: a regra do vidro, conferida pelo conteúdo e não só por palavras soltas; os mutantes têm de ser pegos.
+  const regrasVidro = (m, ef) => {
+    const p = [];
+    const al = +((m.match(/\.cartao-landing \{[\s\S]*?background: rgb\([^/]*\/ (0?\.\d+)\)/) || [])[1] || 0);
+    if (!(al >= 0.72 && al <= 0.88)) p.push('cartão de landing fora de 72–88%: ' + al);
+    if (!/sem foto, sem texto e sem nada em movimento/.test(m)) p.push('fundo calmo sem a definição');
+    if (/sem o véu/.test(m)) p.push('"sem o véu" sugere que com véu serve');
+    if (!/cartão de landing: receita abaixo/.test(m)) p.push('.vidro genérico sem dizer que não é o cartão de landing');
+    if (/Superfície tonal/.test(m) && !/não use no cartão/.test(m)) p.push('superfície tonal sem a ressalva');
+    if (!/se o vidro não separa controle de[\s\S]{0,80}em tela de produto/.test(m)) p.push('"se não separa controle, tire" sem a ressalva da landing');
+    const a1 = (ef.split('### A1.')[1] || '').split('### A2.')[0];
+    if (/fundo variado/.test(a1) || !/fundo calmo/.test(a1)) p.push('efeito A1 contradiz a decisão');
+    return p;
+  };
+  const mat = ler('conhecimento', 'design', 'apple', 'materiais.md'), sup = lerSP('efeitos', 'superficie-e-fundos.md');
+  caso('0.8.0 sites M-3: materiais.md e o efeito A1 seguem a decisão do vidro (landing = cartão, pouca transparência, fundo calmo)', !regrasVidro(mat, sup).length, regrasVidro(mat, sup).join('; '));
+  const mutV = [['cartão a 30%', mat.replace('background: rgb(22 42 58 / 0.82);', 'background: rgb(22 42 58 / 0.30);'), sup],
+    ['regra trocada', mat.replace('sem foto, sem texto e sem nada em movimento', 'foto, vídeo ou gradiente em movimento'), sup],
+    ['A1 sobre fundo variado', mat, sup.replace(/fundo calmo/g, 'fundo variado')]];
+  caso('0.8.0 sites M-3: os mutantes do vidro (cartão a 30%, regra trocada, A1 sobre fundo variado) são pegos', mutV.every(([, m, e]) => regrasVidro(m, e).length > 0), mutV.filter(([, m, e]) => !regrasVidro(m, e).length).map((x) => x[0]).join(', '));
+
   // ---- Prova ----
   const PROVA = ['docs', 'provas', '0.8.0-sites'];
   const res = (() => { try { return JSON.parse(ler(...PROVA, 'resultado.json')); } catch (e) { return null; } })();
@@ -151,7 +172,17 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     caso('0.8.0 sites prova: prefers-reduced-transparency testado (sem desfoque, fundo ≥ 96%)', rt.media_ativa === true && rt.com_desfoque === 0 && rt.alfa_minimo >= 0.96 && rt.contraste_falhas === 0, JSON.stringify(rt));
     caso('0.8.0 sites prova: sem JS o conteúdo está inteiro', (res.sem_js || {}).texto_completo === true, JSON.stringify(res.sem_js));
     const mut = res.mutantes || [];
-    caso('0.8.0 sites prova: as checagens falham no caso errado (mutantes)', mut.length >= 5 && mut.every((m) => m.pegou === true), JSON.stringify(mut));
+    caso('0.8.0 sites prova: as checagens falham no caso errado (mutantes)', mut.length >= 20 && mut.every((m) => m.pegou === true), JSON.stringify(mut));
+    const tk = res.teclado || [];
+    caso('0.8.0 sites A-2: teclado real em 2 temas e 2 larguras (foco fora da barra, anel ≥ 3:1, pausa alcançável) e menu que fecha', tk.length === 3 && tk.every((x) => x.paradas >= 15 && x.tem_pausa && !x.sob_a_barra.length && !x.anel_fraco.length && x.pior_anel >= 3) &&
+      !!res.menu && res.menu.fecha_ao_seguir_link && res.menu.fecha_com_esc && res.menu.titulo_visivel, JSON.stringify(tk.map((x) => [x.sob_a_barra, x.anel_fraco])) + JSON.stringify(res.menu));
+    caso('0.8.0 sites M-4: ponto da maré baixa na curva em cada cena, em 1440 e 390 px', (res.curva || []).length === 6 && res.curva.every((x) => x.ok), JSON.stringify(res.curva));
+    caso('0.8.0 sites M-5: cada cena da simulação sem texto cortado, sobreposto ou sem contraste', (res.cenas || []).length === 6 && res.cenas.every((x) => !x.rolagem_lateral && !x.texto_cortado && !x.texto_sobreposto && !x.contraste_falhas), JSON.stringify(res.cenas));
+    const lgs = res.larguras || [];
+    caso('0.8.0 sites M-6: 320, 768, 905, 960, 1024, 1100, 1440 e 1920 px sem rolagem lateral, texto cortado, espremido ou sobreposto', [320, 768, 905, 960, 1024, 1100, 1440, 1920].every((l) => lgs.some((x) => x.largura === l && !x.erros_js && !x.rolagem_lateral && !x.texto_cortado && !x.texto_espremido && !x.texto_sobreposto && !x.contraste_falhas)), JSON.stringify(lgs.map((x) => [x.largura, x.rolagem_lateral, x.texto_espremido])));
+    caso('0.8.0 sites M-5: vidro dentro da regra nas 4 capturas', cap.every((c) => c.vidro_fora_da_regra === 0), JSON.stringify(cap.map((c) => c.detalhe_vidro)));
+    const nomesM = ['foco invisível', 'botão de pausa escondido', 'anel de foco sem contraste no rodapé', 'barra alta sem scroll-padding (foco sob a barra)', 'menu do celular não fecha ao seguir link', 'vidro a 45% sem desfoque', 'valor longo só na 3ª cena', 'ponto da maré baixa solto da curva', 'tábua de preços sem empilhar (768 px)'];
+    caso('0.8.0 sites M-5: os pontos cegos da revisão viraram mutantes, todos pegos', nomesM.every((n) => (res.mutantes || []).some((m) => m.nome === n && m.pegou)), nomesM.filter((n) => !(res.mutantes || []).some((m) => m.nome === n && m.pegou)).join(', '));
     const html = ler(...PROVA, 'site-preamar.html');
     caso('0.8.0 sites M-2: sem o bloco e os títulos parecidos com os de uma referência', !/Por que é pago|quanto sobra|Perguntas de quem/i.test(html), 'sobrou');
     caso('0.8.0 sites b-7: botões de plano levam ao fim da página, sem aria-label em parágrafo, pausa muda só o nome', /href="#fim">Testar o Solo/.test(html) && !/<p[^>]*aria-label/.test(html) && !/id="pausa" aria-pressed/.test(html), 'falta');
