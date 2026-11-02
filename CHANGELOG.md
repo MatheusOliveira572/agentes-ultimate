@@ -1,9 +1,9 @@
 # Mudanças
 
-## 0.8.0 · 2026-11-03
+## 0.8.0 · 2026-11-02
 Partes, na ordem em que foram feitas: A (regras dos checklists do autor), B (conteúdo dos 10 projetos lido sob demanda),
-o lote de sites, as rodadas da trava de segredo, o vigia das fontes, as provas de design, o padrão "impressiona" e a
-revisão final antes de publicar. Revisões independentes em `docs/historico/`.
+o lote de sites, as rodadas da trava de segredo, o vigia das fontes, as provas de design, o padrão "impressiona", os mundos
+visuais, o nível HD, a revisão final antes de publicar e a conferência antes do push. Revisões independentes em `docs/historico/`.
 
 ### Parte A: regras dos checklists do autor do plugin
 Fonte: `docs/pesquisas/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
@@ -442,6 +442,9 @@ Correção do usuário: "não é tudo que vai ser padrão Apple ou com vidro"; "
 - **Roteamento:** pedido premium sem estilo puxa `mundos/INDICE.md`, não mais a HIG da Apple; o modelo de `PROJETO.md`
   ganha a seção "Gosto visual". Casos novos em `testar-impressionar.js` (vistos pegando 9 de 9 mutantes) e evals de
   regressão nos designers e no revisor.
+- **Mostruário dos 10 mundos (mt106):** `docs/provas/0.8.0-design/mundos/`, a mesma tela fictícia desenhada em cada mundo,
+  com as molas geradas por `modelos/mola-linear.js`, capturas a 2× em WebP (6,9 MB → 1,2 MB) e um verificador com mutações
+  que têm de falhar (número, contraste, foco, gráfico, quebra, desenho e nitidez da fonte pixel).
 
 ### Nível HD (hd102, hd103, hd105)
 Revisão do usuário: "tirar a cara de trabalho amador: movimentos e transições, acabamentos mais HD"; o padrão é o **nível**,
@@ -459,7 +462,7 @@ em qualquer mundo.
 - **Proposta aplicada:** `vitrine/proposta-padrao-hd.md` saiu da prova (continua no histórico do git); os LEIA-MEs citam
   `nivel-hd.md`.
 - **Provas em WebP:** 39 capturas de `docs/provas/0.8.0-design/` (e2e e vitrine) convertidas por `scripts/comprimir-provas.js`
-  (74,7 MB → 5,7 MB) e 10 sem citação apagadas; citações trocadas para `.webp`. O repositório passou de 97,0 MB para 14,6 MB.
+  (74,7 MB → 5,7 MB) e 10 sem citação apagadas; citações trocadas para `.webp`. O repositório passou de 97,0 MB para 15,9 MB (já com o mostruário).
 
 ### Revisão final antes de publicar (`docs/historico/revisao-0.8.0-final.md`)
 - **A-1:** versão 0.8.0 no `plugin.json` (sem subir o número, quem tem a 0.7.0 não recebe a nova).
@@ -481,6 +484,15 @@ em qualquer mundo.
   revisões vão para `docs/historico/` e pesquisas e planos para `docs/pesquisas/`.
 - **Capturas em WebP** (`scripts/comprimir-provas.js`, pelo Edge ou Chrome sem interface): as provas da 0.7.0 e do lote de sites
   passam de PNG a WebP, com o texto legível; os verificadores continuam gravando PNG, e o script converte antes do commit.
+
+### Conferência antes do push (`docs/historico/revisao-0.8.0-conferencia.md`)
+- **A-3:** a atualização diária volta a rodar para quem instalou o Claude Code pelo npm (`claude.cmd`): sem shell, o Windows só
+  acha `claude.exe`; com `ENOENT`, o `atualizar.js` refaz pelo `cmd.exe /d /s /c` com texto fixo e `windowsHide`, sem
+  `detached`, e grava o motivo no `atualizacao.log`. Caso com um `claude.cmd` falso: os 2 comandos rodam e a janela fica escondida.
+- **M-7:** a saída da mutação da vitrine não traz mais a pasta do usuário; o `verificar.js` grava `<pasta>` no lugar.
+- **M-8:** a descrição do `designer-sites` manda tela de app ao `designer-interface` (e painel ao `designer-paineis`).
+- **Baixos:** este CHANGELOG com o mostruário e a data (b-8, b-10); LEIA-ME das provas de design em dia (b-9); README com a
+  régua, os mundos e o nível HD (b-11); caso que pega "Apple é o padrão" na régua (b-12).
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/pesquisas/plano-0.7.md`):**
