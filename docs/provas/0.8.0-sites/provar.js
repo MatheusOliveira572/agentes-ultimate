@@ -236,7 +236,7 @@ const FOCO = `(function () {
   var e = document.activeElement; if (!e || e === document.body) return null;
   var q = e.getBoundingClientRect(), n = document.querySelector('.nav').getBoundingClientRect(), cs = getComputedStyle(e), dentroNav = !!e.closest('.nav, .pular');
   var el = document.elementFromPoint(q.left + q.width / 2, q.top + q.height / 2);
-  return { id: e.id || e.getAttribute('data-cena') || '', nome: (e.textContent || '').trim().slice(0, 28), l: q.left, t: q.top, r: q.right, b: q.bottom, navBase: n.bottom, altura: innerHeight, dentroNav: dentroNav,
+  return { k: e.getAttribute('data-foco-k') || 'fora da lista', id: e.id || e.getAttribute('data-cena') || '', nome: (e.textContent || '').trim().slice(0, 28), l: q.left, t: q.top, r: q.right, b: q.bottom, navBase: n.bottom, altura: innerHeight, dentroNav: dentroNav,
     coberto: !dentroNav && (q.top < n.bottom - 1 || q.bottom > innerHeight + 1 || !el || !(el === e || e.contains(el) || el.contains(e))),
     estilo: cs.outlineStyle, larg: parseFloat(cs.outlineWidth) || 0, off: parseFloat(cs.outlineOffset) || 0, cor: cs.outlineColor.match(/[\\d.]+/g).map(Number) };
 })()`;
@@ -257,12 +257,22 @@ async function medirAnel(b, x) {
 async function medirTeclado(b, url, tema, largura) {
   await midia(b, [{ name: 'prefers-color-scheme', value: tema === 'escuro' ? 'dark' : 'light' }]); await janela(b, largura); await ir(b, url); await espera(1500); await fixarCena(b);
   await b.ev('document.activeElement.blur(); scrollTo(0,0)'); await espera(300);
-  const paradas = [], sob = [], anel = []; let piorAnel = 99;
+  // Lista esperada: todo controle visível (link, botão, resumo de pergunta, campo), inclusive com tabindex="-1", que tira
+  // o controle do teclado e é justamente o defeito a pegar.
+  const esperados = await b.ev(`(function () {
+    var l = []; document.querySelectorAll('a[href], button, summary, input:not([type=hidden]), select, textarea, [tabindex]').forEach(function (e, i) {
+      var cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden' || !e.getClientRects().length) return;
+      var d = e.closest('details'); if (d && !d.open && e.tagName !== 'SUMMARY') return;
+      if (e.matches('input[type=radio]') && !e.checked && document.querySelector('input[name="' + e.name + '"]:checked')) return;
+      e.setAttribute('data-foco-k', 'k' + i); l.push({ k: 'k' + i, nome: (e.textContent || e.value || e.tagName).trim().slice(0, 28) });
+    }); return l;
+  })()`);
+  const paradas = [], ks = [], sob = [], anel = []; let piorAnel = 99;
   for (let i = 0; i < 70; i++) {
     await tecla(b, 'Tab', 'Tab', 9); await assenta(b);
     const x = await b.ev(FOCO); if (!x) break;
-    if (paradas.length && x.nome === paradas[0]) break;
-    paradas.push(x.nome);
+    if (ks.length && x.k === ks[0]) break;
+    paradas.push(x.nome); ks.push(x.k);
     if (x.coberto) sob.push('Tab ' + x.nome);
     const r = await medirAnel(b, x); piorAnel = Math.min(piorAnel, r); if (r < 3) anel.push(x.nome + ':' + r.toFixed(2));
   }
@@ -272,7 +282,8 @@ async function medirTeclado(b, url, tema, largura) {
     const x = await b.ev(FOCO); if (!x) break;
     if (x.coberto) sob.push('Shift+Tab ' + x.nome);
   }
-  return { tema, largura, paradas: paradas.length, voltas, tem_pausa: paradas.some((n) => /Pausar|Retomar/.test(n)), sob_a_barra: sob, anel_fraco: anel, pior_anel: +piorAnel.toFixed(2), erros_js: b.erros.length };
+  const faltam = esperados.filter((e) => !ks.includes(e.k)).map((e) => e.nome), sobram = ks.filter((k) => !esperados.some((e) => e.k === k));
+  return { tema, largura, paradas: paradas.length, esperadas: esperados.length, faltam, sobram, voltas, tem_pausa: paradas.some((n) => /Pausar|Retomar/.test(n)), sob_a_barra: sob, anel_fraco: anel, pior_anel: +piorAnel.toFixed(2), erros_js: b.erros.length };
 }
 async function medirMenu(b, url) {
   await midia(b, [{ name: 'prefers-color-scheme', value: 'light' }]); await janela(b, 390); await ir(b, url); await espera(400);
@@ -323,7 +334,7 @@ async function medirLargura(b, url, l) {
   return { largura: l, erros_js: c.erros_js, rolagem_lateral: c.rolagem_lateral, texto_cortado: c.texto_cortado, detalhe_cortado: c.detalhe_cortado, texto_espremido: c.texto_espremido, detalhe_espremido: c.detalhe_espremido, texto_sobreposto: c.texto_sobreposto, detalhe_sobreposto: c.detalhe_sobreposto, contraste_falhas: c.contraste_falhas, detalhe_falhas: c.detalhe_falhas, titulos_cobertos: c.titulos_cobertos };
 }
 const larguraOk = (x) => !x.erros_js && !x.rolagem_lateral && !x.texto_cortado && !x.texto_espremido && !x.texto_sobreposto && !x.contraste_falhas && !x.titulos_cobertos;
-const tecladoOk = (x) => x.paradas >= 15 && x.tem_pausa && !x.sob_a_barra.length && !x.anel_fraco.length && !x.erros_js;
+const tecladoOk = (x) => x.esperadas > 0 && !x.faltam.length && !x.sobram.length && x.tem_pausa && !x.sob_a_barra.length && !x.anel_fraco.length && !x.erros_js;
 const menuOk = (m) => m.abriu && m.fecha_ao_seguir_link && m.titulo_visivel && m.fecha_com_esc && m.foco_volta;
 async function soUma(qual) {
   const url = urlDe(ARQ_SITE); let b = await abrirEdge(); fs.mkdirSync(PNG, { recursive: true });
@@ -449,6 +460,9 @@ async function provarSite() {
   gravarRes({ mutantes }); await novo();
   c = await medirTeclado(b, mut('foco', ':focus-visible { outline: 2px solid var(--anel);', ':focus-visible { outline: none;'), 'claro', 1440);
   mutantes.push({ nome: 'foco invisível', pegou: !tecladoOk(c) });
+  gravarRes({ mutantes }); await novo();
+  c = await medirTeclado(b, mut('tabindex', '<details class="p"><summary>', '<details class="p"><summary tabindex="-1">'), 'claro', 1440);
+  mutantes.push({ nome: 'pergunta fora do Tab (tabindex -1)', pegou: c.faltam.length > 0 });
   gravarRes({ mutantes }); await novo();
   c = await medirTeclado(b, mut('pausa', '</style>', '.pausa { display: none !important; }</style>'), 'claro', 1440);
   mutantes.push({ nome: 'botão de pausa escondido', pegou: !c.tem_pausa });
