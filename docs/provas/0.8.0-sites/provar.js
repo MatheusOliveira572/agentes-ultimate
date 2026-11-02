@@ -653,7 +653,8 @@ function gravarQuadro() {
   const linhas = IDS.map((id) => {
     const r = e.find((x) => x.id === id);
     if (!r || !estavel(id)) return `| ${id} | ${r ? r.nome : '—'} | [ESTIMATIVA: ${oscila(id) ? 'oscila entre rodadas: p95 ' + tempos(id).join(' / ') + ' ms' + (ult.some((x) => !x.ids.includes(id)) ? '; reprovou em ' + ult.filter((x) => !x.ids.includes(id)).length + ' de ' + ult.length : '') : 'não provado na bancada'}] | ${r ? r.valor : '—'} | ${r ? r.p95_ms + ' ms' : '—'} | ${r && r.reduzido_ok ? 'sim' : 'não'} | ${r && r.props && r.props.length ? r.props.join(', ') : '—'} |`;
-    return `| ${id} | ${r.nome} | PROVADO${r.p95_ms > 30 ? " (perto do limite de 34 ms)" : ""} | ${r.valor} | ${r.p95_ms} ms | sim | ${r.props && r.props.length ? r.props.join(', ') : r.tipo === 'estatico' ? 'sem animação (efeito parado)' : 'por JS (requestAnimationFrame) ou transição já encerrada na medida'} |`;
+    const pior = Math.max(...tempos(id));
+    return `| ${id} | ${r.nome} | PROVADO${pior > 30 ? " (perto do limite de 34 ms)" : ""} | ${r.valor} | ${pior} ms (pior de ${tempos(id).length}: ${tempos(id).join(" / ")}) | sim | ${r.props && r.props.length ? r.props.join(', ') : r.tipo === 'estatico' ? 'sem animação (efeito parado)' : 'por JS (requestAnimationFrame) ou transição já encerrada na medida'} |`;
   }).join('\n');
   const provados = IDS.filter(estavel).length;
   const txt = `<!-- Texto próprio do agentes-ultimate. Gerado por docs/provas/0.8.0-sites/provar.js a partir de resultado.json. -->
@@ -671,7 +672,7 @@ ${provados} de ${IDS.length} efeitos passaram na bancada (rodadas seguidas: ${(r
 nosso]. Quadro por \`requestAnimationFrame\` sobe com carga na linha principal; com pintura cara, o controle de desfoque não sobe sempre (nesta rodada: ${((res.efeitos_controles || []).find((c) => c.informativo) || {}).p95_ms} ms), então **custo de pintura e de compositor não está medido**: vidro, aurora e sombra precisam de aparelho real. Teclado e leitor de tela: só o
 que está na página de prova (\`site-preamar.html\`), não em cada efeito. Os avançados do grupo G não foram construídos.
 
-| Efeito | Nome | Situação | Valor usado | p95 do quadro | Reduzido testado | Propriedades animadas |
+| Efeito | Nome | Situação | Valor usado | p95 do quadro, pior rodada | Reduzido testado | Propriedades animadas |
 |---|---|---|---|---|---|---|
 ${linhas}
 `;
