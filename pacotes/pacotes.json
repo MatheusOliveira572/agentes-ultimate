@@ -233,7 +233,8 @@
         "ui do sistema",
         "interface do sistema",
         "front-end do sistema",
-        "frontend do sistema"
+        "frontend do sistema",
+        "onboarding do app"
       ]
     },
     "sites": {
@@ -294,7 +295,11 @@
         "pagina de vendas da minha",
         "pagina de vendas para",
         "pagina de vendas do curso",
-        "pagina de vendas do produto"
+        "pagina de vendas do produto",
+        "novo site de",
+        "site para o meu",
+        "site para a minha",
+        "site moderno"
       ],
       "pares": {
         "_como_usar": "Verbo + artigo opcional + \"novo\" opcional + alvo = 2 pontos (ex.: \"crie um site\", \"refaça a homepage\", \"faça o site novo\"). Verbo sem o alvo logo depois não pontua.",
