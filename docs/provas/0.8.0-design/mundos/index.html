@@ -1,0 +1,374 @@
+<!doctype html>
+<!-- Mostruário dos 10 mundos visuais do agentes-ultimate (prova de design mt106). Texto, desenho e código próprios.
+     A mesma tela fictícia (Estação Maré) em cada mundo de conhecimento/design/mundos/. Fontes: Google Fonts (SIL OFL 1.1). -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mundos visuais: a mesma tela, dez mundos, o mesmo nível</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d1d1f'/%3E%3Cpath d='M5 19c3 0 3-3 5.5-3s3 3 5.5 3 3-3 5.5-3 3 3 5.5 3' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Inter+Tight:wght@500..700&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Public+Sans:wght@400..800&family=Young+Serif&family=Instrument+Sans:ital,wght@0,400..600;1,400..600&family=Geist:wght@400..600&family=Geist+Mono:wght@400..500&family=Fredoka:wght@500..700&family=Nunito:wght@400..900&family=Cormorant+Garamond:wght@300..500&family=Manrope:wght@400..600&family=Space+Grotesk:wght@500..700&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=VT323&family=JetBrains+Mono:wght@400..700&display=swap">
+<link rel="stylesheet" href="../../../../modelos/liquid-glass/liquido.css">
+<link rel="stylesheet" href="molas.css">
+<link rel="stylesheet" href="mostruario.css">
+<link rel="stylesheet" href="mundos.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<a class="pular" href="#apple-liquid-glass">Pular para os mundos</a>
+
+<!-- Ícones próprios, traço único; a espessura vem do mundo (stroke-width no svg que usa). -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-vento" viewBox="0 0 24 24"><path fill="none" stroke-linecap="round" stroke-linejoin="round" d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></symbol>
+  <symbol id="i-agua" viewBox="0 0 24 24"><path fill="none" stroke-linecap="round" stroke-linejoin="round" d="M12 3.5c3 4 6 7.3 6 10.5a6 6 0 0 1-12 0c0-3.2 3-6.5 6-10.5Z"/></symbol>
+  <symbol id="i-mare" viewBox="0 0 24 24"><path fill="none" stroke-linecap="round" stroke-linejoin="round" d="M3 18c2 0 2.2-1.6 4.5-1.6S10 18 12 18s2.2-1.6 4.5-1.6S19 18 21 18M12 13.5V4M8.5 7.5 12 4l3.5 3.5"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><path fill="none" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-seta" viewBox="0 0 24 24"><path fill="none" stroke-linecap="round" stroke-linejoin="round" d="M4 12h15M13 6l6 6-6 6"/></symbol>
+</svg>
+
+<header class="topo">
+  <p class="topo-sobre">agentes-ultimate · prova de design 0.8.0</p>
+  <h1>A mesma tela, dez mundos, o mesmo nível</h1>
+  <p class="topo-frase">Uma tela fictícia de produto (a <em>Estação Maré</em>) desenhada à risca em cada mundo de
+    <code>conhecimento/design/mundos/</code>: muda a tipografia, a cor, o material, a forma e a mola; o acabamento não muda.
+    Passe o mouse, use o Tab e aperte “Receber alertas”.</p>
+  <nav class="indice" aria-label="Os dez mundos">
+    <ol>
+      <li><a href="#apple-liquid-glass">Apple / Liquid Glass</a></li>
+      <li><a href="#editorial">Editorial</a></li>
+      <li><a href="#suico">Suíço</a></li>
+      <li><a href="#quente-tatil">Quente e tátil</a></li>
+      <li><a href="#escuro-tecnico">Escuro técnico</a></li>
+      <li><a href="#ludico">Lúdico</a></li>
+      <li><a href="#luxo-sobrio">Luxo sóbrio</a></li>
+      <li><a href="#brutalista">Brutalista</a></li>
+      <li><a href="#corporativo-confianca">Corporativo</a></li>
+      <li><a href="#retro-analogico">Retrô</a></li>
+    </ol>
+  </nav>
+</header>
+
+<main id="mundos">
+
+<!-- 1. APPLE / LIQUID GLASS: conteúdo em primeiro plano; vidro só nos controles que flutuam sobre a imagem -->
+<section class="mundo" id="apple-liquid-glass" aria-labelledby="n-apple">
+  <header class="leg"><h2 id="n-apple">Apple / Liquid Glass</h2>
+    <p class="quando">Quando usar: app de plataforma Apple, produto de consumo com objeto físico ou pedido explícito de “cara de Apple”.</p>
+    <p class="meta">Inter Tight + Inter (a SF só no aparelho Apple, pela pilha do sistema) · vidro com lente só nos controles · mola 0,5 s, quique 0,15</p></header>
+  <div class="caixa"><div class="palco ap" data-mundo="apple">
+    <div class="ap-texto">
+      <h3 class="ap-titulo" data-e style="--i:0"><span data-c="titulo">Estação Maré</span></h3>
+      <p class="ap-frase" data-e style="--i:1"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+      <p class="ap-num" data-e style="--i:2"><span data-c="numero">1,8</span><span class="ap-un" data-c="unidade">m</span></p>
+      <p class="ap-rot" data-e style="--i:2"><span data-c="rotulo">altura das ondas agora</span></p>
+      <ul class="ap-lista" data-e style="--i:3">
+        <li><svg class="ic" aria-hidden="true"><use href="#i-vento"/></svg><span data-c="k1">Vento</span><span class="v" data-c="v1">14 nós, nordeste</span></li>
+        <li><svg class="ic" aria-hidden="true"><use href="#i-agua"/></svg><span data-c="k2">Água</span><span class="v" data-c="v2">22,4 °C</span></li>
+        <li><svg class="ic" aria-hidden="true"><use href="#i-mare"/></svg><span data-c="k3">Maré alta</span><span class="v" data-c="v3">15h42</span></li>
+      </ul>
+    </div>
+    <figure class="ap-foto" data-e style="--i:1">
+      <canvas class="ap-mar" data-mar data-lum="0.12" aria-hidden="true"></canvas>
+      <svg class="graf" data-grafico="apple" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg>
+      <figcaption class="ap-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+      <div class="lg ap-vidro" data-lg-adapta="[data-lum]" data-e style="--i:4">
+        <button class="b1" type="button" aria-pressed="false"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span></button>
+        <button class="b2" type="button"><span data-c="b2">Ver as 12 boias</span></button>
+      </div>
+    </figure>
+  </div></div>
+</section>
+
+<!-- 2. EDITORIAL: papel e tinta, serifa de exibição, grade assimétrica, fios no lugar de caixas -->
+<section class="mundo" id="editorial" aria-labelledby="n-editorial">
+  <header class="leg"><h2 id="n-editorial">Editorial</h2>
+    <p class="quando">Quando usar: conteúdo, marca com voz, relatório anual, ensaio com dado.</p>
+    <p class="meta">Fraunces (opsz, WONK) + Source Serif 4 · papel e tinta, um acento de capa · mola 0,6 s sem quique</p></header>
+  <div class="caixa"><div class="palco ed" data-mundo="editorial">
+    <div class="ed-fio" aria-hidden="true"></div>
+    <h3 class="ed-titulo" data-e style="--i:0"><span data-c="titulo">Estação Maré</span></h3>
+    <p class="ed-frase" data-e style="--i:1"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+    <ul class="ed-ficha" data-e style="--i:2">
+      <li><span class="k" data-c="k1">Vento</span><span class="v" data-c="v1">14 nós, nordeste</span></li>
+      <li><span class="k" data-c="k2">Água</span><span class="v" data-c="v2">22,4 °C</span></li>
+      <li><span class="k" data-c="k3">Maré alta</span><span class="v" data-c="v3">15h42</span></li>
+    </ul>
+    <div class="ed-botoes" data-e style="--i:3">
+      <button class="b1" type="button" aria-pressed="false"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span></button>
+      <button class="b2" type="button"><span data-c="b2">Ver as 12 boias</span></button>
+    </div>
+    <div class="ed-lado">
+      <p class="ed-num" data-e style="--i:1"><span data-c="numero">1,8</span><span class="ed-un" data-c="unidade">m</span></p>
+      <p class="ed-rot" data-e style="--i:2"><span data-c="rotulo">altura das ondas agora</span></p>
+      <figure class="ed-fig" data-e style="--i:3">
+        <figcaption class="ed-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+        <div class="revela"><svg class="graf" data-grafico="editorial" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg><span class="cobre" aria-hidden="true"></span></div>
+      </figure>
+    </div>
+  </div></div>
+</section>
+
+<!-- 3. SUÍÇO: grade modular de 12 colunas e módulo de 8 px, uma família, um primário de sinal -->
+<section class="mundo" id="suico" aria-labelledby="n-suico">
+  <header class="leg"><h2 id="n-suico">Suíço / tipográfico</h2>
+    <p class="quando">Quando usar: dado, sinalização, institucional, ferramenta séria.</p>
+    <p class="meta">Public Sans (uma família, 3 pesos) · grade de 12 colunas, módulo 8 px · vermelho só como sinal · mola 0,35 s sem quique</p></header>
+  <div class="caixa"><div class="palco su" data-mundo="suico">
+    <h3 class="su-titulo" data-e style="--i:0"><span data-c="titulo">Estação Maré</span></h3>
+    <p class="su-frase" data-e style="--i:1"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+    <div class="su-heroi">
+      <p class="su-num" data-e style="--i:0"><span data-c="numero" data-conta="mola">1,8</span><span class="su-un" data-c="unidade">m</span></p>
+      <p class="su-rot" data-e style="--i:1"><span class="sinal" aria-hidden="true"></span><span data-c="rotulo">altura das ondas agora</span></p>
+    </div>
+    <ul class="su-lista" data-e style="--i:2">
+      <li><span data-c="k1">Vento</span><span class="v" data-c="v1">14 nós, nordeste</span></li>
+      <li><span data-c="k2">Água</span><span class="v" data-c="v2">22,4 °C</span></li>
+      <li><span data-c="k3">Maré alta</span><span class="v" data-c="v3">15h42</span></li>
+    </ul>
+    <div class="su-botoes" data-e style="--i:3">
+      <button class="b1" type="button" aria-pressed="false"><span data-c="b1">Receber alertas</span><svg class="seta" aria-hidden="true"><use href="#i-seta"/></svg><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg></button>
+      <button class="b2" type="button"><span data-c="b2">Ver as 12 boias</span></button>
+    </div>
+    <figure class="su-fig" data-e style="--i:2">
+      <figcaption class="su-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+      <svg class="graf" data-grafico="suico" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg>
+    </figure>
+  </div></div>
+</section>
+
+<!-- 4. QUENTE E TÁTIL: papel com grão, tinta marrom, terracota dominante, recortes de papel que assentam -->
+<section class="mundo" id="quente-tatil" aria-labelledby="n-quente">
+  <header class="leg"><h2 id="n-quente">Quente e tátil</h2>
+    <p class="quando">Quando usar: comida, bem-estar, artesanal, educação, produto feito por pessoas para pessoas.</p>
+    <p class="meta">Young Serif + Instrument Sans (itálico na voz) · papel com grão de 3,5%, sombra curta e marrom · mola 0,7 s sem quique</p></header>
+  <div class="caixa"><div class="palco qt" data-mundo="quente">
+    <article class="qt-cartao" data-e style="--i:0">
+      <h3 class="qt-titulo"><span data-c="titulo">Estação Maré</span></h3>
+      <p class="qt-frase"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+      <p class="qt-num"><span data-c="numero">1,8</span><span class="qt-un" data-c="unidade">m</span></p>
+      <p class="qt-rot"><span data-c="rotulo">altura das ondas agora</span></p>
+      <ul class="qt-lista">
+        <li><span data-c="k1">Vento</span><i aria-hidden="true"></i><span class="v" data-c="v1">14 nós, nordeste</span></li>
+        <li><span data-c="k2">Água</span><i aria-hidden="true"></i><span class="v" data-c="v2">22,4 °C</span></li>
+        <li><span data-c="k3">Maré alta</span><i aria-hidden="true"></i><span class="v" data-c="v3">15h42</span></li>
+      </ul>
+      <div class="qt-botoes">
+        <button class="b1" type="button" aria-pressed="false"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span></button>
+        <button class="b2" type="button"><span data-c="b2">Ver as 12 boias</span></button>
+      </div>
+    </article>
+    <figure class="qt-postal" data-e style="--i:1">
+      <figcaption class="qt-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+      <svg class="graf" data-grafico="quente" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg>
+    </figure>
+  </div></div>
+</section>
+
+<!-- 5. ESCURO TÉCNICO: escuro em camadas (OKLCH), bordas de 1 px, um acento luminoso, mono no dado -->
+<section class="mundo" id="escuro-tecnico" aria-labelledby="n-escuro">
+  <header class="leg"><h2 id="n-escuro">Escuro técnico</h2>
+    <p class="quando">Quando usar: ferramenta de desenvolvedor, infraestrutura, observabilidade, dado em tempo real.</p>
+    <p class="meta">Geist + Geist Mono · 4 camadas de escuro em OKLCH, borda de 1 px, um acento verde · mola 0,25 s sem quique, estado em 120 ms</p></header>
+  <div class="caixa"><div class="palco es" data-mundo="escuro">
+    <div class="es-janela" data-e style="--i:0">
+      <div class="es-cab">
+        <h3 class="es-titulo"><span data-c="titulo">Estação Maré</span></h3>
+        <p class="es-frase"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+      </div>
+      <div class="es-esq">
+        <p class="es-rot" data-e style="--i:1"><span data-c="rotulo">altura das ondas agora</span></p>
+        <p class="es-num" data-e style="--i:1"><span data-c="numero" data-conta="mola">1,8</span><span class="es-un" data-c="unidade">m</span></p>
+        <ul class="es-lista" data-e style="--i:2">
+          <li><span data-c="k1">Vento</span><span class="v" data-c="v1">14 nós, nordeste</span></li>
+          <li><span data-c="k2">Água</span><span class="v" data-c="v2">22,4 °C</span></li>
+          <li><span data-c="k3">Maré alta</span><span class="v" data-c="v3">15h42</span></li>
+        </ul>
+        <div class="es-botoes" data-e style="--i:3">
+          <button class="b1" type="button" aria-pressed="false"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span><kbd aria-hidden="true">↵</kbd></button>
+          <button class="b2" type="button"><span data-c="b2">Ver as 12 boias</span></button>
+        </div>
+      </div>
+      <figure class="es-fig" data-e style="--i:2">
+        <figcaption class="es-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+        <div class="revela"><svg class="graf" data-grafico="escuro" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg><span class="cobre" aria-hidden="true"></span></div>
+      </figure>
+    </div>
+  </div></div>
+</section>
+
+<!-- 6. LÚDICO: cores vivas com papel claro, formas moles, sombra dura que afunda, quique só no momento-pico -->
+<section class="mundo" id="ludico" aria-labelledby="n-ludico">
+  <header class="leg"><h2 id="n-ludico">Lúdico / arredondado</h2>
+    <p class="quando">Quando usar: aprendizado, hábito, jogo casual, comunidade, consumo jovem.</p>
+    <p class="meta">Fredoka + Nunito · violeta dominante, amarelo de recompensa · botão de base dura que afunda · mola 0,5 s, quique 0,3 só no pico</p></header>
+  <div class="caixa"><div class="palco lu" data-mundo="ludico">
+    <svg class="lu-manchas" aria-hidden="true" viewBox="0 0 1200 720" preserveAspectRatio="none"><path d="M-40 560c90-60 210-40 260 40s40 180-80 200-260-20-260-120 0-80 80-120Z" fill="#f0eaff"/><path d="M1010-60c120 10 230 90 210 210s-150 150-250 110-130-120-100-210 40-120 140-110Z" fill="#fff0c4"/></svg>
+    <div class="lu-esq">
+      <h3 class="lu-titulo" data-e style="--i:0"><span data-c="titulo">Estação Maré</span></h3>
+      <p class="lu-frase" data-e style="--i:1"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+      <div class="lu-placa" data-e style="--i:2">
+        <p class="lu-num"><span data-c="numero">1,8</span><span class="lu-un" data-c="unidade">m</span></p>
+        <p class="lu-rot"><span data-c="rotulo">altura das ondas agora</span></p>
+      </div>
+      <ul class="lu-lista" data-e style="--i:3">
+        <li><span class="bola"><svg class="ic" aria-hidden="true"><use href="#i-vento"/></svg></span><span class="k" data-c="k1">Vento</span><span class="v" data-c="v1">14 nós, nordeste</span></li>
+        <li><span class="bola"><svg class="ic" aria-hidden="true"><use href="#i-agua"/></svg></span><span class="k" data-c="k2">Água</span><span class="v" data-c="v2">22,4 °C</span></li>
+        <li><span class="bola"><svg class="ic" aria-hidden="true"><use href="#i-mare"/></svg></span><span class="k" data-c="k3">Maré alta</span><span class="v" data-c="v3">15h42</span></li>
+      </ul>
+      <div class="lu-botoes" data-e style="--i:4">
+        <button class="b1" type="button" aria-pressed="false"><span class="cara"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span></span></button>
+        <button class="b2" type="button"><span class="cara"><span data-c="b2">Ver as 12 boias</span></span></button>
+      </div>
+    </div>
+    <figure class="lu-fig" data-e style="--i:1">
+      <figcaption class="lu-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+      <svg class="graf" data-grafico="ludico" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg>
+    </figure>
+  </div></div>
+</section>
+
+<!-- 7. LUXO SÓBRIO: muito espaço declarado, serifa fina só grande, preto e marfim, bronze em área mínima, um objeto só -->
+<section class="mundo" id="luxo-sobrio" aria-labelledby="n-luxo">
+  <header class="leg"><h2 id="n-luxo">Luxo sóbrio</h2>
+    <p class="quando">Quando usar: moda, hotelaria, joalheria, perfumaria, imóvel de alto padrão, arquitetura.</p>
+    <p class="meta">Cormorant Garamond (só a partir de 32 px) + Manrope (caixa alta só até 3 palavras) · preto, marfim e bronze · margem de 120 px declarada · mola 0,9 s sem quique</p></header>
+  <div class="caixa"><div class="palco lx" data-mundo="luxo">
+    <div class="lx-esq">
+      <h3 class="lx-titulo" data-e style="--i:0"><span data-c="titulo">Estação Maré</span></h3>
+      <p class="lx-frase" data-e style="--i:1"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+      <ul class="lx-lista" data-e style="--i:2">
+        <li><span class="k" data-c="k1">Vento</span><span class="v" data-c="v1">14 nós, nordeste</span></li>
+        <li><span class="k" data-c="k2">Água</span><span class="v" data-c="v2">22,4 °C</span></li>
+        <li><span class="k" data-c="k3">Maré alta</span><span class="v" data-c="v3">15h42</span></li>
+      </ul>
+      <div class="lx-botoes" data-e style="--i:3">
+        <button class="b1" type="button" aria-pressed="false"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span></button>
+        <button class="b2" type="button"><span data-c="b2">Ver as 12 boias</span><svg class="seta" aria-hidden="true"><use href="#i-seta"/></svg></button>
+      </div>
+    </div>
+    <div class="lx-dir">
+      <p class="lx-num" data-e style="--i:1"><span data-c="numero">1,8</span><span class="lx-un" data-c="unidade">m</span></p>
+      <p class="lx-rot" data-e style="--i:2"><span data-c="rotulo">altura das ondas agora</span></p>
+      <figure class="lx-fig" data-e style="--i:3">
+        <div class="revela"><svg class="graf" data-grafico="luxo" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg><span class="cobre" aria-hidden="true"></span></div>
+        <figcaption class="lx-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+      </figure>
+    </div>
+  </div></div>
+</section>
+
+<!-- 8. BRUTALISTA: campo amarelo chapado, borda preta grossa, sombra dura, escala extrema, corte seco (sem mola) -->
+<section class="mundo" id="brutalista" aria-labelledby="n-brutalista">
+  <header class="leg"><h2 id="n-brutalista">Brutalista contemporâneo</h2>
+    <p class="quando">Quando usar: cultura, arte, festival, agência, portfólio, manifesto.</p>
+    <p class="meta">Space Grotesk + Space Mono · campo amarelo de sinal, borda de 3 px, sombra dura de 6 px · sem mola: corte seco e steps(), hover que inverte</p></header>
+  <div class="caixa"><div class="palco br" data-mundo="brutalista">
+    <h3 class="br-titulo" data-e style="--i:0"><span data-c="titulo">Estação Maré</span></h3>
+    <div class="br-meio">
+      <p class="br-frase" data-e style="--i:1"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+      <div class="br-botoes" data-e style="--i:2">
+        <button class="b1" type="button" aria-pressed="false"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span></button>
+        <button class="b2" type="button"><span data-c="b2">Ver as 12 boias</span></button>
+      </div>
+    </div>
+    <div class="br-grade">
+      <div class="br-caixa br-a" data-e style="--i:3">
+        <p class="br-num"><span data-c="numero">1,8</span><span class="br-un" data-c="unidade">m</span></p>
+        <p class="br-rot"><span data-c="rotulo">altura das ondas agora</span></p>
+      </div>
+      <ul class="br-caixa br-lista" data-e style="--i:4">
+        <li><span class="k" data-c="k1">Vento</span><span class="v" data-c="v1">14 nós, nordeste</span></li>
+        <li><span class="k" data-c="k2">Água</span><span class="v" data-c="v2">22,4 °C</span></li>
+        <li><span class="k" data-c="k3">Maré alta</span><span class="v" data-c="v3">15h42</span></li>
+      </ul>
+      <figure class="br-caixa br-fig" data-e style="--i:5">
+        <figcaption class="br-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+        <svg class="graf" data-grafico="brutalista" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg>
+      </figure>
+    </div>
+  </div></div>
+</section>
+
+<!-- 9. CORPORATIVO DE CONFIANÇA: claro, calmo, previsível; rótulo acima do valor, eixos com unidade, foco forte -->
+<section class="mundo" id="corporativo-confianca" aria-labelledby="n-corporativo">
+  <header class="leg"><h2 id="n-corporativo">Corporativo de confiança</h2>
+    <p class="quando">Quando usar: banco, seguro, saúde, governo, B2B regulado, painel executivo.</p>
+    <p class="meta">IBM Plex Sans · neutros frios, um azul de ação, corpo ≥ 16 px com contraste ≥ 7:1 · foco de 3 px · mola 0,3 s sem quique</p></header>
+  <div class="caixa"><div class="palco co" data-mundo="corporativo">
+    <div class="co-cartao" data-e style="--i:0">
+      <div class="co-cab">
+        <h3 class="co-titulo"><span data-c="titulo">Estação Maré</span></h3>
+        <p class="co-frase"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+      </div>
+      <div class="co-resumo" data-e style="--i:1">
+        <p class="co-rot"><span data-c="rotulo">altura das ondas agora</span></p>
+        <p class="co-num"><span data-c="numero">1,8</span><span class="co-un" data-c="unidade">m</span></p>
+        <dl class="co-lista">
+          <div><dt data-c="k1">Vento</dt><dd data-c="v1">14 nós, nordeste</dd></div>
+          <div><dt data-c="k2">Água</dt><dd data-c="v2">22,4 °C</dd></div>
+          <div><dt data-c="k3">Maré alta</dt><dd data-c="v3">15h42</dd></div>
+        </dl>
+      </div>
+      <figure class="co-fig" data-e style="--i:2">
+        <figcaption class="co-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+        <div class="revela"><svg class="graf" data-grafico="corporativo" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg><span class="cobre" aria-hidden="true"></span></div>
+      </figure>
+      <div class="co-botoes" data-e style="--i:3">
+        <button class="b1" type="button" aria-pressed="false"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span></button>
+        <button class="b2" type="button"><span data-c="b2">Ver as 12 boias</span></button>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 10. RETRÔ / ANALÓGICO: um instrumento de plástico creme, tela de fósforo, teclas que afundam, contador que vira em steps() -->
+<section class="mundo" id="retro-analogico" aria-labelledby="n-retro">
+  <header class="leg"><h2 id="n-retro">Retrô / analógico</h2>
+    <p class="quando">Quando usar: música e áudio, hardware, câmera, jogo independente, marca com história.</p>
+    <p class="meta">VT323 (só no visor, em múltiplos do desenho) + JetBrains Mono · plástico creme, laranja de painel, fósforo verde · mola 0,4 s, quique 0,1</p></header>
+  <div class="caixa"><div class="palco rt" data-mundo="retro">
+    <div class="rt-aparelho" data-e style="--i:0">
+      <div class="rt-moldura">
+        <div class="rt-visor">
+          <h3 class="rt-titulo"><span data-c="titulo">Estação Maré</span></h3>
+          <p class="rt-num"><span data-c="numero" data-conta="passos">1,8</span><span class="rt-un" data-c="unidade">m</span></p>
+          <p class="rt-rot"><span data-c="rotulo">altura das ondas agora</span></p>
+          <figure class="rt-fig">
+            <figcaption class="rt-leg"><span data-c="legenda">Últimas 6 horas</span></figcaption>
+            <svg class="graf" data-grafico="retro" role="img" aria-label="Altura das ondas nas últimas 6 horas: de 1,3 m às 8h a 1,8 m às 14h"></svg>
+          </figure>
+          <span class="rt-varredura" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="rt-painel">
+        <div class="rt-faixa" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p class="rt-frase"><span data-c="frase">Ondas, vento e água do litoral norte, medidos a cada 10 minutos.</span></p>
+        <ul class="rt-lista">
+          <li><span class="led" aria-hidden="true"></span><span class="k" data-c="k1">Vento</span><span class="v" data-c="v1">14 nós, nordeste</span></li>
+          <li><span class="led" aria-hidden="true"></span><span class="k" data-c="k2">Água</span><span class="v" data-c="v2">22,4 °C</span></li>
+          <li><span class="led" aria-hidden="true"></span><span class="k" data-c="k3">Maré alta</span><span class="v" data-c="v3">15h42</span></li>
+        </ul>
+        <div class="rt-botoes">
+          <button class="b1" type="button" aria-pressed="false"><span class="cara"><svg class="ok" aria-hidden="true"><use href="#i-ok"/></svg><span data-c="b1">Receber alertas</span></span></button>
+          <button class="b2" type="button"><span class="cara"><span data-c="b2">Ver as 12 boias</span></span></button>
+        </div>
+        <div class="rt-grade" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+</main>
+
+<footer class="rodape">
+  <p>Texto, desenho, imagens e código próprios do agentes-ultimate; dados fictícios. Fontes do Google Fonts sob a SIL Open Font
+    License 1.1. O vidro usa o modelo <code>modelos/liquid-glass/</code> (lente só no Chromium); as molas saem de
+    <code>modelos/mola-linear.js</code> por <code>gerar-molas.js</code>.</p>
+</footer>
+
+<script src="../../../../modelos/liquid-glass/liquido.js"></script>
+<script src="mostruario.js"></script>
+</body>
+</html>

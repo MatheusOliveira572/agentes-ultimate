@@ -1,0 +1,40 @@
+<!doctype html>
+<!-- Folha de contato dos 10 mundos (mt106): os PNGs 2× de png/, lado a lado, para comparar o nível de uma olhada. -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mundos visuais: visão geral</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #e9e9ec; color: #1d1d1f; font: 15px/1.45 system-ui, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  .folha { width: 1440px; padding: 40px 48px 48px; }
+  h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: -0.02em; }
+  .folha > p { margin: 0 0 24px; color: #3a3a3f; }
+  ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 32px; counter-reset: m; }
+  li { counter-increment: m; }
+  img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.07), 0 10px 24px -14px rgb(0 0 0 / 0.3); }
+  li p { margin: 8px 2px 0; font-weight: 650; }
+  li p::before { content: counter(m) ". "; color: #55555a; }
+</style>
+</head>
+<body>
+<div class="folha">
+  <h1>A mesma tela, dez mundos, o mesmo nível</h1>
+  <p>Estação Maré (fictícia) em cada mundo de conhecimento/design/mundos/. Capturas a 2× do index.html, pelo Edge sem interface.</p>
+  <ol>
+    <li><img src="png/apple-liquid-glass.png" alt="Mundo Apple / Liquid Glass"><p>Apple / Liquid Glass</p></li>
+    <li><img src="png/editorial.png" alt="Mundo editorial"><p>Editorial</p></li>
+    <li><img src="png/suico.png" alt="Mundo suíço"><p>Suíço / tipográfico</p></li>
+    <li><img src="png/quente-tatil.png" alt="Mundo quente e tátil"><p>Quente e tátil</p></li>
+    <li><img src="png/escuro-tecnico.png" alt="Mundo escuro técnico"><p>Escuro técnico</p></li>
+    <li><img src="png/ludico.png" alt="Mundo lúdico"><p>Lúdico / arredondado</p></li>
+    <li><img src="png/luxo-sobrio.png" alt="Mundo luxo sóbrio"><p>Luxo sóbrio</p></li>
+    <li><img src="png/brutalista.png" alt="Mundo brutalista"><p>Brutalista contemporâneo</p></li>
+    <li><img src="png/corporativo-confianca.png" alt="Mundo corporativo de confiança"><p>Corporativo de confiança</p></li>
+    <li><img src="png/retro-analogico.png" alt="Mundo retrô / analógico"><p>Retrô / analógico</p></li>
+  </ol>
+</div>
+<script>document.documentElement.dataset.pronto = '1';</script>
+</body>
+</html>
