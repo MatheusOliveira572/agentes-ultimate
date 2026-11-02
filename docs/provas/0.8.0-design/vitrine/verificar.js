@@ -13,6 +13,9 @@ const os = require('os');
 
 const AQUI = __dirname;
 const PNG = path.join(AQUI, 'png');
+// Saídas sem a pasta do usuário: o caminho da prova vira <pasta> (as saídas vão para o repositório público).
+const semPasta = (s) => String(s).split('file:///' + AQUI.replace(/\\/g, '/')).join('file:///<pasta>').split(AQUI).join('<pasta>')
+  .replace(/[A-Za-z]:[\\/]Users[\\/][^\\/\s]+/g, '<pasta>');
 const EDGE = ['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Microsoft/Edge/Application/msedge.exe'].find(fs.existsSync);
 const PORTA = 9400 + (process.pid % 400);   // porta e perfil por execução: a anterior pode ainda estar fechando
 const PERFIL = path.join(os.tmpdir(), 'vitrine-edge-' + process.pid);
@@ -262,7 +265,7 @@ function focoAtual() {
         if (p.p95 > 50) r.avisos.push(`p95 de quadro ${p.p95} ms com CPU 4× (headless, sem GPU real)`);
       }
       if (c.rolar) { await avaliar((ex) => scrollTo(0, eval(ex)), c.rolar); await espera(2600); }
-      if (!c.semJs) { const ej = await avaliar(() => window.__errosJs || []); r.erros.push(...ej, ...excecoes.map((x) => 'exceção: ' + x.slice(0, 120)));
+      if (!c.semJs) { const ej = await avaliar(() => window.__errosJs || []); r.erros.push(...ej.map(semPasta), ...excecoes.map((x) => 'exceção: ' + semPasta(x).slice(0, 120)));
         if (!(await avaliar(() => !!window.liquido))) r.erros.push('liquido.js não carregou (caminho modelos/liquid-glass)'); }
       if (!c.desempenho) {
         const m = await avaliar(medirTudo, PIXEL); r.erros.push(...m.erros); r.avisos.push(...m.avisos); r.pares = m.nPares; r.piorTexto = m.pior;
