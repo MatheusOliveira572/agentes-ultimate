@@ -86,7 +86,30 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "crie um website para a padaria",
     "crie a homepage da loja",
     "redesenhe a página inicial do site",
-    "monte uma lp de vendas"
+    "monte uma lp de vendas",
+    "crie um site para o meu escritório de advocacia",
+    "faça um site de casamento",
+    "monte a página de vendas do meu ebook",
+    "desenvolva o site da minha consultoria",
+    "preciso de um site institucional para a ONG",
+    "refaça a homepage da minha loja",
+    "crie uma landing para o lançamento do curso",
+    "melhore a página inicial do meu site",
+    "crie um site de uma página só para o evento",
+    "faça o site da pizzaria com cardápio",
+    "crie um site com blog para a minha marca",
+    "crie um site em react",
+    "faça a landing page em react com tailwind",
+    "site com efeito vidro e animação",
+    "faça a landing page com visual premium e efeito vidro",
+    "site em html e css com animação",
+    "monte uma landing page em next.js com tailwind e animação",
+    "quero um site com glassmorphism",
+    "crie o site da clínica em react com formulário de contato",
+    "landing page com liquid glass",
+    "desenvolva o site institucional em react e tailwind",
+    "homepage com animação e componente de depoimentos",
+    "crie a landing page do aplicativo com efeito vidro"
    ],
    "P": [
     "crie a tela de login do app em react",
@@ -125,7 +148,28 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "crie o formulário de cadastro do aplicativo",
     "deixe a tela inicial do app com visual premium",
     "animação de carregamento no aplicativo",
-    "css do botão do app está desalinhado"
+    "css do botão do app está desalinhado",
+    "desenvolva o app e crie a tela de login",
+    "crie e desenvolva o app em react",
+    "monte a tela de perfil do aplicativo com efeito vidro",
+    "faça o redesenho da tela de pedidos do app",
+    "crie um app de finanças com visual premium",
+    "faça a tela de onboarding do aplicativo",
+    "crie um componente de gráfico no app em react",
+    "desenvolva o front-end do sistema de chamados",
+    "monte a interface do app de estoque em tailwind",
+    "faça o app mobile com animação no menu",
+    "crie a navegação do aplicativo com glassmorphism",
+    "melhore a ui do sistema interno",
+    "refaça a tela de busca do app",
+    "construa o painel administrativo do sistema em react",
+    "crie o formulário de login do aplicativo com validação",
+    "faça o css do aplicativo ficar responsivo",
+    "crie um dashboard de vendas no power bi",
+    "monte o painel de indicadores da diretoria",
+    "faça um relatório no power bi com o orçado e realizado",
+    "crie um painel de bi para o comercial",
+    "desenvolva o dashboard de estoque"
    ],
    "A": [
     "crie um dashboard para o site",
@@ -134,7 +178,8 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "mostre um dashboard na landing page do meu produto",
     "desenhe o site do painel de BI",
     "crie um site com dashboard de vendas",
-    "site com painel de indicadores para os clientes"
+    "site com painel de indicadores para os clientes",
+    "crie o site e o app em react com animação"
    ],
    "N": [
     "o site da receita federal saiu do ar hoje",
@@ -176,7 +221,22 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "o css do site quebrou depois do deploy",
     "o visual do site do concorrente é melhor que o nosso",
     "o site responsivo do banco não abre no celular",
-    "a interface do site da prefeitura é horrível"
+    "a interface do site da prefeitura é horrível",
+    "crie um relatório com os dados do site do IBGE",
+    "faça login no site do banco e baixe o extrato",
+    "crie uma conta no site da receita federal",
+    "monte uma planilha com os preços do site do fornecedor",
+    "faça o download da tabela no site da CVM",
+    "crie um resumo da notícia do site do valor",
+    "desenvolva um robô que lê o site da prefeitura",
+    "faça uma pesquisa no site do concorrente sobre preços",
+    "crie um alerta quando o site do banco central publicar a selic",
+    "monte a lista de fornecedores a partir do site da associação",
+    "melhore o script que raspa o site do governo",
+    "faça a cotação do dólar pelo site do banco",
+    "crie um e-mail para o suporte do site da operadora",
+    "construa uma tabela com os dados do website da ANP",
+    "faz um resumo do que tem no site da empresa concorrente"
    ],
    "X": [
     "site web",
@@ -199,18 +259,64 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "redesenhe a landing page do painel",
     "página sobre nós da empresa",
     "glassmorphism no painel",
-    "glassmorphism"
+    "glassmorphism",
+    "crie o site do app em react",
+    "efeito vidro no site do aplicativo",
+    "landing page do app com visual premium em react",
+    "crie um site em react com efeito vidro",
+    "tela de login do site em react",
+    "redesenhe o site e o app",
+    "o app e o site precisam de visual premium",
+    "corrija o css e o html do botão no react",
+    "dashboard com kpi de vendas do meu site",
+    "quero um site moderno para a minha academia"
+   ],
+   "NS": [
+    "crie o plano e monte o cronograma do projeto",
+    "faça a análise de variação e crie a apresentação para a diretoria",
+    "desenvolva e construa o modelo financeiro de fluxo de caixa",
+    "melhore o texto e refaça o resumo executivo",
+    "crie o contrato de prestação de serviço e faça a revisão das cláusulas",
+    "monte o orçamento e faça a projeção do ano",
+    "crie a descrição da vaga e monte o roteiro de entrevista",
+    "faça o fechamento contábil e crie a conciliação bancária",
+    "desenvolva a política de compliance e crie o treinamento",
+    "crie a campanha de marketing e faça o calendário de posts",
+    "melhore o processo de compras e refaça o fluxograma",
+    "faz a conta e cria a planilha de comissões",
+    "crie uma medida dax e faça o gráfico de barras",
+    "monte a query sql e crie a tabela de dimensão",
+    "construa o modelo de dados e desenvolva as medidas",
+    "crie testes unitários e faça o refactor da função",
+    "crie uma api web em python",
+    "desenvolva um serviço web para integrar com o SAP",
+    "faça um scraper web para coletar preços",
+    "crie um web app de tarefas",
+    "desenvolva uma aplicação web para controle de estoque",
+    "monte um servidor web local para testes",
+    "crie um webhook para o slack",
+    "faça o deploy da aplicação web no azure",
+    "corrija o bug no script python que lê a planilha",
+    "escreva o manual do usuário em PDF",
+    "revise a cláusula de rescisão do contrato",
+    "calcule o ebitda ajustado do trimestre",
+    "analise o turnover da equipe de vendas",
+    "prepare o plano de comunicação interna",
+    "avalie o risco de lgpd no cadastro de clientes"
    ]
   };
+
+
   const regra = {
     S: (x) => /designer-sites/.test(x.ag) && !/designer-paineis/.test(x.ag) && !/para `agentes-ultimate:designer-paineis`/.test(x.refs),
     P: (x) => /designer-paineis/.test(x.ag) && !/designer-sites/.test(x.ag),
     A: (x) => /designer-sites/.test(x.ag) && /designer-paineis/.test(x.ag),
     // Referência genérica (layout, relatório) ainda vai ao 1º agente do arquivo quando nenhum pacote entra: é regra do roteador, fora deste lote.
     N: (x) => !/designer-/.test(x.ag) && !/sites-premium|designer-sites/.test(x.refs),
+    NS: (x) => !/designer-sites/.test(x.ag) && !/sites-premium/.test(x.refs),
   };
-  const nomeClasse = { S: 'só o designer de sites', P: 'o designer de painéis, sem o de sites', A: 'os dois designers', N: 'nenhum designer nem a biblioteca de sites' };
-  for (const k of ['S', 'P', 'A', 'N']) {
+  const nomeClasse = { S: 'só o designer de sites', P: 'o designer de painéis, sem o de sites', A: 'os dois designers', N: 'nenhum designer nem a biblioteca de sites', NS: 'tudo menos o designer de sites (outras áreas, "web" que não é site)' };
+  for (const k of ['S', 'P', 'A', 'N', 'NS']) {
     const ruins = TABELA[k].map((p) => [p, agentesDe(p)]).filter(([, x]) => !regra[k](x)).map(([p, x]) => `"${p}" → ${(x.ag || 'nenhum').replace(/agentes-ultimate:/g, '')}`);
     caso(`0.8.0 sites A-3/M-7/b-4/b-8: ${TABELA[k].length} frases que pedem ${nomeClasse[k]}`, !ruins.length, ruins.length + ' erradas: ' + ruins.slice(0, 6).join(' | '));
   }

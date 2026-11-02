@@ -52,6 +52,14 @@ function semNomesProprios(texto) {
   return out.join(' ');
 }
 
+// "crie um site", "refaça a minha homepage", "faça o site novo": verbo + artigo opcional + "novo" opcional + alvo.
+function parDe(texto, pares) {
+  const alt = (l) => (l || []).map((w) => normalizar(w).split(/\s+/).map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\\s+')).join('|');
+  const re = new RegExp('(^|[^a-z0-9])(' + alt(pares.verbos) + ')\\s+((' + alt(pares.artigos) + ')\\s+)?((novo|nova)\\s+)?(' + alt(pares.alvos) + ')(e?s)?($|[^a-z0-9])');
+  const m = texto.match(re);
+  return m ? m[0].trim() : '';
+}
+
 function lerJson(arq, padrao) {
   try { return JSON.parse(fs.readFileSync(arq, 'utf8')); } catch (e) { return padrao; }
 }
@@ -173,6 +181,8 @@ function main(d) {
       // Palavra é pista. A que serve a várias áreas pesa pouco e, sozinha, não escolhe pacote; expressão pesa mais.
       if (ambiguas.has(normalizar(w))) { s += 0.5; m.push(w + ' (ambígua)'); } else { s += w.includes(' ') ? 2 : 1; firme++; m.push(w); }
     }
+    // Par verbo + alvo (pacotes.json → pares): "crie um site" pontua; "crie a conta no site do banco", não.
+    if (p.pares && parDe(texto, p.pares)) { s += 2; firme++; m.push('par: ' + parDe(texto, p.pares)); }
     // Arquivo da pasta só reforça: sem uma palavra firme do assunto ele não conta (pasta com .pbip e "visual" não é BI).
     if (firme) for (const a of p.arquivos || []) if (nomes.some((n) => n.endsWith(a) || n === a)) { s += 2; m.push('pasta tem ' + a); }
     if (!firme) s = Math.min(s, (cfg.minimo || 2) - 0.5);
@@ -195,12 +205,18 @@ function main(d) {
     }
   }
 
-  // Áreas vizinhas (pacotes.json → desempate, ex.: site × tela de app): se as duas passam do mínimo, fica a de mais pontos;
-  // no empate, as duas. Assim a palavra comum (react, efeito vidro) serve às duas e quem decide é a pista mais forte.
-  for (const [a, b] of cfg.desempate || []) {
+  // Áreas vizinhas (pacotes.json → desempate, ex.: site × tela de app). Primeiro a âncora: se só um lado diz o que é o
+  // produto ("site", "app") e algum dos dois passou do mínimo, esse lado fica com o pedido e com os pontos do outro (o
+  // react e o efeito vidro do site são do site). Âncora nos dois ou em nenhum: fica o de mais pontos; empate, os dois.
+  for (const d of cfg.desempate || []) {
+    const [a, b] = Array.isArray(d) ? d : d.areas;
     const min = cfg.minimo || 2;
-    if ((pontos[a] || 0) >= min && (pontos[b] || 0) >= min && pontos[a] !== pontos[b]) {
-      const perde = pontos[a] > pontos[b] ? b : a;
+    const anc = (id) => ((d.ancoras || {})[id] || []).some((w) => contem(texto, w) && !negado(texto, w));
+    const pa = pontos[a] || 0, pb = pontos[b] || 0;
+    const ganha = (g, p) => { pontos[g] = Math.max(pontos[g], pontos[p]); motivos[g].push(`desempate: âncora de ${g}`); pontos[p] = 0; };
+    if (pa > 0 && pb > 0 && (pa >= min || pb >= min) && anc(a) !== anc(b)) { if (anc(a)) ganha(a, b); else ganha(b, a); continue; }
+    if (pa >= min && pb >= min && pa !== pb) {
+      const perde = pa > pb ? b : a;
       motivos[perde].push(`desempate: ${perde === a ? b : a} pontuou mais`);
       pontos[perde] = 0;
     }

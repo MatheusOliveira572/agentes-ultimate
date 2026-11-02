@@ -1,11 +1,36 @@
 {
-  "_como_usar": "Cada pacote diz quando entra (palavras do pedido e arquivos da pasta) e quais agentes traz. O roteador soma pontos: palavra = 1, expressão de 2+ palavras = 2, arquivo da pasta = 2. Entram os pacotes com pontos >= minimo. O núcleo entra sempre que o pedido não é trivial. Para criar um pacote novo, veja docs/criar-pacote.md. Palavra é pista, não decisão: as de \"ambiguas\" servem a várias áreas, valem 0,5 e sozinhas não escolhem pacote; o arquivo da pasta só conta com uma palavra firme do assunto. Em \"desempate\", pares de áreas vizinhas: se as duas passam do mínimo, fica só a de mais pontos (empate, as duas).",
+  "_como_usar": "Cada pacote diz quando entra (palavras do pedido e arquivos da pasta) e quais agentes traz. O roteador soma pontos: palavra = 1, expressão de 2+ palavras = 2, arquivo da pasta = 2. Entram os pacotes com pontos >= minimo. O núcleo entra sempre que o pedido não é trivial. Para criar um pacote novo, veja docs/criar-pacote.md. Palavra é pista, não decisão: as de \"ambiguas\" servem a várias áreas, valem 0,5 e sozinhas não escolhem pacote; o arquivo da pasta só conta com uma palavra firme do assunto. \"pares\" (em sites): verbo + alvo valem 2, verbo solto vale 0. \"desempate\": entre áreas vizinhas decide primeiro a âncora (o que o pedido é: site ou app) e depois a soma; empate, as duas.",
   "minimo": 2,
   "desempate": [
-    [
-      "sites",
-      "interface"
-    ]
+    {
+      "_como_usar": "Quem tem âncora e o outro não fica com o pedido (e com os pontos do outro), se um dos dois já passou do mínimo. Âncora nos dois, ou em nenhum: fica o de mais pontos; empate, os dois.",
+      "areas": [
+        "sites",
+        "interface"
+      ],
+      "ancoras": {
+        "sites": [
+          "site",
+          "sites",
+          "website",
+          "web site",
+          "landing",
+          "homepage",
+          "pagina web",
+          "pagina inicial",
+          "pagina de vendas",
+          "lp de vendas"
+        ],
+        "interface": [
+          "app",
+          "aplicativo",
+          "aplicativos",
+          "apps",
+          "tela do app",
+          "sistema"
+        ]
+      }
+    }
   ],
   "pacotes": {
     "nucleo": {
@@ -45,13 +70,11 @@
         "drill",
         "bi",
         "dashboard de",
-        "dashboard para o site",
-        "dashboard no site",
-        "dashboard na landing",
-        "site com dashboard",
-        "site com painel",
         "painel de bi",
-        "painel de indicadores"
+        "painel de indicadores",
+        "dashboard para",
+        "dashboard no",
+        "dashboard na"
       ],
       "arquivos": [
         ".pbip",
@@ -205,7 +228,14 @@
         "checkout",
         "painel administrativo",
         "tela",
-        "sistema"
+        "sistema",
+        "tela de",
+        "tela do",
+        "tela da",
+        "ui do sistema",
+        "interface do sistema",
+        "front-end do sistema",
+        "frontend do sistema"
       ]
     },
     "sites": {
@@ -252,30 +282,66 @@
         "site responsivo com",
         "formulario de contato",
         "redesign do site",
-        "redesenhe o site",
-        "desenhe o site",
         "site",
         "website",
         "homepage",
         "landing",
-        "web",
-        "crie",
-        "cria",
-        "criar",
-        "faca",
-        "faz",
-        "fazer",
-        "monte",
-        "montar",
-        "desenvolva",
-        "desenvolver",
-        "construa",
-        "construir",
-        "desenhe",
-        "redesenhe",
-        "melhore",
-        "refaca"
-      ]
+        "dashboard para o site",
+        "ux do site",
+        "ux do meu site",
+        "ui do site",
+        "site com glassmorphism",
+        "site com efeito vidro"
+      ],
+      "pares": {
+        "_como_usar": "Verbo + artigo opcional + \"novo\" opcional + alvo = 2 pontos (ex.: \"crie um site\", \"refaça a homepage\", \"faça o site novo\"). Verbo sem o alvo logo depois não pontua.",
+        "verbos": [
+          "crie",
+          "cria",
+          "criar",
+          "faca",
+          "faz",
+          "fazer",
+          "monte",
+          "montar",
+          "desenvolva",
+          "desenvolver",
+          "construa",
+          "construir",
+          "desenhe",
+          "desenhar",
+          "redesenhe",
+          "redesenhar",
+          "melhore",
+          "melhorar",
+          "refaca",
+          "refazer"
+        ],
+        "artigos": [
+          "um",
+          "uma",
+          "o",
+          "a",
+          "meu",
+          "minha",
+          "nosso",
+          "nossa",
+          "seu",
+          "sua"
+        ],
+        "alvos": [
+          "site",
+          "website",
+          "web site",
+          "landing",
+          "landing page",
+          "homepage",
+          "pagina web",
+          "pagina inicial",
+          "pagina de vendas",
+          "lp"
+        ]
+      }
     },
     "documentos": {
       "nome": "Documentos e apresentações",
