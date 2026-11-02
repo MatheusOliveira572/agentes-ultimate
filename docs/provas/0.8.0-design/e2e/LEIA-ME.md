@@ -54,3 +54,69 @@ PNGs: `png/caso-b-landing-{claro,escuro}-{1440,390}.png`, `png/caso-b-landing-cl
   A prova de que o conteúdo é acionado é a saída do roteador (seção 1); a de que ele funciona, as páginas.
 - O suporte a `prefers-reduced-transparency` nos navegadores ainda é parcial (o Edge desta máquina respeita a emulação).
 - A pasta `../app-premium.html` e `../card-vidro.html` são da tentativa anterior (2026-11-01), com as ressalvas do `../LEIA-ME.md`.
+
+---
+
+# v2 (pv94, 2026-11-02): refeito pelo designer-paineis porque a v1 ficou "normal"
+O usuário achou as telas da v1 "bem normais, nada que impressiona" e pediu que **impressionar** seja o padrão do plugin. Por
+que a v1 ficou assim (execução × instruções) e as propostas de mudança: `diagnostico.md` e `propostas/`. Os arquivos da v1
+ficam para comparação.
+
+## O que é cada coisa
+| Arquivo | O que é |
+|---|---|
+| `caso-a-depois-v2.html` | App de tarefas (mesmo conteúdo do "antes": 6 tarefas, detalhe, 12 / 5 / 42%). **Ideia: o dia lido como uma linha do tempo, com o agora no meio**; a fita do dia (cada peça é uma tarefa, clicável); o passado comprimido, o que está aberto ganha espaço; inspetor à direita; teclado (↑ ↓, Espaço, Ctrl+Enter, Ctrl+Z) com dicas na tela; concluir com mola, risco que se desenha, placar, fita e "próxima" que mudam juntos, aviso com desfazer; troca do detalhe com inclinação 3D vinda da lista; "Próximos dias" se revela ao rolar. `?estado=vazio` e `?mutar=contagem` |
+| `caso-b-produto-v2.html` | Álbum do app de fotos (mesmos 24 nomes e datas). **Ideia: a luz da viagem atravessa o vidro.** Capa que sangra por trás da barra lateral; Liquid Glass só na navegação e nos controles; fotos sólidas em mosaico por lugar que **pousam ao rolar** (3D); a mesma luz (o ponteiro) inclina as fotos e gira o aro do vidro; no celular, as abas se recolhem ao rolar e a busca se aproxima |
+| `liquido.css`, `liquido.js` | O material **Liquid Glass** usado nos dois casos: lente (`backdrop-filter: url(#svg)` com `feDisplacementMap`), aro especular que segue a luz, tinta que se adapta à luminância do que passa atrás (grade 4 × 4 por foto, mais grossa sobre fundo misto), cápsula concêntrica. Fora do Chromium: material regular declarado, sem fingir refração |
+| `verificar-v2.js` | Edge sem interface, uma aba, uma captura por vez (`windowsHide`). Uso: `node verificar-v2.js a|b|tudo` e `node verificar-v2.js a --mutar` |
+
+## Junção (cada elemento serve à ideia; o que não servia saiu)
+| Elemento | Caso A ("o dia como linha do tempo") | Caso B ("a luz atravessa o vidro") |
+|---|---|---|
+| Tipografia | "Hoje" 54 px e o placar 56 px; o resto em escala curta | título de 68 px sobre a capa |
+| Material | palco embutido + inspetor; Liquid Glass só na captura, nas abas e no aviso | Liquid Glass na barra lateral e nas cápsulas; fotos sólidas |
+| 3D | o detalhe "vira" vindo da lista (de onde veio) | fotos pousam ao entrar; inclinam para a luz |
+| Revelação ao rolar | os próximos dias chegam (o futuro que vem) | as fotos de cada lugar pousam |
+| Movimento | uma mola para tudo; momento-pico = concluir | a mesma mola; abas que se separam ao rolar |
+| Tirado no 2º passe | metadados das tarefas feitas (o passado comprimido) | paralaxe da capa (não fazia falta à ideia) |
+
+## Conferência (comandos rodados em 2026-11-02, saída lida)
+- `node verificar-v2.js a` → 8 casos ok: contraste do pior texto sólido 4,65:1 (claro) e 5,15:1 (escuro); vidro no pior
+  ponto ≥ 4,91:1; somas placar × lista × fita × navegação × projetos fecham; concluir/desfazer atualizam placar, fita,
+  "próxima", grupo, botão e prazo; Tab → "Pular para a lista", ↓ seleciona a próxima com a transição 3D; revelação com
+  `animation-timeline: view()`; movimento reduzido sem transição longa; alvos ≥ 44 px no celular.
+- `node verificar-v2.js b` → 8 casos ok: vidro e texto sobre foto no pior ponto ≥ 4,67:1; tons do vidro por caso em
+  `png/medidas-v2-b.json` (campo `tons`: escuro sobre a capa, claro e "misto" sobre as fotos claras); teclado e
+  movimento reduzido (0 animações rodando).
+- **Mutações pegas:** contagem errada (`--mutar`: "placar diz 6, a lista tem 5"); "agora" não atualizado; prazo que
+  continuava na tarefa feita; aviso abrindo sobre a barra de vidro; controle cortado pela borda em 390 px (pego na versão
+  real antes da correção).
+- **Vistos e corrigidos no PNG** (a mecânica não pegava): passado ocupando o meio da tela; colisão "Próximos dias0 de 4" e
+  data quebrada no celular; estado incoerente ao concluir; grupos com o mesmo arranjo; faixa cinza na lagoa.
+
+## PNGs v2 (`png/`)
+`caso-a-v2-{claro,escuro}-{1440,390}.png`, `caso-a-v2-claro-1440-concluir.png`, `caso-a-v2-claro-1440-vazio.png`;
+`caso-b-produto-v2-{claro,escuro}-{1440,390}.png`, `caso-b-produto-v2-claro-1440-rolado.png` (+ `-zoom.png`, lente ampliada
+2×), `caso-b-produto-v2-escuro-390-rolado.png` (abas recolhidas), `caso-b-produto-v2-claro-1440-transparencia-reduzida.png`.
+
+## Autocrítica pela régua (`propostas/impressionar.md`, camada 2)
+| Item | A | B |
+|---|---|---|
+| 9 ideia numa frase | sim | sim |
+| 10 uma olhada, primeiro quadro ocupado | sim | sim |
+| 11 tipografia com intenção | sim | sim |
+| 12 cor com papel, escuro em camadas | sim | sim |
+| 13 material com função, vidro fiel | parcial: sobre texto, a lente precisa de 7 px de desfoque e quase não aparece | sim (5 de 5 no teste "parece Apple", ampliação anexada) |
+| 14 movimento com propósito e momento-pico | sim | sim (não há momento-pico de fluxo nesta tela) |
+| 15 acabamento | sim | parcial: as "fotos" pintadas por código leem como ilustração vetorial |
+| 16 final memorável | sim (desfazer) | não se aplica nesta tela |
+
+## O que ainda não está no nível
+- **Fotos de verdade** fariam B subir um degrau; as paisagens por código são o limite honesto sem banco de imagens licenciado.
+- **O Liquid Glass só existe no Chromium.** No Safari (justamente o público "Apple") aparece o material regular, sem lente.
+- No Windows a fonte é a Segoe UI Variable, não a SF: a "cara de Apple" perde um pouco fora do Mac.
+- A tem "Ctrl K" e "Nova tarefa" desenhados, mas a paleta de comandos e a captura não estão construídas; não há arrastar
+  para reordenar.
+- A barra lateral clara de B mostra uma passagem brusca onde a capa termina (é física, mas não é bonita).
+- O verificador mede contraste pixel a pixel, mas o "impressiona" continua julgado no olho, pela régua; não há medida
+  automática para ele.
