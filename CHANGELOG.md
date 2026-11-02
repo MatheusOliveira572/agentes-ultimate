@@ -95,6 +95,9 @@ falhando antes.
 - **Revisão da parte A, A-1 (Alto):** a trava lê o comando antes de ele rodar: `git add` na mesma linha (o que ele levaria,
   inclusive arquivo novo), `cd`/`Set-Location` e `git -C`, caminho no commit, `--include`, `git.exe`, `bash -c`. O que não dá
   para calcular (variável na pasta ou no caminho) pergunta. O texto da mensagem deixa de ser lido como opção (b-2).
+- **Revisão da parte A, M-1:** commit grande não passa calado. Sem o custo quadrático (40 mil linhas: de 23,6 s para 0,5 s;
+  linha de 420 KB: de 9,8 s para menos de 3 s) e, se não couber no teto de 24 MB ou no prazo de 7 s, a trava pergunta ("grande
+  demais para conferir"). A lista da mensagem vai cortada em 20 itens: com milhares, a saída era truncada e a pergunta se perdia.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

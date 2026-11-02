@@ -28,7 +28,7 @@ const ALTOS = [
   { tipo: 'token do npm', re: /\bnpm_[A-Za-z0-9]{36}\b/ },
   { tipo: 'chave de conta do Azure Storage', re: /\bAccountKey=[A-Za-z0-9+/]{40,}={0,2}/ },
   { tipo: 'texto de conexão com senha', re: /\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|rediss?|amqps?|mssql|sqlserver):\/\/[^\s:/@'"]+:([^\s@'"/]+)@[^\s'"]+/i, senha: 1 },
-  { tipo: 'texto de conexão com senha', re: /\b(?:Server|Data Source|Host)\s*=[^;\n]+;.*?\b(?:Password|Pwd)\s*=\s*([^;'"\s]+)/i, senha: 1 },
+  { tipo: 'texto de conexão com senha', re: /\b(?:Server|Data Source|Host)\s*=[^;\n]{1,200};.{0,500}?\b(?:Password|Pwd)\s*=\s*([^;'"\s]+)/i, senha: 1 },
 ];
 const MEDIOS = [
   { tipo: 'senha, chave ou token atribuído no código', re: /\b(?:api[_-]?key|apikey|client[_-]?secret|secret|access[_-]?token|auth[_-]?token|token|senha|password|passwd|pwd)["']?\s*[:=]\s*["']([^"'\s]{12,})["']/i, senha: 1, valor: (v) => /\d/.test(v) && /[A-Za-z]/.test(v) },
@@ -48,20 +48,27 @@ function acrescentadas(diff) {
   }
   return out;
 }
+// Teto de leitura e prazo: o gancho tem 10 s. O que não couber vira pergunta ("grande demais"), nunca passa calado.
+const TETO_BYTES = Number(process.env.AGENTES_ULTIMATE_TRAVA_TETO) || 24 * 1024 * 1024;
+const PRAZO = Date.now() + 7000;
+const leitura = { incompleta: false };
 function achar(linhas, regras) {
   const achados = [];
   const porArq = {};
   for (const x of linhas) (porArq[x.arq] = porArq[x.arq] || []).push(x);
   for (const [arq, ls] of Object.entries(porArq)) {
     const texto = ls.map((x) => x.texto).join('\n');
+    const inicios = [0];
+    for (let i = texto.indexOf('\n'); i >= 0; i = texto.indexOf('\n', i + 1)) inicios.push(i + 1);
+    const linhaDe = (pos) => { let a = 0, b = inicios.length - 1; while (a < b) { const m = (a + b + 1) >> 1; if (inicios[m] <= pos) a = m; else b = m - 1; } return a; };
     for (const r of regras) {
+      if (Date.now() > PRAZO) { leitura.incompleta = true; return [...new Set(achados)]; }
       const re = new RegExp(r.re.source, r.re.flags.includes('g') ? r.re.flags : r.re.flags + 'g');
       let m;
       while ((m = re.exec(texto))) {
         const v = r.senha ? m[r.senha] : m[0];
         if (!marcador(v) && (!r.valor || r.valor(v))) {
-          const idx = texto.slice(0, m.index).split('\n').length - 1;
-          achados.push(`${arq}:${ls[idx].linha} · ${r.tipo}`);
+          achados.push(`${arq}:${ls[linhaDe(m.index)].linha} · ${r.tipo}`);
         }
         if (!m[0].length) re.lastIndex++;
       }
@@ -189,8 +196,14 @@ function planejar(cmd, cwd, plano = { commits: [], incerto: null }, estado = { c
 
 // O que o commit levaria: nomes e linhas acrescentadas. Um arquivo novo que o "git add" do comando levaria entra inteiro.
 function conteudoDoCommit(c) {
-  const opc = { cwd: c.cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'], windowsHide: true };
-  const roda = (a) => { try { return execSync(a, { ...opc, windowsHide: true }); } catch (e) { return ''; } };
+  const opc = { cwd: c.cwd, encoding: 'utf8', maxBuffer: TETO_BYTES + 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] };
+  // Estouro de tamanho ou de tempo: a leitura ficou incompleta. Comando que falha por outro motivo (fora de um repositório): o commit também falha.
+  const roda = (a) => {
+    try { return execSync(a, { ...opc, windowsHide: true, timeout: Math.max(500, PRAZO - Date.now()) }); } catch (e) {
+      if (e.code === 'ENOBUFS' || e.code === 'ETIMEDOUT' || e.signal) leitura.incompleta = true;
+      return '';
+    }
+  };
   const aspas = (l) => l.map((s) => JSON.stringify(s)).join(' ');
   let diff = ''; let nomes = [];
   const lista = (t) => t.split('\n').map((s) => s.trim()).filter(Boolean);
@@ -212,10 +225,15 @@ function conteudoDoCommit(c) {
     if (!a.soRastreados) novos.push(...lista(roda('git ls-files --others --exclude-standard' + ps)));
     if (a.forcado) novos.push(...a.caminhos);
   }
+  if (diff.length > TETO_BYTES) { leitura.incompleta = true; diff = diff.slice(0, TETO_BYTES); }
   const linhas = acrescentadas(diff);
+  let lidos = diff.length;
   for (const f of [...new Set(novos)]) {
     nomes.push(f);
     try {
+      const tam = fs.statSync(path.resolve(c.cwd, f)).size;
+      if (lidos + tam > TETO_BYTES || Date.now() > PRAZO) { leitura.incompleta = true; continue; }
+      lidos += tam;
       const b = fs.readFileSync(path.resolve(c.cwd, f));
       if (b.subarray(0, 8000).includes(0)) continue;
       b.toString('utf8').split('\n').forEach((texto, n) => linhas.push({ arq: f, linha: n + 1, texto }));
@@ -224,6 +242,7 @@ function conteudoDoCommit(c) {
   return { nomes: [...new Set(nomes)], linhas };
 }
 
+const curta = (l) => (l.length > 20 ? l.slice(0, 20).concat(`... e mais ${l.length - 20}`) : l).join('\n  ');
 const bloquear = (msg) => { process.stderr.write(msg + '\n'); process.exit(2); };
 const perguntar = (motivo) => {
   process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'ask', permissionDecisionReason: motivo } }));
@@ -251,18 +270,19 @@ process.stdin.on('end', () => {
       const regras = FIXOS.concat(padroesDoProjeto(c.cwd));
       const ruins = nomes.filter((f) => regras.some((r) => r.test(f)));
       if (ruins.length) {
-        bloquear(`agentes-ultimate: o commit levaria arquivo sensível para o git:\n  ${ruins.join('\n  ')}\nTire do commit (\`git restore --staged <arquivo>\`, se já preparado) e ponha o padrão no .gitignore.`);
+        bloquear(`agentes-ultimate: o commit levaria arquivo sensível para o git:\n  ${curta(ruins)}\nTire do commit (\`git restore --staged <arquivo>\`, se já preparado) e ponha o padrão no .gitignore.`);
       }
       const altos = achar(linhas, ALTOS);
       if (altos.length) {
-        bloquear(`agentes-ultimate: o commit levaria um segredo para o git (o valor não é mostrado):\n  ${altos.join('\n  ')}\n` +
+        bloquear(`agentes-ultimate: o commit levaria um segredo para o git (o valor não é mostrado):\n  ${curta(altos)}\n` +
           'Tire o valor do arquivo (leia de uma variável de ambiente e cite pelo nome), prepare de novo com git add e, se ele já ' +
           'saiu desta máquina, troque-o: crie o novo, ponha no ar, revogue o antigo e prove que o antigo falha. É exemplo? ' +
           'Troque o valor por um marcador como <senha> ou ${VARIAVEL}.');
       }
       const medios = achar(linhas, MEDIOS);
-      if (medios.length) paraPerguntar.push(`o commit parece levar um segredo (média certeza; o valor não é mostrado):\n  ${medios.join('\n  ')}\nConfirme só se for valor de exemplo ou de teste.`);
+      if (medios.length) paraPerguntar.push(`o commit parece levar um segredo (média certeza; o valor não é mostrado):\n  ${curta(medios)}\nConfirme só se for valor de exemplo ou de teste.`);
     }
+    if (leitura.incompleta) paraPerguntar.push('este commit é grande demais para conferir no tempo do gancho: parte dele não foi lida. Confira que não vai segredo (ou faça commits menores).');
     if (plano.incerto && plano.commits.length) paraPerguntar.push(`não dá para saber o que este commit leva (${plano.incerto}). Confira que não vai segredo nem arquivo sensível.`);
     if (paraPerguntar.length) perguntar('agentes-ultimate: ' + paraPerguntar.join('\n'));
   } catch (e) { /* trava nunca quebra o trabalho */ }

@@ -3,9 +3,9 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync, spawnSync } = require('child_process');
 
-module.exports = function testarTravas({ caso, tmp, hook }) {
+module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   const trava = (command, cwd, tool = 'Bash') => hook('travas.js', { tool_name: tool, tool_input: { command }, cwd, hook_event_name: 'PreToolUse' });
   const pede = (x) => x.json && x.json.hookSpecificOutput && x.json.hookSpecificOutput.permissionDecision === 'ask';
   const git = (c, cwd) => execSync(c, { windowsHide: true, cwd, stdio: ['ignore', 'pipe', 'ignore'], encoding: 'utf8' });
@@ -66,4 +66,23 @@ module.exports = function testarTravas({ caso, tmp, hook }) {
   p = muda(repo());
   x = trava("git commit -q -F - <<'EOF'\ncorrige; git add -A && it's ok\nEOF", p);
   caso('0.8.0 A-1 trava: mensagem em heredoc não é lida como comando', x.code === 0 && !x.out, `code ${x.code} ${x.err} ${x.out}`);
+
+  // ---- M-1: commit grande. Sem custo quadrático; o que não der para ler a tempo vira pergunta, nunca passa calado ----
+  const comTeto = (command, cwd, teto) => {
+    const r = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'travas.js')], { windowsHide: true, encoding: 'utf8', input: JSON.stringify({ tool_name: 'Bash', tool_input: { command }, cwd, hook_event_name: 'PreToolUse' }), env: { ...process.env, AGENTES_ULTIMATE_TRAVA_TETO: String(teto) } });
+    let json = null; try { json = JSON.parse(r.stdout || 'null'); } catch (e) { /* texto */ }
+    return { code: r.status, out: r.stdout, err: r.stderr, json };
+  };
+  p = repo(); fs.writeFileSync(path.join(p, 'grande.txt'), 'linha comum\n'.repeat(4000)); git('git add grande.txt', p);
+  x = comTeto('git commit -m x', p, 1000);
+  caso('0.8.0 M-1 trava: diff acima do teto não passa calado: pergunta "grande demais para conferir"', x.code === 0 && pede(x) && /grande demais/.test(x.out), `code ${x.code} ${x.out}`);
+  p = repo(); fs.writeFileSync(path.join(p, 'grande.txt'), 'linha comum\n'.repeat(4000));
+  x = comTeto('git add -A && git commit -m x', p, 1000);
+  caso('0.8.0 M-1 trava: arquivo novo acima do teto também pergunta', x.code === 0 && pede(x) && /grande demais/.test(x.out), `code ${x.code} ${x.out}`);
+  p = repo(); fs.writeFileSync(path.join(p, 'muitos.json'), '{"token": "abc123def456ghi"}\n'.repeat(40000)); git('git add muitos.json', p);
+  let t0 = Date.now(); x = trava('git commit -m x', p); let ms = Date.now() - t0;
+  caso('0.8.0 M-1 trava: 40 mil linhas com achado levam menos de 6 s (era 48 s: custo quadrático)', ms < 6000 && pede(x), `${ms} ms ${x.out.slice(0, 120)}`);
+  p = repo(); fs.writeFileSync(path.join(p, 'host.txt'), 'Host=a;'.repeat(60000) + '\n'); git('git add host.txt', p);
+  t0 = Date.now(); x = trava('git commit -m x', p); ms = Date.now() - t0;
+  caso('0.8.0 M-1 trava: linha de 420 KB com "Host=a;" leva menos de 3 s (era 19,9 s)', ms < 3000, `${ms} ms`);
 };
