@@ -174,6 +174,10 @@ if (fs.existsSync(path.join(RAIZ, 'conhecimento'))) {
   try { atual = fs.readFileSync(path.join(RAIZ, 'conhecimento', 'indice.json'), 'utf8'); } catch (e) { /* falta */ }
   if (atual.replace(/\r\n/g, '\n') !== ind.texto(referencias)) erros.push('conhecimento/indice.json desatualizado ou ausente: rode node scripts/gerar-agentes.js');
 }
+// T35: frases-chave do protocolo comum em cada agente (a igualdade inteira já é conferida; estas dizem o que não pode sumir do comum).
+for (const canario of ['Prova pela fonte real', 'Nunca invente dados', 'Desculpas comuns', 'Sinais de alerta', 'Verifique antes de afirmar']) {
+  if (!comum.includes(canario)) erros.push(`fonte/comum.md: sumiu a frase-chave "${canario}"`);
+}
 // Janela piscando no Windows: toda chamada de processo em hooks/ e scripts/ leva windowsHide.
 {
   const { semWindowsHide } = require(path.join(RAIZ, 'scripts', 'chamadas-processo.js'));

@@ -1,0 +1,39 @@
+// Verificador do projeto e sugestão de compactar, chamados pelo hooks/atividade.js (sem abrir processo de gancho a mais).
+// Verificador: .claude/base/config.json → "verificador": { "comando": "node regras.js {arquivo}", "extensoes": [".js"], "aoParar": "npm test" }.
+// Sem config, silêncio. Falhou → aviso. Passou do tempo (5 s na edição, 30 s ao parar) → corta e avisa; nunca trava o trabalho.
+// Ideia de pbakaus/impeccable hook.mjs @e89e3ad, © 2025 Paul Bakaus, Apache-2.0, e dos ganchos do affaan-m/ECC @b38be6a,
+// © 2026 Affaan Mustafa, MIT; reescrito; alterado por agentes-ultimate; licenças em terceiros/.
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const { spawnSync } = require('child_process');
+
+function config(cwd) {
+  try { return JSON.parse(fs.readFileSync(path.join(cwd, '.claude', 'base', 'config.json'), 'utf8')).verificador || null; } catch (e) { return null; }
+}
+function rodar(comando, cwd, limiteMs) {
+  const r = spawnSync(comando, { windowsHide: true, shell: true, cwd, encoding: 'utf8', timeout: limiteMs, maxBuffer: 1024 * 1024 });
+  if (r.error && r.error.code === 'ETIMEDOUT') return `verificador cortado em ${limiteMs / 1000} s: ${comando.slice(0, 80)}`;
+  if (r.status !== 0) return `verificador acusou (saída ${r.status}): ${((r.stdout || '') + (r.stderr || '')).trim().slice(0, 400)}`;
+  return null;
+}
+function aoEditar(cwd, rel) {
+  const c = config(cwd);
+  if (!c || !c.comando || !rel) return null;
+  if (Array.isArray(c.extensoes) && !c.extensoes.includes(path.extname(rel))) return null;
+  return rodar(String(c.comando).replace(/\{arquivo\}/g, `"${rel}"`), cwd, 5000);
+}
+function aoParar(cwd) {
+  const c = config(cwd);
+  return c && c.aoParar ? rodar(String(c.aoParar), cwd, 30000) : null;
+}
+// Compactar num marco: depois de 50 chamadas e a cada 25, uma linha; nunca interrompe. Conta por sessão, fora do git.
+function sugerirCompactar(cwd, sessao) {
+  const f = path.join(cwd, '.claude', 'base', '.contagem.json');
+  let c = {};
+  try { c = JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { /* 1ª vez */ }
+  const n = c.sessao === sessao ? (c.n || 0) + 1 : 1;
+  try { fs.writeFileSync(f, JSON.stringify({ sessao, n })); } catch (e) { /* sem efeito */ }
+  return n >= 50 && (n - 50) % 25 === 0 ? `${n} chamadas nesta sessão: quando fechar o item em andamento (depois de um commit), é um bom momento de compactar. Nunca no meio de uma tarefa.` : null;
+}
+module.exports = { aoEditar, aoParar, sugerirCompactar };

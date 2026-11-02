@@ -82,4 +82,43 @@ module.exports = function testarPainel({ caso, tmp, RAIZ, hook }) {
   ev('SubagentStop');
   const regs2 = fs.readFileSync(path.join(p, '.claude', 'base', '.agentes.jsonl'), 'utf8').trim().split('\n');
   caso('painel: SubagentStop repetido não vira fim duplicado', regs2.length === n1, `${regs2.length} × ${n1}`);
+
+  // ---- Lote 9: T19 (compactar e retomar) e T2 (verificador do projeto) ----
+  const pv = projeto([]);
+  const ativ = (extra) => hook('atividade.js', { hook_event_name: 'PostToolUse', cwd: pv, session_id: 'S9', tool_name: 'Read', tool_input: { file_path: path.join(pv, 'a.txt') }, ...extra });
+  let aviso50 = false, aviso49 = false, aviso75 = false;
+  for (let i = 1; i <= 75; i++) { fs.writeFileSync(path.join(pv, '.claude', 'base', '.contagem.json'), JSON.stringify({ sessao: 'S9', n: i - 1 })); if (![49, 50, 75].includes(i)) continue; const x = ativ(); const m = /compactar/.test(x.out || ''); if (i === 49) aviso49 = m; if (i === 50) aviso50 = m; if (i === 75) aviso75 = m; }
+  caso('T19 compactar: aviso na 50ª e na 75ª chamada, não na 49ª', aviso50 && aviso75 && !aviso49, JSON.stringify({ aviso49, aviso50, aviso75 }));
+  const rt = hook('retomar.js', { hook_event_name: 'PreCompact', cwd: pv });
+  const trt = fs.existsSync(path.join(pv, '.claude', 'base', '.retomar.md')) ? fs.readFileSync(path.join(pv, '.claude', 'base', '.retomar.md'), 'utf8') : '';
+  caso('T19 retomar: PreCompact grava .claude/base/.retomar.md', rt.code === 0 && /antes de compactar/.test(trt), trt.slice(0, 100) || 'sem arquivo');
+  const cfgV = path.join(pv, '.claude', 'base', 'config.json');
+  const edita = () => hook('atividade.js', { hook_event_name: 'PostToolUse', cwd: pv, session_id: 'V', tool_name: 'Edit', tool_input: { file_path: path.join(pv, 'a.js') } });
+  let xv = edita();
+  caso('T2 verificador: sem config, silêncio', xv.code === 0 && !xv.out, xv.out);
+  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: 'node -e "process.exit(3)"' } }));
+  xv = edita();
+  caso('T2 verificador: comando que falha vira aviso', /verificador acusou/.test(xv.out || ''), xv.out);
+  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: 'node -e "setTimeout(()=>{},20000)"' } }));
+  const t9 = Date.now(); xv = edita();
+  caso('T2 verificador: comando lento é cortado em 5 s e não trava', /cortado em 5 s/.test(xv.out || '') && Date.now() - t9 < 12000, xv.out);
+  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: 'node -e "process.exit(0)"', extensoes: ['.py'] } }));
+  xv = edita();
+  caso('T2 verificador: extensão fora da lista não roda', !xv.out, xv.out);
+
+  // ---- Lote 10 e 11: integrações e T1 detector (fixture com defeito sai 1; limpa sai 0; pasta com espaço e acento) ----
+  const pd = path.join(tmp, 'detector com espaço ação'); fs.mkdirSync(pd, { recursive: true });
+  const det = path.join(RAIZ, 'ferramentas', 'detector-interface', 'detector.js');
+  const ruim = path.join(pd, 'ruim.html'); const bom = path.join(pd, 'bom.html');
+  fs.writeFileSync(ruim, '<meta name="viewport" content="user-scalable=no">\n<style>a{transition: all .2s;height:100vh}</style>\n<img src="x.png">\n');
+  fs.writeFileSync(bom, '<!doctype html><html lang="pt"><style>a{transition:opacity .2s;height:100dvh}</style><img src="x.png" alt="Logotipo"></html>\n');
+  const roda = (f) => require('child_process').spawnSync(process.execPath, [det, f], { windowsHide: true, encoding: 'utf8' });
+  let dr = roda(ruim);
+  caso('T1 detector: HTML com defeito sai 1 e aponta linha e regra', dr.status === 1 && /ruim\.html:1 \[zoom-desligado\]/.test(dr.stdout) && /\[transition-all\]/.test(dr.stdout) && /\[img-sem-alt\]/.test(dr.stdout), dr.stdout + dr.stderr);
+  dr = roda(bom);
+  caso('T1 detector: HTML limpo sai 0', dr.status === 0 && /0 achado/.test(dr.stdout), dr.stdout);
+  const cfgD = JSON.parse(fs.readFileSync(path.join(RAIZ, 'hooks', 'hooks.json'), 'utf8'));
+  caso('T1 detector: desligado por padrão (nenhum gancho do plugin o chama)', !JSON.stringify(cfgD).includes('detector'), 'gancho cita o detector');
+  const ski = fs.readFileSync(path.join(RAIZ, 'skills', 'integracoes', 'SKILL.md'), 'utf8');
+  caso('0.8.0 B10 skill integracoes: só do usuário, com as ferramentas, o dado que sai e como desligar; não instala', /^disable-model-invocation: true/m.test(ski) && ['context7', '21st', 'strix', 'semgrep', 'Chrome DevTools'].every((s) => ski.includes(s)) && /não instala nada/.test(ski) && /Desligar/.test(ski), 'falta');
 };

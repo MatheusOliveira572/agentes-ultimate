@@ -42,7 +42,10 @@ process.stdin.on('end', () => {
   try {
     const d = JSON.parse(entrada || '{}');
     const cwd = d.cwd || process.cwd();
-    if (d.hook_event_name === 'Stop') { if (permitida(cwd)) fim(cwd); process.exit(0); }
+    if (d.hook_event_name === 'Stop') {
+      if (permitida(cwd)) { fim(cwd); const v = require('./verificador').aoParar(cwd); if (v) process.stdout.write(JSON.stringify({ systemMessage: v })); }
+      process.exit(0);
+    }
     const ferramenta = d.tool_name || '';
     if (!ACAO[ferramenta] || !permitida(cwd)) process.exit(0);
     const ti = d.tool_input || {};
@@ -65,6 +68,10 @@ process.stdin.on('end', () => {
     const arq = path.join(cwd, '.claude', 'base', '.atividade.jsonl');
     try { if (fs.statSync(arq).size > MAX_BYTES) fs.renameSync(arq, arq + '.1'); } catch (e) { /* novo */ }
     fs.appendFileSync(arq, JSON.stringify(ev) + '\n');
+    // Numa chamada só de gancho, sem processo a mais: verificador do projeto (só em edição) e sugestão de compactar.
+    const V = require('./verificador');
+    const avisos = [ev.acao === 'editou' || ev.acao === 'criou' ? V.aoEditar(cwd, rel) : null, V.sugerirCompactar(cwd, d.session_id || 'x')].filter(Boolean);
+    if (avisos.length) process.stdout.write(JSON.stringify({ systemMessage: avisos.join(' · ') }));
   } catch (e) { /* nunca quebra o trabalho */ }
   process.exit(0);
 });

@@ -127,6 +127,13 @@ falhando antes.
   sem cabeçalho, jinja e comandos da ferramenta): 29 classes de vulnerabilidade, frameworks, tecnologias, protocolos, nuvem, dependências, método (contraprova,
   gravidade, verificar correção, varredura) e modos; índice em português; lista de construção (addy, MIT). Varredura ofensiva não entra.
 - **B9, parte de revisão · `revisor`:** revisar só a mudança e passe de veredito (Jakub, impeccable), revisão de código com 5 eixos e rótulos (addy).
+- **B9, parte de ganchos:** T19 sugestão de compactar (50 chamadas, depois a cada 25) e `hooks/retomar.js` (PreCompact e SessionEnd gravam
+  `.claude/base/.retomar.md`); T2 `hooks/verificador.js` (comando do projeto a cada edição, 5 s, e ao parar, 30 s), os dois dentro do `atividade.js`, sem
+  processo de gancho a mais; "Desculpas comuns" e "Sinais de alerta" no protocolo comum, uma vez para os 30 agentes, em vez de uma seção por agente; T35
+  frases-chave no `validar.js`. T18 já estava na trava (A-1). **T16 (cache de WebFetch) e T17 (simplify-ignore), opcionais de baixa prioridade, não entraram.**
+- **B10 · skill `integracoes` e README:** por ferramenta, o que faz, que dado sai, como ligar, como desligar e o risco. O plugin não instala nada.
+- **B11 · T1 detector de interface** (`ferramentas/detector-interface/detector.js`, 18 regras, texto nosso): no commit usado, o detector do impeccable é em Rust,
+  então só a ideia veio. Desligado por padrão; liga pelo `verificador`.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
