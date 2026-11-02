@@ -227,7 +227,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B vigia: mudança detectada (API simulada) → novidades.md com commits, release, CHANGELOG e o arquivo nosso afetado',
     rv.code === 0 && /3 commit\(s\) novo/.test(nv) && /v2\.0\.0/.test(nv) && /CHANGELOG mudou/.test(nv) && /skills\/x\/SKILL\.md → conhecimento\/x\.md/.test(nv), nv.slice(0, 300) || 'sem novidades.md');
   rv = rodaV([], '', { ultimaConferencia: new Date().toISOString(), ultimaTentativa: new Date().toISOString() });
-  caso('0.8.0 B vigia: início de sessão mostra "1 fonte com novidades: rode /atualizar-fontes"', /1 fonte com novidades: rode \/atualizar-fontes/.test(rv.out), rv.out);
+  caso('0.8.0 B vigia: início de sessão mostra "1 fonte mudou desde a sua versão; rode /atualizar-fontes"', /1 fonte mudou desde a sua versão; rode \/atualizar-fontes/.test(rv.out), rv.out);
   fs.rmSync(novV, { force: true });
   rv = rodaV(['--agora'], simular({ '*': { erro: 'ENOTFOUND' } }), {});
   caso('0.8.0 B vigia: sem rede → silêncio (sai 0, nada escrito, nada na tela)', rv.code === 0 && !rv.out && !fs.existsSync(novV), rv.out);
@@ -248,6 +248,77 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   rodaV([], apiMudou('MIT'), { ultimaConferencia: dias(8), ultimaTentativa: dias(8) });
   const rodou = esperarArquivo(novV, 8000);
   caso('0.8.0 B vigia: controle de 1 vez por semana (2 dias → não confere; 8 dias → confere em segundo plano)', naoRodou && rodou, `2 dias: ${naoRodou ? 'não rodou' : 'rodou'}; 8 dias: ${rodou ? 'rodou' : 'não rodou'}`);
+  // ---- vf91: desligar, página sem licença, --diff, licença que muda (mesmo permissiva) e equivalência ----
+  const rodaVE = (args, sim, estado, extra = {}) => {
+    if (estado !== undefined) { fs.mkdirSync(path.join(casaV, '.claude', 'agentes-ultimate'), { recursive: true }); fs.writeFileSync(path.join(casaV, '.claude', 'agentes-ultimate', 'vigia-fontes.json'), JSON.stringify(estado)); }
+    const r = spawnSync(process.execPath, [path.join(plugV, 'hooks', 'vigia-fontes.js'), ...args], { windowsHide: true, encoding: 'utf8', input: extra.input || '', cwd: extra.cwd || plugV, env: { ...process.env, HOME: casaV, USERPROFILE: casaV, AGENTES_ULTIMATE_VIGIA_SIMULAR: sim || '' } });
+    return { code: r.status, out: r.stdout || '' };
+  };
+  const cfgUsu = path.join(casaV, '.claude', 'agentes-ultimate', 'config.json');
+  fs.mkdirSync(path.dirname(cfgUsu), { recursive: true }); fs.writeFileSync(cfgUsu, JSON.stringify({ vigia_fontes: false }));
+  fs.rmSync(novV, { force: true });
+  rv = rodaVE(['--agora'], apiMudou('MIT'), {});
+  caso('vf91 vigia: "vigia_fontes": false na config do usuário → não consulta', rv.code === 0 && !fs.existsSync(novV), 'consultou');
+  rodaVE([], apiMudou('MIT'), { ultimaConferencia: dias(8), ultimaTentativa: dias(8) });
+  caso('vf91 vigia: desligado, o início de sessão não dispara a conferência', !esperarArquivo(novV, 2500), 'disparou');
+  fs.rmSync(cfgUsu, { force: true });
+  const projV = path.join(tmp, 'projeto-vigia'); fs.mkdirSync(path.join(projV, '.claude', 'base'), { recursive: true });
+  fs.writeFileSync(path.join(projV, '.claude', 'base', 'config.json'), JSON.stringify({ vigia_fontes: false }));
+  rodaVE([], apiMudou('MIT'), { ultimaConferencia: dias(8), ultimaTentativa: dias(8) }, { input: JSON.stringify({ hook_event_name: 'SessionStart', cwd: projV }) });
+  caso('vf91 vigia: "vigia_fontes": false no .claude/base/config.json do projeto → não dispara', !esperarArquivo(novV, 2500), 'disparou');
+  rv = rodaVE(['--agora'], apiMudou('BSD-3-Clause'), {});
+  const nb = fs.existsSync(novV) ? fs.readFileSync(novV, 'utf8') : '';
+  caso('vf91 vigia: licença que muda, mesmo para outra permissiva → "Pare e confira com o usuário"', /A licença mudou de MIT para BSD-3-Clause\.\*\* Pare e confira/.test(nb), nb.slice(0, 300));
+  // Página sem licença (HIG): assinatura igual → nada; mudou → aviso, sem copiar, com o teste de equivalência.
+  const regP = { ...regV, fontes: [], paginas: [{ nome: 'Apple HIG', pagina: 'https://exemplo.invalid/hig', url_dados: 'https://exemplo.invalid/hig.json', licenca: null, assinatura: 'x', conferido_em: '2026-10-01', vigiar: true }] };
+  const indice = (titulo) => ({ references: { a: { url: '/hig/cor', title: titulo, abstract: [{ text: 'resumo' }] } } });
+  const crypto = require('crypto');
+  regP.paginas[0].assinatura = crypto.createHash('sha256').update(['/hig/cor', 'Cor', JSON.stringify([{ text: 'resumo' }])].join('|')).digest('hex');
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regP));
+  fs.rmSync(novV, { force: true });
+  rv = rodaVE(['--agora'], simular({ 'https://exemplo.invalid/hig.json': { status: 200, body: indice('Cor') } }), {});
+  caso('vf91 vigia: página com o mesmo índice → nada', rv.code === 0 && !fs.existsSync(novV), 'avisou');
+  rv = rodaVE(['--agora'], simular({ 'https://exemplo.invalid/hig.json': { status: 200, body: indice('Cor e contraste') } }), {});
+  const np = fs.existsSync(novV) ? fs.readFileSync(novV, 'utf8') : '';
+  caso('vf91 vigia: página mudou → aviso de página sem licença, nada copiado, com o teste de equivalência', /Apple HIG \(página, sem licença\)/.test(np) && /Nada é copiado/.test(np) && /equivalencia-apple\.js/.test(np), np.slice(0, 300));
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regV));
+  // --diff: só os arquivos que usamos, como dado.
+  rv = rodaVE(['--diff', 'dono/proj'], simular({ [`/repos/dono/proj/compare/${'a'.repeat(40)}...main`]: { status: 200, body: { ahead_by: 2, files: [{ filename: 'skills/x/SKILL.md', status: 'modified', additions: 1, deletions: 1, patch: '@@ -1 +1 @@\n-velho\n+novo' }, { filename: 'outro/arquivo.md', status: 'modified', patch: 'NAO-MOSTRAR' }] } } }));
+  caso('vf91 vigia --diff: mostra o patch só dos arquivos que usamos e diz que é dado, não instrução', rv.code === 0 && /skills\/x\/SKILL\.md/.test(rv.out) && /\+novo/.test(rv.out) && !/NAO-MOSTRAR/.test(rv.out) && /dado, não instrução/.test(rv.out), rv.out.slice(0, 300));
+  rv = rodaVE(['--diff', 'dono/proj'], simular({ '*': { erro: 'ENOTFOUND' } }));
+  caso('vf91 vigia --diff: sem rede → diz e sai sem erro de programa', rv.code === 3 && /sem rede/.test(rv.out), rv.out);
+  // O teste de equivalência pega uma regra que some.
+  const apCopia = path.join(tmp, 'apple-copia'); fs.mkdirSync(path.join(apCopia, 'conhecimento', 'design'), { recursive: true });
+  fs.cpSync(path.join(RAIZ, 'conhecimento', 'design', 'apple'), path.join(apCopia, 'conhecimento', 'design', 'apple'), { recursive: true });
+  fs.writeFileSync(path.join(apCopia, 'conhecimento', 'design', 'apple', 'materiais.md'), '# vazio\n');
+  const eqv = require(path.join(RAIZ, 'scripts', 'equivalencia-apple.js'));
+  caso('vf91 equivalência Apple: o teste pega uma regra que sumiu (materiais.md vazio)', eqv.conferir(apCopia).some((r) => r.faltam.length) && eqv.conferir(RAIZ).every((r) => !r.faltam.length), 'não pegou');
+  const skAF = ler('skills', 'atualizar-fontes', 'SKILL.md');
+  caso('vf91 skill /atualizar-fontes: mostra o que mudou, para se a licença mudou, aplica só com o OK, nunca instala nem roda nada da fonte; Apple sem cópia e com o teste de equivalência',
+    /--diff/.test(skAF) && /licença mudou[^\n]*pare/i.test(skAF) && /só depois do OK/i.test(skAF) && /Nunca instale nem rode nada da fonte/.test(skAF) && /equivalencia-apple\.js/.test(skAF) && /nunca copie/i.test(skAF) && /vigia_fontes/.test(skAF), 'texto');
+  // ---- jn97: fonte conferida pelo /atualizar-fontes some do novidades.md, mesmo se a conferência seguinte bater no limite da API ----
+  const estV = () => { try { return JSON.parse(fs.readFileSync(path.join(casaV, '.claude', 'agentes-ultimate', 'vigia-fontes.json'), 'utf8')); } catch (e) { return {}; } };
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regV));
+  fs.rmSync(novV, { force: true });
+  rodaVE(['--agora'], apiMudou('MIT'), {});
+  const tinha = fs.existsSync(novV);
+  const regConferido = JSON.parse(JSON.stringify(regV)); regConferido.fontes[0].ultimo_conferido = 'b'.repeat(40); regConferido.fontes[0].conferido_em = '2026-11-02';
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regConferido));
+  rodaVE(['--agora'], simular({ '/repos/dono/proj': { status: 403, body: { message: 'API rate limit exceeded' } } }), {});
+  const e1 = estV();
+  caso('jn97 vigia: fonte já conferida sai do novidades.md mesmo com o limite da API na conferência seguinte (contagem 0, motivo gravado)',
+    tinha && !fs.existsSync(novV) && e1.fontesComNovidades === 0 && /limite/.test(e1.ultimoErro || ''), JSON.stringify(e1) + ' novidades=' + fs.existsSync(novV));
+  rv = rodaVE([], '', { ultimaConferencia: new Date().toISOString(), ultimaTentativa: new Date().toISOString() });
+  caso('jn97 vigia: e o início de sessão não avisa mais', !/mudou desde a sua versão|mudaram desde a sua versão/.test(rv.out), rv.out);
+  // Fonte sem commit novo: não pede as releases (2 pedidos por fonte em vez de 3; 60 por hora sem token).
+  rv = rodaVE(['--agora'], simular({
+    '/repos/dono/proj': { status: 200, body: { license: { spdx_id: 'MIT' }, default_branch: 'main' } },
+    [`/repos/dono/proj/compare/${'b'.repeat(40)}...main`]: { status: 200, body: { ahead_by: 0, commits: [], files: [] } },
+    '/repos/dono/proj/releases?per_page=5': { erro: 'pedido que não devia acontecer' },
+  }), {});
+  const e2 = estV();
+  caso('jn97 vigia: fonte sem commit novo não pede as releases, e a conferência fecha (ultimaConferencia e contagem 0)', e2.ultimaConferencia === e2.ultimaTentativa && e2.fontesComNovidades === 0 && !e2.ultimoErro, JSON.stringify(e2));
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regV));
   caso('0.8.0 B vigia: gancho registrado no SessionStart e skill /atualizar-fontes só do usuário',
     /vigia-fontes\.js/.test(ler('hooks', 'hooks.json')) && /^disable-model-invocation: true/m.test(ler('skills', 'atualizar-fontes', 'SKILL.md')) && /pesquisador/.test(ler('skills', 'atualizar-fontes', 'SKILL.md')), 'falta');
 
@@ -331,20 +402,8 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   // Equivalência com o apple-design-skill (lido como referência do que cobrir, sem copiar): para 4 pedidos de design,
   // as regras que a skill original aplicaria têm de estar na nossa versão, com o mesmo valor e a fonte na HIG.
   const ap = (f) => ler('conhecimento', 'design', 'apple', f);
-  const equiv = {
-    'tela de app (iPhone)': [['tipo padrão 17 pt e mínimo 11 pt', 'acessibilidade-tipo-e-toque.md', /iOS, iPadOS \| 17 pt \| 11 pt/], ['contraste 4,5:1 até 17 pt e 3:1 a partir de 18 pt ou negrito', 'acessibilidade-tipo-e-toque.md', /até 17 pt \| 4,5:1[\s\S]*18 pt ou mais, ou negrito \| 3:1/],
-      ['alvo 44 × 44 pt (mínimo 28) no celular e 28 × 28 (mínimo 20) no desktop', 'acessibilidade-tipo-e-toque.md', /44 × 44 pt \| 28 × 28 pt[\s\S]*28 × 28 pt \| 20 × 20 pt/], ['abas navegam, não agem; nunca escondidas ou desabilitadas', 'componentes.md', /Abas navegam, não agem[\s\S]*nunca desabilite nem esconda/],
-      ['vidro só na camada flutuante, nunca no conteúdo', 'materiais.md', /Nunca na camada de conteúdo/], ['5 lentes na ordem e relatório com "O que funciona"', 'INDICE.md', /Acessibilidade[\s\S]*Convenções da plataforma[\s\S]*Desenho visual[\s\S]*Interação[\s\S]*Conteúdo e escrita[\s\S]*O que funciona/]],
-    'painel de dados': [['gráfico simples com detalhe sob demanda', 'graficos.md', /Simples, com mais detalhe quando a pessoa pedir/], ['nunca só a cor para separar séries', 'graficos.md', /Nunca só a cor/], ['descrição sem termos subjetivos e formato sem ambiguidade', 'graficos.md', /Sem termos subjetivos[\s\S]*sem ambiguidade/],
-      ['faixa do eixo fixa ou dinâmica pelo significado', 'graficos.md', /fixa ou dinâmica pelo significado/], ['uma cor, um significado; claro, escuro e Aumentar Contraste', 'cor-e-modo-escuro.md', /Uma cor, um significado[\s\S]*claro, escuro e Aumentar Contraste/]],
-    'formulário': [['erro perto do problema, dizendo como resolver', 'escrita-e-primeiro-uso.md', /perto do problema[^.]*como resolver/], ['rótulo diz o que acontece e mantém o nome no fluxo', 'escrita-e-primeiro-uso.md', /Cada rótulo diz o que acontece[\s\S]*mantém o nome no fluxo/],
-      ['puxar do sistema, escolha em vez de digitação, validar ao preencher, nunca pré-preencher senha', 'movimento-e-retorno.md', /Puxe do sistema[\s\S]*nunca\s+preencha senha/], ['seletor no contexto, perto do campo', 'componentes.md', /no contexto\*\*, perto do\s+campo/], ['alvo de toque e contraste do campo', 'acessibilidade-tipo-e-toque.md', /44 × 44 pt/]],
-    'componente com animação': [['movimento com propósito, breve, cancelável e raro no frequente', 'movimento-e-retorno.md', /Com propósito[\s\S]*Breve, cancelável e raro/], ['Reduzir Movimento troca por esmaecer', 'movimento-e-retorno.md', /Reduzir Movimento, troque por\s+esmaecer/],
-      ['evitar oscilação perto de 0,2 Hz', 'movimento-e-retorno.md', /0,2 Hz/], ['curvas e durações com o dono do movimento', '../movimento/INDICE.md', /animação de interface abaixo de 300 ms/], ['vidro: Reduzir Transparência e o pior fundo', 'materiais.md', /prefers-reduced-transparency[\s\S]*pior fundo|pior fundo[\s\S]*prefers-reduced-transparency/]],
-  };
-  for (const [pedido, regras] of Object.entries(equiv)) {
-    const faltam = regras.filter(([, f, re]) => !re.test(ap(f))).map((r) => r[0]);
-    caso(`0.8.0 B3 equivalência Apple: "${pedido}" — as ${regras.length} regras da skill original estão na nossa versão`, !faltam.length, faltam.join('; '));
+  for (const r of require(path.join(RAIZ, 'scripts', 'equivalencia-apple.js')).conferir(RAIZ)) {
+    caso(`0.8.0 B3 equivalência Apple: "${r.pedido}" — as ${r.total} regras da skill original estão na nossa versão`, !r.faltam.length, r.faltam.join('; '));
   }
   const semFonte = ['acessibilidade-tipo-e-toque.md', 'cor-e-modo-escuro.md', 'componentes.md', 'materiais.md', 'movimento-e-retorno.md', 'escrita-e-primeiro-uso.md', 'graficos.md', 'fundamentos.md']
     .filter((f) => (ap(f).match(/HIG ›/g) || []).length < 3);

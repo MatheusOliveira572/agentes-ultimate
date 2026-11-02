@@ -1,4 +1,4 @@
-<!-- Adaptado de emilkowalski/skills/skills/review-animations/STANDARDS.md e skills/animate/SKILL.md @a81dbca, © 2026 Emil Kowalski, MIT. Alterações: tradução, condensação, junção dos padrões de criação e de revisão; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->
+<!-- Adaptado de emilkowalski/skills/skills/review-animations/STANDARDS.md e skills/animate/SKILL.md @f1090be, © 2026 Emil Kowalski, MIT. Alterações: tradução, condensação, junção dos padrões de criação e de revisão; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->
 <!-- ref: tema=movimento; palavras=animacao, animacoes, animar, movimento, transicao, transicoes, easing, curva de animacao, duracao da animacao, mola, spring, micro interacao, hover animado, entrada da tela, visual premium, redesenhe, redesenho, site bonito, bonito, site institucional; agentes=engenheiro-software, designer-paineis, designer-documentos -->
 <!-- teste-ref: sim=crie a animação de entrada do modal com a curva e a duração certas | revise as animações e transições do app, estão lentas e com easing estranho; nao=calcule o ponto de equilíbrio do produto -->
 # Movimento (Emil Kowalski manda nos valores)
@@ -46,8 +46,9 @@ tabela admite até 500 ms em modal e gaveta; vale o menor que ainda se lê.
 
 ## Desempenho
 Só **`transform` e `opacity`** (pulam layout e pintura). Não mova filhos por variável de CSS no pai (recalcula todos);
-`transform` direto no elemento. Em Framer Motion, use a string completa de `transform` (os atalhos `x`/`y` rodam na
-thread principal). CSS vence JS sob carga; WAAPI dá controle de JS com o desempenho do CSS.
+`transform` direto no elemento. Em Motion, os atalhos `x`/`y`/`scale`/`rotate` têm aceleração de hardware a partir da versão 14.2;
+antes dela, rodam na thread principal: atualize ou use a string completa de `transform`. Animações de layout
+(`layout`, `layoutId`) rodam na thread principal em qualquer versão. CSS vence JS sob carga; WAAPI dá controle de JS com o desempenho do CSS.
 
 ## Acessibilidade
 Envolva em `@media (prefers-reduced-motion: no-preference)`; com redução, esmaecer no lugar de deslizar e escalar;

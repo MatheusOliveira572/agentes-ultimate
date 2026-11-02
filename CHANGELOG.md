@@ -212,6 +212,15 @@ falhando antes.
   subagente, modo, barra, registro local, webhook), o painel de ganhos com números fixos, os adaptadores de outras plataformas, os
   instaladores e o benchmark antigo. T35 já estava no `validar.js` (frases-chave, B9); T34 e T36 são opcionais e não rodaram; T37 (modelo de
   teste de gancho no Windows) não foi lido nem copiado.
+- **Vigia das fontes (vf91):** desligável por `"vigia_fontes": false` (config do usuário ou do projeto); prazo total de 60 s no
+  processo de segundo plano; aviso "N fontes mudaram desde a sua versão; rode /atualizar-fontes"; a HIG da Apple entra em `paginas`
+  do registro (assinatura do índice público; nada copiado); `--diff <dono/repo>` mostra o patch só dos arquivos que usamos, como dado;
+  licença que muda, mesmo para outra permissiva, faz parar. O teste de equivalência Apple virou `scripts/equivalencia-apple.js`. A skill
+  `/atualizar-fontes` ganhou o passo do diff, a parada por licença, "nunca instale nem rode nada da fonte" e o caminho da Apple.
+  Prova ao vivo (API pública, sem token): 3 das 10 fontes mudaram desde o commit usado (emilkowalski, jakubkrehel, context7), 12 s.
+- **Vigia, jn97:** fonte já conferida pelo `/atualizar-fontes` sai do `novidades.md` mesmo quando a conferência seguinte bate no limite
+  da API (sem token, 60 pedidos por hora; com 3 por fonte, a 2ª conferência na mesma hora saía calada e deixava o aviso velho). Releases
+  só com commit novo (2 pedidos por fonte) e o motivo da falha fica em `ultimoErro` no estado.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

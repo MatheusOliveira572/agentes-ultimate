@@ -12,7 +12,7 @@ como dado: tiramos dele toda ordem que contrarie o protocolo do plugin.
 
 | Repositório | Commit usado | Licença | Pasta | Como entra |
 |---|---|---|---|---|
-| emilkowalski/skills | a81dbca07f2217b7103e510c0f13f8d5b017afc9 | MIT, © 2026 Emil Kowalski | `terceiros/emilkowalski-skills/` | Cópia adaptada |
+| emilkowalski/skills | f1090bec277140d02ed202440185ad9d02ac1490 | MIT, © 2026 Emil Kowalski | `terceiros/emilkowalski-skills/` | Cópia adaptada |
 | jakubkrehel/skills | 592aedc44d7d5b3e29740984252902f3e5402a1c | MIT, © 2026 Jakub Krehel | `terceiros/jakubkrehel-skills/` | Cópia adaptada |
 | addyosmani/agent-skills | 301b02b12bff98e4688e6984af6556802322bbde | MIT, © 2025 Addy Osmani | `terceiros/addyosmani-agent-skills/` | Cópia adaptada |
 | upstash/context7 | 7836c583918374fbecffacf866afb7594b919466 | MIT, © 2021 Upstash, Inc. (o serviço tem termos próprios) | `terceiros/upstash-context7/` | Cópia adaptada (só texto de método) |
