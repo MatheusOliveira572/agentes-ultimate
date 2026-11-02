@@ -97,6 +97,15 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B2 teardown: trocar Math.PI por 3 na geometria faz o test-geometry falhar', td2.some((x) => x.t === 'test-geometry.cjs' && x.code !== 0), JSON.stringify(td2));
   caso('0.8.0 B2 teardown: LICENSE do autor junto da ferramenta', /Jakub Krehel/.test(ler('ferramentas', 'teardown', 'LICENSE')), 'sem LICENSE');
 
+  // ---- Lote 4 · redator, comunicação, CS, produto, estratégia, marketing, planejador, pesquisador ----
+  const b4 = { redator: 'escrita/texto-de-interface.md', 'comunicador-corporativo': 'escrita/texto-de-interface.md', 'especialista-cs': 'design/primeiro-uso.md', 'gerente-produto': 'engenharia/lancar.md',
+    estrategista: 'metodo/refinar-ideia.md', 'estrategista-marketing': 'design/modos/persuadir.md', planejador: 'metodo/quebrar-tarefas.md', pesquisador: 'metodo/fonte-oficial-da-versao.md' };
+  for (const [ag, arq] of Object.entries(b4)) {
+    caso(`0.8.0 B4 ${ag}: seção cita ${arq} e o eval cobra a leitura`, secRef(ag).includes('/conhecimento/' + arq) && ler('evals', ag + '.md').includes('conhecimento/' + arq), 'falta na seção ou no eval');
+  }
+  caso('0.8.0 B4 lancar.md aponta para a skill checklist-lancamento em vez de duplicar a lista', /\/checklist-lancamento/.test(ler('conhecimento', 'engenharia', 'lancar.md')), 'falta');
+  caso('0.8.0 B4 marketing continua dentro de 90 linhas com a seção e sem marca [conferir]', ler('agents', 'estrategista-marketing.md').split('## Protocolo comum')[0].split('\n').length <= 90 && !/\[conferir\]/.test(ler('fonte', 'agentes', 'marketing', 'estrategista-marketing.md')), 'passou de 90 ou voltou [conferir]');
+
   // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
   v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });
   caso('0.8.0 B fontes: linha de crédito que cita fonte fora de fontes/fontes.json é erro', v.code === 1 && /cita fulano\/projeto-x, que não está em fontes\/fontes\.json/.test(v.out), v.out.slice(-300));

@@ -802,6 +802,34 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/primeiro-uso.md",
+      "tema": "primeiro-uso",
+      "palavras": [
+        "primeiro uso",
+        "onboarding",
+        "boas vindas",
+        "tela de boas vindas",
+        "estado vazio",
+        "primeira vez",
+        "ativacao do usuario",
+        "tutorial do app"
+      ],
+      "agentes": [
+        "gerente-produto",
+        "especialista-cs",
+        "designer-paineis"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe o primeiro uso do app: boas-vindas, estado vazio e ativação",
+          "o onboarding do produto está longo, melhore a primeira vez do usuário"
+        ],
+        "nao": [
+          "prepare a defesa do auto de infração"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/revisao-tela.md",
       "tema": "revisao-de-tela",
       "palavras": [
@@ -1386,6 +1414,35 @@
       }
     },
     {
+      "arquivo": "conhecimento/engenharia/lancar.md",
+      "tema": "lancar",
+      "palavras": [
+        "lancamento em etapas",
+        "liberacao gradual",
+        "rollout",
+        "canario",
+        "plano de volta",
+        "rollback",
+        "criterio de volta",
+        "monitorar o lancamento",
+        "go-live",
+        "colocar no ar"
+      ],
+      "agentes": [
+        "gerente-produto",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "planeje o rollout em etapas com canário e critério de rollback",
+          "faça o plano de go-live com liberação gradual e monitoramento do lançamento"
+        ],
+        "nao": [
+          "revise a política de home office"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/migracao.md",
       "tema": "migracao",
       "palavras": [
@@ -1646,6 +1703,122 @@
       }
     },
     {
+      "arquivo": "conhecimento/escrita/adr.md",
+      "tema": "adr",
+      "palavras": [
+        "adr",
+        "registro de decisao",
+        "decisao de arquitetura registrada",
+        "documentar a decisao",
+        "documentacao tecnica",
+        "readme do projeto",
+        "changelog do projeto",
+        "comentarios no codigo"
+      ],
+      "agentes": [
+        "redator",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "registre a decisão técnica num ADR com contexto, alternativas e consequências",
+          "escreva o README e o changelog do projeto, documentando as decisões"
+        ],
+        "nao": [
+          "calcule o custo da hora extra"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/escrita/texto-de-interface.md",
+      "tema": "texto-de-interface",
+      "palavras": [
+        "texto de interface",
+        "microcopy",
+        "rotulo",
+        "rotulos",
+        "texto do botao",
+        "mensagem de erro",
+        "mensagem de confirmacao",
+        "estado vazio",
+        "tom de voz",
+        "ux writing",
+        "resposta padrao",
+        "artigo de ajuda"
+      ],
+      "agentes": [
+        "redator",
+        "designer-paineis",
+        "especialista-cs",
+        "comunicador-corporativo"
+      ],
+      "teste": {
+        "sim": [
+          "revise os rótulos, as mensagens de erro e a confirmação de exclusão do app",
+          "escreva o microcopy do estado vazio e do botão de salvar"
+        ],
+        "nao": [
+          "calcule a depreciação acelerada da frota"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/entrevistar.md",
+      "tema": "entrevistar",
+      "palavras": [
+        "pedido vago",
+        "nao sei bem o que quero",
+        "me ajude a definir",
+        "entender o que o usuario quer",
+        "entrevista",
+        "perguntas para o usuario",
+        "levantar requisitos",
+        "clarear o pedido"
+      ],
+      "agentes": [
+        "planejador",
+        "gerente-produto"
+      ],
+      "teste": {
+        "sim": [
+          "o pedido está vago, me ajude a definir o que eu quero com perguntas",
+          "quero levantar requisitos do usuário antes de começar, faça uma entrevista"
+        ],
+        "nao": [
+          "calcule o EBITDA ajustado do trimestre"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/especificar.md",
+      "tema": "especificar",
+      "palavras": [
+        "especificacao",
+        "especificar",
+        "spec",
+        "escrever a spec",
+        "requisitos",
+        "criterio de aceite",
+        "documento de requisitos",
+        "prd",
+        "escopo do projeto"
+      ],
+      "agentes": [
+        "planejador",
+        "gerente-produto",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "escreva a especificação da funcionalidade com critérios de aceite antes do código",
+          "monte o documento de requisitos (PRD) com o escopo do projeto"
+        ],
+        "nao": [
+          "faça a conciliação do cartão corporativo"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/metodo/fonte-oficial-da-versao.md",
       "tema": "fonte-oficial-da-versao",
       "palavras": [
@@ -1672,6 +1845,65 @@
         ],
         "nao": [
           "faça o plano de comunicação interna da reorganização"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/quebrar-tarefas.md",
+      "tema": "quebrar-tarefas",
+      "palavras": [
+        "quebrar em tarefas",
+        "quebrar em etapas",
+        "plano de implementacao",
+        "lista de tarefas",
+        "dividir o trabalho",
+        "ordem das tarefas",
+        "plano de trabalho",
+        "cronograma das etapas",
+        "tarefas pequenas",
+        "criterio de aceite"
+      ],
+      "agentes": [
+        "planejador",
+        "gerente-produto"
+      ],
+      "teste": {
+        "sim": [
+          "quebre o projeto em tarefas pequenas com critério de aceite e ordem",
+          "monte o plano de implementação dividido em etapas com dependências"
+        ],
+        "nao": [
+          "redija a nota de pesar aos colaboradores"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/refinar-ideia.md",
+      "tema": "refinar-ideia",
+      "palavras": [
+        "refinar a ideia",
+        "ideia vaga",
+        "explorar ideias",
+        "gerar alternativas",
+        "comparar direcoes",
+        "brainstorming",
+        "premissas",
+        "nao vamos fazer",
+        "direcao estrategica",
+        "opcoes de caminho"
+      ],
+      "agentes": [
+        "estrategista",
+        "gerente-produto",
+        "estrategista-marketing"
+      ],
+      "teste": {
+        "sim": [
+          "tenho uma ideia vaga de produto, me ajude a refinar e comparar direções",
+          "faça um brainstorming com alternativas e as premissas de cada caminho"
+        ],
+        "nao": [
+          "lance as notas de débito do fornecedor"
         ]
       }
     },

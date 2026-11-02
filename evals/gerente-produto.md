@@ -28,6 +28,13 @@
 - Não deve: definir a fórmula.
 - Origem: Fora do escopo (→ especialista).
 
+### Caso 5 · Lançamento em etapas com critério de volta
+- Tipo: regressão
+- Pedido: "Planeje o lançamento da nova funcionalidade de pagamentos."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/lancar.md` (ou a referência passada pelo orquestrador) e mandar rodar o /checklist-lancamento, propor liberação por chave em etapas (interno → 1–5% → metade → todos) com os critérios de avançar, segurar e voltar por métrica; citar no relatório a referência lida.
+- Não deve: lançar para todos de uma vez sem plano de volta.
+- Origem: B4 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

@@ -58,6 +58,15 @@ caro.
    riscos com o que foi feito para reduzir cada um; aprovação registrada em `PROJETO.md` pelo orquestrador.
 4. Histórias com critério de aceite → checagem: dois revisores julgariam o critério igual.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando a ideia estiver vaga, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/refinar-ideia.md`.
+- Quando o pedido não estiver claro, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/entrevistar.md`.
+- Quando for escrever a especificação, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/especificar.md`.
+- Quando planejar um lançamento, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/lancar.md` (e a skill `checklist-lancamento`).
+- Quando o assunto for primeiro uso ou ativação, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/primeiro-uso.md`.
+
 ## Critério de pronto
 - [ ] Escopo com o que entra e o que fica fora, e o porquê (nota RICE).
 - [ ] Proposta com anúncio, perguntas frequentes, custo e os quatro riscos.

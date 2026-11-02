@@ -100,6 +100,10 @@
           "destino": "conhecimento/documentos/ilustracao-tecnica.md"
         },
         {
+          "origem": "skills/better-writing/SKILL.md",
+          "destino": "conhecimento/escrita/texto-de-interface.md"
+        },
+        {
           "origem": "skills/teardown/assets",
           "destino": "ferramentas/teardown/LEIA-ME.md"
         },
@@ -164,6 +168,10 @@
           "destino": "conhecimento/engenharia/interface-web.md"
         },
         {
+          "origem": "skills/shipping-and-launch/SKILL.md",
+          "destino": "conhecimento/engenharia/lancar.md"
+        },
+        {
           "origem": "skills/deprecation-and-migration/SKILL.md",
           "destino": "conhecimento/engenharia/migracao.md"
         },
@@ -204,8 +212,28 @@
           "destino": "conhecimento/engenharia/teste-no-navegador.md"
         },
         {
+          "origem": "skills/documentation-and-adrs/SKILL.md",
+          "destino": "conhecimento/escrita/adr.md"
+        },
+        {
+          "origem": "skills/interview-me/SKILL.md",
+          "destino": "conhecimento/metodo/entrevistar.md"
+        },
+        {
+          "origem": "skills/spec-driven-development/SKILL.md",
+          "destino": "conhecimento/metodo/especificar.md"
+        },
+        {
           "origem": "skills/source-driven-development/SKILL.md",
           "destino": "conhecimento/metodo/fonte-oficial-da-versao.md"
+        },
+        {
+          "origem": "skills/planning-and-task-breakdown/SKILL.md",
+          "destino": "conhecimento/metodo/quebrar-tarefas.md"
+        },
+        {
+          "origem": "skills/idea-refine/SKILL.md",
+          "destino": "conhecimento/metodo/refinar-ideia.md"
         },
         {
           "origem": "skills/constraint-driven-development/scripts/quality-gate.mjs",

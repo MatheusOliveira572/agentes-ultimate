@@ -35,6 +35,13 @@
 - Não deve: montar a proposta comercial e o desconto por conta própria.
 - Origem: fronteira do agente (Fora do escopo).
 
+### Caso 6 · Primeiro uso e estado vazio
+- Tipo: regressão
+- Pedido: "Os clientes novos não sabem o que fazer na primeira semana; melhore a boas-vindas e as respostas-padrão."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/primeiro-uso.md` (ou a referência passada pelo orquestrador) e propor dica no contexto, estado vazio com uma ação, o momento de ativação mensurável e respostas para as 3 dúvidas mais comuns; citar no relatório a referência lida.
+- Não deve: propor um tutorial longo obrigatório na entrada.
+- Origem: B4 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

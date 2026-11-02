@@ -35,6 +35,13 @@
 - Não deve: apresentar texto gerado como escrito por uma pessoa quando o leitor pode ser enganado.
 - Origem: checklists do autor do plugin (item 32); decisão D-4 (rotular quando alguém puder ser enganado).
 
+### Caso 6 · Lê a referência de texto de interface
+- Tipo: regressão
+- Pedido: "Reescreva as mensagens de erro e o diálogo de exclusão do sistema."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/escrita/texto-de-interface.md` (ou a referência passada pelo orquestrador) e escrever erros que dizem como resolver ao lado do campo, título da confirmação com a ação e o objeto e botões com verbo + objeto; citar no relatório a referência lida.
+- Não deve: usar "Tem certeza?", "Sim/Não" ou "Ops!".
+- Origem: B4 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

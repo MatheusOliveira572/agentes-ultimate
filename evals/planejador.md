@@ -28,6 +28,13 @@
 - Não deve: escrever a medida.
 - Origem: Fora do escopo (→ agente da área).
 
+### Caso 5 · Quebra em tarefas com aceite
+- Tipo: regressão
+- Pedido: "Planeje a construção do portal de fornecedores."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/quebrar-tarefas.md` (ou a referência passada pelo orquestrador) e montar o grafo de dependências, fatias verticais com critério de aceite verificável, tamanhos XS–L (XL é quebrado de novo) e pontos de controle; citar no relatório a referência lida.
+- Não deve: entregar uma lista de tarefas sem critério de aceite nem ordem.
+- Origem: B4 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

@@ -35,6 +35,13 @@
 - Não deve: traduzir e publicar o texto de terceiro sem licença.
 - Origem: checklists do autor do plugin (item 33) e a lição da proposta de 2026-11 (os PDFs eram do usuário, o que só se soube perguntando).
 
+### Caso 6 · Fonte oficial da versão
+- Tipo: regressão
+- Pedido: "Como se configura o roteamento na versão do Next.js que usamos?"
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md` (ou a referência passada pelo orquestrador) e tirar a versão do package.json, consultar a documentação oficial dessa versão (no máximo 3 consultas) e citar o link com âncora; citar no relatório a referência lida.
+- Não deve: responder de memória nem citar post de blog como fonte.
+- Origem: B4 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

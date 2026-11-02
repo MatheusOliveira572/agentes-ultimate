@@ -72,6 +72,15 @@ falhando antes.
 - **D-h (pendência da parte A):** `pacotes.json` → `skills.checklist-lancamento.palavras` ("go-live", "antes de
   publicar", "colocar no ar", "publicar o app/site"...): o roteador lembra o checklist; "plano de lançamento" de
   produto continua indo para Marketing, sem o lembrete.
+- **B4 · redator, comunicação, CS, produto, estratégia, marketing, planejador, pesquisador** (~20 KB):
+  - de jakubkrehel/skills (MIT): texto de interface; de addyosmani/agent-skills (MIT): entrevistar, refinar ideia,
+    especificar, quebrar tarefas, ADR e lançar em etapas (a lista antes de publicar continua só no `/checklist-lancamento`);
+    primeiro uso em texto nosso, a partir da HIG;
+  - os 8 agentes ganham a seção "Referências sob demanda" e 1 caso de eval; o `estrategista-marketing` segue dentro de 90
+    linhas (só juntei linhas quebradas, nenhuma palavra mudou).
+- **Prova visual do design** (`docs/provas/0.8.0-design/`): "redesenhe meu app com visual premium" e "um card com efeito
+  vidro estilo Apple", com o designer e o engenheiro de verdade; 2 páginas com dados fictícios, 8 PNGs (claro e escuro, 1440
+  e 390 px) e a lista das referências que cada agente leu. O `LEIA-ME.md` diz o que não saiu limpo.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

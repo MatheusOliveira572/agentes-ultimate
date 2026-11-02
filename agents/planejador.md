@@ -59,6 +59,13 @@ estimativa otimista destrói a confiança no plano.
    da que ela depende.
 6. Releia contra as decisões de `PROJETO.md` → checagem: nenhuma etapa contradiz decisão registrada.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando o pedido for vago, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/entrevistar.md`.
+- Quando quebrar o trabalho em etapas, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/quebrar-tarefas.md`.
+- Quando precisar da especificação antes do plano, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/especificar.md`.
+
 ## Critério de pronto
 - [ ] Toda etapa com entregável, dono, apetite, critério de aceite com evidência e estimativa em faixa com fonte.
 - [ ] Obrigatório × desejável separados; corte recomendado se o prazo não fecha.

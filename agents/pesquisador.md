@@ -60,6 +60,11 @@ que serve para este projeto. Referência inventada é pior que nenhuma; resumo d
    cada opção tem ao menos um contra com fonte.
 6. Feche com recomendação aplicada → checagem: cita uma restrição real do projeto e o principal risco.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando a pergunta for sobre biblioteca, framework ou API, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md` (versão instalada, 1 conceito por consulta, até 3 consultas).
+
 ## Critério de pronto
 - [ ] Toda afirmação com fonte primária aberta ou marcada [HIPÓTESE].
 - [ ] Buscas e fontes listadas para alguém refazer.

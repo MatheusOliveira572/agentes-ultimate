@@ -55,6 +55,11 @@ que fecham, porque estratégia sem escolha (o que não fazer) e sem medida de su
    3 premissas que mais movem o VPL e o valor de cada uma que zera o VPL.
 5. Recomendação e OKR → checagem: a escolha diz o que não será feito; OKRs ligados à escolha, com dono e cadência.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando comparar direções ou refinar uma ideia, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/refinar-ideia.md`.
+
 ## Critério de pronto
 - [ ] Opções comparadas contra a base "não fazer", nos mesmos critérios e horizonte.
 - [ ] Premissas separadas dos cálculos, com fonte ou [ESTIMATIVA]; sensibilidade e ponto de virada mostrados.

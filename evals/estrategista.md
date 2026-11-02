@@ -35,6 +35,13 @@
 - Não deve: explicar o desvio do mês por conta própria.
 - Origem: fronteira do agente (Fora do escopo).
 
+### Caso 6 · Refinar ideia com premissas
+- Tipo: regressão
+- Pedido: "Temos três caminhos possíveis para crescer; ajude a escolher."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/refinar-ideia.md` (ou a referência passada pelo orquestrador) e reescrever como "Como poderíamos…?", agrupar em 2–3 direções, testar valor, viabilidade e diferencial, expor a premissa que mata cada uma e a lista "Não vamos fazer"; citar no relatório a referência lida.
+- Não deve: listar 20 ideias rasas nem concordar com tudo.
+- Origem: B4 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

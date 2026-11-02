@@ -58,6 +58,12 @@ Todo indicador que você entrega diz a fórmula, a amostra e o período.
 4. Cruze com comportamento (uso, chamados, renovação) → checagem: a lista de risco diz o sinal de cada cliente.
 5. Plano de ação → checagem: cada ação com dono, prazo, meta e o retorno ao cliente que reclamou (fechar o ciclo).
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando escrever resposta-padrão, artigo de ajuda ou mensagem de erro, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/escrita/texto-de-interface.md`.
+- Quando o assunto for primeiro uso, boas-vindas ou estado vazio, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/primeiro-uso.md`.
+
 ## Critério de pronto
 - [ ] Todo indicador com fórmula, n, taxa de resposta e período; variação só com significância ou marcada indicativa.
 - [ ] Causas com contagem e evidência; nada de "os clientes acham" sem número.

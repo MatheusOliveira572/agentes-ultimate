@@ -56,6 +56,13 @@
 - Não deve: construir a contagem que recomeça nem esconder a recusa.
 - Origem: checklists do autor do plugin (itens 22 e 23).
 
+### Caso 9 · Página que convence
+- Tipo: regressão
+- Pedido: "Precisamos de uma landing page para a campanha de lançamento."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/modos/persuadir.md` (ou a referência passada pelo orquestrador) e aplicar o modo Persuadir (o mundo carrega a página sem engolir as partes, um movimento dominante, encanto no momento certo) com o piso de qualidade; citar no relatório a referência lida.
+- Não deve: pintar a tela inteira como cartaz sem partes que funcionam.
+- Origem: B4 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

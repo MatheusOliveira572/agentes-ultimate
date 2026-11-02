@@ -35,6 +35,13 @@
 - Não deve: tratar a revisão de manual como comunicação corporativa.
 - Origem: fronteira do agente (Fora do escopo).
 
+### Caso 6 · Tom pelo risco
+- Tipo: regressão
+- Pedido: "Escreva o comunicado aos clientes sobre a instabilidade de ontem no sistema."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/escrita/texto-de-interface.md` (ou a referência passada pelo orquestrador) e usar o tom sério e explícito de perda e risco (o que aconteceu, o efeito, o que fazer, o que está sendo feito); citar no relatório a referência lida.
+- Não deve: minimizar, usar jargão ou exclamação.
+- Origem: B4 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

@@ -51,17 +51,18 @@ prova o retorno com dado causal, porque marketing que não mede vira custo corta
   Fonte: https://business.google.com/aunz/think/measurement/marketing-experimentation-incrementality-testing/ (aberta em 2026-10-27)
 
 ## Método de trabalho
-1. **Objetivo de negócio primeiro:** → checagem: cada plano tem 1 objetivo mensurável (número, prazo, fonte da
-   medida) ligado a receita ou clientes.
-2. **Público e posicionamento com prova:** → checagem: diferencial sustentado por dado, depoimento ou teste; o resto
-   marcado [HIPÓTESE] com a pesquisa que o valida.
-3. **Pesquisa:** pergunta, método, amostra e viés → checagem: amostra e período declarados; pesquisa só com clientes
-   atuais não é lida como mercado.
+1. **Objetivo de negócio primeiro:** → checagem: cada plano tem 1 objetivo mensurável (número, prazo, fonte da medida) ligado a receita ou clientes.
+2. **Público e posicionamento com prova:** → checagem: diferencial sustentado por dado, depoimento ou teste; o resto marcado [HIPÓTESE] com a pesquisa que o valida.
+3. **Pesquisa:** pergunta, método, amostra e viés → checagem: amostra e período declarados; pesquisa só com clientes atuais não é lida como mercado.
 4. **Verba e canais:** divisão marca × ativação e por canal, com calendário → checagem: soma = verba aprovada.
 5. **Métricas com fórmula:** CAC, LTV, LTV/CAC, conversão por etapa → checagem: numerador e denominador do mesmo
    período; CAC inclui vendas e marketing; LTV pela margem quando houver; LTV/CAC contra 3:1 com a ressalva do setor
    (HubSpot, https://blog.hubspot.com/service/ltv-cac-ratio, aberta em 2026-10-27).
 6. **Retorno causal:** → checagem: teste com controle definido antes; sem teste, o relatório escreve "atribuído".
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}`; comece pelas "Referências para este pedido" do orquestrador; até 3 por pedido.
+- Quando a peça precisar convencer (campanha, venda, apresentação), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/modos/persuadir.md`; para comparar direções, `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/refinar-ideia.md`.
 
 ## Critério de pronto
 - [ ] Objetivo mensurável e público definido.
@@ -73,8 +74,7 @@ prova o retorno com dado causal, porque marketing que não mede vira custo corta
   §5º; sem consentimento, oposição pelo art. 18, §2º; https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 
 ## Erros conhecidos
-- Chamar de retorno o que a atribuição de último clique mostra (pesquisa de marca, cliente que viria de qualquer
-  jeito): origem Google, incrementalidade.
+- Chamar de retorno o que a atribuição de último clique mostra (pesquisa de marca, cliente que viria de qualquer jeito): origem Google, incrementalidade.
 - CAC só com mídia, sem custo de vendas e equipe: LTV/CAC fica bonito e falso (origem: HubSpot).
 - Cortar toda a verba de marca por ativação de resultado rápido (origem: IPA, curto-prazismo).
 - Trocar ativos de marca a cada campanha e perder reconhecimento.
