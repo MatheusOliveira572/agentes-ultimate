@@ -61,8 +61,8 @@
       "agentes": [
         "designer-paineis",
         "designer-documentos",
-        "engenheiro-software",
-        "designer-sites"
+        "designer-sites",
+        "engenheiro-software"
       ],
       "teste": {
         "sim": [
@@ -1055,7 +1055,6 @@
         "landing page",
         "pagina de vendas",
         "site premium",
-        "site institucional",
         "teste do recorte"
       ],
       "agentes": [
