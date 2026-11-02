@@ -391,6 +391,9 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   // Referência: "site" sozinho não entrega nada a designer; pedido de site entrega a biblioteca.
   const refSite = agentesDe('crie um site para a minha padaria');
   caso('0.8.0 sites A-1: pedido de site leva a biblioteca de sites ao designer de sites', /sites-premium\/INDICE\.md` \(para `agentes-ultimate:designer-sites`\)/.test(refSite.refs.replace(/\\/g, '/')), refSite.refs.slice(0, 200));
+  // b-15: âncora negada ('não é um app') não conta; sem o !negado da âncora, o pedido iria aos dois designers.
+  const neg = agentesDe('não é um app: crie o site com react e efeito vidro');
+  caso('0.8.0 sites b-15: âncora negada ("não é um app") não conta no desempate', /designer-sites/.test(neg.ag) && !/designer-paineis/.test(neg.ag), neg.ag);
   const soSite = agentesDe('o site da receita federal saiu do ar hoje');
   caso('0.8.0 sites roteador: "site" sozinho não puxa o designer de sites', !/designer-sites/.test(soSite.ag), soSite.ag);
   const lp = agentesDe('crie uma landing page para o meu aplicativo');
