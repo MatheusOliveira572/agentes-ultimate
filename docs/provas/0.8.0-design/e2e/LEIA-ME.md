@@ -145,8 +145,8 @@ Apontado: a barra lateral terminava num corte seco onde a capa acaba, e o vidro 
 # Nível HD (hd103, 2026-11-02): movimento, acabamento 2× e imagem real, em dois mundos diferentes
 Revisão do usuário: "faltou melhorar os movimentos e os efeitos de transição; os acabamentos precisam ser mais HD; tem cara de
 desenho, não de coisa real; o mínimo é o máximo bem feito". E: "não é tudo que vai ser padrão Apple ou com vidro". Base: a pesquisa
-`docs/pesquisas/acabamento-premium-2026-11.md` (só as regras ABERTA). Regras propostas para telas de app:
-`../vitrine/proposta-padrao-hd.md` §8.
+`docs/pesquisas/acabamento-premium-2026-11.md` (só as regras ABERTA). Regras para telas de app, já no plugin:
+`conhecimento/design/nivel-hd.md` §4 (a proposta foi aplicada e saiu da pasta; está no histórico do git).
 
 ## Dois mundos, o mesmo nível
 | | Caso A, app de tarefas | Caso B, fotos |

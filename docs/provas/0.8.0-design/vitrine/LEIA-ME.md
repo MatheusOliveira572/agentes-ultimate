@@ -8,7 +8,7 @@ página diz isso no cartão e no rodapé.
 - three.js 0.170.0 entra pelo CDN jsDelivr, com versão fixa e SRI no import map.
 
 **Mundo de estilo: produto Apple / Liquid Glass**, porque o produto é uma câmera premium e o briefing pediu esse mundo. É **um**
-mundo entre vários; o nível HD abaixo vale para qualquer estilo (ver `proposta-padrao-hd.md`).
+mundo entre vários; o nível HD abaixo vale para qualquer estilo (regras no plugin: `conhecimento/design/nivel-hd.md`).
 
 **Abrir:** `index.html` no Edge ou no Chrome, com internet (o three.js vem do CDN). Rolar devagar do herói até a reserva e mexer o
 mouse sobre a lente. Sem internet, sem WebGL ou com movimento reduzido, entra a imagem renderizada do mesmo objeto.
@@ -88,4 +88,4 @@ Também: `png/vitrine-claro-1440-q2-aberta.png`, `png/vitrine-claro-390.png`, `p
 | `verificar.js` | bateria (`tudo`, `png`, `checar`, `--so=nome$`, `--mutar`, `--png`) |
 | `tiras.js` | tiras de quadros determinísticas + análise de curva |
 | `foto.js` | captura avulsa e geração das imagens de reserva (`img/*.webp`) |
-| `proposta-padrao-hd.md` | proposta do padrão HD para o plugin (nível universal × mundos de estilo) |
+| (proposta do padrão HD) | aplicada em `conhecimento/design/nivel-hd.md`, `modelos/mola-linear.js` e `modelos/tiras/`; saiu daqui (histórico do git) |
