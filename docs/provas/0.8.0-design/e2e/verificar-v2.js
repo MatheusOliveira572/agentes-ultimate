@@ -34,6 +34,7 @@ if (qual === 'b' || qual === 'tudo') {
     CASOS.push({ nome: `caso-b-produto-v2-${tema === 'light' ? 'claro' : 'escuro'}-${w}`, arq: 'caso-b-produto-v2.html', w, h, tema });
   CASOS.push({ nome: 'caso-b-produto-v2-escuro-390-rolado', arq: 'caso-b-produto-v2.html', w: 390, h: 844, tema: 'dark', rolar: 520 });
   CASOS.push({ nome: 'caso-b-produto-v2-claro-1440-rolado', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'light', rolar: 640, zoom: { x: 1060, y: 640, width: 370, height: 70 } });
+  CASOS.push({ nome: 'caso-b-produto-v2-escuro-1440-teclado-reduzido', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'dark', tecladoB: true, reduzido: true, semPng: true });
   CASOS.push({ nome: 'caso-b-produto-v2-claro-1440-transparencia-reduzida', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'light', transp: true, rolar: 640 });
 }
 if (qual === 'teste') CASOS.push({ nome: '_teste', arq: process.argv[3], w: 640, h: 320, tema: 'light' });
@@ -235,7 +236,17 @@ async function medirVidro(itens) {
         if (!c.semPng) { const shot = await cdp('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(PNG, c.nome + '.png'), Buffer.from(shot.data, 'base64')); r.png = c.nome + '.png'; }
         const d = await avaliar(desfazer, a.antes); r.erros.push(...d.erros); r.interacao = 'concluir → placar, fita, risco, aviso; desfazer → volta';
       }
-      if (c.reduzido) { const d = await avaliar(reduzido); r.erros.push(...d.erros); r.reduzido = 'nenhuma transição longa com movimento reduzido'; }
+      if (c.tecladoB) {
+        const tecla = async () => { await cdp('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 }); await cdp('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 }); await espera(80); };
+        await tecla(); const f1 = await avaliar(focoAtual); if (!/Pular/.test(f1.txt)) r.erros.push('1º Tab não foi o "Pular para as fotos": ' + f1.txt);
+        await avaliar(() => document.querySelector('.foto:not(.g)').focus()); await tecla(); await espera(300);
+        const f2 = await avaliar(() => { const a = document.activeElement; const s = getComputedStyle(a); return { txt: a.getAttribute('aria-label'), outline: s.outlineStyle, larg: parseFloat(s.outlineWidth), leg: +getComputedStyle(a.querySelector('.legenda') || a).opacity, anim: document.getAnimations().length }; });
+        if (f2.outline !== 'solid' || f2.larg < 2) r.erros.push('foto com foco sem anel visível: ' + f2.txt);
+        if (f2.leg < 1) r.erros.push('foto com foco não mostra a legenda: ' + f2.txt);
+        if (f2.anim > 0) r.erros.push('movimento reduzido: ' + f2.anim + ' animações rodando');
+        r.teclado = `${f1.txt} → ${f2.txt} (${f2.outline} ${f2.larg}px, legenda ${f2.leg}); animações com redução: ${f2.anim}`;
+      }
+      if (c.reduzido && !c.tecladoB) { const d = await avaliar(reduzido); r.erros.push(...d.erros); r.reduzido = 'nenhuma transição longa com movimento reduzido'; }
       if (c.teclado) {
         const tecla = async (key, code, vk) => { await cdp('Input.dispatchKeyEvent', { type: 'keyDown', key, code, windowsVirtualKeyCode: vk }); await cdp('Input.dispatchKeyEvent', { type: 'keyUp', key, code, windowsVirtualKeyCode: vk }); await espera(60); };
         await tecla('Tab', 'Tab', 9); const f1 = await avaliar(focoAtual);
