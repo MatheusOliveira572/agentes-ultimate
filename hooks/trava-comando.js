@@ -114,13 +114,12 @@ function resolver(base, alvo) {
   if (process.platform === 'win32') a = a.replace(/^\/([a-zA-Z])(?=\/|$)/, '$1:');
   return path.resolve(base, a);
 }
-// Só a pasta da sessão e as subpastas do mesmo repositório: rodar git em outra pasta usaria a configuração dela.
+// Só a pasta da sessão e o que está dentro dela, inclusive outro repositório (worktree, projeto na pasta-mãe): é a pasta que o usuário
+// confiou ao abrir o Claude Code. Fora dela, nenhum git roda antes da permissão: a configuração de lá poderia executar programa.
 function naSessao(pasta, sessao) {
   const rel = path.relative(sessao, pasta);
   if (rel.startsWith('..') || path.isAbsolute(rel)) return false;
-  if (!fs.existsSync(pasta)) return false;
-  for (let d = pasta; d.length > sessao.length; d = path.dirname(d)) if (fs.existsSync(path.join(d, '.git'))) return false;
-  return true;
+  return fs.existsSync(pasta);
 }
 
 function lerComando(cmd, sessao, ferramenta) {
@@ -173,12 +172,13 @@ function lerComando(cmd, sessao, ferramenta) {
   return { tipo: 'simples', commits, pushes };
 }
 
-// Pastas citadas de forma literal: para o depois do comando e para a barreira do push.
-function pastasCitadas(cmd, sessao) {
-  const out = new Set([sessao]);
+// Pastas citadas de forma literal: para o depois do comando e para a barreira do push. Só as de dentro da sessão;
+// pastasCitadas(cmd, sessao, true) devolve as de fora, que só aparecem na pergunta.
+function pastasCitadas(cmd, sessao, deFora = false) {
+  const out = new Set(deFora ? [] : [sessao]);
   for (const m of String(cmd).matchAll(/(?:\bcd|\bpushd|\bSet-Location|\bPush-Location|\s-C)\s+("[^"$`]+"|'[^']+'|[^\s;&|"'$`]+)/gi)) {
-    try { const p = resolver(sessao, m[1].replace(/^["']|["']$/g, '')); if (fs.statSync(p).isDirectory()) out.add(p); } catch (e) { /* não existe */ }
+    try { const p = resolver(sessao, m[1].replace(/^["']|["']$/g, '')); if (fs.statSync(p).isDirectory() && naSessao(p, sessao) !== deFora) out.add(p); } catch (e) { /* não existe */ }
   }
   return [...out];
 }
-module.exports = { lerComando, pastasCitadas };
+module.exports = { lerComando, pastasCitadas, naSessao };

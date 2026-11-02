@@ -109,7 +109,11 @@ function padroesDoProjeto(cwd) {
 }
 
 // Git com argumentos fixos e sem shell. As opções de -c tiram o que poderia rodar programa da configuração durante a leitura.
-const SEGURO = ['-c', 'core.quotepath=false', '-c', 'core.fsmonitor=false', '-c', 'log.showroot=true'];
+// Opções que desligam o que o git pode executar ao ler: verificação de assinatura (gpg.program), fsmonitor, diff externo, pager e
+// trace2. Não cobre filtro "clean" de .gitattributes na leitura da pasta de trabalho (git diff): ver o limite no README.
+const SEGURO = ['-c', 'core.quotepath=false', '-c', 'core.fsmonitor=false', '-c', 'log.showroot=true', '-c', 'log.showSignature=false',
+  '-c', 'gpg.program=', '-c', 'gpg.ssh.program=', '-c', 'gpg.x509.program=', '-c', 'diff.external=', '-c', 'core.pager=cat',
+  '-c', 'trace2.normalTarget=', '-c', 'trace2.eventTarget=', '-c', 'trace2.perfTarget=', '--no-pager'];
 const DIFF = ['-U0', '--no-color', '--no-ext-diff', '--no-textconv'];
 const lista = (t) => t.split('\0').map((s) => s.trim()).filter(Boolean);
 
@@ -145,7 +149,7 @@ function ler(p, r) {
     }
   } else { // naoEnviados, intervalo: só objetos do git; nada da pasta de trabalho é tocado.
     const alvo = p.tipo === 'intervalo' ? (p.de ? ['-n', '50', `${p.de}..${p.ate}`] : ['-n', '1', p.ate]) : ['HEAD', '--branches', '--tags', '--not', '--remotes'];
-    diff = roda(['log', '-p', '--format=', ...DIFF, ...alvo]);
+    diff = roda(['log', '-p', '--no-show-signature', '--format=', ...DIFF, ...alvo]);
     nomes = nomesDe(['log', '--format=', '--name-only', '-z', ...alvo]);
   }
   if (diff.length > TETO_BYTES) { r.incompleta = true; diff = diff.slice(0, TETO_BYTES); }
@@ -198,4 +202,4 @@ if (require.main === module) {
   process.stdin.on('data', (c) => { e += c; });
   process.stdin.on('end', () => { process.stdout.write(JSON.stringify(lerTudo(JSON.parse(e)))); });
 }
-module.exports = { lerComPrazo };
+module.exports = { lerComPrazo, SEGURO };

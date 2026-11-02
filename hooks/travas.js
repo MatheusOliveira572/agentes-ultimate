@@ -9,7 +9,7 @@
 // Depois do comando, hooks/trava-depois.js lê o commit novo. Esta trava nunca executa texto do comando.
 // Saída 2 + stderr = bloqueio com o motivo. A mensagem diz arquivo:linha e o tipo, nunca o valor.
 'use strict';
-const { lerComando, pastasCitadas } = require('./trava-comando');
+const { lerComando, pastasCitadas, naSessao } = require('./trava-comando');
 const { lerComPrazo } = require('./leitor-segredos');
 
 const PUBLICAR = 'publicar é visível a outros. Confirme que quer enviar agora. Se for um lançamento ou abrir para mais gente, rodou o /checklist-lancamento?';
@@ -36,15 +36,21 @@ function decidir(d) {
   const c = lerComando(cmd, cwd, d.tool_name);
   if (c.tipo === 'inofensivo') sair(pede);
   const pedidos = [];
+  const fora = new Set(); // pastas fora da sessão: nenhum git roda lá antes da permissão
   let publica = false;
   if (c.tipo === 'simples') {
     pedidos.push(...c.commits);
-    for (const p of c.pushes) { publica = true; pedidos.push({ tipo: 'naoEnviados', cwd: p }); }
+    for (const p of c.pushes) { publica = true; if (naSessao(p, cwd)) pedidos.push({ tipo: 'naoEnviados', cwd: p }); else fora.add(p); }
   } else {
     pedidos.push({ tipo: 'preparado', cwd });
-    if (temPush) { publica = true; for (const p of [...new Set([...pastasCitadas(cmd, cwd), ...(c.pushes || [])])]) pedidos.push({ tipo: 'naoEnviados', cwd: p }); }
+    if (temPush) {
+      publica = true;
+      for (const p of [...new Set([...pastasCitadas(cmd, cwd), ...(c.pushes || [])])]) { if (naSessao(p, cwd)) pedidos.push({ tipo: 'naoEnviados', cwd: p }); else fora.add(p); }
+      for (const p of pastasCitadas(cmd, cwd, true)) fora.add(p);
+    }
     if (temCommit) pede.push(`este comando pode criar um commit de um jeito que não dá para ler com certeza (${c.motivo}). Confirme só se souber o que ele leva: segredo ou arquivo sensível não pode ir.`);
   }
+  if (fora.size) pede.push(`não conferido: pasta fora da sessão (${[...fora].join(', ')}). Nenhum git rodou lá; o que vai ser publicado não foi lido.`);
   if (publica) pede.push(PUBLICAR);
   if (!pedidos.length) sair(pede);
   lerComPrazo(pedidos, 7000, (r, motivo) => {

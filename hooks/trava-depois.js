@@ -8,10 +8,11 @@ const path = require('path');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
 const { pastasCitadas } = require('./trava-comando');
-const { lerComPrazo } = require('./leitor-segredos');
+const { lerComPrazo, SEGURO } = require('./leitor-segredos');
 
 const RECENTE_S = 300;
-const git = (args, cwd) => execFileSync('git', args, { windowsHide: true, cwd, encoding: 'utf8', timeout: 3000, stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+// Só nas pastas de dentro da sessão (pastasCitadas), com as opções que desligam o que o git executaria ao ler.
+const git = (args, cwd) => execFileSync('git', [...SEGURO, ...args], { windowsHide: true, cwd, encoding: 'utf8', timeout: 3000, stdio: ['ignore', 'pipe', 'ignore'] }).trim();
 const estado = (top) => path.join(os.tmpdir(), 'agentes-ultimate-head', crypto.createHash('sha1').update(top).digest('hex'));
 
 let entrada = '';
@@ -35,7 +36,7 @@ process.stdin.on('end', () => {
       fs.mkdirSync(path.dirname(f), { recursive: true });
       fs.writeFileSync(f, head);
       // Sem registro anterior: só o último commit, e só se for de agora.
-      if (!antes && Date.now() / 1000 - Number(git(['log', '-1', '--format=%ct'], top)) > RECENTE_S) continue;
+      if (!antes && Date.now() / 1000 - Number(git(['log', '-1', '--no-show-signature', '--format=%ct'], top)) > RECENTE_S) continue;
       pedidos.push({ tipo: 'intervalo', cwd: top, de: antes, ate: head });
     }
     if (!pedidos.length) process.exit(0);

@@ -95,6 +95,34 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   q5 = repo(); let ligou = true;
   try { fs.symlinkSync(path.join(q5, 'nao-existe.js'), path.join(q5, 'quebrado.js')); } catch (e) { ligou = false; }
   if (ligou) { x5 = trava('git add -A && git commit -m x', q5); caso('0.8.0 2ª rodada trava: arquivo novo que não abre pergunta, não passa como limpo', x5.code === 0 && pede(x5), `code ${x5.code} ${x5.out}`); }
+  // ---- B-2 (3ª rodada): nenhum git roda fora da pasta da sessão; dentro, as opções desligam o que a configuração executaria ----
+  const montarX = (onde) => {
+    const p = path.join(onde, 'projeto-baixado-' + (++n)); fs.mkdirSync(p, { recursive: true });
+    const g = (args, input) => require('child_process').execFileSync('git', args, { windowsHide: true, cwd: p, encoding: 'utf8', input, stdio: [input ? 'pipe' : 'ignore', 'pipe', 'pipe'] }).trim();
+    g(['init', '-q']); g(['config', 'user.email', 't@t']); g(['config', 'user.name', 't']);
+    fs.writeFileSync(path.join(p, 'a.js'), 'base\n'); g(['add', 'a.js']); g(['commit', '-q', '-m', 'base']);
+    const obj = 'tree ' + g(['rev-parse', 'HEAD^{tree}']) + '\nparent ' + g(['rev-parse', 'HEAD']) + '\nauthor t <t@t> 1700000000 +0000\ncommitter t <t@t> 1700000000 +0000\ngpgsig -----BEGIN PGP SIGNATURE-----\n \n iQEzBAABCAAdFiEE\n -----END PGP SIGNATURE-----\n\nassinado\n';
+    g(['update-ref', 'HEAD', g(['hash-object', '-t', 'commit', '-w', '--stdin'], obj)]);
+    const marca = path.join(p, 'MARCA.txt');
+    fs.writeFileSync(path.join(p, 'espiao.sh'), '#!/bin/sh\necho "rodou: $*" >> "' + marca.replace(/\\/g, '/') + '"\nexit 1\n');
+    g(['config', 'log.showSignature', 'true']); g(['config', 'gpg.program', path.join(p, 'espiao.sh').replace(/\\/g, '/')]);
+    return { p: p.replace(/\\/g, '/'), marca };
+  };
+  const sessaoB2 = path.join(tmp, 'sessao-b2'); fs.mkdirSync(sessaoB2, { recursive: true });
+  const xFora = montarX(path.join(tmp, 'fora-b2'));
+  for (const [nomeB2, cmdB2, gancho] of [['antes, cd e push', 'cd "<X>" && git push', 'travas.js'], ['antes, -C e push', 'git -C "<X>" push', 'travas.js'], ['depois, cd e ls', 'cd "<X>" && ls', 'trava-depois.js']]) {
+    const y = hook(gancho, { tool_name: 'Bash', tool_input: { command: cmdB2.replace('<X>', xFora.p) }, cwd: sessaoB2, hook_event_name: gancho === 'travas.js' ? 'PreToolUse' : 'PostToolUse' });
+    caso('0.8.0 B-2 trava: pasta fora da sessão não roda a configuração dela (' + nomeB2 + ')', !fs.existsSync(xFora.marca), fs.existsSync(xFora.marca) ? fs.readFileSync(xFora.marca, 'utf8').slice(0, 120) : '');
+    if (gancho === 'travas.js') caso('0.8.0 B-2 trava: push fora da sessão pergunta sem ler e diz qual pasta (' + nomeB2 + ')', y.code === 0 && pede(y) && /fora da sessão/.test(y.out), y.out);
+  }
+  const xDentro = montarX(sessaoB2);
+  for (const [nomeB2, cmdB2, gancho] of [['antes, cd e push', 'cd "<X>" && git push', 'travas.js'], ['depois, cd e ls', 'cd "<X>" && ls', 'trava-depois.js']]) {
+    hook(gancho, { tool_name: 'Bash', tool_input: { command: cmdB2.replace('<X>', xDentro.p) }, cwd: sessaoB2, hook_event_name: gancho === 'travas.js' ? 'PreToolUse' : 'PostToolUse' });
+    caso('0.8.0 B-2 trava: repositório dentro da sessão é lido sem rodar a verificação de assinatura dele (' + nomeB2 + ')', !fs.existsSync(xDentro.marca), fs.existsSync(xDentro.marca) ? fs.readFileSync(xDentro.marca, 'utf8').slice(0, 120) : '');
+  }
+  const qIn = prep(repo()); const mae = path.dirname(qIn);
+  x5 = trava('cd "' + qIn.replace(/\\/g, '/') + '" && git commit -m x', mae);
+  caso('0.8.0 B-2 trava: commit num repositório dentro da sessão (pasta-mãe) é lido como forma comum e barra o segredo', x5.code === 2 && /a\.js:2/.test(x5.err), `code ${x5.code} ${x5.out}`);
   // ---- M-10 (3ª rodada): modelo de .env passa; .env de verdade, .pem, .key e id_rsa continuam barrando, com o nome na mensagem ----
   for (const nomeM of ['.env.example', '.env.sample', '.env.template', '.env.dist', 'config/.env.example']) {
     const q = repo(); fs.mkdirSync(path.dirname(path.join(q, nomeM)), { recursive: true }); fs.writeFileSync(path.join(q, nomeM), 'API_URL=\nAPI_' + 'KEY=\n');
