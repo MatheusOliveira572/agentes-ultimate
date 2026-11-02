@@ -89,6 +89,9 @@ falhando antes.
   - parado sem fim (erro de API) vira "sem notícia" 30 min depois da última escrita, em vez de ficar vivo até vencer;
   - progresso sem o código exato (`<agente>-*.json`) só vale com um único agente vivo daquele tipo;
   - sem faixa registrada e sem progresso: "sem previsão", sem % estimado pelo histórico.
+- **Janela piscando no Windows:** todas as chamadas de processo de `hooks/` e `scripts/` levam `windowsHide: true` (58, em
+  `travas.js`, `checar-ferramenta.js` e nos testes); `validar.js` passa a dar erro em chamada sem a opção
+  (`scripts/chamadas-processo.js`). A confirmação de que era isso que piscava é do usuário: daqui não dá para ver a tela.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

@@ -174,6 +174,15 @@ if (fs.existsSync(path.join(RAIZ, 'conhecimento'))) {
   try { atual = fs.readFileSync(path.join(RAIZ, 'conhecimento', 'indice.json'), 'utf8'); } catch (e) { /* falta */ }
   if (atual.replace(/\r\n/g, '\n') !== ind.texto(referencias)) erros.push('conhecimento/indice.json desatualizado ou ausente: rode node scripts/gerar-agentes.js');
 }
+// Janela piscando no Windows: toda chamada de processo em hooks/ e scripts/ leva windowsHide.
+{
+  const { semWindowsHide } = require(path.join(RAIZ, 'scripts', 'chamadas-processo.js'));
+  for (const d of ['hooks', 'scripts']) {
+    for (const f of listar(path.join(RAIZ, d)).filter((x) => /\.(js|mjs|cjs)$/.test(x))) {
+      for (const a of semWindowsHide(fs.readFileSync(f, 'utf8'))) erros.push(`${rel(f)}:${a.linha}: ${a.nome}(...) sem windowsHide (abre janela no Windows)`);
+    }
+  }
+}
 // Registro das fontes (fontes/fontes.json): toda fonte citada em terceiros/, no CREDITOS.md ou numa linha de crédito
 // está no registro; a lista origem → destino do registro está em dia com as linhas de crédito.
 {

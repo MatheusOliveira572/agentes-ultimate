@@ -26,8 +26,8 @@ function versao(arq) {
   const op = { encoding: 'utf8', timeout: 15000, windowsHide: true };
   // .cmd/.bat no Windows só rodam pelo cmd.exe; o nome já foi conferido (só letras, números, ponto, hífen e sublinhado).
   const r = WIN && /\.(cmd|bat)$/i.test(arq)
-    ? spawnSync('cmd.exe', ['/d', '/s', '/c', `""${arq}" --version"`], { ...op, windowsVerbatimArguments: true })
-    : spawnSync(arq, ['--version'], op);
+    ? spawnSync('cmd.exe', ['/d', '/s', '/c', `""${arq}" --version"`], { windowsHide: true, ...op, windowsVerbatimArguments: true })
+    : spawnSync(arq, ['--version'], { ...op, windowsHide: true });
   if (r.error) return r.error.code === 'ETIMEDOUT' ? 'versão não respondeu em 15 s' : 'versão não lida';
   const linha = `${r.stdout || ''}\n${r.stderr || ''}`.split(/\r?\n/).map((l) => l.trim()).find(Boolean);
   return linha ? linha.slice(0, 120) : 'versão não informada';

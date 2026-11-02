@@ -100,7 +100,7 @@ process.stdin.on('end', () => {
     }
     if (/\bgit\s+(-\S+\s+(\S+\s+)?)*commit\b/.test(cmd)) {
       let prep = '';
-      try { prep = execSync('git diff --cached --name-only', { cwd, encoding: 'utf8' }); } catch (e) { prep = ''; }
+      try { prep = execSync('git diff --cached --name-only', { windowsHide: true, cwd, encoding: 'utf8' }); } catch (e) { prep = ''; }
       const regras = FIXOS.concat(padroesDoProjeto(cwd));
       const ruins = prep.split('\n').map((s) => s.trim()).filter(Boolean).filter((f) => regras.some((r) => r.test(f)));
       if (ruins.length) {
@@ -109,9 +109,9 @@ process.stdin.on('end', () => {
       // Conteúdo: o que já está preparado e, com -a/--all, também as mudanças dos arquivos já versionados.
       const opc = { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] };
       let diff = '';
-      try { diff = execSync('git diff --cached -U0 --no-color --no-ext-diff', opc); } catch (e) { diff = ''; }
+      try { diff = execSync('git diff --cached -U0 --no-color --no-ext-diff', { ...opc, windowsHide: true }); } catch (e) { diff = ''; }
       if (/\bcommit\b[^|;&]*\s(?:-[a-zA-Z]*a[a-zA-Z]*|--all)\b/.test(cmd)) {
-        try { diff += '\n' + execSync('git diff -U0 --no-color --no-ext-diff', opc); } catch (e) { /* sem diff */ }
+        try { diff += '\n' + execSync('git diff -U0 --no-color --no-ext-diff', { ...opc, windowsHide: true }); } catch (e) { /* sem diff */ }
       }
       const linhas = acrescentadas(diff);
       const altos = achar(linhas, ALTOS);

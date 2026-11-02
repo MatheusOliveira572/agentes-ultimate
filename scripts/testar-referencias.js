@@ -16,7 +16,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const pastaEsp = path.join(tmp, 'pasta com espaço ação'); fs.mkdirSync(pastaEsp, { recursive: true });
   const chk = path.join(pastaEsp, 'checar-ferramenta.js');
   if (existe('scripts', 'checar-ferramenta.js')) fs.copyFileSync(path.join(RAIZ, 'scripts', 'checar-ferramenta.js'), chk);
-  const rodaChk = (...a) => { const r = spawnSync(process.execPath, [chk, ...a], { encoding: 'utf8' }); return { code: r.status, out: (r.stdout || '') + (r.stderr || '') }; };
+  const rodaChk = (...a) => { const r = spawnSync(process.execPath, [chk, ...a], { windowsHide: true, encoding: 'utf8' }); return { code: r.status, out: (r.stdout || '') + (r.stderr || '') }; };
   let c = rodaChk('node');
   caso('0.8.0 B0 checar-ferramenta: node instalado → sai 0 com a versão (pasta com espaço e acento)', c.code === 0 && /node: instalado, v\d+/.test(c.out), c.out);
   c = rodaChk('ferramenta-que-nao-existe-zz9');
@@ -54,6 +54,14 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   v = validarCopia({ 'agents/curador.md': comGatilhos(8, 'conhecimento/LEIA-ME.md') });
   caso('0.8.0 B0 validar: 8 gatilhos para arquivo que existe passam', v.code === 0, v.out.slice(-300));
 
+  // Janela piscando no Windows: chamada de processo sem windowsHide é erro; com a opção, passa. O nome vai por partes
+  // para o próprio detector não ler este texto como chamada.
+  const chamadaTeste = (op) => "require('child_process').spawn" + "Sync('git', ['status'], " + op + ");\n";
+  let vh = validarCopia({ 'hooks/teste-janela.js': chamadaTeste("{ encoding: 'utf8' }") });
+  caso('0.8.0 validar: chamada de processo sem windowsHide é erro', vh.code === 1 && /teste-janela\.js:1: spawnSync\(\.\.\.\) sem windowsHide/.test(vh.out), vh.out.slice(-300));
+  vh = validarCopia({ 'hooks/teste-janela.js': chamadaTeste("{ windowsHide: true, encoding: 'utf8' }") });
+  caso('0.8.0 validar: com windowsHide passa', vh.code === 0, vh.out.slice(-300));
+
   // ---- Lote 1 · engenheiro-software e testador-qa ----
   const secRef = (n) => (ler('agents', n + '.md').split('\n## Referências sob demanda')[1] || '').split('\n## ')[0];
   caso('0.8.0 B1 engenheiro-software: seção "Referências sob demanda" com erro de build, depuração, arquitetura, versão da biblioteca e plataformas',
@@ -64,7 +72,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     /conhecimento\/engenharia\/erro-de-build\.md/.test(ler('evals', 'engenheiro-software.md')) && /conhecimento\/engenharia\/verificacao\.md/.test(ler('evals', 'testador-qa.md')), 'falta o caso');
   // T15 portão de qualidade (modelo para o projeto do usuário): achado bloqueante sai 1; limpo 0; incompleto 2.
   const qg = path.join(RAIZ, 'modelos', 'quality-gate.mjs');
-  const rodaQG = (ferr, rel) => { const f = path.join(pastaEsp, 'rel-' + Math.random().toString(36).slice(2) + '.json'); fs.writeFileSync(f, JSON.stringify(rel)); const r = spawnSync(process.execPath, [qg, ferr, f], { encoding: 'utf8' }); return r.status; };
+  const rodaQG = (ferr, rel) => { const f = path.join(pastaEsp, 'rel-' + Math.random().toString(36).slice(2) + '.json'); fs.writeFileSync(f, JSON.stringify(rel)); const r = spawnSync(process.execPath, [qg, ferr, f], { windowsHide: true, encoding: 'utf8' }); return r.status; };
   const sgOk = { results: [], errors: [], paths: { scanned: ['a.js'] } };
   caso('0.8.0 B1 quality-gate: Semgrep com achado HIGH sai 1, limpo sai 0, varredura sem arquivo lido sai 2',
     existe('modelos', 'quality-gate.mjs') && rodaQG('semgrep', { ...sgOk, results: [{ extra: { severity: 'HIGH' } }] }) === 1 && rodaQG('semgrep', sgOk) === 0 && rodaQG('semgrep', { ...sgOk, paths: { scanned: [] } }) === 2, 'saídas erradas');
@@ -73,7 +81,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   // T21 gerenciador de pacotes pelo lockfile ou pelo packageManager.
   const gp = path.join(RAIZ, 'scripts', 'gerenciador-pacotes.js');
   const pastaGP = (arqs) => { const d = fs.mkdtempSync(path.join(pastaEsp, 'gp-')); for (const [n, c] of Object.entries(arqs)) fs.writeFileSync(path.join(d, n), c); return d; };
-  const rodaGP = (d) => { const r = spawnSync(process.execPath, [gp, d], { encoding: 'utf8' }); return { code: r.status, out: r.stdout || '' }; };
+  const rodaGP = (d) => { const r = spawnSync(process.execPath, [gp, d], { windowsHide: true, encoding: 'utf8' }); return { code: r.status, out: r.stdout || '' }; };
   let g1 = rodaGP(pastaGP({ 'pnpm-lock.yaml': 'lockfileVersion: 9\n' }));
   caso('0.8.0 B1 gerenciador-pacotes: pasta com pnpm-lock.yaml → pnpm (sai 0)', existe('scripts', 'gerenciador-pacotes.js') && g1.code === 0 && /^gerenciador: pnpm /.test(g1.out), g1.out);
   g1 = rodaGP(pastaGP({ 'package.json': '{"packageManager":"yarn@4.1.0"}', 'package-lock.json': '{}' }));
@@ -90,7 +98,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const tdOrig = path.join(RAIZ, 'ferramentas', 'teardown');
   const tdCopia = path.join(pastaEsp, 'teardown');
   const testesTD = existe('ferramentas', 'teardown', 'scripts') ? fs.readdirSync(path.join(tdOrig, 'scripts')).filter((f) => /^test-.*\.cjs$/.test(f)) : [];
-  const rodaTD = () => testesTD.map((t) => ({ t, code: spawnSync(process.execPath, [path.join(tdCopia, 'scripts', t)], { cwd: tdCopia, encoding: 'utf8' }).status }));
+  const rodaTD = () => testesTD.map((t) => ({ t, code: spawnSync(process.execPath, [path.join(tdCopia, 'scripts', t)], { windowsHide: true, cwd: tdCopia, encoding: 'utf8' }).status }));
   if (testesTD.length) fs.cpSync(tdOrig, tdCopia, { recursive: true });
   const td1 = rodaTD();
   caso('0.8.0 B2 teardown: os 5 testes da ferramenta passam (Node, pasta com espaço e acento)', testesTD.length === 5 && td1.every((x) => x.code === 0), JSON.stringify(td1));
@@ -127,7 +135,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const novV = path.join(plugV, 'fontes', 'novidades.md');
   const rodaV = (args, sim, estado) => {
     if (estado !== undefined) { fs.mkdirSync(path.join(casaV, '.claude', 'agentes-ultimate'), { recursive: true }); fs.writeFileSync(path.join(casaV, '.claude', 'agentes-ultimate', 'vigia-fontes.json'), JSON.stringify(estado)); }
-    const r = spawnSync(process.execPath, [path.join(plugV, 'hooks', 'vigia-fontes.js'), ...args], { encoding: 'utf8', env: { ...process.env, HOME: casaV, USERPROFILE: casaV, AGENTES_ULTIMATE_VIGIA_SIMULAR: sim || '' } });
+    const r = spawnSync(process.execPath, [path.join(plugV, 'hooks', 'vigia-fontes.js'), ...args], { windowsHide: true, encoding: 'utf8', env: { ...process.env, HOME: casaV, USERPROFILE: casaV, AGENTES_ULTIMATE_VIGIA_SIMULAR: sim || '' } });
     return { code: r.status, out: r.stdout || '' };
   };
   const apiMudou = (licenca) => simular({

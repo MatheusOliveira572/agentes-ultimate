@@ -16,7 +16,7 @@ fs.mkdirSync(casa); fs.mkdirSync(proj);
 const env = { ...process.env, HOME: casa, USERPROFILE: casa };
 
 function hook(script, dados) {
-  const r = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', script)], { input: JSON.stringify(dados), env, encoding: 'utf8' });
+  const r = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', script)], { windowsHide: true, input: JSON.stringify(dados), env, encoding: 'utf8' });
   let json = null; try { json = JSON.parse(r.stdout || 'null'); } catch (e) { /* texto */ }
   return { code: r.status, out: r.stdout, err: r.stderr, json };
 }
@@ -134,7 +134,7 @@ caso('atividade: arquivo fora do projeto não é anotado', !linhasAtv.some((l) =
 const testeServidor = `
 const http=require('http'),fs=require('fs'),path=require('path'),{spawnSync}=require('child_process');
 const proj=process.argv[1],srv=process.argv[2];
-spawnSync(process.execPath,[srv,proj],{encoding:'utf8'});
+spawnSync(process.execPath,[srv,proj],{ windowsHide: true,encoding:'utf8'});
 const est=JSON.parse(fs.readFileSync(path.join(proj,'.claude','base','.mapa-servidor.json'),'utf8'));
 const get=(p)=>new Promise(ok=>http.get({host:'127.0.0.1',port:est.porta,path:p},r=>{let b='';r.on('data',c=>b+=c);r.on('end',()=>ok({s:r.statusCode,b}));}).on('error',()=>ok({s:0,b:''})));
 (async()=>{const s=await get('/saude');const p=await get('/');
@@ -149,13 +149,13 @@ while(busca<0&&Date.now()-t1<2000)await new Promise(r=>setTimeout(r,50));req2.de
 const d=await get('/dados');let dj=null;try{dj=JSON.parse(d.b);}catch(e){}
 try{process.kill(est.pid);}catch(e){}
 console.log(JSON.stringify({saude:s.s,pagina:/Ao vivo/.test(p.b)&&/src\\/carga\\.js/.test(p.b),recebido,busca,dados:d.s===200&&!!dj&&Array.isArray(dj.nos)&&Array.isArray(dj.arestas)}));})();`;
-const rs = spawnSync(process.execPath, ['-e', testeServidor, proj, path.join(RAIZ, 'hooks', 'mapa-servidor.js')], { encoding: 'utf8', env, timeout: 30000 });
+const rs = spawnSync(process.execPath, ['-e', testeServidor, proj, path.join(RAIZ, 'hooks', 'mapa-servidor.js')], { windowsHide: true, encoding: 'utf8', env, timeout: 30000 });
 let srvRes = {}; try { srvRes = JSON.parse((rs.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
 caso('servidor do mapa responde e serve a página', srvRes.saude === 200 && srvRes.pagina === true, rs.stdout + rs.stderr);
 caso('servidor transmite o evento novo na hora', srvRes.recebido === true, rs.stdout + rs.stderr);
 caso('servidor avisa o último pedido novo em até 2 s', srvRes.busca >= 0 && srvRes.busca <= 2000, rs.stdout + rs.stderr);
 caso('servidor entrega os dados atuais em /dados', srvRes.dados === true, rs.stdout + rs.stderr);
-const auto = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'mapa-servidor.js'), '--auto'], { cwd: proj, encoding: 'utf8', env });
+const auto = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'mapa-servidor.js'), '--auto'], { windowsHide: true, cwd: proj, encoding: 'utf8', env });
 caso('abrir sozinho fica desligado sem config', auto.status === 0 && !auto.stdout, auto.stdout);
 
 // Fim do trabalho: o gancho Stop anota o resumo do que foi tocado (1 lido, 1 editado, 1 criado até aqui)
@@ -179,15 +179,15 @@ const http=require('http'),fs=require('fs'),path=require('path'),{spawnSync}=req
 const proj=process.argv[1],srv=process.argv[2],abriu=process.argv[3];
 const conta=()=>fs.existsSync(abriu)?fs.readFileSync(abriu,'utf8').split('\\n').filter(Boolean).length:0;
 const espera=ms=>new Promise(r=>setTimeout(r,ms));
-(async()=>{spawnSync(process.execPath,[srv,'--auto'],{cwd:proj,encoding:'utf8'});
+(async()=>{spawnSync(process.execPath,[srv,'--auto'],{ windowsHide: true,cwd:proj,encoding:'utf8'});
 for(let i=0;i<40&&conta()<1;i++)await espera(100);const primeira=conta();
 let est={};try{est=JSON.parse(fs.readFileSync(path.join(proj,'.claude','base','.mapa-servidor.json'),'utf8'));}catch(e){}
 const req=http.get({host:'127.0.0.1',port:est.porta||1,path:'/eventos'},r=>r.resume());req.on('error',()=>{});
-await espera(600);spawnSync(process.execPath,[srv,'--auto'],{cwd:proj,encoding:'utf8'});await espera(2000);const segunda=conta();
+await espera(600);spawnSync(process.execPath,[srv,'--auto'],{ windowsHide: true,cwd:proj,encoding:'utf8'});await espera(2000);const segunda=conta();
 req.destroy();try{process.kill(est.pid);}catch(e){}
 console.log(JSON.stringify({primeira,segunda}));})();`;
 const ra = spawnSync(process.execPath, ['-e', testeAuto, proj, path.join(RAIZ, 'hooks', 'mapa-servidor.js'), abriu],
-  { encoding: 'utf8', env: { ...env, AGENTES_ULTIMATE_ABRIR_CMD: `"${process.execPath}" "${anota}"` }, timeout: 30000 });
+  { windowsHide: true, encoding: 'utf8', env: { ...env, AGENTES_ULTIMATE_ABRIR_CMD: `"${process.execPath}" "${anota}"` }, timeout: 30000 });
 let au = {}; try { au = JSON.parse((ra.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
 caso('abrir sozinho lê a configuração do usuário', au.primeira === 1, ra.stdout + ra.stderr);
 caso('não abre segunda janela com aba já conectada', au.primeira === 1 && au.segunda === 1, ra.stdout + ra.stderr);
@@ -221,15 +221,15 @@ caso('heredoc com barra invertida bloqueado', r.code === 2, `code ${r.code}`);
 r = trava('git status');
 caso('comando comum passa', r.code === 0 && !r.out, r.out);
 
-execSync('git init -q', { cwd: proj });
+execSync('git init -q', { windowsHide: true, cwd: proj });
 fs.writeFileSync(path.join(proj, '.env'), 'SENHA=x');
-execSync('git add .env', { cwd: proj });
+execSync('git add .env', { windowsHide: true, cwd: proj });
 r = trava('git commit -m teste');
 caso('commit com .env bloqueado', r.code === 2 && /\.env/.test(r.err), `code ${r.code} ${r.err}`);
-execSync('git rm --cached -q .env', { cwd: proj }); // repositório sem commit: restore --staged não funciona
+execSync('git rm --cached -q .env', { windowsHide: true, cwd: proj }); // repositório sem commit: restore --staged não funciona
 fs.mkdirSync(path.join(proj, 'dados')); fs.writeFileSync(path.join(proj, 'dados', 'real.csv'), 'a');
 fs.writeFileSync(path.join(proj, '.claude', 'base', 'sensiveis.txt'), '# padrões do projeto\ndados/**\n');
-execSync('git add dados/real.csv', { cwd: proj });
+execSync('git add dados/real.csv', { windowsHide: true, cwd: proj });
 r = trava('git commit -m dados');
 caso('commit com padrão do projeto bloqueado', r.code === 2 && /dados\/real\.csv/.test(r.err), `code ${r.code} ${r.err}`);
 const g = require(path.join(RAIZ, 'hooks', 'grafo.js')).obter(proj, 0);
@@ -244,7 +244,7 @@ const marca = path.join(tmp, 'chamado.txt');
 const falso = path.join(tmp, 'claude-falso.js');
 fs.writeFileSync(falso, `require('fs').appendFileSync(${JSON.stringify(marca)}, process.argv.slice(2).join(' ') + '\\n');`);
 const envAt = { ...env, AGENTES_ULTIMATE_FORCAR_ATUALIZAR: '1', AGENTES_ULTIMATE_CLAUDE_CMD: `"${process.execPath}" "${falso}"` };
-const atualizar = (e) => spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'atualizar.js')], { input: '{}', env: e, encoding: 'utf8' });
+const atualizar = (e) => spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'atualizar.js')], { windowsHide: true, input: '{}', env: e, encoding: 'utf8' });
 const esperar = (ms) => { const fim = Date.now() + ms; while (Date.now() < fim && !(fs.existsSync(marca) && fs.readFileSync(marca, 'utf8').split('\n').length > 2)) { /* espera o processo em 2º plano */ } };
 let a = atualizar(envAt);
 esperar(8000);
@@ -267,7 +267,7 @@ fs.mkdirSync(path.join(p7, '.claude', 'base'), { recursive: true });
 const execArq = path.join(casa, '.claude', 'agentes-ultimate', 'execucoes.jsonl');
 const lerJsonl = (f) => { try { return fs.readFileSync(f, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)); } catch (e) { return []; } };
 const exe = (dados) => hook('execucoes.js', { cwd: p7, session_id: 's1', ...dados });
-const estimar = (argv, cwd = p7) => spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), ...argv], { cwd, env, encoding: 'utf8' });
+const estimar = (argv, cwd = p7) => spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), ...argv], { windowsHide: true, cwd, env, encoding: 'utf8' });
 const linhaTr = (ts) => JSON.stringify({ type: 'assistant', timestamp: ts, message: { content: 'texto do agente' } }) + '\n';
 function transcricao(nome, ini, fim, mb = 0) {
   const f = path.join(tmp, nome);
@@ -342,7 +342,7 @@ caso('importar: execuções antigas entram uma vez, com classe e sem o pedido', 
 [[10, 10], [20, 10], [30, 25], [40, 20], [50, 50]].forEach(([min, est], i) => fs.appendFileSync(execArq, JSON.stringify({ id: 'r' + i, agente: 'analista-x', classe: 'dados',
   projeto: 'abcd1234', minutos: min, estimado_min: est, fonte_estimativa: 'registrada' }) + '\n'));
 fs.appendFileSync(execArq, JSON.stringify({ id: 'r9', agente: 'analista-x', classe: 'dados', minutos: 900, retomado: true }) + '\n');
-const faixa = (argv, e = env) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', ...argv], { cwd: p7, env: e, encoding: 'utf8' });
+const faixa = (argv, e = env) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', ...argv], { windowsHide: true, cwd: p7, env: e, encoding: 'utf8' });
   try { return JSON.parse(r.stdout); } catch (x) { return { erro: r.stdout + r.stderr }; } };
 let fx = faixa(['--agente', 'analista-x', '--classe', 'dados', '--inicio', '14:00']);
 caso('faixa sem estimado: mediana e p75 dos minutos reais (10..50 → 30 e 40), retomado fora', fx.nivel === 'agente+classe' && fx.n === 5 && fx.mediana === 30 && fx.p75 === 40 &&
@@ -356,7 +356,7 @@ caso('faixa: cascata cai de nível quando n < 3 (agente novo → classe; classe 
 const casaVazia = path.join(tmp, 'casa-vazia'); fs.mkdirSync(casaVazia);
 fx = faixa(['--agente', 'analista-x', '--estimado', '30', '--inicio', '9:00'], { ...env, HOME: casaVazia, USERPROFILE: casaVazia });
 caso('faixa sem histórico: estimado × 1 a × 2, dito no texto', fx.nivel === 'sem histórico' && fx.de_min === 30 && fx.ate_min === 60 && /sem histórico/.test(fx.texto), JSON.stringify(fx));
-re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--agente', 'analista-x', '--classe', 'dados', '--cod', 'fx01', '--registrar'], { cwd: p7, env, encoding: 'utf8' });
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--agente', 'analista-x', '--classe', 'dados', '--cod', 'fx01', '--registrar'], { windowsHide: true, cwd: p7, env, encoding: 'utf8' });
 const regFx = lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl')).find((x) => x.cod === 'fx01');
 caso('faixa --registrar grava a mesma faixa que mostrou', re.status === 0 && regFx && regFx.agente === 'analista-x' && regFx.classe === 'dados' &&
   Math.round((Date.parse(regFx.ate) - Date.parse(regFx.de)) / 60000) >= 5, `${re.stdout}${re.stderr} ${JSON.stringify(regFx)}`);
@@ -378,7 +378,7 @@ const tarefas = [
   { id: 't4', type: 'local_agent', agentType: 'Explore', status: 'completed', description: 'x', startTime: agoraMs - 60000, tokenCount: 1 },
 ];
 const barra = (dados, script = path.join(RAIZ, 'hooks', 'barra.js')) => {
-  const r = spawnSync(process.execPath, [script], { input: typeof dados === 'string' ? dados : JSON.stringify(dados), env, encoding: 'utf8' });
+  const r = spawnSync(process.execPath, [script], { windowsHide: true, input: typeof dados === 'string' ? dados : JSON.stringify(dados), env, encoding: 'utf8' });
   const linhas = (r.stdout || '').trim().split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch (e) { return { erro: l }; } });
   return { code: r.status, out: r.stdout, linhas, porId: Object.fromEntries(linhas.map((l) => [l.id, l.content])) };
 };
@@ -392,7 +392,7 @@ caso('barra: corta na largura da coluna', br.linhas.length === 3 && br.linhas.ev
 br = barra('{isto não é json');
 caso('barra: entrada inválida sai 0 sem texto', br.code === 0 && !br.out, `${br.code} ${br.out}`);
 const lancador = path.join(casa, '.claude', 'agentes-ultimate', 'barra.js');
-re = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js'), '--instalar'], { input: '{}', env, encoding: 'utf8' });
+re = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js'), '--instalar'], { windowsHide: true, input: '{}', env, encoding: 'utf8' });
 br = fs.existsSync(lancador) ? barra({ cwd: p7, columns: 200, tasks: tarefas }, lancador) : { porId: {} };
 caso('barra --instalar grava o lançador fixo e ele mostra a mesma barra', re.status === 0 && /75%/.test(br.porId.t1 || ''), `${re.status} ${re.stderr} ${JSON.stringify(br.porId)}`);
 let cfgPlugin = {}; try { cfgPlugin = JSON.parse(fs.readFileSync(path.join(RAIZ, 'settings.json'), 'utf8')); } catch (e) { /* sem arquivo */ }
@@ -425,7 +425,7 @@ const semAntes = lerEstado().revisor_sem_placar || 0; // o revisor do caso de 40
 revisar('v3', 'Revisei e está tudo certo.');
 const estado = lerEstado();
 caso('placar: relatório do revisor sem a linha Placar não grava e deixa aviso', lerJsonl(revArq).length === 2 && estado.revisor_sem_placar === semAntes + 1, JSON.stringify(estado));
-const placar = (argv, cwd = p7) => spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), ...argv], { cwd, env, encoding: 'utf8' });
+const placar = (argv, cwd = p7) => spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), ...argv], { windowsHide: true, cwd, env, encoding: 'utf8' });
 re = placar(['defeito', '--agente', 'dev-powerbi', '--gravidade', 'Alta', '--texto', 'total da página não bate por R$ 2 mi']);
 const dfTxt = fs.existsSync(path.join(p7, '.claude', 'base', 'DEFEITOS-USUARIO.md')) ? fs.readFileSync(path.join(p7, '.claude', 'base', 'DEFEITOS-USUARIO.md'), 'utf8') : '';
 const dfGlob = fs.existsSync(path.join(casa, '.claude', 'agentes-ultimate', 'defeitos.jsonl')) ? fs.readFileSync(path.join(casa, '.claude', 'agentes-ultimate', 'defeitos.jsonl'), 'utf8') : '';
@@ -468,7 +468,7 @@ caso('agentes agora: quem terminou aparece com os minutos; início de 15 h atrá
 const testeAgentes = `
 const http=require('http'),fs=require('fs'),path=require('path'),{spawnSync}=require('child_process');
 const proj=process.argv[1],srv=process.argv[2];
-spawnSync(process.execPath,[srv,proj],{encoding:'utf8'});
+spawnSync(process.execPath,[srv,proj],{ windowsHide: true,encoding:'utf8'});
 const est=JSON.parse(fs.readFileSync(path.join(proj,'.claude','base','.mapa-servidor.json'),'utf8'));
 const get=(p)=>new Promise(ok=>http.get({host:'127.0.0.1',port:est.porta,path:p},r=>{let b='';r.on('data',c=>b+=c);r.on('end',()=>ok({s:r.statusCode,b}));}).on('error',()=>ok({s:0,b:''})));
 (async()=>{const a=await get('/agentes');let lista=[];try{lista=JSON.parse(a.b);}catch(e){}
@@ -478,7 +478,7 @@ fs.appendFileSync(path.join(proj,'.claude','base','.agentes.jsonl'),JSON.stringi
 while(ms<0&&Date.now()-t1<4000)await new Promise(r=>setTimeout(r,50));req.destroy();
 const p=await get('/');try{process.kill(est.pid);}catch(e){}
 console.log(JSON.stringify({n:lista.length,inicial,ms,painel:/Agentes agora/.test(p.b)}));})();`;
-const rg = spawnSync(process.execPath, ['-e', testeAgentes, p8, path.join(RAIZ, 'hooks', 'mapa-servidor.js')], { encoding: 'utf8', env, timeout: 30000 });
+const rg = spawnSync(process.execPath, ['-e', testeAgentes, p8, path.join(RAIZ, 'hooks', 'mapa-servidor.js')], { windowsHide: true, encoding: 'utf8', env, timeout: 30000 });
 let ag = {}; try { ag = JSON.parse((rg.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
 caso('mapa: /agentes entrega os agentes e a página tem o painel "Agentes agora"', ag.n === 3 && ag.painel === true, rg.stdout + rg.stderr);
 caso('mapa: quem abre recebe os agentes na hora e um agente novo chega em até 3 s', ag.inicial === true && ag.ms >= 0 && ag.ms <= 3000, rg.stdout + rg.stderr);
@@ -527,7 +527,7 @@ const gravarHist = (casaX, h) => { const g = path.join(casaX, '.claude', 'agente
 const ordena = (o) => (o && typeof o === 'object' && !Array.isArray(o) ? Object.fromEntries(Object.keys(o).sort().map((k) => [k, ordena(o[k])])) : o);
 const casaEq = path.join(tmp, 'casa-eq'); const histEq = sintetico(3000, 1000);
 gravarHist(casaEq, histEq);
-re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { cwd: p7, env: { ...env, HOME: casaEq, USERPROFILE: casaEq }, encoding: 'utf8' });
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { windowsHide: true, cwd: p7, env: { ...env, HOME: casaEq, USERPROFILE: casaEq }, encoding: 'utf8' });
 let plNovo = {}; try { plNovo = JSON.parse(re.stdout); } catch (e) { /* falhou */ }
 const plVelho = placarAntigo(histEq);
 caso('escala: o placar dá o mesmo resultado da regra antiga (3 mil execuções, 1 mil revisões)', JSON.stringify(ordena(plNovo.agentes)) === JSON.stringify(ordena(plVelho.agentes)) &&
@@ -536,18 +536,18 @@ const casa60 = path.join(tmp, 'casa60'); gravarHist(casa60, sintetico(60000, 200
 const env60 = { ...env, HOME: casa60, USERPROFILE: casa60 };
 const p60 = path.join(tmp, 'projeto60'); fs.mkdirSync(path.join(p60, '.claude', 'base'), { recursive: true });
 const tr60 = transcricao('t60.jsonl', '2026-10-28T10:00:00.000Z', '2026-10-28T10:20:00.000Z');
-const fim60 = (id) => { const t = Date.now(); spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { input: JSON.stringify({ cwd: p60, hook_event_name: 'SubagentStop', agent_id: id,
+const fim60 = (id) => { const t = Date.now(); spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { windowsHide: true, input: JSON.stringify({ cwd: p60, hook_event_name: 'SubagentStop', agent_id: id,
   agent_type: 'agentes-ultimate:revisor', agent_transcript_path: tr60, last_assistant_message: `Placar: autor=dev-powerbi cod=z${id} veredito=não B=0 A=1 M=0 b=0` }), env: env60, encoding: 'utf8' }); return Date.now() - t; };
 // Abrir um Node no Windows custa de 0,2 a 1 s conforme a carga da máquina: mede-se, intercalado, um Node vazio, e o gancho
 // pode custar no máximo 300 ms além dele (o defeito antigo custava 26 s).
-const vazio = () => { const t = Date.now(); spawnSync(process.execPath, ['-e', ''], { env: env60 }); return Date.now() - t; };
+const vazio = () => { const t = Date.now(); spawnSync(process.execPath, ['-e', ''], { windowsHide: true, env: env60 }); return Date.now() - t; };
 const med = (l) => l.slice().sort((a, b) => a - b)[Math.floor(l.length / 2)];
 fim60('aquece');
 const tempos60 = [], vazios = [];
 for (let i = 1; i <= 5; i++) { tempos60.push(fim60('m' + i)); vazios.push(vazio()); }
 caso(`escala: com 60 mil execuções o fim de um agente custa menos de 0,3 s além de abrir o Node (mediana ${med(tempos60)} ms; Node vazio ${med(vazios)} ms)`,
   med(tempos60) - med(vazios) < 300 && lerJsonl(path.join(casa60, '.claude', 'agentes-ultimate', 'revisoes.jsonl')).length === 20006, `${tempos60.join(', ')} ms × vazio ${vazios.join(', ')} ms`);
-const barra60 = () => { const t = Date.now(); spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js')], { input: JSON.stringify({ cwd: p60, columns: 120, tasks: [{ id: 'x', agentType: 'dev-powerbi',
+const barra60 = () => { const t = Date.now(); spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js')], { windowsHide: true, input: JSON.stringify({ cwd: p60, columns: 120, tasks: [{ id: 'x', agentType: 'dev-powerbi',
   status: 'running', description: 'monte a página', startTime: Date.now() - 600000 }] }), env: env60, encoding: 'utf8' }); return Date.now() - t; };
 barra60();
 const temposB = [], vaziosB = [];
@@ -560,7 +560,7 @@ const testeParalelo = `
 const {spawn}=require('child_process'),path=require('path'),fs=require('fs');
 const [gancho,raiz,casaP]=process.argv.slice(1);
 const env={...process.env,HOME:casaP,USERPROFILE:casaP};
-const roda=(d)=>new Promise(ok=>{const p=spawn(process.execPath,[gancho],{env,stdio:['pipe','ignore','ignore']});p.on('close',ok);p.stdin.end(JSON.stringify(d));});
+const roda=(d)=>new Promise(ok=>{const p=spawn(process.execPath,[gancho],{ windowsHide: true,env,stdio:['pipe','ignore','ignore']});p.on('close',ok);p.stdin.end(JSON.stringify(d));});
 const espera=ms=>new Promise(r=>setTimeout(r,ms));
 (async()=>{const erros=[];const R=require(path.join(raiz,'hooks','registro.js'));
 for(let k=0;k<20;k++){const cwd=path.join(casaP,'p'+k);fs.mkdirSync(path.join(cwd,'.claude','base'),{recursive:true});
@@ -580,7 +580,7 @@ const ex=fs.readFileSync(path.join(casaP,'.claude','agentes-ultimate','execucoes
 for(const x of ex){const k=x.id.replace(/^id[ab]/,'');const certo=(x.id.startsWith('ida')?'xa':'xb')+k;if(x.cod!==certo)erros.push('registro '+x.id+': '+x.cod);}
 console.log(JSON.stringify({n:ex.length,erros}));})();`;
 const casaPar = path.join(tmp, 'casa-paralelo'); fs.mkdirSync(casaPar);
-const rp = spawnSync(process.execPath, ['-e', testeParalelo, path.join(RAIZ, 'hooks', 'execucoes.js'), RAIZ, casaPar], { encoding: 'utf8', timeout: 240000 });
+const rp = spawnSync(process.execPath, ['-e', testeParalelo, path.join(RAIZ, 'hooks', 'execucoes.js'), RAIZ, casaPar], { windowsHide: true, encoding: 'utf8', timeout: 240000 });
 let par = {}; try { par = JSON.parse((rp.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
 caso('código certo: 20 rodadas com dois agentes do mesmo tipo em paralelo (inícios a 5 ms), no painel e no registro', par.n === 40 && par.erros && par.erros.length === 0, rp.stdout + rp.stderr);
 // agente em primeiro plano: sem PostToolUse até o fim; o código vem do .meta.json ao lado da transcrição. No Claude Code
@@ -643,7 +643,7 @@ caso('código: o revisor com [revisa:ab12] (e [cod:ab12] só no pedido) não fic
 const R10 = registro();
 caso('código: a faixa registrada só vale para o mesmo agente', R10.estimativaPara(p7, 'revisor', 'ab12', Date.now()) === null && !!R10.estimativaPara(p7, 'dev-powerbi', 'ab12', Date.now()), 'faixa de outro agente');
 re = estimar(['registrar', '--agente', 'revisor', '--cod', 'ab12', '--de', '10:00', '--ate', '10:30']);
-const re10 = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--agente', 'revisor', '--estimado', '20', '--cod', 'ab12', '--registrar'], { cwd: p7, env, encoding: 'utf8' });
+const re10 = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--agente', 'revisor', '--estimado', '20', '--cod', 'ab12', '--registrar'], { windowsHide: true, cwd: p7, env, encoding: 'utf8' });
 caso('código: estimar.js recusa o código do trabalho de outro agente e explica o [revisa:]', re.status !== 0 && re10.status !== 0 && /\[revisa:ab12\]/.test(re.stderr) &&
   !lerJsonl(path.join(p7, '.claude', 'base', '.estimativas.jsonl')).some((x) => x.agente === 'revisor' && x.cod === 'ab12'), `${re.status} ${re.stderr} | ${re10.status} ${re10.stderr}`);
 re = estimar(['registrar', '--agente', 'dev-powerbi', '--cod', 'ab12', '--de', '10:00', '--ate', '10:30']);
@@ -686,7 +686,7 @@ fs.writeFileSync(path.join(gM5, 'execucoes.jsonl'), lin([
   { id: 'q1', agente: 'ag2', classe: 'dados', minutos: 100 }, { id: 'q2', agente: 'ag2', classe: 'dados', minutos: 100 }, { id: 'q3', agente: 'ag2', classe: 'texto', minutos: 10 },
   { id: 'q4', agente: 'ag3', classe: 'dados', minutos: 20 }, { id: 'q5', agente: 'ag3', classe: 'dados', minutos: 20 }, { id: 'q6', agente: 'ag3', classe: 'dados', minutos: 20 },
 ]));
-const fxM5 = (a) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', '--agente', a, '--classe', 'dados'], { cwd: p7, env: envM5, encoding: 'utf8' });
+const fxM5 = (a) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', '--agente', a, '--classe', 'dados'], { windowsHide: true, cwd: p7, env: envM5, encoding: 'utf8' });
   try { return JSON.parse(r.stdout); } catch (e) { return { erro: r.stdout + r.stderr }; } };
 const f2 = fxM5('ag2'), f3 = fxM5('ag3');
 caso('cascata em par: n = 2 cai para o nível de cima (agente), n = 3 fica (agente+classe)', f2.nivel === 'agente' && f2.n === 3 && f3.nivel === 'agente+classe' && f3.n === 3, JSON.stringify([f2, f3]));
@@ -700,7 +700,7 @@ fs.writeFileSync(path.join(gM5, 'revisoes.jsonl'), lin([
   { em: '2026-10-28T11:00:00Z', autor: 'dev', cod: 'w1', projeto: 'p1', veredito: 'nao', B: 0, A: 1, M: 0, b: 0 },
   { em: '2026-10-28T14:00:00Z', autor: 'dev', cod: 'w2', projeto: 'p1', veredito: 'sim', B: 0, A: 0, M: 0, b: 0 },
 ]));
-re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { cwd: p7, env: envM5, encoding: 'utf8' });
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { windowsHide: true, cwd: p7, env: envM5, encoding: 'utf8' });
 let devM5 = {}; try { devM5 = JSON.parse(re.stdout).agentes.dev; } catch (e) { /* falhou */ }
 caso('retrabalho: conta só a execução do mesmo trabalho depois do "não" (1, não 2 nem 0)', devM5.retrabalho === 1, re.stdout + re.stderr);
 caso('de primeira: é por trabalho; outro código do mesmo autor aprovado de primeira conta (1 de 2)', devM5.revisados === 2 && devM5.de_primeira === 1, re.stdout + re.stderr);
@@ -708,7 +708,7 @@ const pC2 = path.join(tmp, 'projeto-c2'); fs.mkdirSync(path.join(pC2, '.claude',
 for (const [id, c, v] of [['c2a', 'w1', 'não'], ['c2b', 'w2', 'sim']]) {
   hook('execucoes.js', { cwd: pC2, hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'revisor', last_assistant_message: `Placar: autor=dev cod=${c} veredito=${v} B=0 A=0 M=0 b=0` });
 }
-re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json', '--projeto'], { cwd: pC2, env, encoding: 'utf8' });
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json', '--projeto'], { windowsHide: true, cwd: pC2, env, encoding: 'utf8' });
 let devC2 = {}; try { devC2 = JSON.parse(re.stdout).agentes.dev || {}; } catch (e) { /* falhou */ }
 caso('de primeira pelo gancho até o placar: a 1ª revisão de outro código do mesmo autor conta (1 de 2)', devC2.revisados === 2 && devC2.de_primeira === 1, re.stdout + re.stderr);
 
@@ -716,7 +716,7 @@ caso('de primeira pelo gancho até o placar: a 1ª revisão de outro código do 
 const pM6 = path.join(tmp, 'projeto-m6'); fs.mkdirSync(path.join(pM6, '.claude', 'base'), { recursive: true });
 const casaM6 = path.join(tmp, 'casa-m6'); fs.mkdirSync(casaM6);
 const envM6 = { ...env, HOME: casaM6, USERPROFILE: casaM6 };
-const revM6 = (id, linha) => spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { input: JSON.stringify({ cwd: pM6, hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'revisor',
+const revM6 = (id, linha) => spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { windowsHide: true, input: JSON.stringify({ cwd: pM6, hook_event_name: 'SubagentStop', agent_id: id, agent_type: 'revisor',
   last_assistant_message: linha }), env: envM6, encoding: 'utf8' });
 revM6('n1', 'Placar: autor=dev cod=s1 veredito=não B=0 A=1 M=1 b=0');            // sem ids: o Alto e o Médio continuam abertos na 2ª
 revM6('n2', 'Placar: autor=dev cod=s1 veredito=não B=0 A=1 M=1 b=0');
@@ -724,7 +724,7 @@ revM6('i1', 'Placar: autor=redator cod=s2 veredito=não B=0 A=1 M=1 b=0 ids=A-1,
 revM6('i2', 'Placar: autor=redator cod=s2 veredito=não B=0 A=1 M=1 b=0 ids=A-1,M-2');
 const rvM6 = lerJsonl(path.join(casaM6, '.claude', 'agentes-ultimate', 'revisoes.jsonl'));
 caso('achados: a linha fixa aceita ids e o registro guarda a lista', rvM6.length === 4 && JSON.stringify(rvM6[3].ids) === '["A-1","M-2"]', JSON.stringify(rvM6));
-re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { cwd: pM6, env: envM6, encoding: 'utf8' });
+re = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'placar.js'), '--json'], { windowsHide: true, cwd: pM6, env: envM6, encoding: 'utf8' });
 let plM6 = {}; try { plM6 = JSON.parse(re.stdout); } catch (e) { /* falhou */ }
 const dM6 = (plM6.agentes || {}).dev || {}, rM6 = (plM6.agentes || {}).redator || {};
 caso('achados sem ids: o que continua aberto não conta 2 vezes (A 1, M 1)', dM6.A === 1 && dM6.M === 1, re.stdout + re.stderr);
@@ -736,19 +736,19 @@ const pB1 = path.join(tmp, 'projeto-b1'); fs.mkdirSync(path.join(pB1, '.claude',
 const nExB1 = lerJsonl(execArq).length;
 for (const d of [{ hook_event_name: 'PreToolUse', tool_name: 'Agent', tool_input: { description: 'x [cod:sp01]', subagent_type: 'redator' } },
   { hook_event_name: 'SubagentStart', agent_id: 'sp1', agent_type: 'redator' }, { hook_event_name: 'SubagentStop', agent_id: 'sp1', agent_type: 'redator' }]) {
-  spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { input: JSON.stringify({ cwd: pB1, ...d }), env: { ...env, AGENTES_ULTIMATE_SEM_PASTA: '1' }, encoding: 'utf8' });
+  spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'execucoes.js')], { windowsHide: true, input: JSON.stringify({ cwd: pB1, ...d }), env: { ...env, AGENTES_ULTIMATE_SEM_PASTA: '1' }, encoding: 'utf8' });
 }
 caso('AGENTES_ULTIMATE_SEM_PASTA=1 desliga o registro de execuções', !fs.existsSync(path.join(pB1, '.claude', 'base', '.agentes.jsonl')) && lerJsonl(execArq).length === nExB1, 'gravou');
 
 // ---- b-2 · com histórico de minutos e nenhum estimado, o texto não diz "sem histórico" na base ----
 fs.writeFileSync(path.join(gM5, 'execucoes.jsonl'), lin([1, 2, 3].map((i) => ({ id: 'h' + i, agente: 'ag9', classe: 'dados', minutos: 10 * i }))));
-const fB2 = (() => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', '--agente', 'ag9', '--classe', 'dados', '--estimado', '30'], { cwd: p7, env: envM5, encoding: 'utf8' });
+const fB2 = (() => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'faixa', '--json', '--agente', 'ag9', '--classe', 'dados', '--estimado', '30'], { windowsHide: true, cwd: p7, env: envM5, encoding: 'utf8' });
   try { return JSON.parse(r.stdout); } catch (e) { return { erro: r.stdout + r.stderr }; } })();
 caso('faixa: com minutos mas sem estimados, a base mostra o nível certo e só o fator fica "sem histórico"', fB2.nivel === 'agente+classe' && /base n=3 \(agente\+classe\)/.test(fB2.texto) && /fator sem histórico/.test(fB2.texto), JSON.stringify(fB2));
 
 // ---- b-3 · lançador da barra também no $HOME quando ele difere da pasta do usuário (rede corporativa) ----
 const casaU = path.join(tmp, 'casa-userprofile'), casaH = path.join(tmp, 'casa-home'); fs.mkdirSync(casaU); fs.mkdirSync(casaH);
-spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js'), '--instalar'], { input: '{}', env: { ...process.env, USERPROFILE: casaU, HOME: casaH }, encoding: 'utf8' });
+spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'barra.js'), '--instalar'], { windowsHide: true, input: '{}', env: { ...process.env, USERPROFILE: casaU, HOME: casaH }, encoding: 'utf8' });
 const temLanc = (c) => fs.existsSync(path.join(c, '.claude', 'agentes-ultimate', 'barra.js'));
 caso('lançador gravado na pasta do usuário e no $HOME quando são diferentes', process.platform !== 'win32' || (temLanc(casaU) && temLanc(casaH)), `${temLanc(casaU)} ${temLanc(casaH)}`);
 
@@ -757,7 +757,7 @@ const testeDuplo = `
 const {spawn}=require('child_process'),path=require('path'),fs=require('fs');
 const [gancho,casaD,trBase]=process.argv.slice(1);
 const env={...process.env,HOME:casaD,USERPROFILE:casaD};
-const roda=(d)=>new Promise(ok=>{const p=spawn(process.execPath,[gancho],{env,stdio:['pipe','ignore','ignore']});p.on('close',ok);p.stdin.end(JSON.stringify(d));});
+const roda=(d)=>new Promise(ok=>{const p=spawn(process.execPath,[gancho],{ windowsHide: true,env,stdio:['pipe','ignore','ignore']});p.on('close',ok);p.stdin.end(JSON.stringify(d));});
 (async()=>{const cwd=path.join(casaD,'proj');fs.mkdirSync(path.join(cwd,'.claude','base'),{recursive:true});
 for(let k=0;k<10;k++){const id='dup'+k;const tr=path.join(casaD,id+'.jsonl');
 fs.writeFileSync(tr,fs.readFileSync(trBase,'utf8')+JSON.stringify({type:'assistant',timestamp:'2026-10-28T10:30:00Z',message:{content:'Placar: autor=dev cod=dd'+k+' veredito=sim B=0 A=0 M=0 b=0'}})+'\\n');
@@ -767,7 +767,7 @@ await Promise.all([roda({...base,last_assistant_message:'Placar: autor=dev cod=d
 const ler=(n)=>{try{return fs.readFileSync(path.join(casaD,'.claude','agentes-ultimate',n),'utf8').trim().split('\\n').filter(Boolean).map(l=>JSON.parse(l));}catch(e){return [];}};
 console.log(JSON.stringify({exec:ler('execucoes.jsonl').length,rev:ler('revisoes.jsonl').length}));})();`;
 const casaDup = path.join(tmp, 'casa-dup'); fs.mkdirSync(casaDup);
-const rd = spawnSync(process.execPath, ['-e', testeDuplo, path.join(RAIZ, 'hooks', 'execucoes.js'), casaDup, transcricao('dup-base.jsonl', '2026-10-28T10:00:00.000Z', '2026-10-28T10:20:00.000Z')], { encoding: 'utf8', timeout: 120000 });
+const rd = spawnSync(process.execPath, ['-e', testeDuplo, path.join(RAIZ, 'hooks', 'execucoes.js'), casaDup, transcricao('dup-base.jsonl', '2026-10-28T10:00:00.000Z', '2026-10-28T10:20:00.000Z')], { windowsHide: true, encoding: 'utf8', timeout: 120000 });
 let dup = {}; try { dup = JSON.parse((rd.stdout || '').trim().split('\n').pop()); } catch (e) { /* falhou */ }
 caso('SubagentStop repetido em paralelo (10 vezes): 1 execução e 1 linha Placar por agente', dup.exec === 10 && dup.rev === 10, rd.stdout + rd.stderr);
 
@@ -845,7 +845,7 @@ caso('modelo por tarefa: "true" em texto liga e "false" em texto no projeto desl
 const p15 = path.join(tmp, 'projeto15'); fs.mkdirSync(path.join(p15, '.claude', 'base'), { recursive: true });
 const relogio = (h, m) => { const d = new Date(); d.setHours(h, m, 0, 0); return d; };
 const reg15 = (agoraFix, de, ate, cod) => { spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'estimar.js'), 'registrar', '--agente', 'redator', '--cod', cod, '--de', de, '--ate', ate],
-  { cwd: p15, env: { ...env, AGENTES_ULTIMATE_AGORA: agoraFix.toISOString() }, encoding: 'utf8' });
+  { windowsHide: true, cwd: p15, env: { ...env, AGENTES_ULTIMATE_AGORA: agoraFix.toISOString() }, encoding: 'utf8' });
   return lerJsonl(path.join(p15, '.claude', 'base', '.estimativas.jsonl')).find((x) => x.cod === cod) || {}; };
 const min = (a, b) => Math.round((Date.parse(a) - b.getTime()) / 60000);
 const a2350 = relogio(23, 50), a0010 = relogio(0, 10);
@@ -874,7 +874,7 @@ function validarCopia(trocas) {
   const dst = fs.mkdtempSync(path.join(tmp, 'plugin-'));
   for (const d of ['agents', 'evals', 'fonte', 'pacotes', 'skills', 'scripts', 'hooks', 'conhecimento', 'terceiros', 'modelos', 'ferramentas', 'fontes', 'CREDITOS.md']) if (fs.existsSync(path.join(RAIZ, d))) fs.cpSync(path.join(RAIZ, d), path.join(dst, d), { recursive: true });
   for (const [rel, texto] of Object.entries(trocas)) { fs.mkdirSync(path.dirname(path.join(dst, rel)), { recursive: true }); fs.writeFileSync(path.join(dst, rel), texto); }
-  const rv = spawnSync(process.execPath, [path.join(dst, 'scripts', 'validar.js')], { encoding: 'utf8' });
+  const rv = spawnSync(process.execPath, [path.join(dst, 'scripts', 'validar.js')], { windowsHide: true, encoding: 'utf8' });
   return { code: rv.status, out: (rv.stdout || '') + (rv.stderr || '') };
 }
 
@@ -902,14 +902,14 @@ caso('0.8.0 G11 validar: o plugin como está passa (0 erro)', validarCopia({}).c
 // G1 · segredos e chaves. Os segredos de teste são montados aqui por partes: este arquivo não tem nenhum segredo literal
 // (a própria trava, ou a proteção de envio do GitHub, barraria o commit dele).
 const pS = path.join(tmp, 'projeto-segredos'); fs.mkdirSync(pS);
-execSync('git init -q', { cwd: pS }); execSync('git config user.email t@t && git config user.name t', { cwd: pS });
-fs.writeFileSync(path.join(pS, 'leia.md'), 'base\n'); execSync('git add leia.md && git commit -q -m base', { cwd: pS });
+execSync('git init -q', { windowsHide: true, cwd: pS }); execSync('git config user.email t@t && git config user.name t', { windowsHide: true, cwd: pS });
+fs.writeFileSync(path.join(pS, 'leia.md'), 'base\n'); execSync('git add leia.md && git commit -q -m base', { windowsHide: true, cwd: pS });
 const commitCom = (arq, texto, cmd = 'git commit -m teste') => {
-  execSync('git reset -q', { cwd: pS });
+  execSync('git reset -q', { windowsHide: true, cwd: pS });
   fs.mkdirSync(path.dirname(path.join(pS, arq)), { recursive: true }); fs.writeFileSync(path.join(pS, arq), texto);
-  execSync(`git add "${arq}"`, { cwd: pS });
+  execSync(`git add "${arq}"`, { windowsHide: true, cwd: pS });
   const res = trava(cmd, pS);
-  execSync('git reset -q', { cwd: pS }); fs.rmSync(path.join(pS, arq), { force: true });
+  execSync('git reset -q', { windowsHide: true, cwd: pS }); fs.rmSync(path.join(pS, arq), { force: true });
   return res;
 };
 const pedeV8 = (x) => x.json && x.json.hookSpecificOutput && x.json.hookSpecificOutput.permissionDecision === 'ask';
@@ -944,8 +944,8 @@ caso('0.8.0 G1 trava: padrão de média certeza (chave atribuída no código) pe
 fs.writeFileSync(path.join(pS, 'leia.md'), 'base\ntoken: "gh' + 'p_' + 'a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q7R8"\n');
 x8 = trava('git commit -am "muda leia"', pS);
 caso('0.8.0 G1 trava: "git commit -a" também confere o que o -a vai levar', x8.code === 2 && /leia\.md:2/.test(x8.err), `code ${x8.code} ${x8.err}`);
-execSync('git add leia.md && git commit -q -m "com segredo (teste)"', { cwd: pS });
-fs.writeFileSync(path.join(pS, 'leia.md'), 'base\n'); execSync('git add leia.md', { cwd: pS });
+execSync('git add leia.md && git commit -q -m "com segredo (teste)"', { windowsHide: true, cwd: pS });
+fs.writeFileSync(path.join(pS, 'leia.md'), 'base\n'); execSync('git add leia.md', { windowsHide: true, cwd: pS });
 x8 = trava('git commit -m "tira o segredo"', pS);
 caso('0.8.0 G1 trava: commit que só remove o segredo passa (só as linhas acrescentadas contam)', x8.code === 0 && !x8.out, `code ${x8.code} ${x8.err}`);
 caso('0.8.0 G1 protocolo comum: segredo se cita pelo nome, nunca pelo valor (em todos os agentes)', /nunca pelo valor/.test(lerV8('fonte', 'comum.md')) && /nunca pelo valor/.test(agV8('redator')), 'falta em fonte/comum.md');
