@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/critique.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução, condensação (48 KB → 2 arquivos), troca dos comandos e do registro do impeccable pelo nosso protocolo; alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=critica-de-design; palavras=critica de design, criticar a tela, revisao de ux, heuristicas, nielsen, pontuacao de usabilidade, carga cognitiva, avaliar a interface, avalie a interface, problemas de ux, revisar o design; agentes=designer-paineis, designer-documentos, revisor -->
+<!-- ref: tema=critica-de-design; palavras=critica de design, criticar a tela, revisao de ux, heuristicas, nielsen, pontuacao de usabilidade, carga cognitiva, avaliar a interface, avalie a interface, problemas de ux, revisar o design; agentes=designer-interface, designer-paineis, designer-documentos, revisor -->
 <!-- teste-ref: sim=faça a crítica de design da tela com as heurísticas de Nielsen e a carga cognitiva | avalie a interface do app: o que funciona e os problemas de ux por prioridade; nao=calcule o imposto de renda diferido -->
 # Crítica de design (revisão de UX com pontuação)
 

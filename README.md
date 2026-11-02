@@ -53,12 +53,13 @@ Para testar uma cópia local sem instalar: `claude --plugin-dir <pasta-do-reposi
 
 **Núcleo** (sempre disponível): `planejador`, `pesquisador`, `revisor`, `redator`, `curador`.
 
-31 agentes, cada um trabalhando como **as melhores empresas daquela função** (pelo menos 3 empresas diferentes por
+32 agentes, cada um trabalhando como **as melhores empresas daquela função** (pelo menos 3 empresas diferentes por
 agente, com a prática documentada e a fonte aberta), com casos de teste próprios em `evals/`.
 
 | Pacote | Entra quando o pedido fala de… | Agentes | Algumas referências |
 |---|---|---|---|
 | BI e painéis | Power BI, DAX, painel, dashboard (ou a pasta tem `.pbip`) | `designer-paineis`, `engenheiro-dados`, `dev-powerbi` | Financial Times, Airbnb, Microsoft, SQLBI |
+| Interface (app) | tela de app, aplicativo, redesenho, visual premium, efeito vidro | `designer-interface`, `engenheiro-software` | Apple, Nielsen Norman, Google, Stripe |
 | Sites e landing pages | landing page, página de vendas, site institucional | `designer-sites`, `engenheiro-software` | Stripe, Nielsen Norman, Google, Apple |
 | Finanças | orçado, realizado, desvio, fechamento, caixa, capital de giro | `analista-fpa`, `analista-tesouraria` | Microsoft Finance, Equinor, Apple, Ambev |
 | Contábil e tributário | contabilidade, CPC/IFRS, imposto, reforma tributária, SPED | `contador`, `especialista-tributario` | Deloitte, KPMG, Unilever |

@@ -1,5 +1,5 @@
 <!-- Texto próprio do agentes-ultimate, escrito a partir da HIG pública da Apple (https://developer.apple.com/design/human-interface-guidelines, páginas abertas em 2026-11-01). Cobre a mesma função do apple-design-skill (dickwu, sem licença): nada copiado dele nem da Apple; cada regra cita a página da HIG. -->
-<!-- ref: tema=apple-hig; palavras=apple, estilo apple, hig, human interface guidelines, ios, iphone, ipad, mac, visual premium, app premium, redesenhe, redesenho, app, aplicativo, liquid glass, efeito vidro, site institucional, site bonito, bonito; agentes=designer-paineis, designer-documentos, designer-sites, engenheiro-software -->
+<!-- ref: tema=apple-hig; palavras=apple, estilo apple, hig, human interface guidelines, ios, iphone, ipad, mac, visual premium, app premium, redesenhe, redesenho, app, aplicativo, liquid glass, efeito vidro, site institucional, site bonito, bonito; agentes=designer-interface, designer-paineis, designer-documentos, designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=revise o app no estilo Apple seguindo a HIG | redesenhe a tela do aplicativo com visual premium de iphone; nao=faça o rateio das despesas por centro de custo -->
 # Apple (HIG): método de revisão e índice dos temas
 

@@ -1,5 +1,5 @@
 <!-- Texto próprio do agentes-ultimate, a partir da HIG pública da Apple (páginas color, dark-mode, abertas em 2026-11-01). Nada copiado; cada regra cita a página. -->
-<!-- ref: tema=apple-cor; palavras=cor do sistema, cores semanticas, modo escuro do app, dark mode, tema escuro ios, cor de destaque, tint, display p3, cor apple; agentes=designer-paineis, designer-documentos, engenheiro-software -->
+<!-- ref: tema=apple-cor; palavras=cor do sistema, cores semanticas, modo escuro do app, dark mode, tema escuro ios, cor de destaque, tint, display p3, cor apple; agentes=designer-interface, designer-paineis, designer-documentos, engenheiro-software -->
 <!-- teste-ref: sim=acerte as cores semânticas e o modo escuro do app ios | o dark mode do app está com contraste ruim e cor de destaque demais; nao=faça a projeção de receita por canal -->
 # Lente 3 (cor): cor e modo escuro
 

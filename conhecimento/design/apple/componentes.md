@@ -1,5 +1,5 @@
 <!-- Texto próprio do agentes-ultimate, a partir da HIG pública da Apple (páginas buttons, toggles, pickers, menus, tab-bars, sidebars, lists-and-tables, searching, settings, abertas em 2026-11-01). Nada copiado; cada regra cita a página. -->
-<!-- ref: tema=apple-componentes; palavras=barra de abas, tab bar, barra lateral, sidebar, botao principal, botao destrutivo, alternador, toggle, switch, seletor, picker, menu de contexto, lista e tabela, campo de busca, tela de ajustes; agentes=designer-paineis, engenheiro-software -->
+<!-- ref: tema=apple-componentes; palavras=barra de abas, tab bar, barra lateral, sidebar, botao principal, botao destrutivo, alternador, toggle, switch, seletor, picker, menu de contexto, lista e tabela, campo de busca, tela de ajustes; agentes=designer-interface, designer-paineis, engenheiro-software -->
 <!-- teste-ref: sim=revise a tab bar, a barra lateral e os botões do app ios | o switch e o picker da tela de ajustes estão fora do padrão da apple; nao=prepare o dossiê do processo trabalhista -->
 # Lente 2: convenções da plataforma (componentes)
 

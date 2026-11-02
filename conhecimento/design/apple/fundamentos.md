@@ -1,5 +1,5 @@
 <!-- Texto próprio do agentes-ultimate, a partir da HIG pública da Apple (páginas design-principles, branding, layout, abertas em 2026-11-01). Nada copiado; cada regra cita a página. A leitura de "acabamento" é nossa. -->
-<!-- ref: tema=apple-fundamentos; palavras=principios de design apple, identidade visual do app, marca no app, branding, grade, margens, size classes, area segura, layout ios; agentes=designer-paineis, designer-documentos -->
+<!-- ref: tema=apple-fundamentos; palavras=principios de design apple, identidade visual do app, marca no app, branding, grade, margens, size classes, area segura, layout ios; agentes=designer-interface, designer-paineis, designer-documentos -->
 <!-- teste-ref: sim=aplique os princípios de design da apple e a marca no app sem exagero | o layout do app ipad não se adapta às size classes nem respeita a área segura; nao=faça o fechamento contábil de outubro -->
 # Princípios, marca, layout e acabamento
 

@@ -18,6 +18,7 @@
         "zoom de 200"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "engenheiro-software",
@@ -59,6 +60,7 @@
         "bonito"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "designer-sites",
@@ -89,6 +91,7 @@
         "aumentar contraste"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "engenheiro-software"
@@ -124,6 +127,7 @@
         "tela de ajustes"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "engenheiro-software"
       ],
@@ -152,6 +156,7 @@
         "cor apple"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "engenheiro-software"
@@ -179,6 +184,7 @@
         "escrita apple"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "redator",
         "especialista-cs"
@@ -208,6 +214,7 @@
         "layout ios"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos"
       ],
@@ -269,6 +276,7 @@
       ],
       "agentes": [
         "designer-sites",
+        "designer-interface",
         "designer-paineis",
         "engenheiro-software",
         "designer-documentos"
@@ -299,6 +307,7 @@
         "haptico"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "engenheiro-software"
       ],
@@ -330,6 +339,7 @@
       ],
       "agentes": [
         "engenheiro-software",
+        "designer-interface",
         "designer-paineis"
       ],
       "requer": "21st",
@@ -360,6 +370,7 @@
       "agentes": [
         "engenheiro-software",
         "dev-powerbi",
+        "designer-interface",
         "designer-paineis"
       ],
       "teste": {
@@ -389,6 +400,7 @@
         "gradiente"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "engenheiro-software",
@@ -421,6 +433,7 @@
         "revisar o design"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "revisor"
@@ -448,6 +461,7 @@
         "excesso de opcoes"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "revisor"
@@ -484,6 +498,7 @@
         "site institucional"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "engenheiro-software",
         "designer-sites"
@@ -555,6 +570,7 @@
         "ordem de leitura"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "engenheiro-software",
@@ -591,6 +607,7 @@
         "aplicativo"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "designer-sites"
@@ -650,6 +667,7 @@
         "densidade de informacao"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "engenheiro-software"
       ],
@@ -722,6 +740,7 @@
       ],
       "agentes": [
         "engenheiro-software",
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "designer-sites"
@@ -752,6 +771,7 @@
         "texto variavel"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "testador-qa",
         "engenheiro-software",
@@ -783,6 +803,7 @@
         "sofisticado"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "designer-sites"
@@ -811,6 +832,7 @@
         "entrevista de design"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "gerente-produto",
@@ -840,6 +862,7 @@
         "detalhes finais"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "designer-sites"
@@ -870,6 +893,7 @@
       "agentes": [
         "gerente-produto",
         "especialista-cs",
+        "designer-interface",
         "designer-paineis"
       ],
       "teste": {
@@ -902,6 +926,7 @@
       ],
       "agentes": [
         "revisor",
+        "designer-interface",
         "designer-paineis",
         "designer-sites"
       ],
@@ -1766,6 +1791,7 @@
         "do zero"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "designer-sites"
@@ -1799,6 +1825,7 @@
       ],
       "agentes": [
         "designer-documentos",
+        "designer-interface",
         "designer-paineis",
         "engenheiro-software",
         "designer-sites"
@@ -1829,6 +1856,7 @@
         "me mostre opcoes"
       ],
       "agentes": [
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "testador-qa",
@@ -2739,6 +2767,7 @@
       ],
       "agentes": [
         "redator",
+        "designer-interface",
         "designer-paineis",
         "especialista-cs",
         "comunicador-corporativo"
@@ -3046,6 +3075,7 @@
       ],
       "agentes": [
         "engenheiro-software",
+        "designer-interface",
         "designer-paineis"
       ],
       "teste": {
@@ -3102,6 +3132,7 @@
       ],
       "agentes": [
         "engenheiro-software",
+        "designer-interface",
         "designer-paineis"
       ],
       "teste": {
@@ -3161,6 +3192,7 @@
       ],
       "agentes": [
         "engenheiro-software",
+        "designer-interface",
         "designer-paineis"
       ],
       "teste": {

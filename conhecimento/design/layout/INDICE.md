@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/better-layout/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT. Alterações: tradução, corte; o grid e a escala do projeto vencem; alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/. -->
-<!-- ref: tema=layout; palavras=layout, espacamento, alinhamento, grade, grid, agrupamento, hierarquia visual, responsivo, quebra de layout, margens, ordem de leitura; agentes=designer-paineis, designer-documentos, engenheiro-software, designer-sites -->
+<!-- ref: tema=layout; palavras=layout, espacamento, alinhamento, grade, grid, agrupamento, hierarquia visual, responsivo, quebra de layout, margens, ordem de leitura; agentes=designer-interface, designer-paineis, designer-documentos, engenheiro-software, designer-sites -->
 <!-- teste-ref: sim=o layout da página está desalinhado e o espaçamento entre os grupos confuso | revise o grid e o alinhamento do documento, com margens e ordem de leitura; nao=calcule a provisão de férias -->
 # Layout: agrupar, alinhar, espaçar, aguentar o pior caso
 

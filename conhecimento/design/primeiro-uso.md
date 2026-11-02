@@ -1,5 +1,5 @@
 <!-- Texto próprio do agentes-ultimate, a partir da HIG pública da Apple (https://developer.apple.com/design/human-interface-guidelines/onboarding) e das regras de estado vazio de escrita/texto-de-interface.md. Ideia do tema: impeccable reference/onboard.md (Apache-2.0), sem cópia de texto. -->
-<!-- ref: tema=primeiro-uso; palavras=primeiro uso, onboarding, boas vindas, tela de boas vindas, estado vazio, primeira vez, ativacao do usuario, tutorial do app; agentes=gerente-produto, especialista-cs, designer-paineis -->
+<!-- ref: tema=primeiro-uso; palavras=primeiro uso, onboarding, boas vindas, tela de boas vindas, estado vazio, primeira vez, ativacao do usuario, tutorial do app; agentes=gerente-produto, especialista-cs, designer-interface, designer-paineis -->
 <!-- teste-ref: sim=desenhe o primeiro uso do app: boas-vindas, estado vazio e ativação | o onboarding do produto está longo, melhore a primeira vez do usuário; nao=prepare a defesa do auto de infração -->
 # Primeiro uso, estado vazio e ativação
 

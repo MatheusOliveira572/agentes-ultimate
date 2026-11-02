@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/polish.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução, corte dos comandos da ferramenta do impeccable, ajuste ao protocolo; alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=polimento; palavras=polimento, polir, passe final, refinar, refinamento, acabamento final, antes de entregar a tela, detalhes finais; agentes=designer-paineis, designer-documentos, designer-sites -->
+<!-- ref: tema=polimento; palavras=polimento, polir, passe final, refinar, refinamento, acabamento final, antes de entregar a tela, detalhes finais; agentes=designer-interface, designer-paineis, designer-documentos, designer-sites -->
 <!-- teste-ref: sim=faça o passe final de polimento da tela antes de entregar ao usuário | polir os detalhes finais do relatório sem redesenhar; nao=simule o fluxo de caixa com juros compostos -->
 # Polimento: o passe final, sem redesenho escondido
 

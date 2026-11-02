@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/android.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0 (por sua vez destilado de ehmo/platform-design-skills, © 2026 ehmo, MIT, conforme o NOTICE do impeccable). Alterações: tradução, corte; alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md) e terceiros/ehmo-platform-design-skills/. -->
-<!-- ref: tema=android; palavras=android, jetpack compose, material design, material 3, app android, kotlin, emulador android, adb, material you; agentes=engenheiro-software, designer-paineis -->
+<!-- ref: tema=android; palavras=android, jetpack compose, material design, material 3, app android, kotlin, emulador android, adb, material you; agentes=engenheiro-software, designer-interface, designer-paineis -->
 <!-- teste-ref: sim=construa a tela inicial do app android em jetpack compose com material 3 | revise o app android: voltar do sistema, alvos de toque e tema escuro; nao=monte o cronograma de férias do time -->
 # Android nativo (Jetpack Compose, Views, React Native, Expo, Flutter)
 

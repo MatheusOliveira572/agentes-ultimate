@@ -1,5 +1,5 @@
 <!-- Texto próprio do agentes-ultimate, a partir da HIG pública da Apple (páginas motion, feedback, loading, abertas em 2026-11-01). Nada copiado; cada regra cita a página. Valores de duração e curva ficam com movimento/INDICE.md (Emil Kowalski). -->
-<!-- ref: tema=apple-movimento; palavras=movimento apple, animacao ios, transicao, retorno ao usuario, feedback, carregando, indicador de progresso, alerta, reduzir movimento, haptico; agentes=designer-paineis, engenheiro-software -->
+<!-- ref: tema=apple-movimento; palavras=movimento apple, animacao ios, transicao, retorno ao usuario, feedback, carregando, indicador de progresso, alerta, reduzir movimento, haptico; agentes=designer-interface, designer-paineis, engenheiro-software -->
 <!-- teste-ref: sim=revise as animações e o feedback do app ios no padrão apple | o carregamento e os alertas do app estão confusos, ajuste o retorno ao usuário; nao=faça a ata da assembleia de acionistas -->
 # Lente 4: movimento, retorno e carregamento
 

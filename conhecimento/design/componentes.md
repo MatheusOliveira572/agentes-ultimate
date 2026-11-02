@@ -1,5 +1,5 @@
 <!-- Adaptado de serafimcloud/21st/README.md (Quality Guidelines) @b96d84d, © 2024 21st.dev, MIT. Alterações: tradução, corte, regras de entrada de código de terceiro no projeto; alterado por agentes-ultimate. Licença em terceiros/serafimcloud-21st/. -->
-<!-- ref: tema=componentes-21st; palavras=componente pronto, componentes prontos, 21st, shadcn, biblioteca de componentes react, registro de componentes, componente da comunidade, app, site, visual premium, redesenhe; agentes=engenheiro-software, designer-paineis; requer=21st -->
+<!-- ref: tema=componentes-21st; palavras=componente pronto, componentes prontos, 21st, shadcn, biblioteca de componentes react, registro de componentes, componente da comunidade, app, site, visual premium, redesenhe; agentes=engenheiro-software, designer-interface, designer-paineis; requer=21st -->
 <!-- teste-ref: sim=use um componente pronto do 21st com shadcn no app react | procure no registro de componentes da comunidade um cartão de preço pronto; nao=calcule o adicional noturno da folha -->
 # Componentes prontos (registro 21st.dev, com shadcn/ui)
 

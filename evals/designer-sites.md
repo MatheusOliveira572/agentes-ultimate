@@ -4,7 +4,7 @@
 - Tipo: capacidade
 - Pedido: "Na landing page do app, quero os cartões de recursos com efeito vidro sobre o fundo escuro do bloco."
 - Deve: aceitar em landing page, em cartão, com pouca transparência e sobre fundo calmo; dizer os valores como ponto de partida; incluir luz de 1 px no topo, reserva `@supports not`, `prefers-reduced-transparency` e contraste medido no pior ponto de fundo.
-- Não deve: recusar citando a regra da Apple, nem aceitar vidro bem transparente sobre fundo variado ou foto.
+- Não deve: recusar citando a regra da Apple, nem aceitar vidro bem transparente sobre fundo variado, nem pôr o cartão sobre foto sem medir o contraste ponto a ponto (decisão de 2026-11-02).
 - Origem: decisão do usuário sobre vidro (2026-11-01), `apple/materiais.md`.
 
 ### Caso 2 · Vidro em tela de produto

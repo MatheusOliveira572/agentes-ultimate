@@ -1,5 +1,5 @@
 <!-- Texto próprio do agentes-ultimate, a partir da HIG pública da Apple (páginas accessibility, typography, layout, abertas em 2026-11-01). Nada copiado; cada regra cita a página. -->
-<!-- ref: tema=apple-acessibilidade; palavras=dynamic type, tamanho minimo da fonte, alvo de toque, 44 pt, contraste apple, acessibilidade ios, voiceover, reduzir movimento, aumentar contraste; agentes=designer-paineis, designer-documentos, engenheiro-software -->
+<!-- ref: tema=apple-acessibilidade; palavras=dynamic type, tamanho minimo da fonte, alvo de toque, 44 pt, contraste apple, acessibilidade ios, voiceover, reduzir movimento, aumentar contraste; agentes=designer-interface, designer-paineis, designer-documentos, engenheiro-software -->
 <!-- teste-ref: sim=confira se o app ios atende ao dynamic type e ao alvo de toque de 44 pt | revise a acessibilidade do app iphone: voiceover, contraste e reduzir movimento; nao=elabore o termo de rescisão do contrato -->
 # Lente 1: acessibilidade, tipo e toque (falha = Crítico)
 

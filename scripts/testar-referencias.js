@@ -428,7 +428,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
 
   fs.writeFileSync(cfgRef, '{}');
   const vd = rotRef('um card com efeito vidro estilo Apple');
-  caso('0.8.0 ponta a ponta: "um card com efeito vidro estilo Apple" → designer e engenheiro, materiais e Apple, e o /checklist-lancamento', /designer-paineis/.test(vd.agentes) && /engenheiro-software/.test(vd.agentes) && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/materiais.md') && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/INDICE.md') && /\/checklist-lancamento/.test(vd.t), JSON.stringify(vd.refs));
+  caso('0.8.0 ponta a ponta: "um card com efeito vidro estilo Apple" → designer e engenheiro, materiais e Apple, e o /checklist-lancamento', /designer-interface/.test(vd.agentes) && /engenheiro-software/.test(vd.agentes) && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/materiais.md') && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/INDICE.md') && /\/checklist-lancamento/.test(vd.t), JSON.stringify(vd.refs));
 
   // Ponta a ponta (critério do usuário): pedido amplo aciona tudo sozinho. Liga no lote 3 (conteúdo de design).
   const E2E = existe('conhecimento', 'design', 'metodo.md');
@@ -443,9 +443,9 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     for (const ligado of [false, true]) {
       fs.writeFileSync(cfgRef, JSON.stringify(ligado ? { integracoes: ['21st'] } : {}));
       const x = rotRef(pedido);
-      // App é do designer-paineis; site é do designer-sites, que recebe a biblioteca de sites no lugar dos detalhes de interface (teto de 3 por agente).
+      // App é do designer-interface (im99); site é do designer-sites, que recebe a biblioteca de sites no lugar dos detalhes de interface (teto de 3 por agente).
       const ehSite = /site/.test(pedido);
-      const designer = ehSite ? 'designer-sites' : 'designer-paineis';
+      const designer = ehSite ? 'designer-sites' : 'designer-interface';
       const esperaPedido = ehSite ? espera.filter((e) => !/detalhes/.test(e[2])).concat([['conhecimento/design/sites-premium/INDICE.md', 'DESIGNER', 'biblioteca de sites']]) : espera;
       const faltam = esperaPedido.filter(([a, ag]) => !x.refs.some((y) => y.arquivo === a && y.agente === (ag === 'DESIGNER' ? designer : ag))).map((e) => e[2]);
       const c21 = x.refs.some((y) => y.arquivo === 'conhecimento/design/componentes.md' && y.agente === 'engenheiro-software');

@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/critique.md @e89e3ad (Reference Material), © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução e condensação das tabelas de nota, da carga cognitiva e das personas; alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=heuristicas; palavras=heuristicas de nielsen, nota de usabilidade, carga cognitiva, personas, persona, memoria de trabalho, excesso de opcoes; agentes=designer-paineis, designer-documentos, revisor -->
+<!-- ref: tema=heuristicas; palavras=heuristicas de nielsen, nota de usabilidade, carga cognitiva, personas, persona, memoria de trabalho, excesso de opcoes; agentes=designer-interface, designer-paineis, designer-documentos, revisor -->
 <!-- teste-ref: sim=dê nota às heurísticas de Nielsen desta tela e avalie a carga cognitiva | teste a tela com personas: usuário avançado e quem usa pela primeira vez; nao=atualize a planilha de comissões -->
 # Heurísticas, carga cognitiva e personas (material de apoio da crítica)
 

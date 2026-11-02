@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/better-accessibility/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT. Alterações: tradução, corte; alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/. -->
-<!-- ref: tema=acessibilidade; palavras=acessibilidade, wcag, leitor de tela, teclado, foco visivel, aria, contraste minimo, area de toque, alvo de toque, movimento reduzido, zoom de 200; agentes=designer-paineis, designer-documentos, engenheiro-software, testador-qa, designer-sites -->
+<!-- ref: tema=acessibilidade; palavras=acessibilidade, wcag, leitor de tela, teclado, foco visivel, aria, contraste minimo, area de toque, alvo de toque, movimento reduzido, zoom de 200; agentes=designer-interface, designer-paineis, designer-documentos, engenheiro-software, testador-qa, designer-sites -->
 <!-- teste-ref: sim=revise a acessibilidade da tela: teclado, foco visível e leitor de tela | o formulário precisa passar no WCAG 2.2 AA com aria e área de toque mínima; nao=faça a previsão de vendas do trimestre -->
 # Acessibilidade (WCAG 2.2 A e AA)
 

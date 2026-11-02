@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/ios.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0 (por sua vez destilado de ehmo/platform-design-skills, © 2026 ehmo, MIT, conforme o NOTICE do impeccable). Alterações: tradução, corte; alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md) e terceiros/ehmo-platform-design-skills/. -->
-<!-- ref: tema=ios; palavras=ios, ipados, swiftui, uikit, app de iphone, app nativo apple, xcode, simulador do ios, dynamic type, sf symbols; agentes=engenheiro-software, designer-paineis -->
+<!-- ref: tema=ios; palavras=ios, ipados, swiftui, uikit, app de iphone, app nativo apple, xcode, simulador do ios, dynamic type, sf symbols; agentes=engenheiro-software, designer-interface, designer-paineis -->
 <!-- teste-ref: sim=construa a tela de configurações do app de iphone em swiftui | revise o app ios: alvos de toque, dynamic type e sf symbols; nao=escreva o código de conduta do fornecedor -->
 # iOS e iPadOS nativos (SwiftUI, UIKit, React Native, Expo, Flutter)
 

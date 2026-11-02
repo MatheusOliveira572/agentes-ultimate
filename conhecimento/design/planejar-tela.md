@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/shape.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução, condensação, entrevista no nosso formato (uma pergunta por vez com palpite); alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=planejar-tela; palavras=planejar a tela, briefing de design, brief da tela, especificar a tela, antes de desenhar, ux antes do codigo, descoberta, entrevista de design; agentes=designer-paineis, designer-documentos, gerente-produto, designer-sites -->
+<!-- ref: tema=planejar-tela; palavras=planejar a tela, briefing de design, brief da tela, especificar a tela, antes de desenhar, ux antes do codigo, descoberta, entrevista de design; agentes=designer-interface, designer-paineis, designer-documentos, gerente-produto, designer-sites -->
 <!-- teste-ref: sim=antes de desenhar, faça o briefing de design da tela nova | quero planejar a ux da tela antes do código, com as perguntas de descoberta; nao=reveja a conciliação de cartões -->
 # Planejar a tela antes do código (o "brief")
 

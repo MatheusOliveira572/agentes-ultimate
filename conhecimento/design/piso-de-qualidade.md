@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/craft-floor.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução, corte das marcas de regra e do bloco de outro modelo, ajuste ao protocolo (marca e decisões do projeto vencem); alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=piso-de-qualidade; palavras=piso de qualidade, acabamento, cara de ia, cara de template, visual amador, antes de editar a tela, premium, visual premium, refinado, sofisticado; agentes=designer-paineis, designer-documentos, designer-sites -->
+<!-- ref: tema=piso-de-qualidade; palavras=piso de qualidade, acabamento, cara de ia, cara de template, visual amador, antes de editar a tela, premium, visual premium, refinado, sofisticado; agentes=designer-interface, designer-paineis, designer-documentos, designer-sites -->
 <!-- teste-ref: sim=a tela está com cara de template feito por IA, dê um acabamento premium | antes de editar a tela, confira o piso de qualidade do visual; nao=lance as notas fiscais de entrada -->
 # Piso de qualidade (ler logo antes de editar uma tela ou peça)
 

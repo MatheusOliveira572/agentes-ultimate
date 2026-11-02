@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/better-writing/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT. Alterações: tradução com exemplos em português, corte; alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/. -->
-<!-- ref: tema=texto-de-interface; palavras=texto de interface, microcopy, rotulo, rotulos, texto do botao, mensagem de erro, mensagem de confirmacao, estado vazio, tom de voz, ux writing, resposta padrao, artigo de ajuda; agentes=redator, designer-paineis, especialista-cs, comunicador-corporativo -->
+<!-- ref: tema=texto-de-interface; palavras=texto de interface, microcopy, rotulo, rotulos, texto do botao, mensagem de erro, mensagem de confirmacao, estado vazio, tom de voz, ux writing, resposta padrao, artigo de ajuda; agentes=redator, designer-interface, designer-paineis, especialista-cs, comunicador-corporativo -->
 <!-- teste-ref: sim=revise os rótulos, as mensagens de erro e a confirmação de exclusão do app | escreva o microcopy do estado vazio e do botão de salvar; nao=calcule a depreciação acelerada da frota -->
 # Texto de interface: rótulos, erros, vazios e confirmações
 

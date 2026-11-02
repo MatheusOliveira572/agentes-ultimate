@@ -195,7 +195,7 @@
     "interface": {
       "nome": "Interface (app)",
       "agentes": [
-        "designer-paineis",
+        "designer-interface",
         "engenheiro-software"
       ],
       "lancamento": true,

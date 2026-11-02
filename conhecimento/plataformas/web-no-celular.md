@@ -1,5 +1,5 @@
 <!-- Adaptado de emilkowalski/skills/skills/mobile-native/SKILL.md @a81dbca, © 2026 Emil Kowalski, MIT. Alterações: tradução, corte da saudação e dos blocos de código; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->
-<!-- ref: tema=web-no-celular; palavras=celular, no celular, mobile, iphone, android, tela pequena, toque, hover preso, zoom no campo, 100vh, notch, area segura, pwa; agentes=engenheiro-software, designer-paineis -->
+<!-- ref: tema=web-no-celular; palavras=celular, no celular, mobile, iphone, android, tela pequena, toque, hover preso, zoom no campo, 100vh, notch, area segura, pwa; agentes=engenheiro-software, designer-interface, designer-paineis -->
 <!-- teste-ref: sim=no celular o hover fica preso e a página dá zoom no campo de texto | o app web no iphone corta no notch e o 100vh passa da tela; nao=calcule o custo de frete por região -->
 # Web que parece nativa no celular
 

@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/operate.md e skill/SKILL.src.md (Modes) @e89e3ad, © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução, condensação, extensão a painéis de dados; alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=modo-operar; palavras=painel, dashboard, tela de tarefa, app de gestao, sistema interno, editor, administracao, tela de ajustes, ferramenta interna, densidade de informacao; agentes=designer-paineis, engenheiro-software -->
+<!-- ref: tema=modo-operar; palavras=painel, dashboard, tela de tarefa, app de gestao, sistema interno, editor, administracao, tela de ajustes, ferramenta interna, densidade de informacao; agentes=designer-interface, designer-paineis, engenheiro-software -->
 <!-- teste-ref: sim=desenhe o painel de gestão com densidade de informação e leitura rápida | a tela de administração do sistema interno está confusa, revise; nao=escreva o roteiro do podcast da marca -->
 # Modo Operar: o usuário veio cumprir uma tarefa
 

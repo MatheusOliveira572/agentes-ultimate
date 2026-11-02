@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/build-design/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT. Alterações: tradução, corte, extensão ao gabarito em imagem e ao Power BI; alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/. -->
-<!-- ref: tema=construir-do-desenho; palavras=construir a partir do figma, figma, gabarito, a partir do desenho, implementar o design, fiel ao layout, pixel perfect, da imagem para o codigo, construir a tela do gabarito; agentes=engenheiro-software, dev-powerbi, designer-paineis -->
+<!-- ref: tema=construir-do-desenho; palavras=construir a partir do figma, figma, gabarito, a partir do desenho, implementar o design, fiel ao layout, pixel perfect, da imagem para o codigo, construir a tela do gabarito; agentes=engenheiro-software, dev-powerbi, designer-interface, designer-paineis -->
 <!-- teste-ref: sim=construa a tela a partir do figma, fiel ao layout aprovado | implemente o gabarito aprovado em código e compare elemento por elemento; nao=agende a reunião de alinhamento trimestral -->
 # Construir a partir do desenho (Figma, gabarito, imagem)
 

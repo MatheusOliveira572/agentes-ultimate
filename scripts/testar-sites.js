@@ -24,7 +24,11 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const x = agentesDe(p);
     caso(`0.8.0 sites roteador: "${p}" → designer-sites, sem designer-paineis`, /designer-sites/.test(x.ag) && !/designer-paineis/.test(x.ag), x.ag || 'nenhum');
   }
-  for (const p of ['monte um painel no power bi com o desvio por área', 'desenhe o dashboard com os kpi da diretoria', 'redesenhe a tela do app de estoque']) {
+  for (const p of ['redesenhe a tela do app de estoque']) {
+    const x = agentesDe(p);
+    caso(`0.8.0 sites roteador: "${p}" → designer-interface, sem designer-sites nem designer-paineis`, /designer-interface/.test(x.ag) && !/designer-sites|designer-paineis/.test(x.ag), x.ag || 'nenhum');
+  }
+  for (const p of ['monte um painel no power bi com o desvio por área', 'desenhe o dashboard com os kpi da diretoria']) {
     const x = agentesDe(p);
     caso(`0.8.0 sites roteador: "${p}" → designer-paineis, sem designer-sites`, /designer-paineis/.test(x.ag) && !/designer-sites/.test(x.ag), x.ag || 'nenhum');
   }
@@ -424,17 +428,19 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
 
 
 
+  const PAINEL = /\b(painel(?! administrativo)|paineis|dashboard|power ?bi|kpis?|bi|indicadores|grafico)\b/i;
   const regra = {
-    S: (x) => /designer-sites/.test(x.ag) && !/designer-paineis/.test(x.ag) && !/para `agentes-ultimate:designer-paineis`/.test(x.refs),
-    P: (x) => /designer-paineis/.test(x.ag) && !/designer-sites/.test(x.ag),
-    A: (x) => /designer-sites/.test(x.ag) && /designer-paineis/.test(x.ag),
+    S: (x) => /designer-sites/.test(x.ag) && !/designer-paineis|designer-interface/.test(x.ag) && !/para `agentes-ultimate:designer-(paineis|interface)`/.test(x.refs),
+    // Tela de app vai ao designer-interface; painel e dashboard, ao designer-paineis (im99). Nunca ao de sites.
+    P: (x, p) => (PAINEL.test(p) ? /designer-paineis/.test(x.ag) : /designer-interface/.test(x.ag)) && !/designer-sites/.test(x.ag),
+    A: (x) => /designer-sites/.test(x.ag) && /designer-paineis|designer-interface/.test(x.ag),
     // Referência genérica (layout, relatório) ainda vai ao 1º agente do arquivo quando nenhum pacote entra: é regra do roteador, fora deste lote.
     N: (x) => !/designer-/.test(x.ag) && !/sites-premium|designer-sites/.test(x.refs),
     NS: (x) => !/designer-sites/.test(x.ag) && !/sites-premium/.test(x.refs),
   };
-  const nomeClasse = { S: 'só o designer de sites', P: 'o designer de painéis, sem o de sites', A: 'os dois designers', N: 'nenhum designer nem a biblioteca de sites', NS: 'tudo menos o designer de sites (outras áreas, "web" que não é site)' };
+  const nomeClasse = { S: 'só o designer de sites', P: 'o designer de tela (painel → painéis; app → interface), sem o de sites', A: 'os dois designers', N: 'nenhum designer nem a biblioteca de sites', NS: 'tudo menos o designer de sites (outras áreas, "web" que não é site)' };
   for (const k of ['S', 'P', 'A', 'N', 'NS']) {
-    const ruins = TABELA[k].map((p) => [p, agentesDe(p)]).filter(([, x]) => !regra[k](x)).map(([p, x]) => `"${p}" → ${(x.ag || 'nenhum').replace(/agentes-ultimate:/g, '')}`);
+    const ruins = TABELA[k].map((p) => [p, agentesDe(p)]).filter(([p, x]) => !regra[k](x, p)).map(([p, x]) => `"${p}" → ${(x.ag || 'nenhum').replace(/agentes-ultimate:/g, '')}`);
     caso(`0.8.0 sites A-3/M-7/b-4/b-8: ${TABELA[k].length} frases que pedem ${nomeClasse[k]}`, !ruins.length, ruins.length + ' erradas: ' + ruins.slice(0, 6).join(' | '));
   }
   // Referência: "site" sozinho não entrega nada a designer; pedido de site entrega a biblioteca.
@@ -449,8 +455,8 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const envM12 = { ...process.env, HOME: casaM12, USERPROFILE: casaM12 }; delete envM12.AGENTES_ULTIMATE_SEM_PASTA;
     const rotM12 = (prompt) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'roteador.js')], { windowsHide: true, input: JSON.stringify({ prompt, cwd: projS, hook_event_name: 'UserPromptSubmit' }), env: envM12, encoding: 'utf8' }); let j = null; try { j = JSON.parse(r.stdout || 'null'); } catch (e) { /* texto */ } const t = (j && j.hookSpecificOutput && j.hookSpecificOutput.additionalContext) || ''; return (t.match(/(?:Agentes indicados|Candidatos)[^:]*: ([^.]+)\./) || [])[1] || ''; };
     const ped = 'o componente react de tabela quebra quando colo dados do site do IBGE';
-    const antes = rotM12(ped); rotM12('era com designer-paineis'); const depois = rotM12(ped);
-    caso('0.8.0 sites M-12: depois do "era com designer-paineis", o mesmo pedido vai ao designer de painéis, sem o de sites', /designer-sites/.test(antes) && /designer-paineis/.test(depois) && !/designer-sites/.test(depois), `antes: ${antes} | depois: ${depois}`);
+    const antes = rotM12(ped); rotM12('era com designer-interface'); const depois = rotM12(ped);
+    caso('0.8.0 sites M-12: depois do "era com designer-interface", o mesmo pedido vai ao designer de telas de app, sem o de sites', /designer-sites/.test(antes) && /designer-interface/.test(depois) && !/designer-sites/.test(depois), `antes: ${antes} | depois: ${depois}`);
     const ctl = rotM12('crie um site para a minha padaria com cardápio');
     caso('0.8.0 sites M-12 (controle): a correção não muda um pedido de site diferente', /designer-sites/.test(ctl) && !/designer-paineis/.test(ctl), ctl);
     fs.rmSync(casaM12, { recursive: true, force: true });

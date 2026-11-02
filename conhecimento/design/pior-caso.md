@@ -1,5 +1,5 @@
 <!-- Adaptado de emilkowalski/skills/skills/break-ui/SKILL.md @a81dbca, © 2026 Emil Kowalski, MIT. Alterações: tradução, junção, corte; o modelo do alternador ficou em modelos/pior-caso/; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->
-<!-- ref: tema=pior-caso; palavras=pior caso, dados de pior caso, texto longo, nome longo, estado vazio, lista vazia, quebrar a tela, testar a tela com dados reais, casos extremos, texto variavel; agentes=designer-paineis, testador-qa, engenheiro-software, designer-sites -->
+<!-- ref: tema=pior-caso; palavras=pior caso, dados de pior caso, texto longo, nome longo, estado vazio, lista vazia, quebrar a tela, testar a tela com dados reais, casos extremos, texto variavel; agentes=designer-interface, designer-paineis, testador-qa, engenheiro-software, designer-sites -->
 <!-- teste-ref: sim=teste a tela com dados de pior caso: nome longo, lista vazia e mil linhas | quero quebrar o componente com texto variável e casos extremos antes de entregar; nao=prepare o orçamento de viagens da diretoria -->
 # Pior caso: quebrar a tela com dados plausíveis
 
