@@ -217,7 +217,10 @@ cria memória na sua pasta de usuário nem na raiz do disco.
 
   **Limites conhecidos (decisão do usuário: declarados, não corrigidos agora).** A trava é ajuda, não garantia, e o plugin não instala
   gancho do git no seu repositório.
-  - Comando que faz commit sem citar a palavra (script, alias antigo, palavra montada em variável) só é visto depois de rodar e no push.
+  - Comando que faz o commit sem citar a palavra (script, alias antigo, palavra montada em variável) não é lido antes. Na pasta da sessão, o
+    depois avisa e o push seguinte barra. **Script que também publica** (`sh deploy.sh`, `npm run <nome>`, `.\deploy.ps1`, `npx gh-pages`)
+    não pergunta nada: o segredo chega ao remoto, e o depois só avisa "já foi publicado: troque a chave". Fora da pasta da sessão, nada é
+    lido: o depois fica calado e o push só pergunta "não conferido".
   - Arquivo em UTF-16 (o que o Windows PowerShell 5.1 grava com `>` e `>>`) não é lido: passa pelas 3 barreiras.
   - Formas pouco comuns de commit perguntam mesmo sem segredo (`git rm`, `git mv`, `checkout -b`, "R$5" na mensagem, `--trailer`,
     caminho com barra invertida sem aspas no PowerShell, `| Out-Null`).
