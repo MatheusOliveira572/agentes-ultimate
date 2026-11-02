@@ -74,10 +74,11 @@ async function conferirFonte(f) {
     nov.changelog = mexidos.some((n) => /(^|\/)CHANGELOG/i.test(n));
     nov.afetados = f.arquivos.filter((a) => mexidos.some((m) => usaArquivo({ arquivos: [a] }, m))).map((a) => `${a.origem} → ${a.destino}`);
   }
-  const rel = await pedir(`/repos/${f.repo}/releases?per_page=5`);
+  // Releases só com commit novo: sem token, a API dá 60 pedidos por hora, e 3 por fonte esgotavam o limite em 2 conferências.
+  const rel = nov.commits > 0 ? await pedir(`/repos/${f.repo}/releases?per_page=5`) : { status: 0 };
   if (rel.status === 200 && Array.isArray(rel.body)) nov.releases = rel.body.filter((r) => r.published_at && r.published_at.slice(0, 10) > (f.conferido_em || '')).map((r) => r.tag_name);
   const mudou = nov.commits > 0 || nov.releases.length || nov.licenca;
-  return mudou ? nov : null;
+  return mudou ? { ...nov, base: f.ultimo_conferido } : null;
 }
 
 // Assinatura do índice de uma página (a lista de seções, com título e resumo), estável à ordem.
@@ -90,7 +91,7 @@ async function conferirPagina(p) {
   if (r.status === 403 || r.status === 429) throw new SemRede('limite');
   if (r.status !== 200) throw new SemRede('resposta ' + r.status);
   const a = assinatura(r.body, r.texto);
-  return a === p.assinatura ? null : { pagina: p.nome, url: p.pagina, assinatura: a, desde: p.conferido_em };
+  return a === p.assinatura ? null : { pagina: p.nome, url: p.pagina, assinatura: a, desde: p.conferido_em, base: p.assinatura };
 }
 
 function escreverNovidades(lista, quando) {
@@ -101,12 +102,12 @@ function escreverNovidades(lista, quando) {
     '`/atualizar-fontes`: mostra o que mudou, confere a licença e propõe o que trazer; só o que o usuário aprovar é aplicado.', ''];
   for (const n of lista) {
     if (n.pagina) {
-      l.push(`## ${n.pagina} (página, sem licença)`);
+      l.push(`## ${n.pagina} (página, sem licença)`, `<!-- base: ${n.pagina} @ ${n.base} -->`);
       l.push(`- O índice público mudou desde ${n.desde || 'a conferência'} (${n.url}). Nada é copiado: o texto do plugin é nosso. Rode o teste de equivalência, \`node scripts/equivalencia-apple.js\`, e veja na página o que mudou.`);
       l.push(`- Assinatura nova: \`${n.assinatura}\`.`, '');
       continue;
     }
-    l.push(`## ${n.repo}`);
+    l.push(`## ${n.repo}`, `<!-- base: ${n.repo} @ ${n.base || ''} -->`);
     if (n.sumiu) l.push('- **O repositório não responde mais (404).** Mantenha a cópia que temos e veja com o usuário.');
     if (n.licenca) l.push(n.licenca.restritiva
       ? `- **ATENÇÃO: a licença mudou de ${n.licenca.antes || 'nenhuma'} para ${n.licenca.agora || 'nenhuma'}, que não é permissiva.** Não traga nada novo desta fonte; o que já temos segue a licença do commit usado.`
@@ -119,6 +120,20 @@ function escreverNovidades(lista, quando) {
     l.push('');
   }
   try { fs.mkdirSync(path.dirname(NOVIDADES), { recursive: true }); fs.writeFileSync(NOVIDADES, l.join('\n')); } catch (e) { /* sem efeito */ }
+}
+
+// Tira do novidades.md o que o registro já conferiu (base diferente da gravada), sem rede. Devolve quantas novidades sobram.
+function podarNovidades(reg) {
+  let t;
+  try { t = fs.readFileSync(NOVIDADES, 'utf8'); } catch (e) { return 0; }
+  const atual = new Map([...(reg.fontes || []).map((x) => [x.repo, x.ultimo_conferido]), ...(reg.paginas || []).map((x) => [x.nome, x.assinatura])]);
+  const [cabeca, ...secoes] = t.split(/\n(?=## )/);
+  const ficam = secoes.filter((s) => { const m = s.match(/<!-- base: (.+?) @ (\S*) -->/); return !m || !atual.has(m[1]) || atual.get(m[1]) === m[2]; });
+  try {
+    if (!ficam.length) fs.rmSync(NOVIDADES, { force: true });
+    else if (ficam.length !== secoes.length) fs.writeFileSync(NOVIDADES, [cabeca.replace(/<!-- vigia: \d+ -->/, `<!-- vigia: ${ficam.length} -->`), ...ficam].join('\n'));
+  } catch (e) { /* sem efeito */ }
+  return ficam.length;
 }
 
 async function conferirAgora() {
@@ -138,11 +153,13 @@ async function conferirAgora() {
       if (n) lista.push(n);
     }
   } catch (e) {
-    if (e instanceof SemRede) return; // silêncio: tenta de novo na próxima janela
+    // Silêncio na tela, e tenta de novo na próxima janela; o que já foi conferido sai do novidades.md mesmo assim.
+    if (e instanceof SemRede) { gravarJson(ESTADO, { ...lerJson(ESTADO, {}), ultimoErro: e.message, fontesComNovidades: podarNovidades(reg) }); return; }
     throw e;
   }
   escreverNovidades(lista, agora.toISOString().slice(0, 10));
-  gravarJson(ESTADO, { ...lerJson(ESTADO, {}), ultimaConferencia: agora.toISOString(), fontesComNovidades: lista.length });
+  const est2 = lerJson(ESTADO, {}); delete est2.ultimoErro;
+  gravarJson(ESTADO, { ...est2, ultimaConferencia: agora.toISOString(), fontesComNovidades: lista.length });
 }
 
 // O que mudou nos arquivos que usamos de uma fonte: o patch de cada um, como dado (nada é aplicado nem executado).
@@ -169,6 +186,7 @@ function desligado(cwd) {
 
 function inicioDeSessao() {
   let aviso = '';
+  podarNovidades(lerJson(REGISTRO, {}));
   try {
     const t = fs.readFileSync(NOVIDADES, 'utf8');
     const n = Number((t.match(/<!-- vigia: (\d+) -->/) || [])[1] || 0);

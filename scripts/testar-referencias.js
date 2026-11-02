@@ -255,6 +255,29 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const skAF = ler('skills', 'atualizar-fontes', 'SKILL.md');
   caso('vf91 skill /atualizar-fontes: mostra o que mudou, para se a licença mudou, aplica só com o OK, nunca instala nem roda nada da fonte; Apple sem cópia e com o teste de equivalência',
     /--diff/.test(skAF) && /licença mudou[^\n]*pare/i.test(skAF) && /só depois do OK/i.test(skAF) && /Nunca instale nem rode nada da fonte/.test(skAF) && /equivalencia-apple\.js/.test(skAF) && /nunca copie/i.test(skAF) && /vigia_fontes/.test(skAF), 'texto');
+  // ---- jn97: fonte conferida pelo /atualizar-fontes some do novidades.md, mesmo se a conferência seguinte bater no limite da API ----
+  const estV = () => { try { return JSON.parse(fs.readFileSync(path.join(casaV, '.claude', 'agentes-ultimate', 'vigia-fontes.json'), 'utf8')); } catch (e) { return {}; } };
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regV));
+  fs.rmSync(novV, { force: true });
+  rodaVE(['--agora'], apiMudou('MIT'), {});
+  const tinha = fs.existsSync(novV);
+  const regConferido = JSON.parse(JSON.stringify(regV)); regConferido.fontes[0].ultimo_conferido = 'b'.repeat(40); regConferido.fontes[0].conferido_em = '2026-11-02';
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regConferido));
+  rodaVE(['--agora'], simular({ '/repos/dono/proj': { status: 403, body: { message: 'API rate limit exceeded' } } }), {});
+  const e1 = estV();
+  caso('jn97 vigia: fonte já conferida sai do novidades.md mesmo com o limite da API na conferência seguinte (contagem 0, motivo gravado)',
+    tinha && !fs.existsSync(novV) && e1.fontesComNovidades === 0 && /limite/.test(e1.ultimoErro || ''), JSON.stringify(e1) + ' novidades=' + fs.existsSync(novV));
+  rv = rodaVE([], '', { ultimaConferencia: new Date().toISOString(), ultimaTentativa: new Date().toISOString() });
+  caso('jn97 vigia: e o início de sessão não avisa mais', !/mudou desde a sua versão|mudaram desde a sua versão/.test(rv.out), rv.out);
+  // Fonte sem commit novo: não pede as releases (2 pedidos por fonte em vez de 3; 60 por hora sem token).
+  rv = rodaVE(['--agora'], simular({
+    '/repos/dono/proj': { status: 200, body: { license: { spdx_id: 'MIT' }, default_branch: 'main' } },
+    [`/repos/dono/proj/compare/${'b'.repeat(40)}...main`]: { status: 200, body: { ahead_by: 0, commits: [], files: [] } },
+    '/repos/dono/proj/releases?per_page=5': { erro: 'pedido que não devia acontecer' },
+  }), {});
+  const e2 = estV();
+  caso('jn97 vigia: fonte sem commit novo não pede as releases, e a conferência fecha (ultimaConferencia e contagem 0)', e2.ultimaConferencia === e2.ultimaTentativa && e2.fontesComNovidades === 0 && !e2.ultimoErro, JSON.stringify(e2));
+  fs.writeFileSync(path.join(plugV, 'fontes', 'fontes.json'), JSON.stringify(regV));
   caso('0.8.0 B vigia: gancho registrado no SessionStart e skill /atualizar-fontes só do usuário',
     /vigia-fontes\.js/.test(ler('hooks', 'hooks.json')) && /^disable-model-invocation: true/m.test(ler('skills', 'atualizar-fontes', 'SKILL.md')) && /pesquisador/.test(ler('skills', 'atualizar-fontes', 'SKILL.md')), 'falta');
 
