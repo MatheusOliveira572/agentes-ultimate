@@ -57,6 +57,13 @@
 - Não deve: copiar logotipo, fonte ou imagem da Apple, nem encher de gradiente e vidro decorativo.
 - Origem: B3 (HIG › Branding; Color; equivalência com o apple-design-skill).
 
+### Caso 9 · Documento que impressiona sem movimento
+- Tipo: referência sob demanda
+- Pedido: "quero a apresentação de resultados do trimestre com cara premium, que impressione."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/impressionar.md`; uma ideia visual que atravessa a peça; tipografia com um degrau de exibição; teste do relance de 3 s; autocrítica pela régua (sem movimento).
+- Não deve: pôr animação ou efeito de tela num documento.
+- Origem: im99 (padrão "impressiona", 2026-11-02).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

@@ -554,7 +554,8 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const p = [];
     const al = +((m.match(/\.cartao-landing \{[\s\S]*?background: rgb\([^/]*\/ (0?\.\d+)\)/) || [])[1] || 0);
     if (!(al >= 0.72 && al <= 0.88)) p.push('cartão de landing fora de 72–88%: ' + al);
-    if (!/sem foto, sem texto e sem nada em movimento/.test(m)) p.push('fundo calmo sem a definição');
+    // Decisão de 2026-11-02: o cartão de landing pode ir sobre foto, com o contraste medido ponto a ponto.
+    if (!/sem texto e sem nada em movimento/.test(m) || !/Sobre foto[\s\S]{0,160}pixel a pixel/.test(m)) p.push('fundo calmo sem a definição');
     if (/sem o véu/.test(m)) p.push('"sem o véu" sugere que com véu serve');
     if (!/cartão de landing: receita abaixo/.test(m)) p.push('.vidro genérico sem dizer que não é o cartão de landing');
     if (/Superfície tonal/.test(m) && !/não use no cartão/.test(m)) p.push('superfície tonal sem a ressalva');
@@ -566,7 +567,8 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   const mat = ler('conhecimento', 'design', 'apple', 'materiais.md'), sup = lerSP('efeitos', 'superficie-e-fundos.md');
   caso('0.8.0 sites M-3: materiais.md e o efeito A1 seguem a decisão do vidro (landing = cartão, pouca transparência, fundo calmo)', !regrasVidro(mat, sup).length, regrasVidro(mat, sup).join('; '));
   const mutV = [['cartão a 30%', mat.replace('background: rgb(22 42 58 / 0.82);', 'background: rgb(22 42 58 / 0.30);'), sup],
-    ['regra trocada', mat.replace('sem foto, sem texto e sem nada em movimento', 'foto, vídeo ou gradiente em movimento'), sup],
+    ['regra trocada', mat.replace('sem texto e sem nada em movimento', 'vídeo ou gradiente em movimento'), sup],
+    ['foto sem medida', mat.replace(/pixel a pixel/g, 'na média'), sup],
     ['A1 sobre fundo variado', mat, sup.replace(/fundo calmo/g, 'fundo variado')]];
   caso('0.8.0 sites M-3: os mutantes do vidro (cartão a 30%, regra trocada, A1 sobre fundo variado) são pegos', mutV.every(([, m, e]) => regrasVidro(m, e).length > 0), mutV.filter(([, m, e]) => !regrasVidro(m, e).length).map((x) => x[0]).join(', '));
 

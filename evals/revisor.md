@@ -63,6 +63,13 @@
 - Não deve: achado sem caso concreto; "considere" sem correção.
 - Origem: lote 13 (ponytail).
 
+### Caso 10 · Régua de impressionar antes da autocrítica
+- Tipo: referência sob demanda
+- Pedido: "revise a landing que foi prometida como premium."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/impressionar.md` e rodar a régua antes de ler a autocrítica do autor; abrir os PNGs e a ampliação 2× do vidro; achado com o número do item; camada 1 falhou = VERMELHO.
+- Não deve: dar "não impressiona" como gosto solto, sem o item da régua.
+- Origem: im99 (padrão "impressiona", 2026-11-02).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

@@ -11,6 +11,7 @@ sentido. Valores de movimento em geral: `../../movimento/INDICE.md`.
 | A. Superfície e luz · B. Fundos | `superficie-e-fundos.md` |
 | C. Rolagem · D. Texto e números | `rolagem-e-texto.md` |
 | E. Repetição · F. Micro-interações · G. Avançados | `repeticao-e-micro.md` |
+| H. Vitrine Apple (Liquid Glass + 3D + revelação, costurados; padrão em landing) | `vitrine-apple.md` |
 | O que foi provado, com que valor e em que condição | `provas.md` |
 
 ## Regras comuns

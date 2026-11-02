@@ -17,6 +17,8 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
 - Testar o que o autor não testou: bordas dos dois lados do limite (vazio × zero, sinal oposto, limite exato e limite
   +1, 1 item, nenhum item), "clicar e trocar o recorte", escala (10× mais dados), o pior texto possível.
 - Conferir números contra a fonte oficial; conferir que a checagem nova falha no caso errado (mutação).
+- Em tela, site ou documento: rodar a régua `impressionar.md` **antes** de ler a autocrítica do autor, abrir os PNGs e a
+  ampliação 2× do vidro; "não impressiona" vira achado com o número do item, nunca gosto solto.
 - Classificar achados: Bloqueante / Alto / Médio / Baixo, cada um com dono (autor, especialista, designer).
 - Montar a lista curta do que só o usuário consegue provar (cliques, gosto), no máximo ~6 itens.
 
@@ -59,9 +61,11 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
 3. Leia as linhas alteradas no contexto do arquivo → checagem: nenhum arquivo da rodada sem leitura registrada.
 4. Ataque as bordas aos pares e o que ficou de fora → checagem: casos novos com resultado esperado calculado fora do
    código.
-5. Mutação nas partes alteradas → checagem: placar "pegou X de Y"; mutante que escapou vira achado.
-6. Defeitos já achados pelo usuário → checagem: cada um tem caso de regressão rodando e passando.
-7. Veredito e lista do usuário → checagem: nada Bloqueante ou Alto aberto para "sim"; última linha do relatório =
+5. Entrega visual: camadas 1 e 2 da régua, junção e, com vidro, "parece Apple" (`apple/materiais.md`) → checagem: camada 1
+   falhou ou 2+ itens da camada 2 = VERMELHO; 1 item ou elemento que não serve à ideia = AMARELO com a correção.
+6. Mutação nas partes alteradas → checagem: placar "pegou X de Y"; mutante que escapou vira achado.
+7. Defeitos já achados pelo usuário → checagem: cada um tem caso de regressão rodando e passando.
+8. Veredito e lista do usuário → checagem: nada Bloqueante ou Alto aberto para "sim"; última linha do relatório =
    linha fixa do placar, com as contagens iguais às da lista de achados.
 
 ## Referências sob demanda
@@ -73,11 +77,13 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
 - Quando revisar tela (semáforo, até 15 achados, "o que funciona", cobertura declarada), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/revisao-tela.md`.
 - Quando revisar animação (tabela Antes, Depois e Por quê; Bloquear ou Aprovar), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/movimento/INDICE.md`.
 - Quando pontuar UX, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/critica/INDICE.md`.
+- Quando revisar tela, site ou documento prometido como premium, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/impressionar.md`.
 
 ## Critério de pronto
 - [ ] Checagens decisivas rodadas por você, sem cache; placar de mutação registrado.
 - [ ] Achados classificados e com dono; veredito explícito.
 - [ ] Lista do usuário curta e dirigida (o que fazer, o que deve ver).
+- [ ] Em entrega visual: régua rodada por você, com o item de cada achado e o PNG que o mostra.
 
 ## Erros conhecidos
 - "Lote ok" no relatório do autor não prova nada: leia a checagem no código antes de aceitar (origem: revisão real).

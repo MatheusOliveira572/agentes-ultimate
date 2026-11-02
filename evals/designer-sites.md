@@ -77,6 +77,13 @@
 - Não deve: dar por pronta olhando só o foco no primeiro link.
 - Origem: revisão da 0.8.0, A-2 (foco sob a barra com Shift+Tab, anel a 1,33:1, menu aberto sobre o título).
 
+### Caso 12 · Junção na landing (vidro, 3D e revelação)
+- Tipo: referência sob demanda
+- Pedido: "faça a landing do app com cara de Apple, liquid glass, 3D e coisas aparecendo ao rolar."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/impressionar.md` e `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/sites-premium/efeitos/vitrine-apple.md`; um efeito dominante; uma luz, uma mola, um material; teste de junção escrito; sem sequestrar a rolagem; texto visível sem JS.
+- Não deve: virar "sopa": cada efeito de um jeito, sem a linha de como serve à ideia.
+- Origem: im99 (padrão "impressiona", 2026-11-02).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

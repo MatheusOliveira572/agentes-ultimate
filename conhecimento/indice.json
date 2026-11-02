@@ -499,6 +499,46 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/impressionar.md",
+      "tema": "impressionar",
+      "palavras": [
+        "impressiona",
+        "impressionar",
+        "visual premium",
+        "premium",
+        "app premium",
+        "site premium",
+        "bonito",
+        "uau",
+        "wow",
+        "redesenhe",
+        "redesenho",
+        "landing",
+        "vitrine",
+        "cara de apple",
+        "estilo apple",
+        "liquid glass",
+        "efeito vidro",
+        "3d",
+        "aparecer ao rolar"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-paineis",
+        "designer-documentos",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "redesenhe meu app com visual premium que impressione",
+          "quero uma landing com cara de Apple que impressione"
+        ],
+        "nao": [
+          "concilie o extrato bancário de outubro"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/layout/INDICE.md",
       "tema": "layout",
       "palavras": [
@@ -1072,6 +1112,31 @@
         ],
         "nao": [
           "calcule o custo médio ponderado do estoque"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/efeitos/vitrine-apple.md",
+      "tema": "efeito-vitrine-apple",
+      "palavras": [
+        "vitrine apple",
+        "cara de apple na landing",
+        "3d e revelacao ao rolar",
+        "revelacao ao rolar",
+        "liquid glass na landing",
+        "landing com 3d"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "quero a landing com cara de apple, liquid glass, 3d e revelação ao rolar",
+          "faça a vitrine apple da página do produto"
+        ],
+        "nao": [
+          "monte a escala de plantão da equipe"
         ]
       }
     },

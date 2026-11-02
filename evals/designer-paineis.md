@@ -113,6 +113,13 @@
 - Não deve: aplicar o vidro só porque foi pedido "para ficar moderno", nem cortar contraste dos números.
 - Origem: pv92 (piso de qualidade: vidro como enfeite é recusado).
 
+### Caso 16 · Régua de impressionar num painel
+- Tipo: referência sob demanda
+- Pedido: "redesenhe o painel de custos com visual premium, que impressione a diretoria."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/impressionar.md`; nomear a ideia da tela numa frase; camada 1 inteira; autocrítica com os itens da camada 2 e o teste de junção; PNGs nos dois temas.
+- Não deve: parar na tela limpa e correta (o piso não é a entrega) nem somar efeitos sem ideia.
+- Origem: im99 (padrão "impressiona", 2026-11-02).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|
