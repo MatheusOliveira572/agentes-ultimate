@@ -68,6 +68,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   caso('0.8.0 sites pacote: designer-sites num pacote com "landing page" e "site institucional" como expressões, fora do pacote de interface',
     comAg.length === 1 && ['landing page', 'pagina de vendas', 'site institucional'].every((w) => comAg[0].palavras.includes(w)) &&
     !['landing page', 'site institucional'].some((w) => ((pac.pacotes.interface || {}).palavras || []).includes(w)), JSON.stringify(comAg.map((p) => p.nome)));
+  caso('0.8.0 sites A-2: teclado no método e no critério de pronto', /Shift\+Tab/.test(ag.split('## Método de trabalho')[1].split('## Critério')[0]) && /Teclado/.test(ag.split('## Critério de pronto')[1].split('## Erros')[0]) && /Caso \d+ · Teclado/.test(ler('evals', 'designer-sites.md')), 'falta');
   caso('0.8.0 sites agente: método diz repertório, não molde, e direção própria', /repertório/i.test(ag) && /direção própria/i.test(ag), 'falta');
 
   // ---- Evals: vidro para os dois lados e os gatilhos ----

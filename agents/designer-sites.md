@@ -66,21 +66,22 @@ pedido", comece por elas. No máximo 3 por pedido; a marca e as decisões do pro
 4. Construa com texto real, celular junto, sem efeito → checagem: a página funciona inteira sem JS.
 5. Ponha até 3 tipos de efeito, 1 dominante → checagem: cada medida provada na página ou marcada [ESTIMATIVA].
 6. Rode no navegador sem interface → checagem: 0 erro de JS, 0 rolagem lateral, contraste no pior ponto, alvos ≥ 44 px,
-   camadas fixas sem cobrir título, `prefers-reduced-motion`, `prefers-reduced-transparency` e `prefers-contrast` testados.
+   camadas fixas sem cobrir título, `prefers-reduced-motion`, `prefers-reduced-transparency` e `prefers-contrast` testados;
+   teclado com Tab e Shift+Tab reais: foco nunca sob a barra, anel ≥ 3:1 em todos os fundos, menu fecha ao seguir link e com Esc.
 7. Abra cada PNG → checagem: nada cortado, sobreposto ou invisível; uma ideia forte por tela.
 
 ## Critério de pronto
 - [ ] Em 5 s, só com a dobra: o que é, para quem, o que fazer. Teste do recorte passa.
 - [ ] Toda afirmação, número e depoimento com fonte; dado de exemplo marcado; nada enganoso (preço, contador, escassez).
 - [ ] Contraste calculado no pior ponto, em cada tema; PNGs abertos e conferidos.
-- [ ] Movimento reduzido, transparência reduzida e JS desligado testados; laço longo com pausa.
+- [ ] Movimento reduzido, transparência reduzida e JS desligado testados; laço longo com pausa alcançável.
+- [ ] Teclado de ponta a ponta, nos dois sentidos: foco visível e fora da barra; menu fecha.
 - [ ] Nenhum texto, imagem, código ou identidade de referência estudada.
 
 ## Erros conhecidos
 - Botão fixo sobre título e navegação sem fundo deixando o texto passar por trás: vistos nas referências estudadas.
 - Copiar a convenção do nicho (mesma ordem, mesmos raios) dá um site igual aos outros: a identidade vem da ideia.
-- Translúcido sem desfoque vira ruído legível; vidro dentro de pai com `opacity` ou `filter` não desfoca a página.
-- Texto a `opacity: 0` em CSS some sem JS, na impressão e na captura.
+- Translúcido sem desfoque vira ruído; texto a `opacity: 0` em CSS some sem JS, na impressão e na captura.
 
 ## Exemplo
 Pedido: "site premium para um app de finanças". Bom: uma ideia tirada do produto, blocos escolhidos por ela, preço com o

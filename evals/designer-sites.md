@@ -70,6 +70,13 @@
 - Não deve: escrever a integração ou publicar.
 - Origem: Fora do escopo.
 
+### Caso 11 · Teclado na página pronta
+- Tipo: regressão
+- Pedido: "A landing está aprovada visualmente. Pode entregar?"
+- Deve: testar Tab e Shift+Tab reais antes: foco fora da barra fixa (`scroll-padding-top`), anel ≥ 3:1 em cada fundo, inclusive no bloco de cor, e menu do celular que fecha ao seguir link e com Esc.
+- Não deve: dar por pronta olhando só o foco no primeiro link.
+- Origem: revisão da 0.8.0, A-2 (foco sob a barra com Shift+Tab, anel a 1,33:1, menu aberto sobre o título).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

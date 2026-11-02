@@ -11,7 +11,7 @@
 :root {
   color-scheme: light dark;
   --fundo: #f1f3ef; --fundo-2: #e6eae5; --cartao: #fbfcfa; --texto: #14242c; --texto-2: #47585f; --regua: #c4ccc8; --regua-forte: #66767c;
-  --acento: #b5321d; --acento-txt: #ffffff; --acento-forte: #952713; --mar: #0f6277; --mar-suave: #0f627724;
+  --acento: #b5321d; --acento-txt: #ffffff; --acento-forte: #952713; --anel: #952713; --mar: #0f6277; --mar-suave: #0f627724;
   --n1: #f6d9d1; --n2: #e4e8e0; --n3: #cfe0df; --n4: #a9cfd3; --n5: #7cb6bf; --n-txt: #14242c;
   --vidro: rgb(251 252 250 / 0.72);
   --serif: "Sitka Display", "Sitka Text", Georgia, "Times New Roman", serif;
@@ -21,14 +21,14 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --fundo: #0d1a21; --fundo-2: #12232c; --cartao: #152933; --texto: #e8eff0; --texto-2: #a9babf; --regua: #2c424d; --regua-forte: #7f949b;
-    --acento: #f28a70; --acento-txt: #1a0d09; --acento-forte: #f7a48f; --mar: #6cc2d2; --mar-suave: #6cc2d226;
+    --acento: #f28a70; --acento-txt: #1a0d09; --acento-forte: #f7a48f; --anel: #f7a48f; --mar: #6cc2d2; --mar-suave: #6cc2d226;
     --n1: #5a2a22; --n2: #24353d; --n3: #1f4450; --n4: #1f5a6b; --n5: #2a7388; --n-txt: #eef4f5;
     --vidro: rgb(13 26 33 / 0.72);
   }
 }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; scroll-padding-bottom: 24px; -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--fundo); color: var(--texto); font: 400 17px/1.55 var(--sans); }
 h1, h2, h3 { font-family: var(--serif); font-weight: 500; margin: 0; text-wrap: balance; }
 h2 { font-size: clamp(32px, 3.4vw, 46px); line-height: 1.1; letter-spacing: -0.015em; scroll-margin-top: 88px; }
@@ -38,7 +38,7 @@ a { color: inherit; }
 .num { font-variant-numeric: tabular-nums; }
 .grade { width: min(1240px, 100% - 48px); margin-inline: auto; }
 .bloco { padding-block: 96px; }
-:focus-visible { outline: 2px solid var(--acento-forte); outline-offset: 2px; border-radius: 4px; }
+:focus-visible { outline: 2px solid var(--anel); outline-offset: 2px; border-radius: 4px; }
 .pular { position: absolute; left: 12px; top: -80px; background: var(--cartao); color: var(--texto); padding: 12px 16px; border-radius: 8px; z-index: 30; }
 .pular:focus { top: 12px; }
 
@@ -120,7 +120,7 @@ tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 .passos p { color: var(--texto-2); margin-top: 8px; }
 
 /* Recursos: mar calmo com cartões de vidro quase opacos (landing page: permitido) */
-.mar-calmo { --texto: #eaf1f2; --texto-2: #b9c9cd; --regua: #ffffff24; --mar: #6cc2d2; --acento-forte: #f7a48f; color: var(--texto);
+.mar-calmo { --anel: #f7a48f; --texto: #eaf1f2; --texto-2: #b9c9cd; --regua: #ffffff24; --mar: #6cc2d2; --acento-forte: #f7a48f; color: var(--texto);
   background: radial-gradient(900px 620px at 12% 8%, #1a5367 0, transparent 70%), radial-gradient(1000px 700px at 88% 92%, #17465a 0, transparent 72%), #0c2029; }
 .mar-calmo .cab p { color: var(--texto-2); margin-top: 14px; max-width: 60ch; }
 .bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
@@ -171,7 +171,7 @@ details.p[open] summary::after { transform: rotate(45deg); }
 details.p p { padding: 0 32px 18px 0; color: var(--texto-2); }
 
 /* Fim */
-.fim { background: var(--acento); color: var(--acento-txt); }
+.fim { --anel: var(--acento-txt); background: var(--acento); color: var(--acento-txt); }
 .fim h2 { max-width: 16em; } .fim p { margin-top: 12px; }
 .fim .btn { margin-top: 26px; background: var(--acento-txt); color: var(--acento); }
 @media (hover: hover) { .fim .btn:hover { background: var(--acento-txt); opacity: .92; } }
@@ -513,6 +513,9 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
   pausa.addEventListener('click', function () {
     parado = !parado; pausa.textContent = parado ? 'Retomar' : 'Pausar'; pausa.setAttribute('aria-pressed', String(parado)); roda();
   });
+  var menu = q('.menu');
+  menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { menu.open = false; }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menu.open) { menu.open = false; menu.querySelector('summary').focus(); } });
   document.addEventListener('visibilitychange', roda);
   reduzido.addEventListener('change', function () { if (reduzido.matches) { mostra(0); } roda(); atualizaPausa(); });
   function atualizaPausa() { pausa.hidden = reduzido.matches; }
