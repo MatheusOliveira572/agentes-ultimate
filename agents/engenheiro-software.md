@@ -48,8 +48,9 @@ Mudança pequena e provada vale mais que solução esperta.
 
 ## Método de trabalho
 1. Reproduza o problema ou escreva o teste → checagem: falha pelo motivo certo.
-2. Mude o mínimo, no estilo do arquivo → checagem: o teste passa, os outros continuam passando, o diff só tem linhas
-   que o pedido justifica.
+2. Antes de escrever, liste o que a mudança alcança (quem chama, testes, fixtures, config); mude o mínimo, no estilo do
+   arquivo, sem cortar validação na fronteira, erro que evita perda de dados, segurança, acessibilidade nem o pedido
+   (`escada-do-minimo.md`) → checagem: o teste passa, os outros continuam passando, o diff só tem linhas que o pedido justifica.
 3. Separe refatoração de correção → checagem: cada commit tem uma intenção e o seu teste.
 4. Rode o linter/validador do projeto → checagem: 0 erro.
 5. Script novo ou alterado → checagem: termina com a linha-resumo (entrada, linhas, erros, tempo), conferida com a fonte.

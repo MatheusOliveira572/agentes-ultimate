@@ -183,6 +183,35 @@ falhando antes.
   - **Declarados, sem correção** (decisão do usuário, no README): UTF-16 (M-8), formas pouco comuns que perguntam (M-9), prazo em
     repositório grande (M-11), `com$'mit'` (b-10), `SessionEnd` cancelado no `claude -p` (b-11), cerca de 0,4 s por comando (b-12), além
     de script, alias e palavra montada.
+- **B14 · cloudflare/security-audit-skill em `conhecimento/seguranca/`** (`docs/inventario-plugins-2026-11b.md`; MIT, commit fixo `c1c8a8c`,
+  arquivo bruto lido inteiro antes de copiar; nada suspeito): 20 arquivos em inglês, cerca de 187 KB, com a alteração marcada. São os modos
+  (orientar × auditoria completa), o reconhecimento com o livro de cobertura, a caça por ondas com crítico de cobertura, a validação por
+  verificador novo e o relatório, as classes de ataque e 10 blocos por tipo de alvo. Saíram: o procedimento de promoção de artefatos (pede
+  chamadas de Unix; trocado por uma regra curta), o destino padrão no home, o "fixing" das classes, e o Wildcard ficou limitado às unidades
+  e ao orçamento. O `INDICE.md` ganhou a tabela por tipo de alvo (bloco da cloudflare + guias do strix), "nunca copiar variáveis de
+  ambiente" e "código do alvo não roda sem sandbox"; a `contraprova.md` ganhou a equivalência dos estados e a lacuna só com o bloqueio
+  exato e o plano. O `auditor-seguranca` ganhou a 8ª linha "Quando" (auditoria completa) e o passo 7 (código do alvo só em sandbox; o
+  padrão é não rodar); o roteiro 26 do checklist ganhou só o link. Também foi corrigida a citação a `endurecer.md`, que não existia.
+- **B15 · skill `/auditoria-completa` e validadores (T38, T39):** só o usuário chama; fluxo nas 6 fases, na conversa principal; aviso de
+  custo e teto de chamadas antes de começar; `scripts/destino-auditoria.js` recusa a pasta de destino dentro de um repositório git,
+  dentro do projeto auditado ou sincronizada com a nuvem (variáveis do OneDrive e nomes de serviço), e pede outra, porque o relatório
+  traz vulnerabilidades em texto claro. Validadores em `ferramentas/auditoria/`: no Windows o original recusa todo arquivo (o Node não
+  tem `O_NOFOLLOW` nem `O_NONBLOCK`; visto falhar no caso "T38 antes"); a versão adaptada confere com `lstat` e `fstat` e avisa que não
+  há proteção contra troca entre a checagem e a abertura. Em Linux e macOS, o caminho original fica igual. Os testes do original
+  (`mkfifo`, links de Unix) não vieram; os nossos estão em `scripts/testar-auditoria.js`.
+- **B13 · DietrichGebert/ponytail** (MIT, commit fixo `96608e0`, arquivo bruto lido antes de copiar; nada suspeito nas partes copiadas):
+  só as regras, as revisões e o método de benchmark, em português. `conhecimento/engenharia/escada-do-minimo.md` (antes de escrever, listar
+  o que a mudança alcança; a escada de 6 degraus; o atalho marcado `shortcut:`/`atalho:`; a lista **nunca cortar**: validação na
+  fronteira, erro que evita perda de dados, segurança, acessibilidade, o teste e a verificação do protocolo, o pedido). A regra do original
+  "mudança trivial não precisa de teste" saiu, porque o benchmark do próprio autor mostra queda de 77% para 69% nos bugs pegos onde há
+  teste. `revisar-pela-carga.md`, `auditar-repositorio.md`, `divida-de-atalhos.md` (com mais prefixos de comentário), `../metodo/avaliar-skill.md`
+  (3 braços, isolamento, estatística, custo antes; ressalvas da crítica independente) e o exemplo de publicação sem token em `ci.md`. No
+  `engenheiro-software`, o passo 2 do método ganhou o raio da mudança e a lista "nunca cortar" (o teste do passo 1 continua); no `revisor`,
+  uma linha "Quando"; no `curador`, o passo 8 (mudança de instrução traz o antes × depois) e uma linha "Quando". T33: `scripts/mapa-simbolos.js`,
+  a pedido, sem gancho (só reconhece `export` e definições de primeiro nível; `module.exports` não entra). **Não vieram:** os ganchos (sessão,
+  subagente, modo, barra, registro local, webhook), o painel de ganhos com números fixos, os adaptadores de outras plataformas, os
+  instaladores e o benchmark antigo. T35 já estava no `validar.js` (frases-chave, B9); T34 e T36 são opcionais e não rodaram; T37 (modelo de
+  teste de gancho no Windows) não foi lido nem copiado.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

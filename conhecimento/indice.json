@@ -1064,6 +1064,30 @@
       }
     },
     {
+      "arquivo": "conhecimento/engenharia/auditar-repositorio.md",
+      "tema": "auditar-repositorio",
+      "palavras": [
+        "auditar o repositorio",
+        "auditoria de qualidade",
+        "repositorio inteiro",
+        "o que da para apagar",
+        "codigo inchado"
+      ],
+      "agentes": [
+        "revisor",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça uma auditoria de qualidade do repositório inteiro",
+          "o que dá para apagar neste código inchado?"
+        ],
+        "nao": [
+          "planeje o cardápio da semana"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/backend.md",
       "tema": "backend",
       "palavras": [
@@ -1271,6 +1295,30 @@
       }
     },
     {
+      "arquivo": "conhecimento/engenharia/divida-de-atalhos.md",
+      "tema": "divida-de-atalhos",
+      "palavras": [
+        "divida de atalhos",
+        "atalhos marcados",
+        "listar os atalhos",
+        "shortcut no codigo",
+        "divida tecnica marcada"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "liste a dívida de atalhos marcados no código",
+          "quais atalhos marcados com shortcut ficaram para depois?"
+        ],
+        "nao": [
+          "calcule o frete do pedido"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/e2e.md",
       "tema": "e2e",
       "palavras": [
@@ -1323,6 +1371,33 @@
         ],
         "nao": [
           "escreva a política de férias da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/escada-do-minimo.md",
+      "tema": "escada-do-minimo",
+      "palavras": [
+        "escada do minimo",
+        "menor mudanca completa",
+        "codigo minimo",
+        "yagni",
+        "superengenharia",
+        "mudanca enxuta",
+        "nunca cortar"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "revisor",
+        "planejador"
+      ],
+      "teste": {
+        "sim": [
+          "faça a menor mudança completa, sem superengenharia",
+          "quero o código mínimo, yagni, nada a mais"
+        ],
+        "nao": [
+          "escreva o texto do convite da festa"
         ]
       }
     },
@@ -1593,6 +1668,30 @@
       }
     },
     {
+      "arquivo": "conhecimento/engenharia/revisar-pela-carga.md",
+      "tema": "revisar-pela-carga",
+      "palavras": [
+        "carga esperada",
+        "aguenta a carga",
+        "revisao pela carga",
+        "escala da mudanca",
+        "muitos usuarios ao mesmo tempo"
+      ],
+      "agentes": [
+        "revisor",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "revise se a mudança aguenta a carga esperada de muitos usuários ao mesmo tempo",
+          "revisão pela carga: isso escala?"
+        ],
+        "nao": [
+          "resuma a ata da reunião de condomínio"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/simplificar.md",
       "tema": "simplificar",
       "palavras": [
@@ -1759,6 +1858,31 @@
         ],
         "nao": [
           "calcule a depreciação acelerada da frota"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/avaliar-skill.md",
+      "tema": "avaliar-skill",
+      "palavras": [
+        "avaliar skill",
+        "benchmark de agente",
+        "medir se a instrucao melhorou",
+        "tres bracos",
+        "braco sem skill",
+        "mudanca de regra do agente"
+      ],
+      "agentes": [
+        "curador",
+        "planejador"
+      ],
+      "teste": {
+        "sim": [
+          "faça um benchmark de agente para avaliar a skill antes de mudar a regra",
+          "medir se a instrução melhorou, com braço sem skill"
+        ],
+        "nao": [
+          "escreva a legenda do post de aniversário"
         ]
       }
     },
@@ -2184,6 +2308,269 @@
       }
     },
     {
+      "arquivo": "conhecimento/seguranca/blocos/cadeia-e-release.md",
+      "tema": "seg-cf-cadeia-e-release",
+      "palavras": [
+        "cadeia de suprimentos",
+        "assinatura de release",
+        "cadeia de suprimentos no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a cadeia de suprimentos",
+          "o código pode ter assinatura de release, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/cliente.md",
+      "tema": "seg-cf-cliente",
+      "palavras": [
+        "dom clobbering",
+        "xs-leaks",
+        "dom clobbering no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a dom clobbering",
+          "o código pode ter xs-leaks, confira"
+        ],
+        "nao": [
+          "monte a escala de plantão da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/desktop-e-ipc.md",
+      "tema": "seg-cf-desktop-e-ipc",
+      "palavras": [
+        "deep link",
+        "ipc local",
+        "deep link no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a deep link",
+          "o código pode ter ipc local, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/esgotamento.md",
+      "tema": "seg-cf-esgotamento",
+      "palavras": [
+        "esgotamento de recursos",
+        "negacao de servico",
+        "esgotamento de recursos no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a esgotamento de recursos",
+          "o código pode ter negacao de servico, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/ia-e-llm.md",
+      "tema": "seg-cf-ia-e-llm",
+      "palavras": [
+        "agencia excessiva",
+        "envenenamento de memoria do agente",
+        "agencia excessiva no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a agencia excessiva",
+          "o código pode ter envenenamento de memoria do agente, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/isolamento-e-ciclo.md",
+      "tema": "seg-cf-isolamento-e-ciclo",
+      "palavras": [
+        "isolamento entre inquilinos",
+        "retencao e exclusao de dados",
+        "isolamento entre inquilinos no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a isolamento entre inquilinos",
+          "o código pode ter retencao e exclusao de dados, confira"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/memoria-e-binario.md",
+      "tema": "seg-cf-memoria-e-binario",
+      "palavras": [
+        "seguranca de memoria",
+        "estouro de buffer",
+        "seguranca de memoria no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a seguranca de memoria",
+          "o código pode ter estouro de buffer, confira"
+        ],
+        "nao": [
+          "monte a escala de plantão da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/nuvem-e-implantacao.md",
+      "tema": "seg-cf-nuvem-e-implantacao",
+      "palavras": [
+        "identidade de workload",
+        "conteiner privilegiado",
+        "identidade de workload no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a identidade de workload",
+          "o código pode ter conteiner privilegiado, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/protocolos-e-filas.md",
+      "tema": "seg-cf-protocolos-e-filas",
+      "palavras": [
+        "grpc",
+        "fila de mensagens",
+        "grpc no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a grpc",
+          "o código pode ter fila de mensagens, confira"
+        ],
+        "nao": [
+          "monte a escala de plantão da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/blocos/web-e-autenticacao.md",
+      "tema": "seg-cf-web-e-autenticacao",
+      "palavras": [
+        "saml",
+        "passkey",
+        "saml no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a saml",
+          "o código pode ter passkey, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/classes-de-ataque-1.md",
+      "tema": "seg-cf-classes-de-ataque-1",
+      "palavras": [
+        "classes de ataque",
+        "escolher as classes de ataque",
+        "classes de ataque no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a classes de ataque",
+          "o código pode ter escolher as classes de ataque, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/classes-de-ataque-2.md",
+      "tema": "seg-cf-classes-de-ataque-2",
+      "palavras": [
+        "classes de ataque parte 2",
+        "escolher as classes de ataque parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "leia classes de ataque parte 2 do guia",
+          "leia escolher as classes de ataque parte 2 do guia"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/seguranca/dependencias/api-spec-testing.md",
       "tema": "seg-dependencias-api-spec-testing",
       "palavras": [
@@ -2430,6 +2817,49 @@
       }
     },
     {
+      "arquivo": "conhecimento/seguranca/metodo/cacar-por-cobertura-1.md",
+      "tema": "seg-cf-cacar-por-cobertura-1",
+      "palavras": [
+        "cacada por cobertura",
+        "critico de cobertura",
+        "cacada por cobertura no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a cacada por cobertura",
+          "o código pode ter critico de cobertura, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/metodo/cacar-por-cobertura-2.md",
+      "tema": "seg-cf-cacar-por-cobertura-2",
+      "palavras": [
+        "cacada por cobertura parte 2",
+        "critico de cobertura parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "leia cacada por cobertura parte 2 do guia",
+          "leia critico de cobertura parte 2 do guia"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/seguranca/metodo/contraprova.md",
       "tema": "seg-metodo-counterevidence",
       "palavras": [
@@ -2470,6 +2900,49 @@
         ],
         "nao": [
           "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/metodo/reconhecimento-1.md",
+      "tema": "seg-cf-reconhecimento-1",
+      "palavras": [
+        "reconhecimento da auditoria",
+        "livro de cobertura",
+        "reconhecimento da auditoria no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a reconhecimento da auditoria",
+          "o código pode ter livro de cobertura, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/metodo/reconhecimento-2.md",
+      "tema": "seg-cf-reconhecimento-2",
+      "palavras": [
+        "reconhecimento da auditoria parte 2",
+        "livro de cobertura parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "leia reconhecimento da auditoria parte 2 do guia",
+          "leia livro de cobertura parte 2 do guia"
+        ],
+        "nao": [
+          "monte a escala de plantão da equipe"
         ]
       }
     },
@@ -2518,6 +2991,49 @@
       }
     },
     {
+      "arquivo": "conhecimento/seguranca/metodo/validar-e-relatar-1.md",
+      "tema": "seg-cf-validar-e-relatar-1",
+      "palavras": [
+        "verificador independente do achado",
+        "relatorio final da auditoria",
+        "verificador independente do achado no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a verificador independente do achado",
+          "o código pode ter relatorio final da auditoria, confira"
+        ],
+        "nao": [
+          "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/metodo/validar-e-relatar-2.md",
+      "tema": "seg-cf-validar-e-relatar-2",
+      "palavras": [
+        "verificador independente do achado parte 2",
+        "relatorio final da auditoria parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "leia verificador independente do achado parte 2 do guia",
+          "leia relatorio final da auditoria parte 2 do guia"
+        ],
+        "nao": [
+          "monte a escala de plantão da equipe"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/seguranca/modos/deep.md",
       "tema": "seg-modos-deep",
       "palavras": [
@@ -2558,6 +3074,49 @@
         ],
         "nao": [
           "calcule a folha de pagamento do mês"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/modos/orientar-ou-auditar-1.md",
+      "tema": "seg-cf-orientar-ou-auditar-1",
+      "palavras": [
+        "orientacao ou auditoria completa",
+        "modo de auditoria completa",
+        "orientacao ou auditoria completa no codigo"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "audite o sistema quanto a orientacao ou auditoria completa",
+          "o código pode ter modo de auditoria completa, confira"
+        ],
+        "nao": [
+          "faça o fechamento do orçamento de viagens"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/seguranca/modos/orientar-ou-auditar-2.md",
+      "tema": "seg-cf-orientar-ou-auditar-2",
+      "palavras": [
+        "orientacao ou auditoria completa parte 2",
+        "modo de auditoria completa parte 2"
+      ],
+      "agentes": [
+        "auditor-seguranca",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "leia orientacao ou auditoria completa parte 2 do guia",
+          "leia modo de auditoria completa parte 2 do guia"
+        ],
+        "nao": [
+          "escreva o texto da campanha de natal"
         ]
       }
     },

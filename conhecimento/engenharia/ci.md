@@ -27,6 +27,11 @@ corrija o código, não pule o teste.
 - **Em etapas:** homologação → canário → todos, com métrica de saúde em cada etapa e critério de parada.
 - **Plano de volta** em toda implantação: como reverter, quem decide, em quanto tempo.
 
+## Publicação sem token guardado (exemplo do ponytail)
+Ações fixadas pelo SHA do commit (com a versão em comentário), `permissions: contents: read` no topo e `id-token: write` só no job de
+publicar, publicação por OIDC (o registro confia no CI, sem token guardado) e o job de publicar dependente dos testes. Fonte:
+`DietrichGebert/ponytail/.github/workflows/publish.yml` @96608e0, © 2026 DietrichGebert, MIT.
+
 ## Otimizar quando passar de 10 min
 Cache das dependências; jobs em paralelo; rodar só o afetado pela mudança; dividir a suíte em partes.
 

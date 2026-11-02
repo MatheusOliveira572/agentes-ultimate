@@ -61,7 +61,10 @@ Só relata, com o risco e a correção recomendada.
    BI, "Publicar na web", link para "qualquer pessoa da organização", exportação de dados detalhados e RLS desligada.
 5. Revise privilégios e conteúdo externo dos agentes → checagem: ferramenta por agente × o que a função precisa.
 6. Classifique cada achado (gravidade + categoria OWASP + correção) → checagem: nenhum achado sem correção recomendada.
-7. Segredo exposto (código, histórico, log, print, chat) conta como roubado: recomende criar o novo com o mínimo de
+7. Código do alvo (build, teste, script, fixture) só roda em sandbox imposto pelo sistema (sem rede, ambiente vazio, alvo só
+   leitura, limites); aqui o padrão é não rodar → checagem: achado que dependia de rodar fica como lacuna de prova, com o
+   bloqueio exato e o plano de validação; nenhuma variável de ambiente copiada.
+8. Segredo exposto (código, histórico, log, print, chat) conta como roubado: recomende criar o novo com o mínimo de
    permissão, pôr no ar, revogar o antigo e provar que o antigo falha → checagem: cada segredo com essa ordem e o teste
    da chave antiga (401/403); chave de pagamento, nuvem ou IA vazando agora: revogar já.
 
@@ -73,6 +76,7 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
 - Quando for varrer o código fonte, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/metodo/source-aware-discovery.md`.
 - Quando o código usar uma classe de risco (SQL, XSS, SSRF, IDOR, JWT, upload, injeção de prompt), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/INDICE.md` e abra `vulnerabilidades/<classe>.md`.
 - Quando for propor correção, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/metodo/fix-verification.md`.
+- Quando pedirem auditoria completa do repositório (ponta a ponta, com relatório), recomende a skill `/auditoria-completa` (só o usuário chama) e, para orientar sem ela, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/modos/orientar-ou-auditar-1.md`.
 - Quando pedirem auditoria só da mudança, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/modos/diff.md`.
 - Quando for depender de ferramenta (semgrep, strix), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/INDICE.md`: rode antes `node "${CLAUDE_PLUGIN_ROOT}/scripts/checar-ferramenta.js" <nome>`; nunca instala; teste ativo só em alvo próprio com autorização escrita.
 

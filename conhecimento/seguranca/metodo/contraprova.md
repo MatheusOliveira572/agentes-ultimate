@@ -42,6 +42,11 @@ uncertain, and quietly closes the candidate. That is an
 `open_proof_gap` being mislabelled as `ruled_out`, and it is how real
 vulnerabilities get missed.
 
+> **agentes-ultimate: equivalência com a cloudflare/security-audit-skill** (`../metodo/validar-e-relatar-1.md`):
+> `confirmed` = `confirmed`; `ruled_out` = `rejected`; `open_proof_gap` = `needs_validation`. A lacuna só vale com o **bloqueio exato**
+> (o fato que falta e por que não se vê no código nem no teste local) e um **plano de validação** (local, ou o dono observa a implantação).
+> Lacuna não recebe gravidade, e a gravidade de um `confirmed` não passa do impacto demonstrado.
+
 ## What Does NOT Rule Out a Candidate
 
 Each of these is a common, plausible-sounding reason to drop a candidate.

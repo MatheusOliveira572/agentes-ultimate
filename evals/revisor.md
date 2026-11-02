@@ -56,6 +56,13 @@
 - Não deve: recomeçar a caça do zero nem dar por resolvido sem refazer a prova.
 - Origem: B7-9 (referências sob demanda).
 
+### Caso 9 · Revisão pela carga esperada
+- Tipo: referência sob demanda
+- Pedido: "revise esta mudança no contador de visitas; o site tem muitos acessos ao mesmo tempo."
+- Deve: dizer a carga assumida; procurar corrida de ler e depois gravar; cada achado com um caso concreto e nas 4 partes (`conhecimento/engenharia/revisar-pela-carga.md`); atalho marcado com limite é decisão, salvo se a carga já passou.
+- Não deve: achado sem caso concreto; "considere" sem correção.
+- Origem: lote 13 (ponytail).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|
