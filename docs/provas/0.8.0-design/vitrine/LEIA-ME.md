@@ -1,102 +1,91 @@
-# Vitrine "Clara 35" (prova do padrão "impressiona", designer-sites)
+# Vitrine "Clara 35": prova do nível HD (designer-sites, hd102)
 
-Produto fictício: **Clara 35**, câmera compacta com lente fixa de 35 mm f/1,4. Nada de finanças. Preço, prazo e
-especificações são de exemplo e a página diz isso no cartão ("preço de exemplo") e no rodapé. Paisagem, lente, diafragma, luzes e
-letreiro são **ilustrações geradas por código** (SVG e CSS, com gerador determinístico em `vitrine.js`). Nenhuma imagem, texto ou
-código de terceiros. O vidro é o modelo do plugin, `modelos/liquid-glass/` (a página o carrega pela raiz do plugin).
+Produto fictício: **Clara 35**, câmera compacta com lente fixa de 35 mm f/1,4. Preço, prazo e especificações são de exemplo; a
+página diz isso no cartão e no rodapé.
+- A lente é **geometria procedural em three.js**, sem modelo, textura ou foto de terceiros.
+- Gravações, paisagem, luzes e letreiro são gerados por código.
+- O vidro da barra e do cartão é o modelo do plugin, `modelos/liquid-glass/`.
+- three.js 0.170.0 entra pelo CDN jsDelivr, com versão fixa e SRI no import map.
 
-**Abrir:** `index.html` no Edge ou no Chrome (a lente do vidro só existe no Chromium) e rolar devagar do herói até a reserva.
+**Mundo de estilo: produto Apple / Liquid Glass**, porque o produto é uma câmera premium e o briefing pediu esse mundo. É **um**
+mundo entre vários; o nível HD abaixo vale para qualquer estilo (ver `proposta-padrao-hd.md`).
 
-## A ideia (uma frase)
-**"Sete vidros entre você e a luz":** a lente é a página. O herói mostra a lente montada; ao rolar, **o mesmo objeto** gira de
-lado e se abre em 3D nos seus sete vidros, com o eixo da luz em âmbar até o sensor; depois o diafragma explica o desfoque, e o
-mesmo material de vidro vira a navegação e o cartão de reserva.
+**Abrir:** `index.html` no Edge ou no Chrome, com internet (o three.js vem do CDN). Rolar devagar do herói até a reserva e mexer o
+mouse sobre a lente. Sem internet, sem WebGL ou com movimento reduzido, entra a imagem renderizada do mesmo objeto.
 
-Efeito dominante: **a lente que se abre ao rolar** (CSS 3D, `animation-timeline` de vista, sem sequestrar a rolagem).
-Apoios: revelação dos textos ao rolar (mesma mola) e o Liquid Glass (navegação + cartão). Uma luz (cima à esquerda, ou o ponteiro),
-uma curva (a mola curta da receita), um material (vidro), um acento (âmbar da hora dourada).
+## A ideia
+**"Sete vidros entre você e a luz":** a lente é a página.
+1. No herói, a lente montada aparece sobre a paisagem da hora dourada, com o fundo desfocado como em f/1,4.
+2. Ao rolar, **o mesmo objeto 3D** gira de lado. O barril desliza para trás pelo eixo, como uma luva, e os 7 vidros se separam,
+   com o eixo da luz em âmbar até o sensor e as etiquetas iguais à lista.
+3. O diafragma explica o desfoque.
+4. A reserva fecha no cartão de vidro.
 
-## Teste de junção (cada elemento, a função; tirar faz falta?)
-| Elemento | Serve à ideia porque… | Tirar faz falta? |
+## O que mudou da v1 (o usuário: "cara de desenho, movimento de template, acabamento não HD")
+| Item | v1 | v2 (agora) |
 |---|---|---|
-| Lente 3D (herói) | é o produto e o título ("sete vidros") | sim: sem ela não há ideia |
-| Abertura em 3D ao rolar (dominante) | mostra os sete vidros "por dentro"; a lista ao lado tem os mesmos números das etiquetas | sim: é o argumento técnico |
-| Eixo âmbar + sensor | é "a luz" do título atravessando os vidros até o sensor | sim: liga título, lista ("entrega a luz reta ao sensor") e cor |
-| Revelação ao rolar | os blocos chegam com a mesma mola da lente; nada espera para ler | médio: tirar deixa a página correta, mas solta |
-| Diafragma (3 desenhos iguais: dentro da lente, na lista, no controle) | explica o desfoque redondo (11 lâminas) e liga a lente ao quadro f/1,4 | sim |
-| Quadro f/1,4 com o letreiro "aberto" em foco | o fundo vira luz; o letreiro é o objeto nítido (e o trocadilho com "abertura") | o letreiro é o elo mais fraco; sem ele o quadro vira papel de parede de bokeh |
-| Liquid Glass na barra e no cartão | é o mesmo material dos vidros; o cartão fica "na luz" (a coluna de brilho do mar passa sob a borda) | sim no cartão (é o último vidro entre você e a compra); a barra é convenção da Apple |
-| Paisagem | é "a luz": no herói, refletida no vidro frontal e atrás do cartão | sim |
-| Âmbar | a hora dourada; só no acento (botão, f/1,4, eixo da luz) | sim |
+| Lente | discos em CSS 3D com degradês | **WebGL**: barril anodizado em perfil de revolução, anel de foco com **serrilha real na malha** (240 sulcos), gravações em textura gerada, baioneta cromada, **7 vidros sólidos** (superfícies curvas, espessura, borda pintada de preto) em `MeshPhysicalMaterial` (transmissão 1, `ior` 1,52 a 1,85 por vidro, `thickness`, atenuação, **iridescência** = revestimento antirreflexo, `dispersion` 0,35), diafragma de 11 lâminas extrudado, sensor com difração |
+| Luz | gradiente desenhado | **ambiente PMREM**: o RoomEnvironment com a sala escurecida e 4 softboxes (chave em cima à esquerda, recorte, faixa para o vidro aberto, frente); **Neutral (Khronos)** no tone mapping |
+| Sombra e profundidade | nenhuma | sombra de contato macia sob a vista aberta; fundo do herói desfocado (profundidade de campo) |
+| Movimento | `animation-timeline` ligado direto à rolagem (aos saltos com a roda) | **mola da casa** (rigidez 170, amortecimento 24, ζ 0,92, bounce ≈ 0, assenta em 573 ms) segue o progresso da rolagem, sem prender a rolagem; a mesma mola em CSS por `linear()` de 37 pontos; entrada da lente com a mola; o ponteiro inclina com a mola |
+| Revelação | ligada à rolagem | uma vez, por tempo, escalonada 45 ms (o principal primeiro); o quadro f/1,4 chega com inclinação 3D |
+| Reserva | troca de texto | **continuidade**: o mesmo botão, rótulo que sai em 120 ms e entra 70 ms depois, ✓ desenhado depois, aviso que troca no lugar; desfazer volta pelo mesmo caminho |
+| Toque | escala fixa | apertar = 0,97 em 90 ms; soltar = **mola de toque** (380/26, bounce 0,06); passar = sobe 1 px; realce da navegação por cápsula concêntrica |
+| HD | 1× | capturas em **2×**; bordas de 0,5 px em telas 2×; sombras em 3 camadas; grão contra faixas; `corner-shape: squircle` com `@supports`; tracking −0,034 a −0,042 nos títulos; `font-optical-sizing` |
 
-Ficou de fora de propósito: escolha de cor do produto, grade de recursos, depoimentos, números de mercado (não há prova real).
+## Provas (todas em 2×, Edge sem interface, uma captura por vez)
+- **Bateria `node verificar.js tudo`** (`png/saida-tudo.txt`, `png/medidas-tudo.json`): **39 de 39 casos ok, 0 erro**.
+  - Contraste: 342 textos medidos pixel a pixel no pior ponto, sobre o 3D, a foto e o vidro. O pior foi 5,09:1, e o pior em
+    fundo sólido 5,34:1. Cartão de vidro: ≥ 8,27 no claro e ≥ 5,26 no escuro.
+  - Sem rolagem lateral de 320 a 1920 px. Teclado (Tab e Shift+Tab, anel visível, nada sob a barra), sem JS, sem WebGL,
+    movimento reduzido, transparência reduzida e contraste aumentado: todos passam.
+  - Objeto 3D: **0,000% de pixels saturados** no recorte da lente (limite 1%).
+  - Coerência: 7 vidros, 5 grupos e 11 lâminas lidos **do objeto 3D**, e a mola amostrada (37 pontos).
+- **Mutação** `node verificar.js --mutar` (tira o vidro 5 do objeto 3D): o verificador falha com 7 erros, como deve
+  (`png/saida-mutacao.txt`).
+- **Tiras de quadros** `node tiras.js tudo` (`png/saida-tiras.txt`, `png/tiras-medidas.json`), com relógio controlado:
+  - a mola da lente avança 50 ms por quadro;
+  - nas transições CSS, as animações ficam pausadas e são postas em `currentTime` 0 a 600 ms;
+  - a curva é analisada: sem salto no 1º quadro, sem parada seca, sem recuo. **As 3 curvas passam.**
+- **Desempenho (navegação quente).** LCP: 320 ms (CPU 1×), 164 a 580 ms (CPU 4×); o elemento é o título. **CLS 0,000.**
+  Quadros ao rolar, com a lente em WebGL a 2×: mediana de 17 ms com a CPU 1×; com a CPU 4×, mediana de 50 a 83 ms e p95 de
+  100 a 167 ms. [MEDIDO no Edge sem interface com a GPU Intel Iris Xe. A CPU 4× pesa no JavaScript do three.js; não vale como
+  número de aparelho.]
+  - Para baixar o custo: a resolução é adaptativa (1,25× em movimento, até 2× parado), sem mapa de sombra, com
+    `transmissionResolutionScale` 0,75, e a lente só começa depois do `load`.
+  - A 1ª navegação num navegador recém-aberto pinta tarde em qualquer variante da página (medido: até ~4 s com a CPU 4×).
 
-## Medidas (bateria `node verificar.js tudo` → `png/saida-tudo.txt` e `png/medidas-tudo.json`, 2026-11-02)
-Edge sem interface, perfil próprio, uma aba, uma captura por vez, `windowsHide`. **34 de 34 casos ok, 0 erro, saída 0.**
-- **Contraste:** 332 textos medidos **pixel a pixel no pior ponto** (sobre paisagem, quadro e vidro, com o texto escondido e o fundo
-  capturado) + 41 pares em fundo sólido. Pior pixel **5,28:1** ("Ver a lente por dentro" em 1024 px); pior sólido **5,34:1**
-  (legenda do quadro). Cartão de vidro: claro ≥ 8,14:1 e escuro ≥ 7,14:1 em todos os textos (1440 e 390). Contas à parte (`node`, fórmula WCAG):
-  anel de foco 5,47:1 (claro) e 9,34:1 (escuro), 7,20:1 sobre o vidro escurecido; trilho do controle 3,29:1 e 4,22:1 (≥ 3:1, 1.4.11).
-- **Rolagem lateral:** 0 em 320, 390, 768, 1024, 1440 e 1920, no topo e rolado.
-- **Coerência texto × desenho:** 7 vidros, 5 grupos, 11 lâminas, lista cobre 1–7 uma vez; desfoque redondo até f/4 e com a forma do
-  diafragma em f/5,6 e f/8 (o texto diz "redondo, de f/1,4 até f/4"). **Mutação** `node verificar.js --mutar` (tira um vidro):
-  o verificador **falha** com 4 erros ("texto diz sete elementos, a lente tem 6 vidros"…). O contraste por pixel também falhou de
-  verdade antes da correção (a lente cobria o texto em 320 e 768 px: 1:1) e passou depois.
-- **Teclado:** 1º Tab = "Pular para o conteúdo"; ordem barra → herói → controle → reserva; anel sólido em todos; nenhum foco sob a
-  barra; Shift+Tab volta. Reserva: "Reservada" + ✓ desenhado + aviso falado (`aria-live`) + Desfazer, que devolve o foco.
-- **Movimento reduzido:** 0 animações rodando; a lente aparece aberta, parada (estado por IntersectionObserver).
-  **Transparência reduzida** e **contraste mais:** `backdrop-filter: none` na barra e no cartão (fosco opaco), textos ≥ 9:1.
-- **Sem JS:** 22 textos, cada um posto no meio da tela: 0 escondido (a revelação é CSS puro).
-- **Vidro que se adapta:** a barra fica clara sobre o céu (0,80) e **escura sobre o quadro noturno** (0,06), no tema claro
-  (`png/vitrine-claro-1440-q3b-barra-sobre-foto-zoom.png`: as luzes e o letreiro entortam na borda da cápsula).
-- **Desempenho (CPU 4× mais lenta, headless):** LCP 760 ms (1440) e 588 ms (390), o elemento é o título; **CLS 0,000**.
-  Quadros ao rolar a abertura: mediana 33,4 e 33,3 ms, p95 66,6 e 50 ms, 13 e 0 de 90 acima de 50 ms (varia entre rodadas). **[MEDIDO em headless, sem GPU real:
-  não vale como prova de 60 fps num aparelho.]** INP não medido (o clique é sintético; os manipuladores são de tempo constante).
+### PNGs e tiras que eu mostraria
+1. `png/vitrine-claro-1440.png`: herói em 2×, lente renderizada sobre a hora dourada desfocada.
+2. `png/vitrine-escuro-1440-q2-aberta.png`: os 7 vidros abertos no estúdio escuro (softboxes nos vidros, iridescência, etiquetas).
+3. `png/tira-lente-escuro.png`: 12 quadros de 50 ms, do herói à vista aberta; o barril sai como uma luva, o mesmo objeto em todos.
+4. `png/tira-girar-20graus.png`: o mesmo quadro a 0° e a 20°; os reflexos mudam de lugar (não é desenho).
+5. `png/tira-reserva.png` e `png/tira-revelacao.png`: a reserva com continuidade e a revelação escalonada.
+Também: `png/vitrine-claro-1440-q2-aberta.png`, `png/vitrine-claro-390.png`, `png/vitrine-escuro-1440-q4-reservar.png` (+ `-zoom`),
+`png/vitrine-claro-1440-zoom4x.png`, reduções e as imagens de reserva em `img/`.
 
-## PNGs (todos abertos e conferidos)
-| Arquivo | Mostra |
-|---|---|
-| `png/vitrine-claro-1440.png`, `png/vitrine-escuro-1440.png` (+ `-zoom4x`: base da lente ampliada 4×) | herói: lente 3D (barril, gravação, reflexos dos vidros por dentro) sobre o amanhecer / a hora azul com lua |
-| `png/vitrine-claro-390.png`, `png/vitrine-escuro-390.png` | herói no celular (lente presa à base da tela, sem cobrir o texto) |
-| `png/vitrine-claro-1440-q1-girando.png` | quadro 1 da rolagem: a lente passa de frente, o barril começa a sumir |
-| `png/vitrine-claro-1440-q2-aberta.png`, `png/vitrine-escuro-1440-q2-aberta.png` | quadro 2: os sete vidros abertos, etiquetas = números da lista, eixo da luz até o sensor |
-| `png/vitrine-claro-1440-q3-abertura.png`, `png/vitrine-claro-1440-q3b-barra-sobre-foto.png` (+ `-zoom`) | quadro 3: f/1,4 e o desfoque; a barra de vidro escurece sobre a foto |
-| `png/vitrine-claro-1440-q4-reservar.png` (já reservado), `png/vitrine-escuro-1440-q4-reservar.png` (+ `-zoom` de cada) | cartão de Liquid Glass na luz; ampliação 2× da borda com a coluna de brilho entortando |
-| `png/vitrine-claro-390-q2-aberta.png`, `png/vitrine-escuro-390-q4-reservar.png` | lente aberta e cartão no celular |
-| `png/vitrine-claro-1440-reduzido-aberta.png`, `png/vitrine-claro-1440-transparencia-reduzida.png` | movimento reduzido (aberta, parada) e transparência reduzida (cartão opaco) |
-
-## Autocrítica pela régua (`conhecimento/design/impressionar.md`)
-**Camada 1:** 1 INP não medido (pendência, não "não"); 2 hover/foco/pressionado sim; 3 vazio/erro/carregando: não se aplica (sem
-servidor), a reserva tem desfazer; 4 teclado sim; 5 coerência sim (medida); 6 contraste no pior ponto sim; 7 390 e CPU fraca sim;
-8 reduções sim. **Camada 2:** 9 uma ideia sim; 10 primeiro quadro ocupado sim; 11 título 96 px = 4,6× o corpo sim; 12 um acento sim;
-13 material com prova de conteúdo atrás sim (zoom); 14 um dominante e o pico (✓ em 240 ms, mola que chega a 1,0 em ~100 ms) sim;
-15 acabamento: quase (ver abaixo); 16 final com desfazer sim.
-
-- **O que um usuário exigente notaria em 5 s:** a lente de verdade no herói, girando ao rolar, e a tipografia grande; no escuro,
-  a lua e o brilho do mar. Depois: os vidros abertos são planos (sem espessura de vidro vista de lado).
-- **Vidro, "parece Apple ou tentativa?"** (5 traços): entorta na borda sim (zooms do cartão e da barra); aro desigual, mais forte do
-  lado da luz, sim; tom muda claro/escuro sim (medido); dá para reconhecer o que está atrás sim (montanhas e brilho do mar no cartão);
-  cápsula/raio concêntrico e sombra macia sobre conteúdo real sim. **Passa**, no Chromium.
-- **Referência da categoria:** as páginas de produto da Apple (seção de câmera do iPhone). O que ela ainda faz melhor: render 3D
-  real (espessura, refração e luz física) e fotografia de verdade como prova; aqui são planos CSS e ilustração.
-
-### Ainda não está no nível (sem esconder)
-- Os vidros abertos são discos planos: de lado viram elipses finas com aro; espessura e refração real pediriam WebGL.
-- A barra de vidro no topo, sobre o céu claro, lê como "pílula branca"; o Liquid Glass só aparece de verdade sobre o quadro escuro e
-  no cartão.
-- O letreiro "aberto" usa a fonte do sistema (Segoe no Windows, SF no Mac): muda de aparência entre sistemas.
-- A lente do vidro existe só no Chromium; Safari e Firefox recebem o fosco regular (não testado: não há esses navegadores aqui).
-  O caminho sem linha do tempo de rolagem **com** movimento (Firefox) também não foi exercitado; com movimento reduzido, sim.
-
-## Decidido
-Vidro de landing **pode ir sobre foto** quando o contraste é medido pixel a pixel no pior ponto (decisão de 2026-11-02; aqui ≥ 7,14:1 no cartão).
-
-## Correções depois da revisão final (b-5)
-- A coluna de brilho do mar sob a lente era um retângulo de bordas retas (visível no escuro): agora esmaece nas laterais (máscara
-  em gradiente) e ficou mais larga e suave.
-- A fresta castanha na base da lente (ampliação 4×) era o filete âmbar do barril visto de raspão: o filete saiu e a face frontal
-  cresceu 0,8% para cobrir a junta (`png/vitrine-claro-1440-zoom4x.png`, `png/vitrine-escuro-1440-zoom4x.png`).
+## Autocrítica (régua: "parece produto real renderizado ou ilustração? o movimento parece produto premium ou site de modelo?")
+- **Lente: parece produto renderizado.** A serrilha pega luz, o vidro tem espessura e reflexo de softbox, e o revestimento dá o
+  verde e o violeta dos vidros de verdade. O "girar 20°" mostra os reflexos se movendo.
+- **Movimento: parece produto.** Uma mola só; a lente não pula com a roda do mouse (segue a mola); revelações escalonadas; a
+  reserva troca no lugar.
+- **Ainda não está no nível (sem esconder):**
+  - No escuro, o diafragma (preto) quase some contra o fundo da vista aberta.
+  - O barril em close é limpo demais (sem micro-riscos nem desgaste).
+  - O fundo do herói é paisagem pintada em canvas, não foto.
+  - Sem pós-processamento de profundidade de campo nos vidros (a profundidade de campo está só no fundo).
+  - O custo de quadro com a CPU 4× é alto.
+  - Safari e Firefox não testados (a lente WebGL deve funcionar; o vidro da barra cai para o fosco).
+  - O letreiro "aberto" usa a fonte do sistema.
 
 ## Arquivos
-`index.html` (estrutura e paisagem em SVG), `vitrine.css`, `vitrine.js`, `verificar.js` (verificador e capturador; `tudo`, `png`,
-`checar`, `--so=<trecho>`, `--mutar`, `--png`), `png/` (PNGs, `saida-tudo.txt`, `medidas-tudo.json`).
+| Arquivo | Para quê |
+|---|---|
+| `index.html` | estrutura; import map com SRI; paisagem em SVG para a reserva sem WebGL |
+| `lente3d.js` | a lente WebGL (geometria, materiais, ambiente, mola, poses pelo espaço livre do layout, imagens de reserva por `?render=`) |
+| `vitrine.js` | brilho do mar, diafragma em SVG, luzes do f/1,4, revelação escalonada, reserva |
+| `vitrine.css` | mola da casa em `linear()`, coreografia, acabamento HD, reduções |
+| `verificar.js` | bateria (`tudo`, `png`, `checar`, `--so=nome$`, `--mutar`, `--png`) |
+| `tiras.js` | tiras de quadros determinísticas + análise de curva |
+| `foto.js` | captura avulsa e geração das imagens de reserva (`img/*.webp`) |
+| `proposta-padrao-hd.md` | proposta do padrão HD para o plugin (nível universal × mundos de estilo) |

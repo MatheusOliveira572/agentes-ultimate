@@ -1,6 +1,6 @@
-// Clara 35: vitrine. Gera as peças decorativas (barril, brilho do mar, diafragma, luzes), liga a luz ao ponteiro,
-// faz a reserva (pico do fluxo) e o recuo por IntersectionObserver quando não há linha do tempo de rolagem.
-// Sem JS a página continua inteira: textos, links e a lente montada (sem barril e sem brilho do mar).
+// Clara 35: vitrine. Gera as peças decorativas (brilho do mar, diafragma, luzes), revela os blocos ao entrar na tela
+// (escalonados, com a mola da casa), faz a reserva (pico do fluxo, com continuidade) e troca as imagens de reserva da lente.
+// A lente em WebGL fica em lente3d.js. Sem JS a página continua inteira: todos os textos à vista, a lente em imagem.
 (function () {
   'use strict';
   const raiz = document.documentElement;
@@ -12,8 +12,6 @@
   const temLinha = CSS.supports('animation-timeline: view()');
   const params = new URLSearchParams(location.search);
 
-  // Mutação para provar o verificador: tira um vidro (a contagem "sete elementos" deixa de bater).
-  if (params.get('mutar') === 'vidro') $('.vidro[data-n="5"]')?.remove();
 
   // Luminância do que passa atrás do vidro, pelo tema (liquido.js lê data-lum).
   function lum() { for (const e of $$('[data-lum-claro]')) e.dataset.lum = escuro.matches ? e.dataset.lumEscuro : e.dataset.lumClaro; window.liquido?.quadro(); }
@@ -37,17 +35,6 @@
       s += `<rect x="${(x - w / 2).toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(2)}" rx="${(h / 2).toFixed(2)}" opacity="${o.toFixed(2)}"/>`;
     }
     mar.innerHTML = s;
-  }
-
-  // Barril: 48 faixas em volta do eixo; o tom de cada uma sai do ângulo até a luz (CSS: cos(--a − --luz-lente)).
-  const barril = $('#barril');
-  if (barril) {
-    const N = 48; let s = '';
-    for (let i = 0; i < N; i++) s += `<i class="faixa" style="--a:${(i * 360 / N).toFixed(2)}deg;--par:${i % 2}"></i>`;
-    barril.innerHTML = s;
-    barril.style.setProperty('--R', 'calc(var(--d) * .47)');
-    barril.style.setProperty('--w', `calc(var(--d) * ${(2 * Math.PI * 0.47 / N + 0.004).toFixed(4)})`);
-    barril.style.setProperty('--L', 'calc(150 * var(--u))');
   }
 
   // Diafragma de 11 lâminas: abertura em polígono de lados curvos; cada lado continua até a borda (o desenho das lâminas).
@@ -75,36 +62,17 @@
   iris($('#iris-lente'), 40);
   iris($('.iris-mini'), 30);
 
-  // Luz e inclinação: a mesma luz do vidro (liquido.js) gira o brilho do barril e dos vidros; a lente inclina ≤ 8° para o ponteiro.
-  const lente = $('#obj-lente'), mira = $('#mira');
-  const ponteiroFino = matchMedia('(hover: hover) and (pointer: fine)');
-  let alvoX = 0, alvoY = 0, atualX = 0, atualY = 0, luz = 135, correndo = false;
-  function passo() {
-    atualX += (alvoX - atualX) * 0.12; atualY += (alvoY - atualY) * 0.12;
-    mira.style.setProperty('--tx', atualX.toFixed(2) + 'deg'); mira.style.setProperty('--ty', atualY.toFixed(2) + 'deg');
-    lente.style.setProperty('--luz-lente', luz.toFixed(1) + 'deg');
-    if (Math.abs(alvoX - atualX) + Math.abs(alvoY - atualY) > 0.02) requestAnimationFrame(passo); else correndo = false;
-  }
-  if (lente && mira) addEventListener('pointermove', (e) => {
-    if (!ponteiroFino.matches || reduz.matches || e.pointerType !== 'mouse') return;
-    const r = mira.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
-    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    const nx = Math.max(-1, Math.min(1, (e.clientX - cx) / (innerWidth / 2))), ny = Math.max(-1, Math.min(1, (e.clientY - cy) / (innerHeight / 2)));
-    alvoY = nx * 8; alvoX = -ny * 8;
-    luz = Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI + 90 + 180; // a luz vem do lado do ponteiro
-    if (!correndo) { correndo = true; requestAnimationFrame(passo); }
-  }, { passive: true });
-
-  // Recuo: sem linha do tempo de rolagem, ou com movimento reduzido, a lente se abre quando a lista entra (IntersectionObserver).
-  if (!temLinha || reduz.matches) {
-    raiz.classList.add('io');
-    const abertura = $('.abertura'), lista = $('#por-dentro');
-    const io = new IntersectionObserver((es) => { for (const e of es) {
-      if (e.target === lista) abertura.classList.toggle('aberta', e.isIntersecting || e.boundingClientRect.top < 0);
-      else if (e.isIntersecting) { e.target.classList.add('visto'); io.unobserve(e.target); }
-    } }, { rootMargin: '0px 0px -12% 0px' });
-    io.observe(lista); $$('.revela').forEach((e) => io.observe(e));
-  }
+  // Revelação: cada bloco entra uma vez, com a mola da casa, escalonado 45 ms dentro do grupo (o principal primeiro).
+  // A transição é por tempo (não presa à rolagem): rolar aos saltos não faz o texto pular. Movimento reduzido: só esmaece.
+  // Imagens de reserva da lente: a vista aberta substitui a montada quando a lista entra (só quando não há WebGL).
+  raiz.classList.add('io');
+  { const grupos = new Map(); for (const e of $$('.revela')) { const g = e.parentElement; const i = grupos.get(g) || 0; e.style.setProperty('--i', i); grupos.set(g, i + 1); } }
+  const abertura = $('.abertura'), lista = $('#por-dentro');
+  const io = new IntersectionObserver((es) => { for (const e of es) {
+    if (e.target === lista) abertura.classList.toggle('aberta', e.isIntersecting || e.boundingClientRect.top < 0);
+    else if (e.isIntersecting) { e.target.classList.add('visto'); io.unobserve(e.target); }
+  } }, { rootMargin: '0px 0px -8% 0px' });
+  io.observe(lista); $$('.revela').forEach((e) => io.observe(e));
 
   // Abertura f/1,4 → f/8: as luzes encolhem (abertura ∝ 1/N), ficam mais fortes e, de f/5,6 em diante, tomam a forma do diafragma.
   const PASSOS = [1.4, 2, 2.8, 4, 5.6, 8];
@@ -136,17 +104,14 @@
   }
   if (faixa) { faixa.addEventListener('input', aplicarAbertura); aplicarAbertura(); }
 
-  // Reserva: o pico do fluxo. Mola curta no botão, ✓ que se desenha, aviso falado e Desfazer.
-  const bReservar = $('#b-reservar'), estado = $('#estado-reserva');
-  const textoInicial = estado?.textContent;
-  function reservar() {
-    if (bReservar.classList.contains('reservada')) return;
-    bReservar.classList.add('reservada'); $('.b-rotulo', bReservar).textContent = 'Reservada';
-    estado.innerHTML = 'Lugar guardado na fila de março. Nada é cobrado até o envio. <button type="button" class="desfazer" id="b-desfazer">Desfazer</button>';
-    $('#b-desfazer').addEventListener('click', () => {
-      bReservar.classList.remove('reservada'); $('.b-rotulo', bReservar).textContent = 'Reservar';
-      estado.textContent = 'Reserva desfeita. ' + textoInicial; bReservar.focus();
-    });
+  // Reserva: o pico do fluxo. O mesmo botão troca de rótulo por baixo (camadas que deslizam com a mola), o ✓ se desenha e
+  // o aviso abaixo troca no mesmo lugar; Desfazer volta pelo mesmo caminho, interrompível no meio (transição, não animação fixa).
+  const bReservar = $('#b-reservar'), cartao = $('#cartao'), aviso = $('#aviso-sr');
+  function marcar(sim) {
+    cartao.classList.toggle('reservado', sim); bReservar.setAttribute('aria-pressed', String(sim));
+    $('.b-antes', bReservar).setAttribute('aria-hidden', String(sim)); $('.b-depois', bReservar).setAttribute('aria-hidden', String(!sim));
+    aviso.textContent = sim ? 'Reservada. Lugar guardado na fila de março. Nada é cobrado até o envio.' : 'Reserva desfeita. Sem cobrança até o envio.';
   }
-  bReservar?.addEventListener('click', reservar);
+  bReservar?.addEventListener('click', () => { if (!cartao.classList.contains('reservado')) marcar(true); });
+  $('#b-desfazer')?.addEventListener('click', () => { marcar(false); bReservar.focus(); });
 })();

@@ -9,7 +9,20 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%231d1f23'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23e9a35f' stroke-width='3'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="../../../../modelos/liquid-glass/liquido.css">
 <link rel="stylesheet" href="vitrine.css">
-<script>window.__errosJs = []; addEventListener('error', (e) => window.__errosJs.push(String(e.message)));</script>
+<script>document.documentElement.classList.add('js'); window.__errosJs = []; addEventListener('error', (e) => window.__errosJs.push(String(e.message)));</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  },
+  "integrity": {
+    "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js": "sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28",
+    "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/environments/RoomEnvironment.js": "sha384-9ItPPH2vgKbkvgrqTKq7ptGYe+WuAnqlZtlqleJW4/CJjnM5R7C+efD6iS7ADPJ9"
+  }
+}
+</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 </head>
 <body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -62,30 +75,16 @@
     </div>
 
     <div class="palco" aria-hidden="true">
-      <div class="lente" id="obj-lente">
-        <div class="entra"><div class="mira" id="mira">
-          <div class="halo"></div>
-          <div class="tampa"></div>
-          <div class="barril" id="barril"></div>
-          <div class="face"><svg viewBox="0 0 200 200"><defs><path id="arco" d="M100 100 m-84 0 a84 84 0 1 1 168 0 a84 84 0 1 1 -168 0"/></defs>
-            <circle cx="100" cy="100" r="99" class="face-fundo"/><circle cx="100" cy="100" r="92.5" class="face-filete"/>
-            <text class="face-gravacao"><textPath href="#arco" startOffset="2%">CLARA 35 · 1:1,4 · 35 mm · ⌀ 49</textPath></text></svg></div>
-          <div class="vidro" data-n="1" data-grupo="1" style="--z:-8;--ze:120;--s:.74;--rv:120 210 160"><svg class="dentro" viewBox="0 0 100 100" preserveAspectRatio="none"><use href="#cena" x="-60" y="-30" width="220" height="160"/></svg></div>
-          <div class="vidro" data-n="2" data-grupo="2" style="--z:-30;--ze:20;--s:.66;--rv:236 176 96"></div>
-          <div class="vidro" data-n="3" data-grupo="3" style="--z:-50;--ze:-86;--s:.6;--rv:120 210 200"></div>
-          <div class="vidro" data-n="4" data-grupo="3" style="--z:-60;--ze:-104;--s:.6;--rv:236 176 96"></div>
-          <div class="iris" style="--z:-76;--ze:-196;--s:.62"><svg viewBox="-50 -50 100 100" id="iris-lente"></svg></div>
-          <div class="vidro" data-n="5" data-grupo="4" style="--z:-94;--ze:-292;--s:.56;--rv:120 210 160"></div>
-          <div class="vidro" data-n="6" data-grupo="5" style="--z:-118;--ze:-392;--s:.52;--rv:120 210 200"></div>
-          <div class="vidro" data-n="7" data-grupo="5" style="--z:-128;--ze:-410;--s:.52;--rv:236 176 96"></div>
-          <i class="eixo"></i>
-          <i class="sensor"></i>
-          <b class="tag" style="--ze:120;--s:.74">1</b>
-          <b class="tag" style="--ze:20;--s:.66">2</b>
-          <b class="tag" style="--ze:-95;--s:.6">3·4</b>
-          <b class="tag" style="--ze:-292;--s:.56">5</b>
-          <b class="tag" style="--ze:-401;--s:.52">6·7</b>
-        </div></div>
+      <!-- A lente em WebGL (lente3d.js). Sem WebGL, sem JS ou com movimento reduzido: as imagens renderizadas do mesmo objeto. -->
+      <canvas id="gl" class="gl"></canvas>
+      <picture class="lente-img lente-img-heroi"><source media="(max-width: 980px)" srcset="img/lente-heroi-empilhado.webp"><img src="img/lente-heroi.webp" width="1400" height="1400" alt="" decoding="async"></picture>
+      <picture class="lente-img lente-img-aberta">
+        <source media="(max-width: 980px) and (prefers-color-scheme: dark)" srcset="img/lente-aberta-empilhado-escuro.webp">
+        <source media="(max-width: 980px)" srcset="img/lente-aberta-empilhado-claro.webp">
+        <source media="(prefers-color-scheme: dark)" srcset="img/lente-aberta-escuro.webp">
+        <img src="img/lente-aberta-claro.webp" width="2880" height="1800" alt="" decoding="async" loading="lazy"></picture>
+      <div class="tags" id="tags">
+        <b class="tag" data-grupo="1">1</b><b class="tag" data-grupo="2">2</b><b class="tag" data-grupo="3">3·4</b><b class="tag" data-grupo="4">5</b><b class="tag" data-grupo="5">6·7</b>
       </div>
     </div>
 
@@ -145,11 +144,14 @@
       <p class="cartao-ficha">35 mm · f/1,4 · 7 elementos · 24 MP · 380 g</p>
       <p class="cartao-preco"><span class="preco">R$ 6.490</span> <span class="preco-nota">à vista, preço de exemplo</span></p>
       <p class="cartao-prazo">Entrega a partir de março de 2027.</p>
-      <button class="botao botao-reservar" id="b-reservar" type="button" aria-describedby="estado-reserva">
-        <span class="b-rotulo">Reservar</span>
-        <svg class="b-ok" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4.5 10.5 8.3 14 15.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="botao botao-reservar" id="b-reservar" type="button" aria-pressed="false" aria-describedby="estado-reserva">
+        <span class="b-camadas"><span class="b-rotulo b-antes">Reservar</span><span class="b-rotulo b-depois" aria-hidden="true">Reservada <svg class="b-ok" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4.5 10.5 8.3 14 15.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
       </button>
-      <p class="estado" id="estado-reserva" aria-live="polite">Sem cobrança até o envio.</p>
+      <div class="estado" id="estado-reserva">
+        <p class="estado-a">Sem cobrança até o envio.</p>
+        <p class="estado-b">Lugar guardado na fila de março. Nada é cobrado até o envio. <button type="button" class="desfazer" id="b-desfazer">Desfazer</button></p>
+      </div>
+      <p class="vh" id="aviso-sr" aria-live="polite"></p>
     </div>
   </section>
 </main>
@@ -160,6 +162,7 @@
 </footer>
 
 <script src="vitrine.js"></script>
+<script src="lente3d.js"></script>
 <script src="../../../../modelos/liquid-glass/liquido.js"></script>
 </body>
 </html>

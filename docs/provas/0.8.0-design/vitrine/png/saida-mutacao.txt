@@ -1,0 +1,13 @@
+ERRO mutacao-vidro: 0 textos sólidos, pior 99:1; pior pixel 5.75:1 "Ver a lente por dentro"
+     · 6 vidros, 4 grupos, 11 lâminas (do objeto 3D), formas 1.4:circle( 2:circle( 2.8:circle( 4:circle( 5.6:polygon 8:polygon; mola linear() com 37 pontos
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+     ✗ a lente WebGL não ativou em 25 s
+     ✗ Uncaught TypeError: Cannot read properties of undefined (reading 'getWorldPosition')
+     ✗ exceção: TypeError: Cannot read properties of undefined (reading 'getWorldPosition')
+    at file:///C:/Users/59-109037/agentes-ul
+     ✗ texto diz sete elementos, a lente tem 6 vidros
+     ✗ texto diz cinco grupos, a lente tem 4
+     ✗ cartão diz 7 elementos, a lente tem 6
+     ✗ lista cobre 1,2,3,4,5,6,7 e a lente tem 1,2,3,4,6,7
+mutação PEGA (7 erro(s)): o verificador falha no caso errado
+saida=0
