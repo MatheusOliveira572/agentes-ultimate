@@ -102,6 +102,11 @@ falhando antes.
   `localhost`, senha igual ao usuário e o exemplo clássico da documentação perguntam em vez de bloquear (padrão até o usuário dizer
   o contrário). Passam a ser pegos: texto ADO com a senha antes do servidor (bloqueia), `API_KEY=valor` sem aspas e
   `aws_secret_access_key` sem o id (perguntam).
+- **Revisão da parte A, baixos:** b-3, casos da condição do bloco S-web e da carga sob demanda dos roteiros; b-4, a bateria roda
+  com `AGENTES_ULTIMATE_SEM_PASTA=1` no ambiente; b-5, registro no topo de `docs/regras-pdfs-2026-11.md` (os PDFs são do usuário); b-6,
+  o eval do engenheiro aponta para o item S-12, onde ficaram os campos do log. b-7, duas mensagens de commit não descrevem o conteúdo
+  e o histórico não será reescrito: o `5544502` ("G8 correção: H-5") também traz o vigia das fontes da parte B, e o `9fc1af7` altera
+  conteúdo jurídico (é a conferência da `especialista-lgpd`), embora diga "sem alteração de conteúdo".
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

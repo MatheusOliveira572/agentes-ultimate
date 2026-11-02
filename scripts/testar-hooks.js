@@ -13,6 +13,8 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'agentes-ultimate-'));
 const casa = path.join(tmp, 'casa');
 const proj = path.join(tmp, 'projeto');
 fs.mkdirSync(casa); fs.mkdirSync(proj);
+// A variável desliga a pasta do projeto: herdada do ambiente, os casos que esperam a memória falhariam (b-4).
+delete process.env.AGENTES_ULTIMATE_SEM_PASTA;
 const env = { ...process.env, HOME: casa, USERPROFILE: casa };
 
 function hook(script, dados) {

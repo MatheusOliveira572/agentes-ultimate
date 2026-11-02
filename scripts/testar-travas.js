@@ -131,4 +131,11 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   git('git init -q', arv); git('git config user.email t@t', arv); git('git config user.name t', arv);
   const ta = trava('git add -A && git commit -m tudo', arv);
   caso('0.8.0 M-3 trava: a árvore inteira do plugin passa sem bloqueio nem pergunta', ta.code === 0 && !ta.out, `code ${ta.code} ${ta.err.slice(0, 400)}`);
+
+  // ---- b-3: escolha de blocos do checklist pelo perfil e carga sob demanda dos roteiros ----
+  const sk = fs.readFileSync(path.join(RAIZ, 'skills', 'checklist-lancamento', 'SKILL.md'), 'utf8');
+  caso('0.8.0 b-3 checklist: o bloco S-web tem condição de perfil (só com login próprio ou entrada de fora), não entra sempre', /\*\*S-web\*\*[^|]*\|\s*resposta 3 = login próprio, ou 5 = sim\s*\|/.test(sk), 'condição do S-web mudou');
+  caso('0.8.0 b-3 checklist: os roteiros abrem só o da área do item, quando for executar', /abra só o da área do item, quando for executar/.test(sk) && !/abra todos|leia todos os roteiros/i.test(sk), 'carga sob demanda mudou');
+  // ---- b-4: a bateria roda com AGENTES_ULTIMATE_SEM_PASTA=1 no ambiente ----
+  caso('0.8.0 b-4 bateria: tira AGENTES_ULTIMATE_SEM_PASTA do ambiente dos ganchos', !('AGENTES_ULTIMATE_SEM_PASTA' in process.env), 'variável herdada');
 };

@@ -1,5 +1,10 @@
 # Proposta: regras de dois checklists de lançamento (2026-11-01)
 
+> **Registro (2026-11-01, decisão D-1, revisão da parte A, b-5):** os 2 PDFs de origem são do próprio usuário, que confirmou a autoria; o uso,
+> inclusive a tradução próxima dos roteiros em `skills/checklist-lancamento/referencias/`, é legítimo. Esta proposta já foi aplicada
+> (commits "0.8.0 G1" a "G11"): onde o texto abaixo diz "só proposta", "autoria não identificada" ou que os prompts não entram no plugin,
+> vale este registro. Regra de treino de IA: vale a redação conferida pela `especialista-lgpd` no `CHANGELOG.md`.
+
 > Só proposta. Nada do plugin foi alterado. Cada mudança daqui passa pelo curador e pela aprovação do usuário
 > (fluxo de `PROPOSTAS.md`). O texto é nosso: nenhum trecho longo dos PDFs foi copiado.
 > Isto não é parecer jurídico. As leis citadas precisam ser conferidas no texto oficial antes de virarem regra de
