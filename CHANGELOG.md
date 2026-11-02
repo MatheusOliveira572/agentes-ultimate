@@ -443,6 +443,21 @@ Correção do usuário: "não é tudo que vai ser padrão Apple ou com vidro"; "
   ganha a seção "Gosto visual". Casos novos em `testar-impressionar.js` (vistos pegando 9 de 9 mutantes) e evals de
   regressão nos designers e no revisor.
 
+### Nível HD (hd102, hd103, hd105)
+Revisão do usuário: "tirar a cara de trabalho amador: movimentos e transições, acabamentos mais HD"; o padrão é o **nível**,
+em qualquer mundo.
+- **Provas refeitas:** vitrine "Clara 35" com a lente em WebGL (three.js, ambiente de estúdio, Neutral), mola única no WebGL e
+  no CSS e tiras de quadros (hd102); casos A (agenda de papel editorial) e B (Apple / vidro, fotos renderizadas por shader
+  próprio) com View Transitions, foco que segue o objeto e interrupção sem salto (hd103).
+- **`conhecimento/design/nivel-hd.md`:** 10 regras só de itens ABERTA da pesquisa (`docs/pesquisas/acabamento-premium-2026-11.md`),
+  "A validar" com os [HIPÓTESE] (inclusive a fórmula do amortecimento da nota da pesquisa, a conferir na WWDC23), método,
+  verificação, telas de app e critério de pronto. A régua `impressionar.md` resume e cita.
+- **Modelos:** `modelos/mola-linear.js` (`linear()` a partir de duração e bounce ou de rigidez e amortecimento; a prova e2e
+  usa o modelo) e `modelos/tiras/` (tiras com relógio controlado e análise de curva: salto, parada seca, recuo, degrau).
+- **Agentes:** os 4 designers provam com capturas a 2× e tiras e têm o nível HD no critério; o revisor abre as tiras (tira
+  ausente ou curva reprovada = achado). 17 casos novos em `testar-impressionar.js`.
+- **Provas em WebP:** capturas de `docs/provas/0.8.0-design/` convertidas e só as citadas mantidas.
+
 ### Revisão final antes de publicar (`docs/historico/revisao-0.8.0-final.md`)
 - **A-1:** versão 0.8.0 no `plugin.json` (sem subir o número, quem tem a 0.7.0 não recebe a nova).
 - **A-2:** a atualização diária não abre mais janela de console: um `node` destacado, sem shell, roda o `claude` com
