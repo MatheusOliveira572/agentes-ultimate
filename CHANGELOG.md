@@ -476,3 +476,7 @@ Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11
 - **Vidro em `apple/materiais.md`** (decisão do usuário): em landing page, permitido em cartão, com pouca transparência e sobre fundo calmo; em tela de produto ou de tarefa, a regra da Apple. Mais os acréscimos do estudo.
 - **Prova em `docs/provas/0.8.0-sites/`:** página fictícia, feita seguindo o agente, e bancada dos efeitos no Edge sem interface; contraste medido nos pixels do fundo, mutantes para cada checagem. O que passou está em `sites-premium/efeitos/provas.md`; o resto fica [ESTIMATIVA].
 - **Pendência:** Nivora e Code and Chill não foram estudados (rede da organização). Registro em `fontes/fontes.json`.
+- **Correções da revisão do lote** (`docs/revisao-0.8.0-sites.md`): roteamento por expressão de criação de site (A-1, só `pacotes.json`;
+  html, css, react e frontend sem site vão ao engenheiro); teclado na prova, no método e no critério (A-2); bancada com tolerância
+  de 3 níveis por canal (M-1); objeção e títulos nascidos do produto (M-2); vidro sem contradição (M-3); ponto preso à curva (M-4);
+  20 mutantes na prova da página (M-5); 8 larguras (M-6); a maré até o fim da página (b-1); b-2 a b-7.
