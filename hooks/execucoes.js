@@ -6,6 +6,7 @@
 // A descrição e o pedido nunca são gravados. Nunca bloqueia: em qualquer erro, sai 0.
 'use strict';
 const path = require('path');
+const fs = require('fs');
 const R = require('./registro');
 
 const DEZ_MIN = 10 * 60 * 1000;
@@ -52,7 +53,7 @@ function tratar(d) {
       // sessão aberta ao mesmo tempo, ainda dentro da faixa, fica
       const lig = R.ligacao(regs, r.id);
       const p = R.previsao(cwd, { agente: r.agente, cod: lig.cod, inicio: Date.parse(r.em), classe: lig.classe, agora, resumo: resumo() });
-      if (R.situacao(cwd, r, p, lig.cod, agora).estado === 'trabalhando') continue;
+      if (R.situacao(cwd, r, p, lig.cod, agora, false, R.escritaTranscricao(cwd, r)).estado === 'trabalhando') continue;
       R.acrescentar(arq, { em: iso(agora), tipo: 'abandonado', id: r.id, agente: r.agente });
       fechados.add(r.id);
     }
@@ -65,7 +66,10 @@ function tratar(d) {
 
   if (ev === 'SubagentStart') {
     const regs = R.lerJsonl(arq);
-    if (regs.some((r) => r.tipo === 'inicio' && r.id === id)) return; // retomada do mesmo agente
+    if (regs.some((r) => r.tipo === 'inicio' && r.id === id)) { // retomada do mesmo agente: volta ao painel e pode ter novo fim
+      if (regs.some((r) => r.tipo === 'fim' && r.id === id)) { R.acrescentar(arq, { em: iso(agora), tipo: 'retomada', id, agente }); soltarFim(cwd, id); }
+      return;
+    }
     // Código, em ordem de certeza: o .meta.json do agente (descrição e tool_use_id dele), o par do PostToolUse, e só
     // então o pedido mais antigo do mesmo tipo (palpite, marcado provisório). Na 2.1.302 o .meta.json ainda não existe
     // aqui (só no fim), então em primeiro plano vale o palpite até o PostToolUse ou o SubagentStop corrigirem.
@@ -78,6 +82,8 @@ function tratar(d) {
     } else if (lancado) fonte = lancado;
     else { fonte = pedidoLivre(regs, agente, null, agora) || {}; provisorio = true; }
     const linha = { em: iso(agora), tipo: 'inicio', id, agente, cod: fonte.cod || null, classe: fonte.classe || 'outra', ref: fonte.ref || null, sessao: d.session_id || null };
+    // Só o caminho (arquivo local, fora do git): a data de escrita da transcrição é o sinal de vida do painel.
+    if (d.transcript_path) linha.tr = path.join(String(d.transcript_path).replace(/\.jsonl$/, ''), 'subagents', `agent-${id}.jsonl`);
     if (provisorio) linha.provisorio = true;
     R.acrescentar(arq, linha);
     return;
@@ -85,7 +91,17 @@ function tratar(d) {
 
   if (ev === 'SubagentStop') {
     const regs = R.lerJsonl(arq);
-    if (regs.some((r) => r.tipo === 'fim' && r.id === id)) return; // o SubagentStop chega 2 vezes para o mesmo agente
+    // O SubagentStop chega 2 vezes para o mesmo agente; um fim depois de uma retomada é outro fim. Retomado sem aviso de
+    // início (SendMessage): a transcrição cresceu depois do fim registrado, então este também é outro fim.
+    const fimAnt = regs.filter((r) => r.tipo === 'fim' && r.id === id).pop();
+    if (fimAnt) {
+      const tAnt = Date.parse(fimAnt.em);
+      const retomou = regs.some((r) => r.tipo === 'retomada' && r.id === id && Date.parse(r.em) > tAnt);
+      let cresceu = false;
+      try { cresceu = !!d.agent_transcript_path && agora - tAnt > 60000 && fs.statSync(d.agent_transcript_path).mtimeMs > tAnt + 60000; } catch (e) { /* sem arquivo */ }
+      if (!retomou && !cresceu) return;
+      soltarFim(cwd, id);
+    }
     if (!travarFim(cwd, id)) return; // as 2 chamadas podem chegar ao mesmo tempo: só a que cria a trava segue
     const ini = regs.find((r) => r.tipo === 'inicio' && r.id === id) || {};
     const lig = R.ligacao(regs, id);
@@ -144,8 +160,10 @@ function placarDoRevisor(cwd, agente, id, msg, cauda) {
 
 // Trava do fim de um agente: criar o arquivo com "wx" é atômico, então só uma das chamadas repetidas segue. Travas de
 // mais de 1 dia são apagadas de vez em quando (pasta .claude/base/.fins/, fora do git).
+function soltarFim(cwd, id) {
+  try { fs.rmSync(path.join(R.base(cwd), '.fins', id.replace(/[^\w-]/g, '_')), { force: true }); } catch (e) { /* sem trava */ }
+}
 function travarFim(cwd, id) {
-  const fs = require('fs');
   const dir = path.join(R.base(cwd), '.fins');
   try {
     fs.mkdirSync(dir, { recursive: true });

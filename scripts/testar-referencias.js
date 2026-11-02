@@ -9,6 +9,8 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const ler = (...p) => { try { return fs.readFileSync(path.join(RAIZ, ...p), 'utf8'); } catch (e) { return ''; } };
   const existe = (...p) => fs.existsSync(path.join(RAIZ, ...p));
 
+  try { require('./testar-painel.js')({ caso, tmp, RAIZ, hook }); } catch (e) { caso('painel: scripts/testar-painel.js roda', false, e.message); }
+
   // ---- Lote 0 · infraestrutura ----
   // T31 checar-ferramenta: confere e nunca instala; roda de uma pasta com espaço e acento no caminho.
   const pastaEsp = path.join(tmp, 'pasta com espaço ação'); fs.mkdirSync(pastaEsp, { recursive: true });

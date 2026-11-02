@@ -81,6 +81,14 @@ falhando antes.
 - **Prova visual do design** (`docs/provas/0.8.0-design/`): "redesenhe meu app com visual premium" e "um card com efeito
   vidro estilo Apple", com o designer e o engenheiro de verdade; 2 páginas com dados fictícios, 8 PNGs (claro e escuro, 1440
   e 390 px) e a lista das referências que cada agente leu. O `LEIA-ME.md` diz o que não saiu limpo.
+- **Correção do painel "Agentes agora" (defeito achado pelo usuário):**
+  - o sinal de vida passa a ser a data de escrita da transcrição do agente (só a data; o início guarda o caminho, em
+    arquivo local fora do git): agente ativo não vira "sem notícia" nem sai do painel, nem depois de 12 h;
+  - agente retomado volta sozinho: linha `retomada` quando há novo `SubagentStart`, ou transcrição que cresceu depois do
+    fim; ele pode ter um segundo fim;
+  - parado sem fim (erro de API) vira "sem notícia" 30 min depois da última escrita, em vez de ficar vivo até vencer;
+  - progresso sem o código exato (`<agente>-*.json`) só vale com um único agente vivo daquele tipo;
+  - sem faixa registrada e sem progresso: "sem previsão", sem % estimado pelo histórico.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
