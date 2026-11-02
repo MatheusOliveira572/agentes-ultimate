@@ -1,24 +1,114 @@
 {
   "_como_usar": "Casos do scripts/eval-roteamento.js contra o roteador real. pacote = o que deve vir em 1º; nao = os que não podem vir em 1º. Caso que falha mostra palavra faltando ou ambígua: corrija pelo assunto, não só para passar.",
   "casos": [
-    { "pedido": "crie a medida DAX de margem no Power BI e ajuste o dashboard", "pacote": "bi" },
-    { "pedido": "monte o relatório interativo no power bi com segmentação por centro de custo", "pacote": "bi" },
-    { "pedido": "corrija o bug no script python que lê a planilha", "pacote": "software" },
-    { "pedido": "refatorar o código da api e rodar os testes", "pacote": "software" },
-    { "pedido": "redesenhe a tela do aplicativo com visual premium", "pacote": "interface" },
-    { "pedido": "faça a landing page com animação e formulário em react", "pacote": "sites" },
-    { "pedido": "escreva o manual do usuário em PDF para a diretoria", "pacote": "documentos" },
-    { "pedido": "monte a descrição da vaga e o roteiro de entrevista estruturada", "pacote": "pessoas" },
-    { "pedido": "revise a cláusula de limitação de responsabilidade do contrato com o fornecedor", "pacote": "juridico" },
-    { "pedido": "qual o impacto da reforma tributária no crédito de PIS COFINS", "pacote": "contabil" },
-    { "pedido": "projete o fluxo de caixa de 13 semanas e a necessidade de capital de giro", "pacote": "financas" },
-    { "pedido": "vai me mostrar os resultados desses testes, glass effect", "nao": ["software"] },
-    { "pedido": "esses pedidos foram para o plugin, não para o nosso BI", "nao": ["bi"] },
-    { "pedido": "um visual novo para o cartão", "nao": ["bi"] },
-    { "pedido": "qual o melhor plano e os dados do processo", "nao": ["bi", "software", "operacoes"] },
-    { "pedido": "plano de lançamento do produto com campanha nas redes sociais", "pacote": "marketing" },
-    { "pedido": "qual a estratégia de expansão e o posicionamento competitivo da empresa", "pacote": "estrategia" },
-    { "pedido": "faça o inventário de emissões de gases de efeito estufa no relatório ESG", "pacote": "esg" },
-    { "pedido": "avalie os riscos de compliance e o canal de denúncias", "pacote": "compliance" }
+    {
+      "pedido": "crie a medida DAX de margem no Power BI e ajuste o dashboard",
+      "pacote": "bi"
+    },
+    {
+      "pedido": "monte o relatório interativo no power bi com segmentação por centro de custo",
+      "pacote": "bi"
+    },
+    {
+      "pedido": "corrija o bug no script python que lê a planilha",
+      "pacote": "software"
+    },
+    {
+      "pedido": "refatorar o código da api e rodar os testes",
+      "pacote": "software"
+    },
+    {
+      "pedido": "redesenhe a tela do aplicativo com visual premium",
+      "pacote": "interface"
+    },
+    {
+      "pedido": "faça a landing page com animação e formulário em react",
+      "pacote": "sites"
+    },
+    {
+      "pedido": "escreva o manual do usuário em PDF para a diretoria",
+      "pacote": "documentos"
+    },
+    {
+      "pedido": "monte a descrição da vaga e o roteiro de entrevista estruturada",
+      "pacote": "pessoas"
+    },
+    {
+      "pedido": "revise a cláusula de limitação de responsabilidade do contrato com o fornecedor",
+      "pacote": "juridico"
+    },
+    {
+      "pedido": "qual o impacto da reforma tributária no crédito de PIS COFINS",
+      "pacote": "contabil"
+    },
+    {
+      "pedido": "projete o fluxo de caixa de 13 semanas e a necessidade de capital de giro",
+      "pacote": "financas"
+    },
+    {
+      "pedido": "vai me mostrar os resultados desses testes, glass effect",
+      "nao": [
+        "software"
+      ]
+    },
+    {
+      "pedido": "esses pedidos foram para o plugin, não para o nosso BI",
+      "nao": [
+        "bi"
+      ]
+    },
+    {
+      "pedido": "um visual novo para o cartão",
+      "nao": [
+        "bi"
+      ]
+    },
+    {
+      "pedido": "qual o melhor plano e os dados do processo",
+      "nao": [
+        "bi",
+        "software",
+        "operacoes"
+      ]
+    },
+    {
+      "pedido": "plano de lançamento do produto com campanha nas redes sociais",
+      "pacote": "marketing"
+    },
+    {
+      "pedido": "qual a estratégia de expansão e o posicionamento competitivo da empresa",
+      "pacote": "estrategia"
+    },
+    {
+      "pedido": "faça o inventário de emissões de gases de efeito estufa no relatório ESG",
+      "pacote": "esg"
+    },
+    {
+      "pedido": "avalie os riscos de compliance e o canal de denúncias",
+      "pacote": "compliance"
+    },
+    {
+      "pedido": "por exemplo, se eu pedir para ele redesenhar um app com visual premium, ou um site algo assim, ele vai suar todas as skills e pluguin necessários para fazer sme eu precisar ficar pedindo, né?",
+      "nao": [
+        "bi"
+      ]
+    },
+    {
+      "pedido": "vc vai me mostrar os resuldos desses testes, quando eu pedir um design mais aplle, tipo glass effect ele será capaz de fazer?",
+      "nao": [
+        "software",
+        "bi"
+      ]
+    },
+    {
+      "pedido": "vc entendeu que esses ultimos pedidos foram para o plugin, né, não para o nosso BI",
+      "nao": [
+        "bi"
+      ]
+    },
+    {
+      "pedido": "redesenhe a tela de tarefas do meu aplicativo com visual premium",
+      "pacote": "interface"
+    }
   ]
 }
