@@ -121,6 +121,11 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   qA4 = comRemoto(); depois('git status', qA4); muda(qA4); git('git commit -qam s', qA4);
   dA4 = depois('git commit -am s', qA4);
   caso('0.8.0 A-4 trava depois: sem push, continua "desfaça antes do push"', /Desfaça ANTES do push/.test(dA4.out), dA4.out);
+  // b-13 (4ª rodada): push para caminho, sem ramo de rastreio → "pode já ter sido publicado", nunca "Desfaça ANTES do push".
+  const qB13 = repo(); const nuB13 = path.join(tmp, 'nu-b13-' + (++n)); git('git init -q --bare "' + nuB13 + '"', tmp);
+  depois('git status', qB13); muda(qB13); git('git commit -qam s', qB13); git('git push -q "' + nuB13 + '" HEAD:main', qB13);
+  const dB13 = depois('git commit -am s && git push "' + nuB13.split(path.sep).join('/') + '" HEAD:main', qB13);
+  caso('0.8.0 b-13 trava depois: push para caminho sem rastreio → "pode já ter sido publicado", não "Desfaça ANTES do push"', /pode já ter sido publicado/.test(dB13.out) && !/Desfaça ANTES do push/.test(dB13.out), dB13.out);
   // ---- B-2 (3ª rodada): nenhum git roda fora da pasta da sessão; dentro, as opções desligam o que a configuração executaria ----
   const montarX = (onde) => {
     const p = path.join(onde, 'projeto-baixado-' + (++n)); fs.mkdirSync(p, { recursive: true });

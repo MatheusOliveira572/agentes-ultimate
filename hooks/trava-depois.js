@@ -48,8 +48,11 @@ process.stdin.on('end', () => {
         // O commit já está num remoto? (o push pode ter rodado no mesmo comando)
         let remotos = '';
         try { remotos = git(['branch', '-r', '--contains', pedidos[0].ate], pedidos[0].cwd); } catch (e) { /* sem remoto */ }
+        // Sem ramo de rastreio que contenha o commit, mas com push no comando (para caminho ou URL): pode já ter saído.
+        const comPush = /\bgit\b[\s\S]*\bpush\b/i.test(String((d.tool_input || {}).command || '').replace(/['"\\`^]/g, ''));
         msg = `agentes-ultimate: ATENÇÃO, o commit novo tem o que parece segredo ou arquivo sensível (o valor não é mostrado):\n  ${lista.join('\n  ')}\n` +
           (remotos ? `Já foi publicado (${remotos.split(/\s+/).filter(Boolean).slice(0, 3).join(', ')}): troque a chave agora (crie a nova, ponha no ar, revogue a antiga e prove que a antiga falha). Desfazer o commit aqui não tira do remoto; limpar o histórico de lá é com quem cuida do repositório.`
+            : comPush ? 'Este comando teve push: o commit pode já ter sido publicado. Troque a chave agora (crie a nova, ponha no ar, revogue a antiga e prove que a antiga falha) e, se não saiu, desfaça o commit antes de outro push.'
             : `Desfaça ANTES do push: \`git reset --soft ${volta}\`, tire o valor do arquivo, prepare de novo e faça o commit. Não publique. Se já saiu desta máquina, troque o segredo.`);
       } else if (!r || r.incompleta) msg = `agentes-ultimate: não deu para conferir o commit novo (${motivo || 'grande demais'}). A barreira do push lê de novo; confira antes de publicar.`;
       if (msg) process.stdout.write(JSON.stringify({ decision: 'block', reason: msg, systemMessage: msg }));
