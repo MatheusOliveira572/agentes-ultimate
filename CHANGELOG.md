@@ -456,7 +456,10 @@ em qualquer mundo.
   usa o modelo) e `modelos/tiras/` (tiras com relógio controlado e análise de curva: salto, parada seca, recuo, degrau).
 - **Agentes:** os 4 designers provam com capturas a 2× e tiras e têm o nível HD no critério; o revisor abre as tiras (tira
   ausente ou curva reprovada = achado). 17 casos novos em `testar-impressionar.js`.
-- **Provas em WebP:** capturas de `docs/provas/0.8.0-design/` convertidas e só as citadas mantidas.
+- **Proposta aplicada:** `vitrine/proposta-padrao-hd.md` saiu da prova (continua no histórico do git); os LEIA-MEs citam
+  `nivel-hd.md`.
+- **Provas em WebP:** 39 capturas de `docs/provas/0.8.0-design/` (e2e e vitrine) convertidas por `scripts/comprimir-provas.js`
+  (74,7 MB → 5,7 MB) e 10 sem citação apagadas; citações trocadas para `.webp`. O repositório passou de 97,0 MB para 14,6 MB.
 
 ### Revisão final antes de publicar (`docs/historico/revisao-0.8.0-final.md`)
 - **A-1:** versão 0.8.0 no `plugin.json` (sem subir o número, quem tem a 0.7.0 não recebe a nova).
