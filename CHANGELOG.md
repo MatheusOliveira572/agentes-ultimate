@@ -134,6 +134,35 @@ falhando antes.
 - **B10 · skill `integracoes` e README:** por ferramenta, o que faz, que dado sai, como ligar, como desligar e o risco. O plugin não instala nada.
 - **B11 · T1 detector de interface** (`ferramentas/detector-interface/detector.js`, 18 regras, texto nosso): no commit usado, o detector do impeccable é em Rust,
   então só a ideia veio. Desligado por padrão; liga pelo `verificador`.
+- **Revisão da parte A, 2ª rodada: a trava muda de desenho** (`docs/revisao-0.8.0-parteA.md`; foram 2 correções do leitor de comando sem
+  sucesso, então parei de remendar). A trava não tenta mais prever o que um comando vai preparar:
+  - **B-1:** a trava nunca executa texto do comando. `hooks/leitor-segredos.js` só chama o git com `execFile`, sem shell, com os caminhos
+    depois de `--` e `-c core.fsmonitor=false`, `--no-ext-diff`, `--no-textconv`. Commit em outra pasta pergunta, porque rodar git que lê
+    a pasta de trabalho de outro repositório antes da permissão usaria a configuração dele (filtros do git executam programa). Prova: 6 formas
+    de injeção não criam o arquivo; no `claude -p` real, com a ferramenta negada, o `INJETADO.txt` não foi criado;
+  - **antes do comando:** uma lista curta de formas lidas com certeza (`cd` literal na pasta da sessão, `git add` com `-A`/`-u`/caminhos,
+    `git commit` com as opções comuns, mensagem em heredoc com aspas, saída redirecionada, `| tail`, `; if ($?) { }` do PowerShell). Com a
+    palavra `commit` em qualquer outra forma (`eval`, alias, `xargs`, `VAR=x`, `bash -c`, palavra partida por aspas), lê o que já está
+    preparado, bloqueia segredo de alta certeza e **pergunta**. Isso fecha A-2 e o resto do A-1;
+  - **depois do comando** (`hooks/trava-depois.js`, PostToolUse de Bash e PowerShell): HEAD mudou e o commit novo tem segredo → aviso em
+    destaque com `git reset --soft <anterior>` antes do push. No `claude -p` real, `git ci -am x` com alias antigo gerou o aviso;
+  - **antes do push:** lê os commits que ainda não foram para o remoto; segredo de alta certeza bloqueia, antes da pergunta de publicar;
+  - **A-3:** `core.quotepath=false`, `-z` nas listas de nomes e nome entre aspas do diff desfeito; arquivo que não abre pergunta;
+  - **M-1:** a leitura roda num processo filho com prazo de 7 s; venceu, pergunta. Nunca libera calado;
+  - **M-5:** casos para número da linha, `add -u`, `add -f`, heredoc da mensagem, prazo e estouro do buffer. **b-1:** `aws_secret_access_key`
+    com ou sem aspas bloqueia (a chave de exemplo da AWS passa); `api_key=` minúsculo sem aspas pergunta. **b-8:** senha com barra invertida,
+    `localhost.empresa.com` e "localhost" em outro ponto da linha voltam a bloquear;
+  - **prova:** `scripts/testar-travas-formas.js` roda as 43 formas do revisor e mais 4, de verdade, no Git Bash e no PowerShell. Código
+    anterior: 29 levaram o segredo sem pergunta (as 28 do revisor e a palavra partida por aspas). Código novo: 0; 19 levam o segredo só
+    depois de uma pergunta respondida (16) ou em limite declarado (3, sem a palavra commit: alias antigo, script, palavra montada em variável),
+    e todas as 19 avisam depois do comando e barram no push. As 17 formas simples sem segredo nunca perguntam e o commit acontece;
+  - **limite:** script, alias antigo ou palavra montada não são vistos antes de rodar; só depois e no push. Git hook no repositório do usuário
+    não entra (mexe na configuração de cada projeto).
+- **Revisão da parte A, b-9:** o detector de `windowsHide` lê o código sem comentários nem textos, recusa `windowsHide: false`, acha
+  `cp.exec(`, `require('child_process').exec(` e função renomeada, acusa parêntese sem fechar e só olha arquivo que usa `child_process`.
+  Passa a olhar `ferramentas/` e `modelos/`; as 6 chamadas do `ferramentas/teardown` ganharam a opção (alteração marcada no LEIA-ME).
+- **Revisão da parte A, b-6:** o `engenheiro-software` volta a ter os campos do log de segurança (passo 8 do método, com o S-12), que é o que
+  o caso 8 do eval cobra.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

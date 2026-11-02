@@ -63,9 +63,16 @@ defeito que você achou ─► regra automática no verificador do projeto (prov
 
 | Situação | O que acontece |
 |---|---|
-| `git push`, `npm publish`, deploy de produção | pede a sua confirmação |
-| commit com `.env`, chaves, credenciais ou padrões de `.claude/base/sensiveis.txt` | bloqueia, com o motivo |
+| `npm publish`, deploy de produção | pede a sua confirmação |
+| `git push` | lê os commits que ainda não foram para o remoto: segredo de alta certeza bloqueia; o resto pede a sua confirmação |
+| commit em forma lida com certeza (`cd` literal na pasta da sessão, `git add`, `git commit`, saída redirecionada, `\| tail`) | lê o que ele leva: `.env`, chaves, padrões de `sensiveis.txt` e segredo de alta certeza bloqueiam; média certeza pergunta; limpo, nunca pergunta |
+| a palavra `commit` em qualquer outra forma (`eval`, alias, `xargs`, `VAR=x`, outra pasta) | lê o que já está preparado e pergunta, sem adivinhar |
+| leitura que passa de 7 s, ou erro nela | pergunta; nunca libera calado |
+| depois de Bash ou PowerShell, se o HEAD mudou (`hooks/trava-depois.js`) | lê o commit novo e, com segredo, avisa com a instrução de desfazer antes do push |
 | heredoc gravando script com barra invertida | bloqueia (o arquivo sairia estragado) |
+
+A trava nunca executa texto do comando (`hooks/leitor-segredos.js`: só o git, sem shell, em processo filho com prazo) e não roda git que
+leia a pasta de trabalho de outro repositório antes da sua permissão: a configuração dele poderia executar programa. A tabela de formas está em `scripts/testar-travas-formas.js`.
 
 ## 6. Estimativa, barra e placar (0.7.0)
 
