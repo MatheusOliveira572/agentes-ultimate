@@ -191,6 +191,17 @@ context7, 21st, strix, semgrep, Chrome DevTools MCP e o detector de interface s�
   de cada agente pela tarefa, pela tabela da skill `ultimate` §1b (revisão nunca abaixo de opus/high). Vale também
   `"true"`/`"false"` em texto. Sem a chave, nada muda.
 
+## Vigia das fontes de terceiros
+
+Uma vez por semana, no início de uma sessão e em segundo plano (sem atrasar a abertura, sem janela), o plugin confere se os
+projetos de `fontes/fontes.json` mudaram desde a versão usada: no GitHub, pela API pública, sem token (commits, releases,
+licença e os arquivos que usamos); na HIG da Apple, a assinatura do índice público. Mudou: aparece "N fontes mudaram desde a sua
+versão; rode /atualizar-fontes". A skill mostra o que mudou, para se a licença mudou, propõe o que trazer e só aplica com o seu OK.
+Nada é instalado nem executado da fonte; da Apple nada é copiado (roda só o teste de equivalência). Sem rede ou com filtro: silêncio,
+tenta de novo na semana seguinte. Desligar: `"vigia_fontes": false` em `~/.claude/agentes-ultimate/config.json` ou no
+`.claude/base/config.json` do projeto. Limite: a assinatura da HIG cobre a lista de páginas e os resumos, não o texto inteiro de
+cada página.
+
 ## Desligar num projeto
 
 Crie o arquivo `.claude/base/desligado` na pasta do projeto, ou defina `AGENTES_ULTIMATE_SEM_PASTA=1`. A base nunca

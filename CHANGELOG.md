@@ -183,6 +183,12 @@ falhando antes.
   - **Declarados, sem correção** (decisão do usuário, no README): UTF-16 (M-8), formas pouco comuns que perguntam (M-9), prazo em
     repositório grande (M-11), `com$'mit'` (b-10), `SessionEnd` cancelado no `claude -p` (b-11), cerca de 0,4 s por comando (b-12), além
     de script, alias e palavra montada.
+- **Vigia das fontes (vf91):** desligável por `"vigia_fontes": false` (config do usuário ou do projeto); prazo total de 60 s no
+  processo de segundo plano; aviso "N fontes mudaram desde a sua versão; rode /atualizar-fontes"; a HIG da Apple entra em `paginas`
+  do registro (assinatura do índice público; nada copiado); `--diff <dono/repo>` mostra o patch só dos arquivos que usamos, como dado;
+  licença que muda, mesmo para outra permissiva, faz parar. O teste de equivalência Apple virou `scripts/equivalencia-apple.js`. A skill
+  `/atualizar-fontes` ganhou o passo do diff, a parada por licença, "nunca instale nem rode nada da fonte" e o caminho da Apple.
+  Prova ao vivo (API pública, sem token): 3 das 10 fontes mudaram desde o commit usado (emilkowalski, jakubkrehel, context7), 12 s.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
