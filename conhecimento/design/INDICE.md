@@ -18,10 +18,11 @@ Ordem de quem manda: marca e decisões do projeto → norma (WCAG) → referênc
 | ilustração técnica (vista explodida, corte) | `../documentos/ilustracao-tecnica.md` |
 | pedido amplo (redesenhar, app, site, visual premium): o método inteiro | `metodo.md` |
 | planejar a tela antes do código (o brief) | `planejar-tela.md` |
-| tela ou página nova: escolher o mundo visual | `tela-nova/INDICE.md` |
+| tela ou página nova: escolher o mundo visual | `tela-nova/INDICE.md`, `mundos/INDICE.md` |
+| mundos visuais (Apple, editorial, suíço, quente, escuro técnico, lúdico, luxo, brutalista, corporativo, retrô) | `mundos/INDICE.md` |
 | painel, app de gestão, tela de tarefa | `modos/operar.md` |
 | gráfico e dado | `visualizacao.md`, `apple/graficos.md` |
-| estilo Apple, HIG, vidro (Liquid Glass) | `apple/INDICE.md`, `apple/materiais.md` |
+| estilo Apple, HIG, vidro (Liquid Glass): só no mundo Apple ou a pedido | `apple/INDICE.md`, `apple/materiais.md` |
 | animação, transição, curva, duração | `movimento/INDICE.md` |
 | raio, sombra, ícone, alinhamento óptico | `detalhes-interface.md` |
 | texto variável, vazio, mil linhas: quebrar com dado plausível | `pior-caso.md` |

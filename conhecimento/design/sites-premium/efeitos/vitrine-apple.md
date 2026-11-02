@@ -1,10 +1,12 @@
-<!-- Texto próprio do agentes-ultimate, a partir do pedido do usuário de 2026-11-02 e da prova pv94 (docs/provas/0.8.0-design/e2e/): técnica descrita em palavras, nada copiado. -->
+<!-- Texto próprio do agentes-ultimate, a partir do pedido de 2026-11-02 e da prova pv94 (docs/provas/0.8.0-design/e2e/): técnica descrita em palavras, nada copiado. Receita do mundo Apple, não padrão do plugin. -->
 <!-- ref: tema=efeito-vitrine-apple; palavras=vitrine apple, cara de apple na landing, 3d e revelacao ao rolar, revelacao ao rolar, liquid glass na landing, landing com 3d; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=quero a landing com cara de apple, liquid glass, 3d e revelação ao rolar | faça a vitrine apple da página do produto; nao=monte a escala de plantão da equipe -->
 # H. Vitrine Apple: Liquid Glass + 3D + revelação ao rolar, numa ideia só
 
-Padrão de landing do plugin: **3D e revelação ao rolar entram por padrão**, dentro dos limites abaixo (usuário, 2026-11-02: "cara de Apple", "glass da Apple", "efeitos 3D e coisas aparecendo ao
-rolar", "uma junção, pensada, sem sopa de letrinhas"). Não é lista de compras: os 3 servem à **mesma ideia** do produto.
+Receita do **mundo Apple** (`../../mundos/apple-liquid-glass.md`) na landing; não é o padrão do plugin. O mundo vem do
+briefing e da marca (`../../mundos/INDICE.md`). Em qualquer mundo, **3D e revelação ao rolar** são camada de impacto
+**quando o mundo e a ideia pedem**, com os limites abaixo; o **vidro** só no mundo Apple ou quando pedido. Não é lista de
+compras: o que entra serve à **mesma ideia** do produto.
 
 ## Como costurar
 1. Escreva a ideia numa frase e escolha **o dominante** (o que fica na memória). Os outros dois apoiam.

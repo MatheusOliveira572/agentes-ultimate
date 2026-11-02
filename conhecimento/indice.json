@@ -47,17 +47,8 @@
         "iphone",
         "ipad",
         "mac",
-        "visual premium",
-        "app premium",
-        "redesenhe",
-        "redesenho",
-        "app",
-        "aplicativo",
         "liquid glass",
-        "efeito vidro",
-        "site institucional",
-        "site bonito",
-        "bonito"
+        "efeito vidro"
       ],
       "agentes": [
         "designer-interface",
@@ -753,6 +744,339 @@
         ],
         "nao": [
           "calcule o ponto de equilíbrio do produto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/INDICE.md",
+      "tema": "mundos-visuais",
+      "palavras": [
+        "mundo visual",
+        "estilo visual",
+        "direcao visual",
+        "linguagem visual",
+        "qual estilo",
+        "que estilo",
+        "visual premium",
+        "premium",
+        "site premium",
+        "app premium",
+        "redesenhe",
+        "redesenho",
+        "site institucional",
+        "site bonito",
+        "bonito"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-interface",
+        "designer-paineis",
+        "designer-documentos",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "que estilo visual combina com o meu produto?",
+          "redesenhe meu app com visual premium"
+        ],
+        "nao": [
+          "calcule a depreciação do ativo imobilizado"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/apple-liquid-glass.md",
+      "tema": "mundo-apple",
+      "palavras": [
+        "mundo apple",
+        "cara de apple",
+        "estilo apple",
+        "liquid glass",
+        "vidro da apple",
+        "visual de iphone"
+      ],
+      "agentes": [
+        "designer-interface",
+        "designer-sites",
+        "designer-paineis",
+        "designer-documentos",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero o app com cara de Apple e Liquid Glass",
+          "use o mundo Apple com vidro da Apple na barra"
+        ],
+        "nao": [
+          "monte o fluxo de caixa do trimestre"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/brutalista.md",
+      "tema": "mundo-brutalista",
+      "palavras": [
+        "brutalista",
+        "brutalismo",
+        "neo brutalismo",
+        "neobrutalismo",
+        "visual cru",
+        "estetica crua",
+        "anti design"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-interface",
+        "designer-documentos",
+        "designer-paineis",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero o portfólio da agência brutalista, cru e direto",
+          "faça a landing do festival com neobrutalismo"
+        ],
+        "nao": [
+          "monte a matriz de riscos do projeto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/corporativo-confianca.md",
+      "tema": "mundo-corporativo-confianca",
+      "palavras": [
+        "corporativo de confianca",
+        "visual corporativo",
+        "passar confianca",
+        "visual de banco",
+        "visual de saude",
+        "servico publico",
+        "visual institucional serio"
+      ],
+      "agentes": [
+        "designer-paineis",
+        "designer-interface",
+        "designer-sites",
+        "designer-documentos",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "o app do banco precisa passar confiança, visual corporativo premium",
+          "faça o portal do serviço público com visual institucional sério"
+        ],
+        "nao": [
+          "escreva o roteiro do vídeo de lançamento"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/editorial.md",
+      "tema": "mundo-editorial",
+      "palavras": [
+        "estilo editorial",
+        "visual editorial",
+        "mundo editorial",
+        "cara de revista",
+        "layout de revista",
+        "serifa de exibicao",
+        "ensaio visual"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-documentos",
+        "designer-interface",
+        "designer-paineis",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero o site no estilo editorial, com cara de revista",
+          "faça o relatório anual com visual editorial e serifa de exibição"
+        ],
+        "nao": [
+          "revise o contrato de locação"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/escuro-tecnico.md",
+      "tema": "mundo-escuro-tecnico",
+      "palavras": [
+        "escuro tecnico",
+        "visual de dev tool",
+        "ferramenta de desenvolvedor",
+        "estilo terminal",
+        "fonte mono",
+        "visual tecnico escuro",
+        "cara de linear",
+        "cara de vercel"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-interface",
+        "designer-paineis",
+        "designer-documentos",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero a landing da API com visual de dev tool, escuro técnico e fonte mono",
+          "faça o painel de logs com cara de Vercel"
+        ],
+        "nao": [
+          "redija o comunicado de férias coletivas"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/ludico.md",
+      "tema": "mundo-ludico",
+      "palavras": [
+        "ludico",
+        "visual ludico",
+        "divertido",
+        "arredondado",
+        "cores vivas",
+        "formas moles",
+        "visual amigavel",
+        "mola com quique",
+        "expressivo"
+      ],
+      "agentes": [
+        "designer-interface",
+        "designer-sites",
+        "designer-paineis",
+        "designer-documentos",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero o app de estudos lúdico, arredondado e com cores vivas",
+          "faça a landing divertida com formas moles e mola com quique"
+        ],
+        "nao": [
+          "prepare a auditoria de controles internos"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/luxo-sobrio.md",
+      "tema": "mundo-luxo-sobrio",
+      "palavras": [
+        "luxo sobrio",
+        "visual de luxo",
+        "alto padrao",
+        "sofisticado",
+        "elegante",
+        "serifa fina",
+        "preto e marfim",
+        "minimalista sofisticado"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-documentos",
+        "designer-interface",
+        "designer-paineis",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero o site do hotel com visual de luxo sóbrio, preto e marfim",
+          "faça a página da joalheria com serifa fina e cara de alto padrão"
+        ],
+        "nao": [
+          "corrija o teste unitário que falha"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/quente-tatil.md",
+      "tema": "mundo-quente-tatil",
+      "palavras": [
+        "quente e tatil",
+        "visual tatil",
+        "visual quente",
+        "cores terrosas",
+        "textura de papel",
+        "grao de papel",
+        "artesanal",
+        "aconchegante"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-interface",
+        "designer-documentos",
+        "designer-paineis",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero um site quente e tátil, com cores terrosas e textura de papel",
+          "o app de receitas precisa de um visual aconchegante e artesanal"
+        ],
+        "nao": [
+          "configure o pipeline de deploy"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/retro-analogico.md",
+      "tema": "mundo-retro-analogico",
+      "palavras": [
+        "retro",
+        "visual retro",
+        "analogico",
+        "visual analogico",
+        "vintage",
+        "nostalgico",
+        "anos 80",
+        "pixel art",
+        "visual de hardware"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-interface",
+        "designer-documentos",
+        "designer-paineis",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero a landing do sintetizador com visual retrô e analógico",
+          "faça o jogo independente com pixel art e cara de anos 80"
+        ],
+        "nao": [
+          "revise a política de privacidade"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/mundos/suico.md",
+      "tema": "mundo-suico",
+      "palavras": [
+        "estilo suico",
+        "design suico",
+        "estilo tipografico internacional",
+        "tipografico rigoroso",
+        "grade rigorosa",
+        "modernista",
+        "grade modular"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-paineis",
+        "designer-documentos",
+        "designer-interface",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "quero o painel no estilo suíço, com grade rigorosa",
+          "faça a apresentação com design suíço e grade modular"
+        ],
+        "nao": [
+          "calcule o imposto de renda da folha"
         ]
       }
     },

@@ -5,10 +5,11 @@
 
 1. **Brief primeiro** (`../planejar-tela.md`): modo, público, ação principal, conteúdo real.
 2. **Preservar, expandir ou substituir** o mundo visual que já existe (a falta de especificação não torna o projeto "do
-   zero": olhe o que já está no ar e na marca).
-3. **Três opções de composição** (o "comp"), diferentes de verdade num eixo (estrutura, densidade, ênfase, tipo ou voz;
-   `../variantes.md`), cada uma com o material real e no piso de qualidade (`../piso-de-qualidade.md`). Não escolha pelo
-   usuário.
+   zero": olhe o que já está no ar, na marca e em `PROJETO.md` › "Gosto visual"). Sem mundo decidido, escolha 2 ou 3
+   candidatos em `../mundos/INDICE.md` (nenhum é o padrão), cada um com o porquê vindo do produto.
+3. **Três opções de composição** (o "comp"), diferentes de verdade num eixo (mundo, estrutura, densidade, ênfase, tipo
+   ou voz; `../variantes.md`), cada uma com o material real, no piso de qualidade (`../piso-de-qualidade.md`) e no nível
+   do mundo dela (`../impressionar.md`). Não escolha pelo usuário.
 4. **Um ponto de aprovação só:** o usuário escolhe uma (ou combina com motivo). Sem rodadas infinitas de "mais uma".
 5. **Depois da aprovação, o comp vira especificação:** medidas, tokens, estados e comportamento escritos; o que o comp
    não mostrou é decisão em aberto, não invenção de quem constrói.
