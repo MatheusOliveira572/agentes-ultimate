@@ -192,7 +192,7 @@
   },
   {
    "nome": "rótulo da curva em cima de outro texto",
-   "pegou": false
+   "pegou": true
   },
   {
    "nome": "foco invisível",
@@ -227,11 +227,11 @@
    "pegou": true
   },
   {
-   "nome": "tábua de preços sem empilhar (768 px)",
-   "pegou": false
+   "nome": "tábua de preços sem empilhar (320 px)",
+   "pegou": true
   }
  ],
- "gerado_em": "2026-11-02T07:55:15.396Z",
+ "gerado_em": "2026-11-02T08:09:49.384Z",
  "navegador": "Edg/156.0.4314.58",
  "condicao": "Edge sem interface, uma máquina Windows; imagens renderizadas sem aparelho real",
  "efeitos": [
