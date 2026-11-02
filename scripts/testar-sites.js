@@ -407,7 +407,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   const pac = JSON.parse(ler('pacotes', 'pacotes.json') || '{"pacotes":{}}');
   const comAg = Object.values(pac.pacotes).filter((p) => p.agentes.includes('designer-sites'));
   caso('0.8.0 sites pacote: designer-sites num pacote com "landing page" e "site institucional" como expressões, fora do pacote de interface',
-    comAg.length === 1 && ['landing page', 'pagina de vendas', 'site institucional'].every((w) => comAg[0].palavras.includes(w)) &&
+    comAg.length === 1 && ['landing page', 'uma pagina de vendas', 'site institucional'].every((w) => comAg[0].palavras.includes(w)) &&
     !['landing page', 'site institucional'].some((w) => ((pac.pacotes.interface || {}).palavras || []).includes(w)), JSON.stringify(comAg.map((p) => p.nome)));
   caso('0.8.0 sites A-2: teclado no método e no critério de pronto', /Shift\+Tab/.test(ag.split('## Método de trabalho')[1].split('## Critério')[0]) && /Teclado/.test(ag.split('## Critério de pronto')[1].split('## Erros')[0]) && /Caso \d+ · Teclado/.test(ler('evals', 'designer-sites.md')), 'falta');
   caso('0.8.0 sites M-2: agente e critério proíbem imitar argumento e ordem de referência', /sem imitar os de uma referência/.test(ag) && /nem o argumento e a ordem de um bloco/.test(ag.split('## Critério de pronto')[1].split('## Erros')[0]), 'falta');

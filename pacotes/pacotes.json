@@ -17,8 +17,6 @@
           "landing",
           "homepage",
           "pagina web",
-          "pagina inicial",
-          "pagina de vendas",
           "lp de vendas"
         ],
         "interface": [
@@ -248,7 +246,6 @@
       "palavras": [
         "landing page",
         "landing pages",
-        "pagina de vendas",
         "pagina de captura",
         "pagina de campanha",
         "site institucional",
@@ -291,7 +288,13 @@
         "ux do meu site",
         "ui do site",
         "site com glassmorphism",
-        "site com efeito vidro"
+        "site com efeito vidro",
+        "uma pagina de vendas",
+        "pagina de vendas do meu",
+        "pagina de vendas da minha",
+        "pagina de vendas para",
+        "pagina de vendas do curso",
+        "pagina de vendas do produto"
       ],
       "pares": {
         "_como_usar": "Verbo + artigo opcional + \"novo\" opcional + alvo = 2 pontos (ex.: \"crie um site\", \"refaça a homepage\", \"faça o site novo\"). Verbo sem o alvo logo depois não pontua.",
@@ -337,8 +340,6 @@
           "landing page",
           "homepage",
           "pagina web",
-          "pagina inicial",
-          "pagina de vendas",
           "lp"
         ]
       }
