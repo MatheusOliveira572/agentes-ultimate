@@ -120,7 +120,6 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "construa um site de portfólio para fotógrafo",
     "preciso de um site institucional para a construtora",
     "faça um site one page para o casamento",
-    "site para o meu restaurante com cardápio e reservas",
     "crie uma lp para a black friday",
     "redesenhe o site da escola com um visual mais moderno",
     "monte um site em next.js para a minha consultoria",
@@ -129,8 +128,9 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "crie um site com tailwind e animações suaves para a agência",
     "não é um app: crie o site com react e efeito vidro",
     "não é para o app, faça o site em react com animação",
-    "quero um site moderno para a minha academia",
-    "novo site de vendas"
+    "não quero um app: faça o site da padaria com cardápio",
+    "site para o meu escritório de contabilidade, com formulário de contato",
+    "crie a página inicial do site da clínica"
    ],
    "P": [
     "crie a tela de login do app em react",
@@ -198,7 +198,12 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "melhore a ux do aplicativo de agendamento",
     "crie a interface do sistema de estoque com tailwind",
     "redesenhe a tela de configurações do app",
-    "componente de calendário em react para o app de reservas"
+    "componente de calendário em react para o app de reservas",
+    "crie a tela de login do aplicativo de entregas em react native",
+    "desenhe a tela do carrinho do app de mercado",
+    "refaça a tela de onboarding do app com 3 passos",
+    "melhore a tela do perfil no aplicativo",
+    "não é um site: crie o app de agenda em react"
    ],
    "A": [
     "crie um dashboard para o site",
@@ -293,7 +298,15 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "calcule o ebitda ajustado do trimestre",
     "quais exames admissionais são obrigatórios para motorista",
     "quero um site para aprender inglês",
-    "quero um site para aprender DAX de graça"
+    "quero um site para aprender DAX de graça",
+    "a tela de fechamento do TM1 travou no meio da carga",
+    "mande a tela da nota fiscal rejeitada para o fiscal",
+    "o colaborador não acha a tela do contracheque no portal de RH",
+    "anexe a tela do extrato bancário na conciliação de outubro",
+    "revise a tela de aprovação da ordem de compra no Ariba",
+    "a tela da folha de pagamento mostra horas extras erradas",
+    "explique o que aparece na tela do ponto eletrônico",
+    "o jurídico pediu a tela do processo no portal do tribunal"
    ],
    "X": [
     "site web",
@@ -330,7 +343,17 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "faça a landing page e as telas do app de delivery",
     "faça a tela de importação que lê o arquivo baixado do site do banco",
     "o componente react de tabela quebra quando colo dados do site do IBGE",
-    "crie a tela de login do app com link para o site"
+    "crie a tela de login do app com link para o site",
+    "monte a tela de cadastro do sistema de chamados",
+    "quero um novo site de receitas da minha avó",
+    "preciso de um site moderno para o escritório",
+    "uma página de vendas para o meu curso de excel",
+    "novo site de vendas",
+    "site para o meu restaurante com cardápio e reservas",
+    "quero um site moderno para a minha academia",
+    "faça a página de vendas do meu curso",
+    "monte a página de vendas para o lançamento do ebook",
+    "faça a página de vendas da minha loja de roupas"
    ],
    "NS": [
     "crie o plano e monte o cronograma do projeto",
@@ -369,9 +392,34 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "refaça a página inicial do painel com os kpis do mês",
     "melhore a tela de vendas do dashboard do power bi",
     "a tela do relatório de orçamento demora para carregar no power bi",
-    "crie a medida dax de margem e mostre na tela de resultados"
+    "crie a medida dax de margem e mostre na tela de resultados",
+    "crie a página inicial do relatório de vendas no power bi",
+    "refaça a página de vendas do relatório do power bi com os kpis",
+    "a página de vendas do dashboard não atualiza depois da carga",
+    "monte uma página de vendas no power bi com mapa por região",
+    "na página inicial do painel, troque o cartão de receita",
+    "filtre a página de vendas para a região sul no power bi",
+    "na página de vendas do produto, o gráfico de margem está vazio",
+    "a página de vendas do meu relatório não carrega depois da atualização",
+    "mude a página de vendas para mostrar o realizado do mês",
+    "redesenhe a página inicial do painel administrativo em react com efeito vidro",
+    "crie a página inicial do portal do cliente em react com animação",
+    "melhore a página inicial do dashboard em react com glassmorphism",
+    "refaça a página inicial do painel administrativo com o formulário de contato",
+    "crie a página inicial do painel administrativo com formulário de contato em react",
+    "o site moderno do concorrente tem preço menor, monte a análise de preço",
+    "acesse o novo site de compras do governo e baixe o edital",
+    "cadastre o fornecedor no novo site de compras da empresa",
+    "o novo site de notas fiscais da prefeitura pede certificado digital",
+    "o novo site de reembolso não aceita o recibo do táxi",
+    "o banco lançou um site moderno, mas o extrato continua igual",
+    "procure um site para o meu filho estudar matemática",
+    "qual o site para o meu cadastro no INSS",
+    "indique um site para a minha pesquisa de preços de aço",
+    "a planilha baixada do novo site de câmbio veio com vírgula errada"
    ]
   };
+
 
 
 
