@@ -58,6 +58,13 @@ function testar({ caso, RAIZ }) {
   caso('impressiona: a régua mede o nível, o mundo vem antes (marca/projeto → briefing → 2 ou 3 propostos) e nenhum é o padrão',
     /## O mundo vem antes da régua/.test(im) && /Nenhum mundo é o padrão do plugin/.test(im) && /PROJETO\.md`, seção "Gosto visual"/.test(im) &&
     /propõe 2 ou 3 mundos/.test(im) && /`mundos\/INDICE\.md`/.test(im), 'falta a seção do mundo');
+  // Conferência b-12: nenhuma frase da régua diz que a Apple é o padrão (frase com "Apple" e "padrão" exige "não/nunca/nenhum/nem").
+  const applePadrao = (t) => t.replace(/<!--[^]*?-->/g, '').replace(/\s+/g, ' ').split(/(?<=[.;!?])\s+/)
+    .filter((f) => /apple/i.test(f) && /padr[ãa]o/i.test(f) && !/(^|[^\p{L}])(não|nunca|nenhum|nenhuma|nem)([^\p{L}]|$)/iu.test(f));
+  const mutApple = im.replace('Apple / Liquid Glass é um mundo entre os outros', 'Apple / Liquid Glass é o mundo padrão');
+  caso('conferência b-12: a régua diz que Apple / Liquid Glass é um mundo entre os outros e nenhuma frase a põe como padrão (o mutante é pego)',
+    /Apple \/ Liquid Glass é um mundo entre os outros/.test(im) && !applePadrao(im).length && mutApple !== im && applePadrao(mutApple).length === 1,
+    JSON.stringify(applePadrao(im)).slice(0, 300));
   caso('impressiona: a junção é a combinação do mundo escolhido, sem Apple + vidro como padrão',
     /## A junção \(a combinação do mundo escolhido/.test(im) && /dentro do mundo escolhido/.test(secao(im, 'A junção')) &&
     !/cara de Apple \(tipo do sistema/.test(im) && !/entram \*\*por padrão\*\*/.test(im), 'a junção ainda prende a um estilo');
