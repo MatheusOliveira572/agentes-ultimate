@@ -77,6 +77,10 @@ agente, com a prática documentada e a fonte aberta), com casos de teste própri
 | Software | código, erro, script, testes, segurança | `engenheiro-software`, `testador-qa`, `auditor-seguranca` | Google, Microsoft, Stripe, Spotify |
 | Documentos | apresentação, relatório, PDF, manual, e-mail | `designer-documentos`, `redator` | Duarte, Financial Times, Amazon, Mailchimp |
 
+**Padrão visual:** o padrão é o nível, não um estilo. A régua [impressiona](conhecimento/design/impressionar.md) e o
+[nível HD](conhecimento/design/nivel-hd.md) (mola, continuidade, capturas a 2×, tiras de quadros) valem em qualquer um dos
+[10 mundos visuais](conhecimento/design/mundos/INDICE.md), escolhido pela marca ou pelo briefing; Apple / Liquid Glass é um deles.
+
 Nas áreas reguladas (jurídico, tributário, contábil, trabalhista), o agente cita a lei com o artigo e o link oficial e
 diz quando a decisão precisa de advogado ou contador habilitado. O padrão completo está em
 [docs/padrao-agente.md](docs/padrao-agente.md).
