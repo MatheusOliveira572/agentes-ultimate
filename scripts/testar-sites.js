@@ -17,7 +17,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   fs.writeFileSync(path.join(projS, '.claude', 'base', 'desligado'), '');
   const agentesDe = (pedido) => {
     const t = ctx(rot(pedido, projS));
-    return { t, ag: (t.match(/Agentes indicados[^:]*: ([^.]+)\./) || [])[1] || '' };
+    return { t, ag: (t.match(/(?:Agentes indicados|Candidatos)[^:]*: ([^.]+)\./) || [])[1] || '', refs: (t.match(/Referências para este pedido.*/) || [''])[0] };
   };
   for (const p of ['crie uma landing page para o meu aplicativo', 'faça a página de vendas do curso de investimentos', 'desenhe o site institucional da empresa',
     'crie um site premium para um app de finanças', 'redesenhe o site da clínica']) {
@@ -28,6 +28,28 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const x = agentesDe(p);
     caso(`0.8.0 sites roteador: "${p}" → designer-paineis, sem designer-sites`, /designer-paineis/.test(x.ag) && !/designer-sites/.test(x.ag), x.ag || 'nenhum');
   }
+  // A-1 (revisão): frases do revisor, lendo agentes e referências.
+  const PARA_SITES = ['efeito vidro no site', 'visual premium para o site', 'crie uma página web de contato', 'html e css do site', 'crie o frontend do meu site em react',
+    'melhore a ux do site', 'a interface do meu site está confusa', 'redesign do site', 'site com animação', 'site responsivo com tailwind', 'formulário de contato do site', 'componente do meu site', 'animacao no site',
+    'preciso de um site', 'quero um site para minha clínica', 'melhore o visual do meu site', 'crie um site premium para a minha clínica', 'efeito vidro no meu site',
+    'crie um website para a padaria', 'crie a homepage da loja', 'redesenhe a página inicial do site', 'monte uma lp de vendas'];
+  for (const p of PARA_SITES) {
+    const x = agentesDe(p);
+    caso(`0.8.0 sites A-1: "${p}" → designer-sites, sem designer-paineis, com a biblioteca`, /designer-sites/.test(x.ag) && !/designer-paineis/.test(x.ag) && !/para `agentes-ultimate:designer-paineis`/.test(x.refs) && /sites-premium/.test(x.refs), `${x.ag || 'nenhum'} | ${x.refs.slice(0, 200)}`);
+  }
+  const SEM_DESIGNER = ['o site de vendas caiu', 'abra o novo site do governo', 'confira o preço no site do produto', 'erro no novo site da empresa', 'o site da receita federal saiu do ar hoje', 'publique o site', 'o avião fez um landing de emergência', 'site para minha clínica'];
+  for (const p of SEM_DESIGNER) {
+    const x = agentesDe(p);
+    caso(`0.8.0 sites A-1: "${p}" não chama designer nem entrega referência a designer`, !/designer-/.test(x.ag) && !/designer-/.test(x.refs), `${x.ag} | ${x.refs.slice(0, 200)}`);
+  }
+  const dash = agentesDe('dashboard com kpi de vendas do meu site');
+  caso('0.8.0 sites A-1: pedido de painel não leva a biblioteca de sites', !/sites-premium/.test(dash.refs) && !/designer-sites/.test(dash.ag), dash.refs.slice(0, 200));
+  for (const p of ['faça um card com efeito vidro estilo Apple', 'redesenhe meu app com visual premium', 'melhore a ux do aplicativo']) {
+    const x = agentesDe(p);
+    caso(`0.8.0 sites A-1: "${p}" continua no designer-paineis`, /designer-paineis/.test(x.ag) && !/designer-sites/.test(x.ag), x.ag || 'nenhum');
+  }
+  const css = agentesDe('corrija o css e o html do botão no react');
+  caso('0.8.0 sites A-1: html, css e react sem site vão ao engenheiro, sem designer', /engenheiro-software/.test(css.ag) && !/designer-/.test(css.ag), css.ag || 'nenhum');
   const soSite = agentesDe('o site da receita federal saiu do ar hoje');
   caso('0.8.0 sites roteador: "site" sozinho não puxa o designer de sites', !/designer-sites/.test(soSite.ag), soSite.ag);
   const lp = agentesDe('crie uma landing page para o meu aplicativo');
