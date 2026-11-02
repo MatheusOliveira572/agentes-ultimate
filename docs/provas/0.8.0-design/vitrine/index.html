@@ -25,6 +25,9 @@
     </linearGradient>
     <radialGradient id="g-halo"><stop offset="0" class="c-halo" stop-opacity=".95"/><stop offset=".45" class="c-halo" stop-opacity=".35"/><stop offset="1" class="c-halo" stop-opacity="0"/></radialGradient>
     <linearGradient id="g-coluna" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="c-brilho" stop-opacity=".9"/><stop offset="1" class="c-brilho" stop-opacity="0"/></linearGradient>
+    <!-- a coluna de brilho esmaece nas laterais (sem retângulo de bordas retas) -->
+    <linearGradient id="g-coluna-lados" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".3" stop-color="#fff" stop-opacity=".75"/><stop offset=".5" stop-color="#fff"/><stop offset=".7" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <mask id="m-coluna" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#g-coluna-lados)"/></mask>
     <symbol id="cena" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
       <rect width="1600" height="610" fill="url(#g-ceu)"/>
       <circle class="astro-halo" cx="1150" cy="575" r="420" fill="url(#g-halo)"/>
@@ -32,7 +35,7 @@
       <path class="serra1" d="M0 548 C120 520 210 470 330 488 C430 503 500 455 610 462 C720 469 790 520 900 512 C1010 504 1080 470 1190 482 C1300 494 1380 535 1480 528 C1540 524 1580 515 1600 512 L1600 612 L0 612 Z"/>
       <path class="serra2" d="M0 586 C90 570 180 548 280 560 C380 572 450 590 560 584 C700 576 760 556 860 566 C960 576 1010 596 1100 600 C1200 604 1260 592 1360 588 C1460 584 1540 594 1600 590 L1600 614 L0 614 Z"/>
       <rect y="606" width="1600" height="294" fill="url(#g-mar)"/>
-      <rect class="coluna" x="1070" y="606" width="160" height="294" fill="url(#g-coluna)" opacity=".55"/>
+      <rect class="coluna" x="1050" y="606" width="200" height="294" fill="url(#g-coluna)" opacity=".55" mask="url(#m-coluna)"/>
       <g class="linhas-mar" id="linhas-mar"></g>
     </symbol>
   </defs>

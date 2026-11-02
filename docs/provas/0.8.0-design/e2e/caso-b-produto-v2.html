@@ -70,8 +70,9 @@
   .lugares { position: relative; padding: 8px 32px 120px calc(var(--lateral) + 24px); }
   /* Extensão de fundo (macOS 26: o conteúdo junto da barra lateral continua por baixo dela, espelhado e desfocado),
      para o vidro ter conteúdo atrás do começo ao fim, sem corte onde a capa acaba. */
-  .extensao { position: absolute; z-index: 0; left: 0; top: 0; bottom: 0; width: calc(var(--lateral) + 24px); overflow: hidden; pointer-events: none;
-    -webkit-mask: linear-gradient(90deg, #000 calc(100% - 44px), transparent calc(100% - 12px)); mask: linear-gradient(90deg, #000 calc(100% - 44px), transparent calc(100% - 12px)); }
+  /* A máscara termina antes da borda direita da barra (12 + lateral − 24 = lateral − 12 px): nada vaza para o mosaico. */
+  .extensao { position: absolute; z-index: 0; left: 0; top: 0; bottom: 0; width: var(--lateral); overflow: hidden; pointer-events: none;
+    -webkit-mask: linear-gradient(90deg, #000 calc(100% - 40px), transparent calc(100% - 14px)); mask: linear-gradient(90deg, #000 calc(100% - 40px), transparent calc(100% - 14px)); }
   .extensao canvas { position: absolute; inset: -40px -40px -40px -40px; width: calc(100% + 80px); height: calc(100% + 80px); filter: blur(10px) saturate(1.15); }
   .lugar, .rodape { position: relative; z-index: 1; }
   @media (prefers-color-scheme: dark) { .extensao canvas { filter: blur(10px) saturate(1.15) brightness(0.72); } }

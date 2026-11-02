@@ -1,5 +1,5 @@
 {
-  "data": "2026-11-02T17:32:12.989Z",
+  "data": "2026-11-02T19:53:44.253Z",
   "totalErros": 0,
   "relatorio": [
     {
@@ -2102,16 +2102,16 @@
     {
       "caso": "desempenho-cpu4x-1440",
       "erros": [],
-      "avisos": [],
-      "desempenho": "LCP 648 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 33.3 ms, p95 50 ms, 3 de 90 acima de 50 ms (CPU 4×)"
+      "avisos": [
+        "p95 de quadro 66.6 ms com CPU 4× (headless, sem GPU real)"
+      ],
+      "desempenho": "LCP 760 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 33.4 ms, p95 66.6 ms, 13 de 90 acima de 50 ms (CPU 4×)"
     },
     {
       "caso": "desempenho-cpu4x-390",
       "erros": [],
-      "avisos": [
-        "p95 de quadro 50.1 ms com CPU 4× (headless, sem GPU real)"
-      ],
-      "desempenho": "LCP 664 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 33.3 ms, p95 50.1 ms, 6 de 90 acima de 50 ms (CPU 4×)"
+      "avisos": [],
+      "desempenho": "LCP 588 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 33.3 ms, p95 50 ms, 0 de 90 acima de 50 ms (CPU 4×)"
     }
   ]
 }

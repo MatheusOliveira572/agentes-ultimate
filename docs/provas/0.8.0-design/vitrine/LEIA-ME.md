@@ -27,7 +27,7 @@ uma curva (a mola curta da receita), um material (vidro), um acento (âmbar da h
 | Quadro f/1,4 com o letreiro "aberto" em foco | o fundo vira luz; o letreiro é o objeto nítido (e o trocadilho com "abertura") | o letreiro é o elo mais fraco; sem ele o quadro vira papel de parede de bokeh |
 | Liquid Glass na barra e no cartão | é o mesmo material dos vidros; o cartão fica "na luz" (a coluna de brilho do mar passa sob a borda) | sim no cartão (é o último vidro entre você e a compra); a barra é convenção da Apple |
 | Paisagem | é "a luz": no herói, refletida no vidro frontal e atrás do cartão | sim |
-| Âmbar | a hora dourada; só no acento (botão, f/1,4, eixo da luz, filete do barril) | sim |
+| Âmbar | a hora dourada; só no acento (botão, f/1,4, eixo da luz) | sim |
 
 Ficou de fora de propósito: escolha de cor do produto, grade de recursos, depoimentos, números de mercado (não há prova real).
 
@@ -49,14 +49,14 @@ Edge sem interface, perfil próprio, uma aba, uma captura por vez, `windowsHide`
 - **Sem JS:** 22 textos, cada um posto no meio da tela: 0 escondido (a revelação é CSS puro).
 - **Vidro que se adapta:** a barra fica clara sobre o céu (0,80) e **escura sobre o quadro noturno** (0,06), no tema claro
   (`png/vitrine-claro-1440-q3b-barra-sobre-foto-zoom.png`: as luzes e o letreiro entortam na borda da cápsula).
-- **Desempenho (CPU 4× mais lenta, headless):** LCP 648 ms (1440) e 664 ms (390), o elemento é o título; **CLS 0,000**.
-  Quadros ao rolar a abertura: mediana 33,3 ms, p95 50 ms, 3 e 6 de 90 acima de 50 ms. **[MEDIDO em headless, sem GPU real:
+- **Desempenho (CPU 4× mais lenta, headless):** LCP 760 ms (1440) e 588 ms (390), o elemento é o título; **CLS 0,000**.
+  Quadros ao rolar a abertura: mediana 33,4 e 33,3 ms, p95 66,6 e 50 ms, 13 e 0 de 90 acima de 50 ms (varia entre rodadas). **[MEDIDO em headless, sem GPU real:
   não vale como prova de 60 fps num aparelho.]** INP não medido (o clique é sintético; os manipuladores são de tempo constante).
 
 ## PNGs (todos abertos e conferidos)
 | Arquivo | Mostra |
 |---|---|
-| `png/vitrine-claro-1440.png`, `png/vitrine-escuro-1440.png` | herói: lente 3D (barril, gravação, reflexos dos vidros por dentro) sobre o amanhecer / a hora azul com lua |
+| `png/vitrine-claro-1440.png`, `png/vitrine-escuro-1440.png` (+ `-zoom4x`: base da lente ampliada 4×) | herói: lente 3D (barril, gravação, reflexos dos vidros por dentro) sobre o amanhecer / a hora azul com lua |
 | `png/vitrine-claro-390.png`, `png/vitrine-escuro-390.png` | herói no celular (lente presa à base da tela, sem cobrir o texto) |
 | `png/vitrine-claro-1440-q1-girando.png` | quadro 1 da rolagem: a lente passa de frente, o barril começa a sumir |
 | `png/vitrine-claro-1440-q2-aberta.png`, `png/vitrine-escuro-1440-q2-aberta.png` | quadro 2: os sete vidros abertos, etiquetas = números da lista, eixo da luz até o sensor |
@@ -87,8 +87,15 @@ servidor), a reserva tem desfazer; 4 teclado sim; 5 coerência sim (medida); 6 c
 - O letreiro "aberto" usa a fonte do sistema (Segoe no Windows, SF no Mac): muda de aparência entre sistemas.
 - A lente do vidro existe só no Chromium; Safari e Firefox recebem o fosco regular (não testado: não há esses navegadores aqui).
   O caminho sem linha do tempo de rolagem **com** movimento (Firefox) também não foi exercitado; com movimento reduzido, sim.
-- Divergência registrada: `apple/materiais.md` (cartão de landing "não serve sobre foto") × a proposta `apple-materiais-receita.md`
-  (a lente precisa de conteúdo vivo atrás). Segui a proposta, com tinta e contraste medidos pixel a pixel (≥ 7,14:1). Decidir qual vale.
+
+## Decidido
+Vidro de landing **pode ir sobre foto** quando o contraste é medido pixel a pixel no pior ponto (decisão de 2026-11-02; aqui ≥ 7,14:1 no cartão).
+
+## Correções depois da revisão final (b-5)
+- A coluna de brilho do mar sob a lente era um retângulo de bordas retas (visível no escuro): agora esmaece nas laterais (máscara
+  em gradiente) e ficou mais larga e suave.
+- A fresta castanha na base da lente (ampliação 4×) era o filete âmbar do barril visto de raspão: o filete saiu e a face frontal
+  cresceu 0,8% para cobrir a junta (`png/vitrine-claro-1440-zoom4x.png`, `png/vitrine-escuro-1440-zoom4x.png`).
 
 ## Arquivos
 `index.html` (estrutura e paisagem em SVG), `vitrine.css`, `vitrine.js`, `verificar.js` (verificador e capturador; `tudo`, `png`,

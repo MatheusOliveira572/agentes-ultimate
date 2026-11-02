@@ -34,7 +34,7 @@ const R = {
 const CASOS = [];
 const tnome = (t) => (t === 'light' ? 'claro' : 'escuro');
 if (qual === 'png' || qual === 'tudo') {
-  for (const tema of ['light', 'dark']) for (const [w, h] of [[1440, 900], [390, 844]]) CASOS.push({ nome: `vitrine-${tnome(tema)}-${w}`, w, h, tema });
+  for (const tema of ['light', 'dark']) for (const [w, h] of [[1440, 900], [390, 844]]) CASOS.push({ nome: `vitrine-${tnome(tema)}-${w}`, w, h, tema, zoomRet: w === 1440 ? { x: 860, y: 600, width: 360, height: 180 } : null });   // base da lente ampliada 4×
   CASOS.push({ nome: 'vitrine-claro-1440-q1-girando', w: 1440, h: 900, tema: 'light', rolar: R.girando });
   CASOS.push({ nome: 'vitrine-claro-1440-q2-aberta', w: 1440, h: 900, tema: 'light', rolar: R.aberta });
   CASOS.push({ nome: 'vitrine-escuro-1440-q2-aberta', w: 1440, h: 900, tema: 'dark', rolar: R.lista });
@@ -57,7 +57,8 @@ if (qual === 'checar' || qual === 'tudo') {
   CASOS.push({ nome: 'desempenho-cpu4x-1440', w: 1440, h: 900, tema: 'light', desempenho: true, semPng: true });
   CASOS.push({ nome: 'desempenho-cpu4x-390', w: 390, h: 844, tema: 'light', desempenho: true, semPng: true });
 }
-if (SO) CASOS.splice(0, CASOS.length, ...CASOS.filter((c) => c.nome.includes(SO)));
+// --so=nome (contém) ou --so=nome$ (nome exato)
+if (SO) CASOS.splice(0, CASOS.length, ...CASOS.filter((c) => (SO.endsWith('$') ? c.nome === SO.slice(0, -1) : c.nome.includes(SO))));
 if (MUTAR) CASOS.splice(0, CASOS.length, { nome: 'mutacao-vidro', w: 1440, h: 900, tema: 'light', coerencia: true, semPng: true, qs: '?mutar=vidro' });
 
 // ---------- CDP mínimo ----------
@@ -289,6 +290,7 @@ function focoAtual() {
         r.teclado = seq.map((f) => `${f.txt}${f.tom ? '[' + f.tom + ']' : ''}`).join(' → ') + ` ⟵ ${volta.txt}`;
       }
       if (c.reservar) { const a = await avaliar(reservarEDesfazer); r.erros.push(...a.erros); }
+      if (c.zoomRet) { const z = await cdp('Page.captureScreenshot', { format: 'png', clip: { ...c.zoomRet, scale: 4 } }); fs.writeFileSync(path.join(PNG, c.nome + '-zoom4x.png'), Buffer.from(z.data, 'base64')); }
       if (c.zoomNav) { const q = await avaliar(() => { const b = document.querySelector('.nav').getBoundingClientRect(); return { x: b.left - 16 + scrollX, y: Math.max(0, b.top - 10) + scrollY, width: b.width + 32, height: b.height + 24 }; });
         const z = await cdp('Page.captureScreenshot', { format: 'png', clip: { ...q, scale: 2 } }); fs.writeFileSync(path.join(PNG, c.nome + '-zoom.png'), Buffer.from(z.data, 'base64')); }
       if (c.zoomSel) {
