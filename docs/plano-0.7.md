@@ -4,7 +4,7 @@
 
 - **V1 · sim, ao contrário da hipótese.** Um plugin pode ligar a barra: o `settings.json` na raiz do plugin aceita só
   `agent` e `subagentStatusLine` (documentação `plugins/components.md`, "Default settings"; no código do 2.1.302,
-  `Tho=["agent","subagentStatusLine"]`). A configuração do usuário e a do projeto vencem a do plugin (o MVP Orçamento
+  `Tho=["agent","subagentStatusLine"]`). A configuração do usuário e a do projeto vencem a do plugin (o projeto piloto
   mantém a barra dele em `.claude/settings.json`). O comando vai cru para o shell, com o ambiente da sessão e
   `CLAUDE_PROJECT_DIR`, **sem** `CLAUDE_PLUGIN_ROOT` (código da função que roda a barra), e a pasta do plugin muda a
   cada versão. Por isso o `settings.json` chama um lançador fixo, `$HOME/.claude/agentes-ultimate/barra.js`, que o
@@ -60,7 +60,7 @@ os casos novos de cada bloco, e cada caso novo visto **falhando** antes da mudan
 
 ## 1. O que já existe e o que se reaproveita
 
-Referência que funciona (projeto MVP Orçamento, `.claude/hooks/`):
+Referência que funciona (projeto piloto, `.claude/hooks/`):
 
 | Peça | O que faz | O que levar | O que não levar |
 |---|---|---|---|
@@ -120,7 +120,7 @@ Pastas:
 - Onde fica ligada: se V1 = sim, no `settings.json` do plugin. Se V1 = não (esperado), **skill `instalar-barra`**:
   mostra o trecho que vai escrever, pede a aprovação, faz cópia do `~/.claude/settings.json` (`.bak-agentes-ultimate`),
   grava `subagentStatusLine` com o caminho absoluto do plugin e oferece `--desfazer`. Nunca sobrescreve uma
-  `subagentStatusLine` existente (o projeto MVP tem a dele em `.claude/settings.json`, que tem precedência): avisa e
+  `subagentStatusLine` existente (o projeto piloto tem a dele em `.claude/settings.json`, que tem precedência): avisa e
   para. Caminho do plugin muda a cada versão? **[HIPÓTESE]**: se mudar, a skill grava um lançador fixo em
   `~/.claude/agentes-ultimate/barra.js` que procura a versão instalada.
 - Teste: entrada falsa com 2 tarefas do mesmo tipo e códigos diferentes → 2 linhas com progressos diferentes (falha
@@ -154,7 +154,7 @@ Pastas:
   - n < 3 em todos os níveis: faixa larga (estimado × 1 a × 2) marcada "sem histórico".
 - `node estimar.js registrar --agente … --classe … --cod ab12 --de 14:10 --ate 14:50` grava em
   `.claude/base/.estimativas.jsonl` com encoding UTF-8 garantido. É **o único jeito** de registrar faixa (corrige o
-  `estimativas.json` corrompido do MVP).
+  `estimativas.json` corrompido do projeto piloto).
 - O orquestrador usa: `skills/ultimate/SKILL.md` ganha a regra "ao lançar agente, rode `estimar.js faixa`, diga a
   faixa ao usuário com a base, rode `registrar`; avise quando a faixa deixar de valer".
 - Mapa ao vivo (desejável ~): `mapa-servidor.js` lê `.estimativas.jsonl` e mostra a faixa e o "passou da previsão"
@@ -169,7 +169,7 @@ Pastas:
 |---|---|---|
 | Passou no revisor de primeira | veredito do **primeiro** relatório do revisor para um `cod` | o revisor passa a terminar o relatório com uma linha fixa: `Placar: autor=<agente> cod=<cod> veredito=sim\|não B=<n> A=<n> M=<n> b=<n>` (Bloqueante, Alta, Média, baixa). O gancho `SubagentStop` do revisor lê essa linha do fim da transcrição (ou de `last_assistant_message`, se V3 confirmar) e grava em `revisoes.jsonl` |
 | Defeitos achados pelo revisor por gravidade | a mesma linha | idem, somado por autor |
-| Defeitos que escaparam ao usuário | o usuário diz "defeito: <o que viu> (era do <agente>)" ou usa a skill `registrar-defeito` | a skill acrescenta a linha completa em `.claude/base/DEFEITOS-USUARIO.md` (no projeto, com texto, como o `defeitos-usuario.md` do MVP) e só a contagem `{agente, projeto, data, gravidade}` em `defeitos.jsonl` |
+| Defeitos que escaparam ao usuário | o usuário diz "defeito: <o que viu> (era do <agente>)" ou usa a skill `registrar-defeito` | a skill acrescenta a linha completa em `.claude/base/DEFEITOS-USUARIO.md` (no projeto, com texto, como o `defeitos-usuario.md` do projeto piloto) e só a contagem `{agente, projeto, data, gravidade}` em `defeitos.jsonl` |
 | Taxa de captura do revisor | pegos pelo revisor ÷ (pegos + só pelo usuário), por período | derivada de `revisoes.jsonl` + `defeitos.jsonl` |
 | Retrabalho | execuções do mesmo agente com o mesmo `cod` depois de um veredito "não" + correções "era com" (roteador já grava em `roteamento.json`) | derivado; o `cod` liga construção, revisão e correção |
 | Acerto da estimativa | `execucoes.jsonl`: % dentro da faixa e mediana de \|real − fim da faixa\| ÷ fim da faixa | derivado |
@@ -222,7 +222,7 @@ Pastas:
 4. Quem constrói (no repositório do plugin): muda `fonte/`, roda `gerar-agentes.js`, o portão 3.2, `validar.js`,
    `testar-hooks.js`; sobe a versão em `plugin.json` e `marketplace.json`; CHANGELOG. **Push e publicação são do
    usuário** (trava já existente). A atualização automática (`hooks/atualizar.js`, 1 vez por dia) leva a todos.
-- Teste: proposta com "Motiva", "R$ 213 mil" e um caminho `C:\Users\…` → 3 bloqueios; proposta genérica → passa.
+- Teste: proposta com "Vetora", "R$ 213 mil" e um caminho `C:\Users\…` → 3 bloqueios; proposta genérica → passa.
 - Custo: 2,5–3 h.
 
 ### Peça 4 · Relatório periódico
@@ -258,8 +258,8 @@ Cada bloco tem revisor e teste do usuário curto (ex.: bloco 3 = "lance 2 agente
 
 ## 5. Estimativa total
 
-Classe de referência: as rodadas reais do projeto MVP Orçamento levaram **~1,5× o estimado** (número informado pelo
-orquestrador neste pedido; o `historico-agentes.js` do MVP calcula esse fator, mas não rodei o resumo nesta tarefa).
+Classe de referência: as rodadas reais do projeto piloto levaram **~1,5× o estimado** (número informado pelo
+orquestrador neste pedido; o `historico-agentes.js` do projeto piloto calcula esse fator, mas não rodei o resumo nesta tarefa).
 Não há histórico de horas por versão do plugin (as 0.1.0 a 0.5.1 saíram no mesmo dia, 27/10, pelo CHANGELOG).
 
 | | Soma da base (h) | × 1,5 (h) |
@@ -296,19 +296,19 @@ registradas a curadoria e o relatório teriam pouco a dizer.
    para o laço valer. Risco: o laço chega 2–3 rodadas depois. Reversível.
 2. **Barra na sua configuração.** Se o plugin não puder ligar a barra sozinho (o mais provável), a skill
    `instalar-barra` escreve no seu `~/.claude/settings.json` com a sua aprovação e cópia de segurança. **Recomendo
-   aceitar.** No MVP Orçamento continua valendo a barra do projeto (precedência). Reversível com `--desfazer`.
+   aceitar.** No projeto piloto continua valendo a barra do projeto (precedência). Reversível com `--desfazer`.
 3. **Custo dos evals.** Rodar os evals só quando houver mudança de instrução (≈ 40 chamadas por mudança)
    **[ESTIMATIVA]**, ou também uma vez por mês em todos os agentes (centenas de chamadas). **Recomendo só na
    mudança.** Perda: não pega piora que venha de troca de modelo; dá para ligar a rodada mensal depois.
 4. **Relatório mensal sozinho na abertura da sessão.** **Recomendo sim** (3 linhas, uma vez por mês); a
    alternativa é só sob pedido (`/placar`) e no fechamento de etapa.
 5. **Nome do projeto no registro global.** Só hash (anônimo) ou hash + um nome curto que você escolhe por projeto
-   (ex.: "mvp-orcamento") para o placar ficar legível. **Recomendo hash + nome curto opcional**, nunca o caminho.
+   (ex.: "meu-projeto") para o placar ficar legível. **Recomendo hash + nome curto opcional**, nunca o caminho.
 
 ## 8. Fontes deste plano
 - Referência: `.claude/hooks/barra-agentes.js`, `historico-agentes.js`, `registrar-agente.js`,
   `.claude/logs/estimativas.json`, `docs/padroes/fluxo-de-trabalho.md`, `.claude/agent-evals/defeitos-usuario.md`
-  (projeto MVP Orçamento), lidos em 2026-10-28.
+  (projeto piloto), lidos em 2026-10-28.
 - Plugin: `fonte/comum.md`, `fonte/agentes/nucleo/curador.md`, `evals/revisor.md`, `hooks/hooks.json`,
   `.claude-plugin/plugin.json` (0.5.1), `CHANGELOG.md`, `hooks/atividade.js`, `hooks/roteador.js` (trechos).
 - Método: apetite e corte (Basecamp, Shape Up); classe de referência (Flyvbjerg); Definição de Pronto (Scrum Guide).

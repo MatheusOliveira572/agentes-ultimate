@@ -62,7 +62,7 @@ volta ao início a cada chamada. O README diz "o conteúdo do commit também é 
 - criar um caso para cada forma, visto falhando antes.
 
 ### M-1 · Médio · commit grande passa sem aviso
-| Tamanho (árvore do MVP, segredo no último arquivo) | Diff | Tempo do gancho | Resultado |
+| Tamanho (árvore do projeto piloto, segredo no último arquivo) | Diff | Tempo do gancho | Resultado |
 |---|---|---|---|
 | ×1 | 8,0 MB | 3,3 s | bloqueia |
 | ×4 | 32,2 MB | 16,6 s | bloqueia só fora do Claude Code; o limite do gancho é 10 s |
@@ -98,7 +98,7 @@ O CHANGELOG diz: "a árvore inteira do plugin (206 arquivos) [...] passam sem bl
 - no 58f7920 (249 arquivos) e no 9fc1af7 (272): **bloqueia**, em `scripts/testar-hooks.js:936`;
 - essa linha é o próprio caso de teste do falso positivo, com `\n` literal depois de `Password=…`: o `n` conta como letra da senha;
 - o commit passou porque a versão instalada aqui é a 0.7.0, sem a leitura de conteúdo;
-- a árvore do MVP passa: 671 arquivos, 8,0 MB, 3,1 s, 0 bloqueio. Essa parte confere.
+- a árvore do projeto piloto passa: 671 arquivos, 8,0 MB, 3,1 s, 0 bloqueio. Essa parte confere.
 
 **Correção sugerida:** resolver junto com M-2, refazer a medida e corrigir o texto. Sem isso, publicar o plugin num repositório novo
 é bloqueado pela própria trava.
@@ -191,7 +191,7 @@ Mutante R1 pego. Como os demais, o eval está como "não rodado".
 - `validar.js` sem aviso de 90 linhas; maior parte específica em 87 linhas.
 - Texto antes e depois: LGPD, marketing e compliance não perderam regra. Saíram frases de motivo, referências repetidas e a "origem" de
   um erro conhecido. "Preliminar" e "data-limite calculada" continuam no passo 5 do método.
-- Motiva: nada na parte A. As menções em `plano-0.7.md`, `revisao-0.7.0.md` e `testar-hooks.js` (nome fictício de teste) já existiam.
+- Nome da empresa do usuário: nada na parte A. As menções em `plano-0.7.md`, `revisao-0.7.0.md` e `testar-hooks.js` (nome fictício de teste) já existiam.
 - Os PDFs não estão no git.
 
 **7. [conferir] e [HIPÓTESE]: confere, inclusive no 9fc1af7.**
@@ -314,7 +314,7 @@ Todas com o segredo no commit, rodando o comando de verdade (11 formas):
 **`git add -A && git commit -m x && git push`:** a trava só pergunta sobre publicar, sem ler o commit, porque a checagem de push vem antes. Quem confirma envia o segredo. Já era assim no 13d4afd, mas é a forma mais grave: ler o commit antes da pergunta de push.
 
 ### M-1 · o gancho ainda pode estourar 10 s
-| Tamanho (árvore do MVP, segredo no último arquivo) | Gancho | Resultado |
+| Tamanho (árvore do projeto piloto, segredo no último arquivo) | Gancho | Resultado |
 |---|---|---|
 | ×1, 8,0 MB | 3,6 s | bloqueia |
 | ×2, 16,1 MB | 6,8 s | bloqueia |
@@ -391,7 +391,7 @@ Placar: autor=engenheiro-software cod=sem-codigo veredito=não B=1 A=3 M=2 b=4 i
 
 O que o autor afirmou e se sustenta: o texto do comando não é mais executado (16 formas, 0 arquivo criado, com controle positivo);
 `git commit -m "x"` e a forma padrão do Claude Code passam sem pergunta; A-1, A-2, A-3, M-1, b-1, b-6 e b-8 fechados; licença e marcação
-dos 69 guias do strix; nada da Motiva nos commits novos.
+dos 69 guias do strix; nada da empresa do usuário nos commits novos.
 
 - Revisor: `revisor`, código rv87 (manhã de 2026-11-02: bateria às 06h30, fim às 08h15). Autor: `engenheiro-software`, código tr86.
 - Revisado: cópia `git archive` do a13ea41 (HEAD; inclui dbfd0c3, a trava refeita, e 56de65b..097a9fb, os lotes 7 a 11). Comparação: 82458d9.
@@ -573,7 +573,7 @@ o `.env.example` no git, com marcadores. O agente que segue o checklist é barra
 bloqueia.
 
 ### M-11 · Médio · 1º push de projeto com histórico vira pergunta genérica
-O repositório do MVP (sem remoto, 196 commits, 20,8 MB de diff) leva 9,8 s só para o `git log -p` dos não enviados. A barreira do push
+O repositório do projeto piloto (sem remoto, 196 commits, 20,8 MB de diff) leva 9,8 s só para o `git log -p` dos não enviados. A barreira do push
 vence o prazo de 7 s **sempre** (7,5 s, 3 de 3) e pergunta "não deu para conferir". O 1º push de um projeto, o que publica tudo, é
 justamente quando a barreira não lê. Com `git add -A && git commit` no mesmo repositório, o antes leva 5,3 s de mediana e 7,8 s de máximo:
 perto do prazo.
@@ -603,28 +603,28 @@ que o usuário roda uma vez (por exemplo, o `/checklist-lancamento`).
   não. Mas 13 de 25 formas comuns perguntam (M-9) e o `.env.example` bloqueia (M-10).
 - **(d) Lentidão e janela:** tempos abaixo. Nenhuma chamada nova sem `windowsHide` (`validar.js` 0 erro, detector conferido em b-9). O
   verificador com `shell: true` também esconde a janela.
-- **(e) Licença e Motiva:**
+- **(e) Licença e nomes da empresa:**
   - os 69 guias do strix têm, na 1ª linha, a origem, o commit 6b7ae2e, "© 2025 OmniSecure Inc., Apache-2.0", a lista de alterações e
     "alterado por agentes-ultimate" (conferi os 69);
   - o `LICENSE` está em `terceiros/usestrix-strix/`, e o `CREDITOS.md` e o `fontes.json` têm o registro;
   - **não verificado:** se o strix tem um arquivo `NOTICE` (Apache §4d manda copiar). Esta máquina não tem rede para o GitHub, e o
     inventário não registra;
-  - Motiva, CFO, caminhos e e-mails do usuário: 0 nos commits 56de65b..a13ea41. As menções antigas (`plano-0.7.md`, revisões e nome de
+  - Nome da empresa, CFO, caminhos e e-mails do usuário: 0 nos commits 56de65b..a13ea41. As menções antigas (`plano-0.7.md`, revisões e nome de
     teste) continuam como na 2ª rodada.
 - **(f) As 2 decisões:** abaixo.
 
 ### Tempos dos ganchos
-Mediana de 5, intercalada com um `node` vazio. As linhas sem nota foram medidas com a máquina livre; as do MVP, com a máquina ocupada pela bateria.
+Mediana de 5, intercalada com um `node` vazio. As linhas sem nota foram medidas com a máquina livre; as do projeto piloto, com a máquina ocupada pela bateria.
 
 | Gancho e caso | Mediana | `node` vazio |
 |---|---|---|
 | antes (`travas.js`), comando sem git | 303 ms | 253 ms |
 | antes, `git commit -m x`, repositório pequeno | 776 ms | 210 ms |
-| antes, `git commit -m x`, repositório do MVP (OneDrive), máquina ocupada | 1,8 s | 0,4 s |
-| antes, `git add -A && git commit -m x`, MVP, máquina ocupada | 5,3 s (máx. 7,8 s) | 0,4 s |
-| antes, push no MVP, máquina ocupada | 7,5 s: vence o prazo (M-11) | 0,4 s |
+| antes, `git commit -m x`, repositório do projeto piloto (pasta sincronizada), máquina ocupada | 1,8 s | 0,4 s |
+| antes, `git add -A && git commit -m x`, projeto piloto, máquina ocupada | 5,3 s (máx. 7,8 s) | 0,4 s |
+| antes, push no projeto piloto, máquina ocupada | 7,5 s: vence o prazo (M-11) | 0,4 s |
 | depois (`trava-depois.js`), comando comum | 411 ms | 204 ms |
-| depois, comando comum no MVP, máquina ocupada | 531 ms | 302 ms |
+| depois, comando comum no projeto piloto, máquina ocupada | 531 ms | 302 ms |
 | depois, HEAD mudou (lê o commit num filho) | 975 ms | - |
 | depois, comando com 10 `cd` literais | 1,7 s | 191 ms |
 | `retomar.js` no PreCompact, atividade com 0, 2 mil e 20 mil linhas | 411, 406 e 388 ms | cerca de 200 ms |

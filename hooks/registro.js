@@ -56,7 +56,7 @@ function projetoHash(cwd) {
   if (process.platform === 'win32') p = p.toLowerCase();
   return crypto.createHash('sha256').update(p).digest('hex').slice(0, 8);
 }
-// Nome curto opcional que o usuário dá ao projeto em .claude/base/config.json ("nome_curto": "mvp-orcamento").
+// Nome curto opcional que o usuário dá ao projeto em .claude/base/config.json ("nome_curto": "meu-projeto").
 function nomeCurto(cwd) {
   try { const c = JSON.parse(fs.readFileSync(path.join(base(cwd), 'config.json'), 'utf8')); return typeof c.nome_curto === 'string' ? c.nome_curto.slice(0, 40) : null; } catch (e) { return null; }
 }

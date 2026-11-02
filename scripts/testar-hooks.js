@@ -81,9 +81,9 @@ caso('exemplos do "era com" só com termos (os antigos com texto são convertido
 r = rot('corrija o erro no script de importação');
 caso('pedido parecido continua seguindo a correção antiga convertida', /analista-fpa/.test(msg(r)) || /analista-fpa/.test(ctx(r)), msg(r));
 // b-11: palavra com inicial maiúscula fora do começo da frase é provável nome próprio (pessoa, empresa, cliente) e sai
-rot('revise o contrato da Odebrecht com o João Silva da CCR para a Motiva. Depois monte o resumo do contrato');
+rot('revise o contrato da Andaluza com o João Silva da XPTO para a Vetora. Depois monte o resumo do contrato');
 const ultimoB11 = fs.readFileSync(path.join(casa, '.claude', 'agentes-ultimate', 'ultimo-pedido.json'), 'utf8');
-caso('termos sem nomes próprios (inicial maiúscula fora do começo da frase), mantendo o começo da frase', !/odebrecht|joao|silva|ccr|motiva/.test(ultimoB11) &&
+caso('termos sem nomes próprios (inicial maiúscula fora do começo da frase), mantendo o começo da frase', !/andaluza|joao|silva|xpto|vetora/.test(ultimoB11) &&
   /revise/.test(ultimoB11) && /contrato/.test(ultimoB11) && /depois/.test(ultimoB11) && /resumo/.test(ultimoB11), ultimoB11);
 
 fs.appendFileSync(path.join(proj, '.claude', 'base', 'DIARIO.md'), '- 2026-10-20 [dev-powerbi] página de desvio por centro de custo construída → powerbi/x\n');

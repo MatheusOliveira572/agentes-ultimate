@@ -185,7 +185,7 @@ pode chegar antes do `PostToolUse` com o `agentId`; agente parado não dispara `
    terminou · N min" e a linha no "Ao vivo".
 3. Pare um agente no meio (Esc ou parar a tarefa): hoje ele continua "trabalhando" no painel (M-1). Diga se incomoda.
 4. Depois de uma revisão, rode `/placar`: a linha do autor deve aparecer com "de primeira" e os defeitos.
-5. No MVP Orçamento, confira que a barra do projeto continua valendo (a dele tem precedência).
+5. No projeto piloto, confira que a barra do projeto continua valendo (a dele tem precedência).
 
 ## Arquivos lidos
 
@@ -328,8 +328,8 @@ engenheiro-software.
     carregada: não é um detector confiável.
 - **b-11 · `ultimo-pedido.json` e `roteamento.json` sem o texto, mas com nomes próprios.** Testei 3 pedidos.
   - Saíram valores, números, caminhos (inclusive com espaços), e-mail, CPF e senha.
-  - Ficaram nomes de pessoa, de empresa e de cliente como termos (ex.: `joao`, `silva`, `motiva`, `odebrecht`,
-    `ccr`). O README diz "palavras de assunto"; vale dizer que nomes podem ficar, ou filtrar pelos `termos_privados`
+  - Ficaram nomes de pessoa, de empresa e de cliente como termos (ex.: `joao`, `silva`, `vetora`, `andaluza`,
+    `xpto`). O README diz "palavras de assunto"; vale dizer que nomes podem ficar, ou filtrar pelos `termos_privados`
     do `config.json`.
 - **b-12 · O campo `primeira` em `revisoes.jsonl` fica `null` para sempre quando o histórico de revisões passa de
   256 KB.** O índice de revisões só é montado sem limite por quem lê sem pressa, e hoje ninguém faz isso. O placar
@@ -344,7 +344,7 @@ engenheiro-software.
 3. Parar um agente no meio: ele deve virar "sem notícia" (cinza) depois do fim da faixa + 30 min, e não ficar
    "trabalhando".
 4. Uma correção do mesmo trabalho (mesmo código): confirmar que o orquestrador registra uma faixa nova (M-7).
-5. No MVP Orçamento, a barra do projeto continua valendo.
+5. No projeto piloto, a barra do projeto continua valendo.
 
 ## Arquivos lidos na 2ª rodada
 
@@ -385,7 +385,7 @@ publicar** (é pequeno) ou, no mínimo, não rodar a conferência final nessa ja
 | M-7, cenário da 2ª rodada | **fechado**. Com a faixa da construção registrada 180 ou 20 min antes da correção: barra sem faixa herdada, registro com fonte "sem", `estimado_min` vazio, nenhum fator novo. Resto na borda: b-13 |
 | b-8, 2ª sessão | **fechado**. O agente de 35 min, dentro da faixa, continua "trabalhando" depois do início da sessão S2 |
 | b-9 e b-10 | **fechados**. O texto do caso foi corrigido; M4 e M2b agora são pegos (abaixo) |
-| b-11, nomes próprios | **fechado em parte, e documentado no README**. "Odebrecht", "CCR", "Metrô Bahia" no meio da frase saem. Ficam o nome no começo de frase ("Odebrecht pediu…", "… reunião. Matheus aprovou.") e nomes em minúscula ("joão silva", "motiva"): b-14 |
+| b-11, nomes próprios | **fechado em parte, e documentado no README**. "Andaluza", "XPTO", "Porto Azul" no meio da frase saem. Ficam o nome no começo de frase ("Andaluza pediu…", "… reunião. Fulano aprovou.") e nomes em minúscula ("joão silva", "vetora"): b-14 |
 | b-12 | **fechado**. O registro da revisão não tem mais o campo `primeira` |
 | `modelo_por_tarefa` | **certo** nos 6 casos que montei. Usuário true sem chave no projeto → ativa; usuário true e projeto `false` → **desliga**; usuário false e projeto true → ativa; nenhum → desliga; usuário `"true"` (texto) → desliga; projeto `"false"` (texto) → vale o usuário (b-15) |
 

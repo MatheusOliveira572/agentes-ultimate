@@ -220,7 +220,7 @@ até 380 px e sobra quase nada para a 3ª coluna. O limite de 900 px só empilha
 - É repertório: nenhuma ordem obrigatória, sequências como ponto de partida.
 - Medidas não provadas estão como [ESTIMATIVA], pela frase de cada receita e do catálogo.
 
-**Nada da Motiva** nos arquivos do lote: as ocorrências em `scripts/testar-hooks.js` são casos antigos, e não são do lote.
+**Nada da empresa do usuário** nos arquivos do lote: as ocorrências em `scripts/testar-hooks.js` são casos antigos, e não são do lote.
 **`windowsHide`** nas 2 chamadas novas, `spawn` do Edge e `spawnSync` do teste, e o `validar.js` passa.
 
 **Pacote `interface`:** só perdeu as 3 palavras previstas. O que se perdeu é o efeito delas (A-1).

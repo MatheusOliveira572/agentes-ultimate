@@ -73,21 +73,21 @@ público: as menções à empresa (M-2), o peso dos PNGs (M-3) e o CHANGELOG (M-
 
 **M-2 · Menções à empresa e ao repositório do usuário no repositório público** (dono: `engenheiro-software`; decisão do usuário)
 - **Novas na 0.8.0 (ainda não publicadas):**
-  - `docs/provas/0.8.0-design/vitrine/LEIA-ME.md:3` ("Nada da Motiva, nada de finanças");
-  - `docs/revisao-0.8.0-parteA.md`, linhas 65, 101, 194, 317, 394, 576, 606, 612, 617 e 623–627 ("Motiva", "árvore do MVP",
-    "repositório do MVP (OneDrive)");
+  - `docs/provas/0.8.0-design/vitrine/LEIA-ME.md:3` (a frase que dizia que nada era da empresa do usuário);
+  - `docs/revisao-0.8.0-parteA.md`, linhas 65, 101, 194, 317, 394, 576, 606, 612, 617 e 623–627 (o nome da empresa, a árvore e o repositório
+    do projeto piloto do usuário);
   - `docs/revisao-0.8.0-sites.md:223`.
 - **Já publicadas na 0.7.0:**
-  - `scripts/testar-hooks.js:84` ("contrato da Odebrecht com o João Silva da CCR para a Motiva");
-  - `docs/revisao-0.7.0.md:331` e `:388` (`motiva`, `ccr`, "Metrô Bahia");
+  - `scripts/testar-hooks.js:84` (o pedido de teste citava a empresa e dois clientes reais);
+  - `docs/revisao-0.7.0.md:331` e `:388` (nomes reais de empresa e de cliente);
   - `docs/plano-0.7.md:225`.
-- **Nada achado de:** segredo (busca por padrões de chave AWS, GitHub, Anthropic, OpenAI, Slack e PEM), caminho `C:\Users`,
-  `59-109037`, e-mail real (só exemplos fictícios), dado real. As mensagens dos 144 commits a publicar não citam nenhum desses
+- **Nada achado de:** segredo (busca por padrões de chave AWS, GitHub, Anthropic, OpenAI, Slack e PEM), caminho de pasta de usuário,
+  nome de usuário do Windows, e-mail real (só exemplos fictícios), dado real. As mensagens dos 144 commits a publicar não citam nenhum desses
   termos.
 - **Ficam por decisão do dono:** "Matheus Oliveira" e "MatheusOliveira572" no manifesto, no LICENSE e no README (é a identidade
-  pública do repositório) e o e-mail de autor dos commits (`matheus572@gmail.com`).
+  pública do repositório) e o e-mail de autor dos commits.
 - **Correção:** trocar por nomes fictícios ("Empresa X", "Cliente Y"; o caso de teste não perde nada) e tirar as frases "nada da
-  Motiva". Nos arquivos novos, antes do push: depois, ficam no histórico.
+  <empresa>". Nos arquivos novos, antes do push: depois, ficam no histórico.
 
 **M-3 · Peso: a árvore tem 31 MB, dos quais 26,6 MB são 76 PNGs de provas** (decisão do usuário)
 - **Comparação com a 0.7.0:** no cache local, a 0.7.0 ocupa 2,5 MB.
@@ -211,7 +211,7 @@ Pegou 4 de 15. O controle sem mutação passou nos 4 testes. A lista dos que esc
 | `docs/provas/0.8.0-sites/png/site-claro-1920.png`, `-768.png`, `-905.png` | 2,1 MB | não são citados pelo nome | apagar ou citar |
 | `docs/revisao-*.md` (7 arquivos) | cerca de 200 KB | registros de revisão, com as menções do M-2 e tempos desta máquina; o CHANGELOG cita | mover para `docs/revisoes/` e limpar as menções, ou tirar do repositório público (decisão do usuário) |
 | `docs/inventario-plugins-2026-11*.md`, `pesquisa-*.md`, `regras-pdfs-2026-11.md`, `referencias-*-2026-11.md`, `plano-0.7.md` | cerca de 300 KB | pesquisas e planos de entrada; o CHANGELOG e o `designer-paineis` citam | manter, agrupados em `docs/pesquisas/` (corrigindo as citações) |
-| Fora do push: 4 worktrees (`C:\Users\59-109037\au-prova`, `au-seg`, `au-sites`, `au-vigia`) e os ramos `prova-design`, `lotes-seguranca`, `lote-sites`, `vigia-fontes` | — | todos já juntados (0 commit fora da `main`), sem mudança pendente | `git worktree remove` e `git branch -d` |
+| Fora do push: 4 worktrees (`au-prova`, `au-seg`, `au-sites`, `au-vigia`) e os ramos `prova-design`, `lotes-seguranca`, `lote-sites`, `vigia-fontes` | — | todos já juntados (0 commit fora da `main`), sem mudança pendente | `git worktree remove` e `git branch -d` |
 | Falsos órfãos (ficam) | — | os 4 `test-*.cjs` do `teardown` são usados pela ferramenta; os `assets/` citados em `referencia-original/` são do original, que é mantido como veio | nada |
 
 ## Lista do usuário (o que só você prova)
