@@ -112,6 +112,11 @@ function testar({ caso, RAIZ }) {
   caso('impressiona: efeitos/INDICE.md lista a vitrine-apple.md, e ela existe',
     /vitrine-apple\.md/.test(ix) && !!ler('conhecimento', 'design', 'sites-premium', 'efeitos', 'vitrine-apple.md'), 'falta no índice');
 
+  // Conferência M-8: a descrição (o que o Claude Code lê para delegar) manda tela de app ao designer-interface.
+  const descSites = (ler('agents', 'designer-sites.md').match(/^description: .*$/m) || [''])[0];
+  caso('conferência M-8: a descrição do designer-sites manda tela de app ao designer-interface, painel ao designer-paineis',
+    /tela de app \(→ designer-interface\)/.test(descSites) && /painel ou dashboard \(→ designer-paineis\)/.test(descSites) && !/tela de app \(→ designer-paineis\)/.test(descSites), descSites.slice(-260));
+
   // ---- Nível HD (hd105): referência, régua, designers, revisor e os 2 modelos ----
   const hd = ler('conhecimento', 'design', 'nivel-hd.md');
   const regrasHd = secao(hd, '1. Regras').split('\n### A validar')[0];
