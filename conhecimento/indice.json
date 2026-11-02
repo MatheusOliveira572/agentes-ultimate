@@ -1064,6 +1064,30 @@
       }
     },
     {
+      "arquivo": "conhecimento/engenharia/auditar-repositorio.md",
+      "tema": "auditar-repositorio",
+      "palavras": [
+        "auditar o repositorio",
+        "auditoria de qualidade",
+        "repositorio inteiro",
+        "o que da para apagar",
+        "codigo inchado"
+      ],
+      "agentes": [
+        "revisor",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça uma auditoria de qualidade do repositório inteiro",
+          "o que dá para apagar neste código inchado?"
+        ],
+        "nao": [
+          "planeje o cardápio da semana"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/backend.md",
       "tema": "backend",
       "palavras": [
@@ -1271,6 +1295,30 @@
       }
     },
     {
+      "arquivo": "conhecimento/engenharia/divida-de-atalhos.md",
+      "tema": "divida-de-atalhos",
+      "palavras": [
+        "divida de atalhos",
+        "atalhos marcados",
+        "listar os atalhos",
+        "shortcut no codigo",
+        "divida tecnica marcada"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "revisor"
+      ],
+      "teste": {
+        "sim": [
+          "liste a dívida de atalhos marcados no código",
+          "quais atalhos marcados com shortcut ficaram para depois?"
+        ],
+        "nao": [
+          "calcule o frete do pedido"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/e2e.md",
       "tema": "e2e",
       "palavras": [
@@ -1323,6 +1371,33 @@
         ],
         "nao": [
           "escreva a política de férias da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/engenharia/escada-do-minimo.md",
+      "tema": "escada-do-minimo",
+      "palavras": [
+        "escada do minimo",
+        "menor mudanca completa",
+        "codigo minimo",
+        "yagni",
+        "superengenharia",
+        "mudanca enxuta",
+        "nunca cortar"
+      ],
+      "agentes": [
+        "engenheiro-software",
+        "revisor",
+        "planejador"
+      ],
+      "teste": {
+        "sim": [
+          "faça a menor mudança completa, sem superengenharia",
+          "quero o código mínimo, yagni, nada a mais"
+        ],
+        "nao": [
+          "escreva o texto do convite da festa"
         ]
       }
     },
@@ -1593,6 +1668,30 @@
       }
     },
     {
+      "arquivo": "conhecimento/engenharia/revisar-pela-carga.md",
+      "tema": "revisar-pela-carga",
+      "palavras": [
+        "carga esperada",
+        "aguenta a carga",
+        "revisao pela carga",
+        "escala da mudanca",
+        "muitos usuarios ao mesmo tempo"
+      ],
+      "agentes": [
+        "revisor",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "revise se a mudança aguenta a carga esperada de muitos usuários ao mesmo tempo",
+          "revisão pela carga: isso escala?"
+        ],
+        "nao": [
+          "resuma a ata da reunião de condomínio"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/engenharia/simplificar.md",
       "tema": "simplificar",
       "palavras": [
@@ -1759,6 +1858,31 @@
         ],
         "nao": [
           "calcule a depreciação acelerada da frota"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/avaliar-skill.md",
+      "tema": "avaliar-skill",
+      "palavras": [
+        "avaliar skill",
+        "benchmark de agente",
+        "medir se a instrucao melhorou",
+        "tres bracos",
+        "braco sem skill",
+        "mudanca de regra do agente"
+      ],
+      "agentes": [
+        "curador",
+        "planejador"
+      ],
+      "teste": {
+        "sim": [
+          "faça um benchmark de agente para avaliar a skill antes de mudar a regra",
+          "medir se a instrução melhorou, com braço sem skill"
+        ],
+        "nao": [
+          "escreva a legenda do post de aniversário"
         ]
       }
     },

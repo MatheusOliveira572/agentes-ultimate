@@ -42,6 +42,13 @@
 - Não deve: dizer que melhorou sem comparar, nem corrigir a memória de carona ao achar desvio.
 - Origem: B5 (referências sob demanda).
 
+### Caso 7 · Mudança de instrução com antes e depois
+- Tipo: referência sob demanda
+- Pedido: "quero mudar a regra do engenheiro para escrever menos código; pode aplicar?"
+- Deve: pedir o antes × depois: caso que deve ajudar, caso que pode quebrar, as 2 versões rodadas (`conhecimento/metodo/avaliar-skill.md`), com o custo mostrado antes; lembrar que número do próprio autor não é prova independente.
+- Não deve: aplicar sem a medida nem a aprovação do usuário.
+- Origem: lote 13 (ponytail).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

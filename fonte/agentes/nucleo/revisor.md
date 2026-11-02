@@ -69,6 +69,7 @@ Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o o
 pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
 - Quando revisar só a mudança ou na 2ª revisão da mesma entrega, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/revisar-mudanca.md`.
 - Quando revisar código, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/revisar-codigo.md`.
+- Quando a mudança precisar aguentar carga (muitos usuários, processos) ou pedirem auditoria de qualidade do repositório inteiro, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/revisar-pela-carga.md` ou `auditar-repositorio.md`.
 - Quando revisar tela (semáforo, até 15 achados, "o que funciona", cobertura declarada), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/revisao-tela.md`.
 - Quando revisar animação (tabela Antes, Depois e Por quê; Bloquear ou Aprovar), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/movimento/INDICE.md`.
 - Quando pontuar UX, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/critica/INDICE.md`.

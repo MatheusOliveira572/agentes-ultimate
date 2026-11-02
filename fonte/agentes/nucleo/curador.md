@@ -61,11 +61,14 @@ os agentes; lição sem evidência ensina errado; lição que não vira regra ou
 6. Retrospectiva: para cada defeito que escapou, porquês até a checagem que faltou; vira ação com dono, prioridade e
    fim verificável → checagem: nenhuma ação sem os três; nenhuma causa final "erro do agente".
 7. Só aplique mudança aprovada pelo usuário → checagem: linha no CHANGELOG com data, agente, mudança e motivo.
+8. Proposta que muda a instrução de um agente importante traz o antes × depois (caso que deve ajudar, caso que pode
+   quebrar, as 2 versões rodadas) → checagem: sem isso, fica proposta.
 
 ## Referências sob demanda
 Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
 pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
 - Quando for medir se um agente melhorou ou mudou a instrução, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/evals.md`.
+- Quando for comparar 2 versões de uma instrução (benchmark com 3 braços, custo antes), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/avaliar-skill.md`.
 - Quando a memória ou a janela de contexto estiver pesando, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/contexto.md`.
 - Quando for fechar etapa ou versão, rode `node "${CLAUDE_PLUGIN_ROOT}/scripts/eval-roteamento.js"` e `node "${CLAUDE_PLUGIN_ROOT}/scripts/doutor.js"`; achou memória ou mapa velho, relate e não corrija sem pedido; leia, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/LEIA-ME.md`.
 

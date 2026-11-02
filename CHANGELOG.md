@@ -179,6 +179,19 @@ falhando antes.
   tem `O_NOFOLLOW` nem `O_NONBLOCK`; visto falhar no caso "T38 antes"); a versão adaptada confere com `lstat` e `fstat` e avisa que não
   há proteção contra troca entre a checagem e a abertura. Em Linux e macOS, o caminho original fica igual. Os testes do original
   (`mkfifo`, links de Unix) não vieram; os nossos estão em `scripts/testar-auditoria.js`.
+- **B13 · DietrichGebert/ponytail** (MIT, commit fixo `96608e0`, arquivo bruto lido antes de copiar; nada suspeito nas partes copiadas):
+  só as regras, as revisões e o método de benchmark, em português. `conhecimento/engenharia/escada-do-minimo.md` (antes de escrever, listar
+  o que a mudança alcança; a escada de 6 degraus; o atalho marcado `shortcut:`/`atalho:`; a lista **nunca cortar**: validação na
+  fronteira, erro que evita perda de dados, segurança, acessibilidade, o teste e a verificação do protocolo, o pedido). A regra do original
+  "mudança trivial não precisa de teste" saiu, porque o benchmark do próprio autor mostra queda de 77% para 69% nos bugs pegos onde há
+  teste. `revisar-pela-carga.md`, `auditar-repositorio.md`, `divida-de-atalhos.md` (com mais prefixos de comentário), `../metodo/avaliar-skill.md`
+  (3 braços, isolamento, estatística, custo antes; ressalvas da crítica independente) e o exemplo de publicação sem token em `ci.md`. No
+  `engenheiro-software`, o passo 2 do método ganhou o raio da mudança e a lista "nunca cortar" (o teste do passo 1 continua); no `revisor`,
+  uma linha "Quando"; no `curador`, o passo 8 (mudança de instrução traz o antes × depois) e uma linha "Quando". T33: `scripts/mapa-simbolos.js`,
+  a pedido, sem gancho (só reconhece `export` e definições de primeiro nível; `module.exports` não entra). **Não vieram:** os ganchos (sessão,
+  subagente, modo, barra, registro local, webhook), o painel de ganhos com números fixos, os adaptadores de outras plataformas, os
+  instaladores e o benchmark antigo. T35 já estava no `validar.js` (frases-chave, B9); T34 e T36 são opcionais e não rodaram; T37 (modelo de
+  teste de gancho no Windows) não foi lido nem copiado.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

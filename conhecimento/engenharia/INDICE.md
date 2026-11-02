@@ -26,7 +26,11 @@
 | lentidão medida (servidor, banco) | `desempenho.md` |
 | página lenta, Core Web Vitals | `desempenho-web.md` |
 | régua de qualidade do projeto (CONSTRAINTS.md), exceções | `restricoes.md` |
+| menor mudança completa, o que nunca cortar, atalho marcado | `escada-do-minimo.md` |
+| revisar pela carga esperada; achado em 4 partes | `revisar-pela-carga.md` |
+| auditoria de qualidade do repositório inteiro (não muda código) | `auditar-repositorio.md` |
+| lista dos atalhos marcados (`shortcut:`, `atalho:`) | `divida-de-atalhos.md` |
 
-Ferramentas: `<plugin>/scripts/checar-ferramenta.js <nome>` (está instalado?), `<plugin>/scripts/gerenciador-pacotes.js
+Ferramentas: `<plugin>/scripts/mapa-simbolos.js [pasta]` (o que já existe para reaproveitar), `<plugin>/scripts/checar-ferramenta.js <nome>` (está instalado?), `<plugin>/scripts/gerenciador-pacotes.js
 [pasta]` (npm, pnpm, yarn ou bun pelo lockfile), modelo `<plugin>/modelos/quality-gate.mjs` (portão sobre o JSON do
 Semgrep ou do axe). Pilha específica: `../plataformas/INDICE.md`. Versão da biblioteca: `../metodo/fonte-oficial-da-versao.md`.

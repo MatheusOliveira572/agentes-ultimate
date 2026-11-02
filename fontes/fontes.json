@@ -843,6 +843,54 @@
           "destino": "ferramentas/auditoria/validate-findings.cjs"
         }
       ]
+    },
+    {
+      "repo": "DietrichGebert/ponytail",
+      "licenca": "MIT",
+      "branch": "main",
+      "pasta": "dietrichgebert-ponytail",
+      "commit_usado": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
+      "ultimo_conferido": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
+      "conferido_em": "2026-11-02",
+      "vigiar": true,
+      "arquivos": [
+        {
+          "origem": "skills/ponytail-audit/SKILL.md",
+          "destino": "conhecimento/engenharia/auditar-repositorio.md"
+        },
+        {
+          "origem": "skills/ponytail-debt/SKILL.md",
+          "destino": "conhecimento/engenharia/divida-de-atalhos.md"
+        },
+        {
+          "origem": "AGENTS.md",
+          "destino": "conhecimento/engenharia/escada-do-minimo.md"
+        },
+        {
+          "origem": "skills/ponytail/SKILL.md",
+          "destino": "conhecimento/engenharia/escada-do-minimo.md"
+        },
+        {
+          "origem": "skills/ponytail-review/SKILL.md",
+          "destino": "conhecimento/engenharia/revisar-pela-carga.md"
+        },
+        {
+          "origem": ".github/CONTRIBUTING.md",
+          "destino": "conhecimento/metodo/avaliar-skill.md"
+        },
+        {
+          "origem": "benchmarks/agentic/README.md",
+          "destino": "conhecimento/metodo/avaliar-skill.md"
+        },
+        {
+          "origem": "benchmarks/results/2026-10-07-agentic.md",
+          "destino": "conhecimento/metodo/avaliar-skill.md"
+        },
+        {
+          "origem": "hooks/ponytail-map.js",
+          "destino": "scripts/mapa-simbolos.js"
+        }
+      ]
     }
   ]
 }

@@ -175,6 +175,25 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     JSON.parse(ler('fontes', 'fontes.json')).fontes.some((x) => x.repo === 'cloudflare/security-audit-skill' && x.commit_usado.startsWith('c1c8a8c') && x.arquivos.length >= 20), 'falta');
   // ---- Lote 15 · skill auditoria-completa e validadores ----
   try { require('./testar-auditoria.js')({ caso, tmp, RAIZ }); } catch (e) { caso('0.8.0 B15: scripts/testar-auditoria.js carrega e roda', false, e.message); }
+  // ---- Lote 13 · ponytail: regras como orientação, sem ganchos ----
+  const esc = ler('conhecimento', 'engenharia', 'escada-do-minimo.md');
+  caso('0.8.0 B13 ponytail: escada com a lista "nunca cortar" e sem afrouxar teste', /## Nunca cortar/.test(esc) && /validação na fronteira/i.test(esc) && /o teste e a verificação do protocolo/.test(esc) && !/Trivial changes need none|mudança trivial não precisa de teste\b(?! saiu)/.test(esc.split('\n').slice(3).join('\n')), 'texto');
+  caso('0.8.0 B13 ponytail: o motivo (77% para 69%) está escrito e não há modo que fica ligado', /77% para 69%/.test(esc) && /nunca como modo que fica ligado/.test(esc), 'texto');
+  const ag13 = ler('fonte', 'agentes', 'software', 'engenheiro-software.md');
+  caso('0.8.0 B13 engenheiro-software: listar o que a mudança alcança e a lista "nunca cortar" no método, com o teste do passo 1 intacto', /liste o que a mudança alcança/.test(ag13) && /sem cortar validação na fronteira/.test(ag13) && /1\. Reproduza o problema ou escreva o teste/.test(ag13) && (ag13.match(/^- Quando/gm) || []).length <= 8, 'falta');
+  const hk13 = ler('hooks', 'hooks.json');
+  caso('0.8.0 B13 ponytail: nenhum gancho de terceiro, nada injetado em subagente, sem registro local nem webhook', !/ponytail/i.test(hk13) && !fs.readdirSync(path.join(RAIZ, 'hooks')).some((n) => /ponytail|band/i.test(n)) && !/webhook|ledger/i.test(ler('scripts', 'mapa-simbolos.js')), 'achou');
+  caso('0.8.0 B13 crédito: licença, CREDITOS e registro com o commit fixo', fs.existsSync(path.join(RAIZ, 'terceiros', 'dietrichgebert-ponytail', 'LICENSE')) && /DietrichGebert\/ponytail \| 96608e0/.test(ler('CREDITOS.md')) && JSON.parse(ler('fontes', 'fontes.json')).fontes.some((x) => x.repo === 'DietrichGebert/ponytail' && x.arquivos.length >= 5), 'falta');
+  caso('0.8.0 B13 revisor e curador citam as referências novas', /revisar-pela-carga\.md/.test(secRef('revisor')) && /avaliar-skill\.md/.test(secRef('curador')), 'falta');
+  // T33: mapa de símbolos, numa pasta com espaço e acento, sem git
+  const pm = path.join(tmp, 'mapa símbolos ação'); fs.mkdirSync(path.join(pm, 'lib'), { recursive: true }); fs.mkdirSync(path.join(pm, 'tests'), { recursive: true });
+  fs.writeFileSync(path.join(pm, 'lib', 'datas.js'), 'export function formatarData(d) { return d; }\nexport const somar = (a, b) => a + b;\n');
+  fs.writeFileSync(path.join(pm, 'lib', 'preco.py'), 'def calcular_preco(x):\n    return x\n');
+  fs.writeFileSync(path.join(pm, 'tests', 'datas.test.js'), 'export function naoListar() {}\n');
+  const mp = require('child_process').spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'mapa-simbolos.js'), pm], { windowsHide: true, encoding: 'utf8' });
+  caso('0.8.0 B13 T33 mapa de símbolos: lista funções e exports por pasta e pula testes', mp.status === 0 && /lib\/: [^\n]*formatarData/.test(mp.stdout) && /calcular_preco/.test(mp.stdout) && !/naoListar/.test(mp.stdout), mp.stdout + mp.stderr);
+  const mp2 = require('child_process').spawnSync(process.execPath, [path.join(RAIZ, 'scripts', 'mapa-simbolos.js'), pm], { windowsHide: true, encoding: 'utf8', env: { ...process.env, AGENTES_ULTIMATE_MAPA_CARACTERES: '10' } });
+  caso('0.8.0 B13 T33 mapa de símbolos: respeita o limite de caracteres', mp2.status === 0 && !/formatarData/.test(mp2.stdout), mp2.stdout);
   // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
   v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });
   caso('0.8.0 B fontes: linha de crédito que cita fonte fora de fontes/fontes.json é erro', v.code === 1 && /cita fulano\/projeto-x, que não está em fontes\/fontes\.json/.test(v.out), v.out.slice(-300));

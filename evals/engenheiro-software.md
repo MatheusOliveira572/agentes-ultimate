@@ -85,6 +85,13 @@
 - Não deve: instalar e publicar sem olhar a licença.
 - Origem: checklists do autor do plugin (item 34).
 
+### Caso 12 · Menor mudança sem cortar o que protege
+- Tipo: referência sob demanda
+- Pedido: "acrescente o filtro por data na exportação; o mais simples possível."
+- Deve: listar antes o que a mudança alcança (quem chama, testes, config); usar o que já existe no projeto; manter a validação da data na entrada e o teste que falha antes; abrir `conhecimento/engenharia/escada-do-minimo.md` se precisar; fechar com o que ficou de fora.
+- Não deve: tirar validação, tratamento de erro ou teste para encurtar; criar opção ou configuração que ninguém pediu.
+- Origem: lote 13 (ponytail).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|
