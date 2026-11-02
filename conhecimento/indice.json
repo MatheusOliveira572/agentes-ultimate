@@ -2104,6 +2104,88 @@
           "calcule o custo de frete por região"
         ]
       }
+    },
+    {
+      "arquivo": "fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md",
+      "tema": "gravidade-e-excecoes",
+      "palavras": [
+        "matriz de risco",
+        "classificar risco",
+        "gravidade do risco",
+        "severidade",
+        "excecao de controle",
+        "tabela de excecoes",
+        "nao conformidade",
+        "aceite de risco",
+        "risco residual"
+      ],
+      "agentes": [
+        "analista-compliance"
+      ],
+      "teste": {
+        "sim": [
+          "classifique a gravidade dos riscos desta não conformidade e o risco residual",
+          "monte a tabela de exceções de controle com dono e validade para o aceite de risco"
+        ],
+        "nao": [
+          "crie a animação do botão da tela"
+        ]
+      }
+    },
+    {
+      "arquivo": "fonte/agentes/juridico/referencias/advogado-contratos/licencas-abertas.md",
+      "tema": "licencas-abertas",
+      "palavras": [
+        "licenca de software",
+        "licenca mit",
+        "licenca apache",
+        "copiar codigo de terceiro",
+        "usar codigo aberto",
+        "open source",
+        "gpl",
+        "copyleft",
+        "notice",
+        "repositorio sem licenca"
+      ],
+      "agentes": [
+        "advogado-contratos"
+      ],
+      "teste": {
+        "sim": [
+          "podemos copiar este código de terceiro com licença MIT para o produto?",
+          "o repositório não tem licença e outro é GPL, o que dá para usar em open source?"
+        ],
+        "nao": [
+          "monte o gráfico de vendas do painel"
+        ]
+      }
+    },
+    {
+      "arquivo": "fonte/agentes/juridico/referencias/especialista-lgpd/dados-para-terceiros.md",
+      "tema": "dados-para-terceiros",
+      "palavras": [
+        "dado para terceiro",
+        "ferramenta externa",
+        "mcp",
+        "servico externo",
+        "transferencia de dados",
+        "enviar dados para ia",
+        "provedor externo",
+        "operador de dados",
+        "dados pessoais em log"
+      ],
+      "agentes": [
+        "especialista-lgpd"
+      ],
+      "teste": {
+        "sim": [
+          "esta ferramenta externa com mcp manda dados pessoais para um provedor externo? avalie",
+          "podemos enviar dados para IA de um serviço externo e o que entra no log?"
+        ],
+        "nao": [
+          "escolha a paleta de cores da landing page"
+        ]
+      }
     }
   ]
 }

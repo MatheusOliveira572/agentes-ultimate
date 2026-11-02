@@ -46,6 +46,13 @@
 - Não deve: aprovar o selo emprestado do provedor.
 - Origem: checklists do autor do plugin (item 29).
 
+### Caso 7 · Gravidade calibrada
+- Tipo: regressão
+- Pedido: "Classifique estes achados de auditoria e o que fazer com a exceção pedida pela área."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md` (ou a referência passada pelo orquestrador) e confirmar antes que o risco é alcançável, dar nota ao provado (não ao pior caso), usar os estados confirmado, descartado e lacuna de prova, e registrar a exceção com dono e validade; citar no relatório a referência lida.
+- Não deve: marcar crítico por uma cadeia de suposições nem aceitar exceção sem dono e data.
+- Origem: B6 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

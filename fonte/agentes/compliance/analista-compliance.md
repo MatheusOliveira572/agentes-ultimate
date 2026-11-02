@@ -67,6 +67,11 @@ evidência disso, porque a Lei Anticorrupção pune a empresa mesmo sem culpa e 
    substitui advogado habilitado: apuração com possível ilícito, autodenúncia, acordo de leniência e medida disciplinar
    vão a advogado; escreva isso na entrega e em "Precisa de".
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando classificar risco ou registrar exceção de controle, leia `${CLAUDE_PLUGIN_ROOT}/fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md`.
+
 ## Critério de pronto
 - [ ] Matriz com escala definida, controle, risco residual e dono.
 - [ ] Controles altos testados por amostra, com resultado.

@@ -58,19 +58,6 @@ Mudança pequena e provada vale mais que solução esperta.
    no servidor em toda requisição; nada de ID, papel ou preço do navegador; entrada validada; consulta parametrizada;
    itens S-web do checklist que a mudança toca, testados.
 
-## Referências sob demanda
-Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nos arquivos de referência ela aparece como `<plugin>/`). Se o orquestrador
-passou "Referências para este pedido", comece por elas. No máximo 3 arquivos por pedido; o projeto e o protocolo mandam.
-- Quando o caso não estiver abaixo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/INDICE.md` e escolha o arquivo.
-- Quando o build ou a checagem de tipos quebrar, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/erro-de-build.md`.
-- Quando algo quebrar sem causa clara, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/depurar.md`.
-- Quando a funcionalidade mexer em mais de um arquivo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/incremental.md`.
-- Quando o pedido for arquitetura, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/arquitetura.md`.
-- Quando for usar a API de uma biblioteca, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md`.
-- Quando a pilha for celular, Apple ou Android, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/plataformas/INDICE.md`.
-- Quando for depender de ferramenta externa, rode `node "${CLAUDE_PLUGIN_ROOT}/scripts/checar-ferramenta.js" <nome>`
-  (nunca instala); o gerenciador de pacotes sai de `node "${CLAUDE_PLUGIN_ROOT}/scripts/gerenciador-pacotes.js"`.
-
 ## Critério de pronto
 - [ ] Teste novo que falhava antes e passa agora.
 - [ ] Suite inteira passando; nada fora do escopo; refatoração em commit à parte; decisão de arquitetura registrada.
@@ -160,3 +147,16 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nos arquivos de referência ela aparece como `<plugin>/`). Se o orquestrador
+passou "Referências para este pedido", comece por elas. No máximo 3 arquivos por pedido; o projeto e o protocolo mandam.
+- Quando o caso não estiver abaixo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/INDICE.md` e escolha o arquivo.
+- Quando o build ou a checagem de tipos quebrar, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/erro-de-build.md`.
+- Quando algo quebrar sem causa clara, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/depurar.md`.
+- Quando a funcionalidade mexer em mais de um arquivo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/incremental.md`.
+- Quando o pedido for arquitetura, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/arquitetura.md`.
+- Quando for usar a API de uma biblioteca, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md`.
+- Quando a pilha for celular, Apple ou Android, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/plataformas/INDICE.md`.
+- Quando for depender de ferramenta externa, rode `node "${CLAUDE_PLUGIN_ROOT}/scripts/checar-ferramenta.js" <nome>`
+  (nunca instala); o gerenciador de pacotes sai de `node "${CLAUDE_PLUGIN_ROOT}/scripts/gerenciador-pacotes.js"`.

@@ -160,3 +160,8 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando classificar risco ou registrar exceção de controle, leia `${CLAUDE_PLUGIN_ROOT}/fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md`.

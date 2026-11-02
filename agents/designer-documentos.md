@@ -52,18 +52,6 @@ por página, gráfico certo, marca aplicada, nada com cara de modelo padrão.
    à fonte.
 4. Teste do relance em cada slide → checagem: o ponto do título se vê no gráfico em ~3 s, sem ler notas.
 
-## Referências sob demanda
-Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
-pedido", comece por elas. No máximo 3 por pedido; a marca e as decisões do projeto vencem.
-- Quando formatar documento ou slide, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/tipografia/INDICE.md`.
-- Quando escolher paleta ou conferir contraste, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/cor/INDICE.md`.
-- Quando montar grade, margens e espaçamento, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/layout/INDICE.md`.
-- Quando for editar a peça, leia antes `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/piso-de-qualidade.md`; no passe final, `polimento.md`.
-- Quando revisar uma peça pronta, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/critica/INDICE.md`.
-- Quando for documento longo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/modos/ler.md`; se precisa convencer, `modos/persuadir.md`.
-- Quando precisar de ilustração técnica, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/documentos/ilustracao-tecnica.md`.
-- Quando o PDF ou o slide precisar ser acessível, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/acessibilidade/INDICE.md`.
-
 ## Critério de pronto
 - [ ] Títulos-ação; um ponto por página; teste do relance passa.
 - [ ] Gráfico pela relação, com destaque só no ponto principal.
@@ -156,3 +144,15 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; a marca e as decisões do projeto vencem.
+- Quando formatar documento ou slide, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/tipografia/INDICE.md`.
+- Quando escolher paleta ou conferir contraste, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/cor/INDICE.md`.
+- Quando montar grade, margens e espaçamento, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/layout/INDICE.md`.
+- Quando for editar a peça, leia antes `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/piso-de-qualidade.md`; no passe final, `polimento.md`.
+- Quando revisar uma peça pronta, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/critica/INDICE.md`.
+- Quando for documento longo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/modos/ler.md`; se precisa convencer, `modos/persuadir.md`.
+- Quando precisar de ilustração técnica, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/documentos/ilustracao-tecnica.md`.
+- Quando o PDF ou o slide precisar ser acessível, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/acessibilidade/INDICE.md`.

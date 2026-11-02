@@ -244,6 +244,10 @@
           "destino": "conhecimento/metodo/refinar-ideia.md"
         },
         {
+          "origem": "skills/constraint-driven-development/SKILL.md",
+          "destino": "fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md"
+        },
+        {
           "origem": "skills/constraint-driven-development/scripts/quality-gate.mjs",
           "destino": "modelos/quality-gate.mjs"
         }
@@ -285,7 +289,12 @@
       "ultimo_conferido": "6b7ae2ebe4d47037a927aade23265ff4e4f27e84",
       "conferido_em": "2026-11-01",
       "vigiar": true,
-      "arquivos": []
+      "arquivos": [
+        {
+          "origem": "strix/skills/analysis/severity_calibration.md",
+          "destino": "fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md"
+        }
+      ]
     },
     {
       "repo": "affaan-m/ECC",

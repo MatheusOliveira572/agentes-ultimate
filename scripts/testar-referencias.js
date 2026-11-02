@@ -140,6 +140,13 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B5 rodada: ponto de controle e passadas limitadas', /Ponto de controle/.test(ler('skills', 'rodada', 'SKILL.md')) && /Passadas limitadas/.test(ler('skills', 'rodada', 'SKILL.md')), 'falta');
   caso('0.8.0 B5 curador: seção de referências e eval cobram evals e contexto', secRef('curador').includes('/conhecimento/metodo/evals.md') && ler('evals', 'curador.md').includes('conhecimento/metodo/evals.md'), 'falta');
 
+  // ---- Lote 6 · compliance, LGPD, contratos, dados e Power BI ----
+  const b6 = { 'analista-compliance': 'fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md', 'especialista-lgpd': 'fonte/agentes/juridico/referencias/especialista-lgpd/dados-para-terceiros.md', 'advogado-contratos': 'fonte/agentes/juridico/referencias/advogado-contratos/licencas-abertas.md', 'engenheiro-dados': 'conhecimento/engenharia/migracao.md', 'dev-powerbi': 'conhecimento/design/construir-do-desenho.md' };
+  for (const [ag, arq] of Object.entries(b6)) caso(`0.8.0 B6 ${ag}: seção cita ${arq.split('/').pop()} e o eval cobra a leitura`, secRef(ag).includes('/' + arq) && ler('evals', ag + '.md').includes(arq), 'falta');
+  const seisAg = ler('agents', 'dev-powerbi.md');
+  caso('0.8.0 B6 gerador: "Referências sob demanda" vem depois do protocolo comum, fora das 90 linhas', seisAg.indexOf('## Referências sob demanda') > seisAg.indexOf('## Protocolo comum'), 'seção antes do protocolo');
+  caso('0.8.0 B6 licenças: sem licença não se copia; Apache pede marcar alterados e levar o NOTICE', /Sem licença\*\* \| \*\*não\*\*/.test(ler(...b6['advogado-contratos'].split('/'))) && /NOTICE/.test(ler(...b6['advogado-contratos'].split('/'))), 'falta');
+
   // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
   v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });
   caso('0.8.0 B fontes: linha de crédito que cita fonte fora de fontes/fontes.json é erro', v.code === 1 && /cita fulano\/projeto-x, que não está em fontes\/fontes\.json/.test(v.out), v.out.slice(-300));

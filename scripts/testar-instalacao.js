@@ -17,7 +17,7 @@ const falhas = [];
 const passo = (nome, ok, det) => { console.log(`${ok ? 'ok   ' : 'FALHA'} ${nome}${ok ? '' : ' → ' + det}`); if (!ok) falhas.push(nome); };
 const tar = path.join(dst, 'p.tar');
 execSync(`git archive HEAD -o "${tar}"`, { windowsHide: true, cwd: RAIZ });
-execSync(`tar --force-local -xf "${tar}" -C "${dst}"`, { windowsHide: true });
+execSync('tar --force-local -xf p.tar', { windowsHide: true, cwd: dst }); // pela pasta: o tar não abre caminho com acento no Windows
 fs.rmSync(tar);
 const node = (args, cwd = dst) => spawnSync(process.execPath, args, { windowsHide: true, cwd, encoding: 'utf8' });
 let r = node([path.join(dst, 'scripts', 'validar.js')]);
@@ -31,7 +31,7 @@ const dois = hash();
 passo('gerar-agentes.js é idempotente e o agents/ do git está em dia', antes === um && um === dois, 'agents/ muda ao gerar: rode o gerador antes do commit');
 r = spawnSync(process.execPath, [path.join(dst, 'hooks', 'roteador.js')], { windowsHide: true, encoding: 'utf8', input: JSON.stringify({ prompt: 'corrija o bug do script python', cwd: dst, hook_event_name: 'UserPromptSubmit' }), env: { ...process.env, AGENTES_ULTIMATE_SEM_PASTA: '1', AGENTES_ULTIMATE_SEM_AUTOATUALIZAR: '1' } });
 passo('o roteador responde na cópia limpa', r.status === 0 && /Software/.test(r.stdout || ''), (r.stdout || r.stderr || '').slice(0, 300));
-const cl = spawnSync('claude', ['plugin', 'validate', dst], { windowsHide: true, encoding: 'utf8', shell: process.platform === 'win32', timeout: 60000 });
+const cl = spawnSync(`claude plugin validate "${dst}"`, { windowsHide: true, encoding: 'utf8', shell: true, timeout: 60000 });
 if (cl.error || cl.status === null) console.log('info  claude não disponível: validação do manifesto pulada');
 else passo('claude plugin validate', cl.status === 0, (cl.stdout || cl.stderr || '').slice(-300));
 fs.rmSync(dst, { recursive: true, force: true });

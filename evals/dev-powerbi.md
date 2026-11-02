@@ -35,6 +35,13 @@
 - Não deve: escolher cor ou visual por conta própria.
 - Origem: Fora do escopo.
 
+### Caso 6 · Do gabarito para o PBIP
+- Tipo: regressão
+- Pedido: "Construa a página a partir do gabarito aprovado."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/construir-do-desenho.md` (ou a referência passada pelo orquestrador) e mapear para o tema e as medidas, construir só o que o desenho mostra e entregar a tabela elemento × desenho × construído, com a imagem exportada contra o gabarito; citar no relatório a referência lida.
+- Não deve: inventar estado que o desenho não mostra nem usar valor solto fora do tema.
+- Origem: B6 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

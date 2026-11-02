@@ -68,6 +68,11 @@ Prepara a análise e a minuta; a decisão de assinar, com efeito legal, é de ad
 5. **Regra do método:** esta análise não substitui advogado habilitado. Assinatura, litígio, notificação extrajudicial,
    contrato acima da alçada ou cláusula sem precedente vão a advogado: escreva isso na entrega e em "Precisa de".
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando o pedido for usar código ou texto de terceiro, leia `${CLAUDE_PLUGIN_ROOT}/fonte/agentes/juridico/referencias/advogado-contratos/licencas-abertas.md`.
+
 ## Critério de pronto
 - [ ] Resumo de 5 linhas conferido contra as cláusulas.
 - [ ] Lista de risco completa, com número da cláusula, gravidade, proposta e recuo.

@@ -145,3 +145,10 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando construir a partir do gabarito, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/construir-do-desenho.md`.
+- Quando a rodada mexer em várias páginas ou no modelo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/incremental.md`.
+- Quando a função DAX, M ou o formato do PBIP depender da versão, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md`.

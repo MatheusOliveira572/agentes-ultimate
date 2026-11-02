@@ -118,6 +118,9 @@ falhando antes.
   gerador idempotente, roteador e manifesto); `ultimate` ganha padrões de orquestração, passagem entre agentes, revisor em contexto limpo e
   régua de pronto; `rodada` ganha ponto de controle e passadas limitadas; `criar-agente` ensina as referências. **T11** (evals de
   comportamento com o `claude` sem tela) fica descrito em `evals.md`, opcional.
+- **B6 · `analista-compliance`, `especialista-lgpd`, `advogado-contratos`, `engenheiro-dados`, `dev-powerbi`** (~7 KB): gravidade calibrada e exceções
+  com dono e validade (strix Apache-2.0, addy MIT), dado para serviço externo e licenças abertas (texto nosso); seção e caso de eval nos 5.
+  `gerar-agentes.js` passa a pôr "Referências sob demanda" depois do protocolo comum: é índice e não conta nas 90 linhas (os 3 primeiros estavam em 89).
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
