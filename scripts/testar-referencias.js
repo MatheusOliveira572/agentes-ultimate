@@ -183,7 +183,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     const t = ctx(r);
     const linha = (t.split('\n').find((l) => l.startsWith('Referências para este pedido')) || '');
     const refs = [...linha.matchAll(/`([^`]+)` \(para `([^`]+)`\)/g)].map((m) => ({ arquivo: path.relative(RAIZ, m[1]).split(path.sep).join('/'), agente: m[2].replace(/^agentes-ultimate:/, '') }));
-    return { t, refs, agentes: (t.match(/Agentes indicados[^:]*: ([^.]+)\./) || [])[1] || '' };
+    return { t, refs, agentes: (t.match(/(?:Agentes indicados|Candidatos, com o motivo de cada um; decida pelo assunto)[^:]*: ([^.]+)\./) || [])[1] || '' };
   };
   const ind = (() => { try { return JSON.parse(ler('conhecimento', 'indice.json')); } catch (e) { return { referencias: [] }; } })();
   const fixo = (() => { try { return require(path.join(RAIZ, 'scripts', 'indice-referencias.js')).montar(RAIZ); } catch (e) { return null; } })();
@@ -219,6 +219,30 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const mkt = rotRef('monte o plano de lançamento do produto novo com a campanha nas redes sociais');
   caso('0.8.0 D-h roteador: plano de lançamento de produto vai para Marketing e não pede o checklist de publicação',
     /estrategista-marketing/.test(mkt.agentes) && !/\/checklist-lancamento/.test(mkt.t), `agentes: ${mkt.agentes}; checklist: ${/checklist-lancamento/.test(mkt.t)}`);
+
+  // ---- Palavra vira pista: casos com os erros reais do usuário ----
+  const pbip = path.join(tmp, 'pasta-pbip'); fs.mkdirSync(path.join(pbip, '.claude', 'base'), { recursive: true });
+  fs.writeFileSync(path.join(pbip, '.claude', 'base', 'desligado'), ''); fs.writeFileSync(path.join(pbip, 'Painel.pbip'), '{}');
+  const naPasta = (pedido, cwd) => {
+    const r = hook('roteador.js', { prompt: pedido, cwd, hook_event_name: 'UserPromptSubmit' });
+    const c = ctx(r);
+    const pac = (c.split('\n').find((l) => l.startsWith('Pacotes:')) || '').replace('Pacotes: ', '');
+    return { c, pac, primeiro: pac.split(' (')[0], msg: (r.json && r.json.systemMessage) || '' };
+  };
+  let rp = naPasta('redesenhar um app com visual premium', pbip);
+  caso('0.8.0 pista: "redesenhar um app com visual premium" numa pasta com .pbip não dá BI', /Interface/.test(rp.primeiro) && !/BI e painéis/.test(rp.pac), rp.pac || rp.c.slice(0, 200));
+  rp = naPasta('vai me mostrar os resultados desses testes, glass effect', pbip);
+  caso('0.8.0 pista: "os resultados desses testes, glass effect" não dá Software como primeira opção', !/Software/.test(rp.primeiro), rp.pac || 'sem pacote');
+  rp = naPasta('esses pedidos foram para o plugin, não para o nosso BI', pbip);
+  caso('0.8.0 pista: "não para o nosso BI" não dá BI', !/BI e painéis/.test(rp.pac), rp.pac);
+  rp = naPasta('um visual novo', pbip);
+  caso('0.8.0 pista: palavra ambígua sozinha com o .pbip na pasta não escolhe pacote', !/BI e painéis/.test(rp.pac), rp.pac);
+  rp = naPasta('crie a medida de margem e ajuste o relatório do dashboard', pbip);
+  caso('0.8.0 pista: pedido de BI de verdade continua indo para BI', /BI e painéis/.test(rp.primeiro), rp.pac);
+  caso('0.8.0 pista: a saída diz "Candidatos, com o motivo de cada um; decida pelo assunto"', /Candidatos, com o motivo de cada um; decida pelo assunto/.test(rp.c) && !/Agentes indicados/.test(rp.c), rp.c.slice(0, 200));
+  rp = naPasta('monte o painel de custos com a planilha de orçado e realizado', proj2());
+  caso('0.8.0 pista: mostra as alternativas próximas quando há outra área com sinal', /Alternativas próximas/.test(rp.c) || rp.pac.split(';').length > 1, rp.c.slice(0, 300));
+  function proj2() { return projRef; }
 
   // Equivalência com o apple-design-skill (lido como referência do que cobrir, sem copiar): para 4 pedidos de design,
   // as regras que a skill original aplicaria têm de estar na nossa versão, com o mesmo valor e a fonte na HIG.

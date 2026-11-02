@@ -19,6 +19,12 @@ function contem(texto, termo) {
   return new RegExp('(^|[^a-z0-9&])' + t + '($|[^a-z0-9&])').test(texto);
 }
 
+// "não para o nosso BI", "não é um painel": o pedido cita o assunto para afastá-lo.
+function negado(texto, termo) {
+  const t = normalizar(termo).split(/\s+/).map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(e?s)?').join('\\s+');
+  return new RegExp('(^|[^a-z0-9&])nao\\s+(para|e|era|foi|no|na|do|da)(\\s+[a-z]+){0,3}?\\s+' + t + '($|[^a-z0-9&])').test(texto);
+}
+
 function palavras(texto) {
   return new Set(texto.split(/[^a-z0-9&]+/).filter((p) => p.length > 2));
 }
@@ -156,14 +162,20 @@ function main(d) {
   }
 
   const nomes = nomesDaPasta(cwd);
+  const ambiguas = new Set((cfg.ambiguas || []).map(normalizar));
   const pontos = {};
   const motivos = {};
   for (const [id, p] of Object.entries(cfg.pacotes)) {
     if (p.sempre) continue;
-    let s = 0; const m = [];
-    for (const w of p.palavras || []) if (contem(texto, w)) { s += w.includes(' ') ? 2 : 1; m.push(w); }
-    // Arquivo da pasta só reforça: sozinho não puxa o pacote (pergunta curta numa pasta com package.json não é Software).
-    if (s > 0) for (const a of p.arquivos || []) if (nomes.some((n) => n.endsWith(a) || n === a)) { s += 2; m.push('pasta tem ' + a); }
+    let s = 0; const m = []; let firme = 0;
+    for (const w of p.palavras || []) {
+      if (!contem(texto, w) || negado(texto, w)) continue;
+      // Palavra é pista. A que serve a várias áreas pesa pouco e, sozinha, não escolhe pacote; expressão pesa mais.
+      if (ambiguas.has(normalizar(w))) { s += 0.5; m.push(w + ' (ambígua)'); } else { s += w.includes(' ') ? 2 : 1; firme++; m.push(w); }
+    }
+    // Arquivo da pasta só reforça: sem uma palavra firme do assunto ele não conta (pasta com .pbip e "visual" não é BI).
+    if (firme) for (const a of p.arquivos || []) if (nomes.some((n) => n.endsWith(a) || n === a)) { s += 2; m.push('pasta tem ' + a); }
+    if (!firme) s = Math.min(s, (cfg.minimo || 2) - 0.5);
     pontos[id] = s; motivos[id] = m;
   }
 
@@ -200,6 +212,9 @@ function main(d) {
   const doProjeto = new Set(Object.values(equiv));
   const chamada = (a) => (doProjeto.has(a) ? a : 'agentes-ultimate:' + a);
   const nomesPac = escolhidos.map((id) => cfg.pacotes[id].nome);
+  // Áreas com sinal que não chegaram ao mínimo: ficam à vista para o orquestrador decidir pelo assunto.
+  const proximas = Object.keys(pontos).filter((id) => pontos[id] > 0 && !escolhidos.includes(id)).sort((a, b) => pontos[b] - pontos[a]).slice(0, 3)
+    .map((id) => `${cfg.pacotes[id].nome} (${motivos[id].slice(0, 3).join(', ')})`);
   const linhaUsuario = escolhidos.length
     ? `Usando: ${nomesPac.join(' + ')} · ${agentes.join(', ')}`
     : 'Área não reconhecida pelo vocabulário: o Claude escolhe os especialistas';
@@ -213,12 +228,12 @@ function main(d) {
       ? 'Pacotes: ' + escolhidos.map((id) => `${cfg.pacotes[id].nome} (${motivos[id].slice(0, 4).join(', ')})`).join('; ') + '.'
       : 'O vocabulário não reconheceu a área deste pedido. DECIDA VOCÊ quais especialistas o pedido precisa, pelo assunto (não pelo verbo), escolhendo no catálogo abaixo e nas descrições dos agentes disponíveis; não use só o núcleo por falta de palavra-chave.',
     escolhidos.length
-      ? `Agentes indicados (subagent_type para a ferramenta Agent): ${agentes.map(chamada).join(', ')}${agenteExemplo ? ` (o usuário já indicou ${agenteExemplo} para pedido parecido)` : ''}. Se o pedido precisar de outra área, acrescente pelo catálogo.`
+      ? `Candidatos, com o motivo de cada um; decida pelo assunto (subagent_type para a ferramenta Agent): ${agentes.map(chamada).join(', ')}${agenteExemplo ? ` (o usuário já indicou ${agenteExemplo} para pedido parecido)` : ''}. A palavra é pista, não decisão: se o assunto for outro, troque pelo catálogo.${proximas.length ? ` Alternativas próximas: ${proximas.join('; ')}.` : ''}`
       : 'Revisor (sempre antes de entregar): agentes-ultimate:revisor' + (equiv.revisor ? ` (neste projeto: ${equiv.revisor})` : '') + '.',
     `Catálogo (área: subagent_type): ${catalogo}.`,
     projetoCfg.delegar === 'quando-precisar'
       ? 'Conduza pela skill `ultimate`. Delegue aos agentes quando o trabalho pedir um especialista; o resto, faça você.'
-      : 'DELEGUE: este pedido é trabalho de especialista. Você é o orquestrador: chame os agentes indicados com a ferramenta Agent (passe o contexto e o "já feito" abaixo), combine o resultado, chame o revisor antes de entregar e fale com o usuário. Não faça você mesmo a análise, o código ou o documento. Siga a skill `ultimate`. Só responda sem agentes se for uma pergunta de uma linha.',
+      : 'DELEGUE: este pedido é trabalho de especialista. Você é o orquestrador: chame os candidatos que servem ao assunto com a ferramenta Agent (passe o contexto e o "já feito" abaixo), combine o resultado, chame o revisor antes de entregar e fale com o usuário. Não faça você mesmo a análise, o código ou o documento. Siga a skill `ultimate`. Só responda sem agentes se for uma pergunta de uma linha.',
     'Na 1ª linha da resposta, diga quais agentes vai usar; o usuário corrige com "era com <agente>".',
   ];
   // Modelo e esforço por tarefa (skill ultimate §1b): só com o aceite do usuário. O projeto vence, inclusive com false.

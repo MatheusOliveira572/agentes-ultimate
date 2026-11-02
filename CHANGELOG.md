@@ -107,6 +107,10 @@ falhando antes.
   o eval do engenheiro aponta para o item S-12, onde ficaram os campos do log. b-7, duas mensagens de commit não descrevem o conteúdo
   e o histórico não será reescrito: o `5544502` ("G8 correção: H-5") também traz o vigia das fontes da parte B, e o `9fc1af7` altera
   conteúdo jurídico (é a conferência da `especialista-lgpd`), embora diga "sem alteração de conteúdo".
+- **Roteador: palavra vira pista, não decisão.** A saída passa a "Candidatos, com o motivo de cada um; decida pelo assunto", com as
+  alternativas próximas. Palavra ambígua (`ambiguas` em `pacotes.json`) vale 0,5 e sozinha não escolhe pacote; arquivo da pasta só
+  reforça com uma palavra firme do assunto; "não para o nosso BI" não conta como pedido de BI. `scripts/eval-roteamento.js`: casos em
+  `evals/roteamento.json` contra o roteador real, piso de 90%, e relatório das palavras em mais de um pacote.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
