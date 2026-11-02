@@ -354,7 +354,7 @@ async function provarSite() {
   // Interações: cena à mão, período do preço, pergunta, menu do celular, foco no "pular".
   gravarRes({ simulacao }); await novo(); await janela(b, 1440); await ir(b, url); await espera(300);
   await b.ev(`document.querySelector('[data-cena="2"]').click()`); await espera(450);
-  const m = await b.ev(`document.getElementById('metrica').getAttribute('aria-label')+'|'+document.getElementById('t-22').textContent`);
+  const m = await b.ev(`document.getElementById('m-falado').textContent+'|'+document.getElementById('t-22').textContent`);
   const precos = await b.ev(`(function(){var t=document.querySelector('.tabela-planos').innerText;return ['178,80','19,90','274,80','29,90'].every(function(s){return t.indexOf(s)>=0})})()`);
   await b.ev(`document.querySelector('details.p summary').click()`);
   const abriu = await b.ev(`document.querySelector('details.p').open && document.querySelector('details.p p').getBoundingClientRect().height > 0`);

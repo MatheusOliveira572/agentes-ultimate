@@ -154,6 +154,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     caso('0.8.0 sites prova: as checagens falham no caso errado (mutantes)', mut.length >= 5 && mut.every((m) => m.pegou === true), JSON.stringify(mut));
     const html = ler(...PROVA, 'site-preamar.html');
     caso('0.8.0 sites M-2: sem o bloco e os títulos parecidos com os de uma referência', !/Por que é pago|quanto sobra|Perguntas de quem/i.test(html), 'sobrou');
+    caso('0.8.0 sites b-7: botões de plano levam ao fim da página, sem aria-label em parágrafo, pausa muda só o nome', /href="#fim">Testar o Solo/.test(html) && !/<p[^>]*aria-label/.test(html) && !/id="pausa" aria-pressed/.test(html), 'falta');
     caso('0.8.0 sites direitos: a página de prova não traz nome, texto nem endereço de terceiros, e diz que é fictícia', /fict[ií]c/i.test(html) && !/finmate|usecalen|dinzo|nivora|code ?and ?chill/i.test(html) && !/(src|href)=["']https?:/i.test(html) && !/url\(["']?https?:/i.test(html), 'falta aviso ou há referência externa');
     // Cada efeito ou tem prova na bancada, ou fica [ESTIMATIVA] no quadro.
     const quadro = lerSP('efeitos', 'provas.md');

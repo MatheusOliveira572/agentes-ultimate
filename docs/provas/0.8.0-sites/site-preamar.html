@@ -73,6 +73,7 @@ h1 { font-size: clamp(36px, 5vw, 68px); line-height: 1.04; letter-spacing: -0.02
 .tabua-topo { font-size: 14px; color: var(--texto-2); display: flex; justify-content: space-between; gap: 12px; }
 .metrica { display: flex; align-items: baseline; font-family: var(--serif); margin-top: 6px; color: var(--texto); }
 .metrica .s { font-size: 26px; margin-right: 6px; } .metrica .i { font-size: 54px; line-height: 1.1; letter-spacing: -0.01em; } .metrica .c { font-size: 26px; }
+.metrica-a11y { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .variacao { font-size: 14px; color: var(--texto-2); min-height: 22px; }
 .cenas { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
 .cenas button { min-height: 44px; padding: 0 9px; font: 500 14px/1.15 var(--sans); color: var(--texto); background: transparent; border: 1px solid var(--regua-forte); border-radius: 8px; cursor: pointer; transition: background-color .16s ease-out; }
@@ -295,13 +296,14 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
     </div>
     <div class="tabua" id="tabua">
       <p class="tabua-topo"><span>Menor saldo de novembro</span><span id="cena-nome" class="troca">Como está</span></p>
-      <p class="metrica num troca" id="metrica" aria-label="R$ 312,40"><span class="s">R$</span><span class="i" id="m-i">312</span><span class="c" id="m-c">,40</span></p>
+      <p class="metrica-a11y" id="m-falado">R$ 312,40</p>
+      <p class="metrica num troca" id="metrica" aria-hidden="true"><span class="s">R$</span><span class="i" id="m-i">312</span><span class="c" id="m-c">,40</span></p>
       <p class="variacao troca" id="variacao">No dia 22, quando o cartão vence.</p>
       <div class="cenas" id="cenas" hidden>
         <button type="button" data-cena="0" aria-pressed="true">Como está</button>
         <button type="button" data-cena="1" aria-pressed="false">Parcelar o seguro</button>
         <button type="button" data-cena="2" aria-pressed="false">Antecipar o freela</button>
-        <button type="button" class="pausa" id="pausa" aria-pressed="false">Pausar</button>
+        <button type="button" class="pausa" id="pausa">Pausar</button>
       </div>
       <table>
         <thead><tr><th scope="col">Dia</th><th scope="col">O que acontece</th><th scope="col" class="dir">Saldo previsto (R$)</th></tr></thead>
@@ -529,7 +531,7 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
     var c = cenas[n];
     var trocar = function () {
       q('#cena-nome').textContent = c.nome; q('#m-i').textContent = c.i; q('#m-c').textContent = c.c;
-      q('#metrica').setAttribute('aria-label', c.falado); q('#variacao').textContent = c.nota;
+      q('#m-falado').textContent = c.falado; q('#variacao').textContent = c.nota;
       q('#t-22').textContent = c.d22; q('#t-30').textContent = c.d30;
       alvos.forEach(function (e) { e.classList.remove('saindo'); });
     };
@@ -547,10 +549,10 @@ footer a { display: inline-flex; align-items: center; justify-content: center; m
     relogio = setInterval(function () { mostra((atual + 1) % cenas.length); }, 3000);
   }
   botoes.forEach(function (b) {
-    b.addEventListener('click', function () { parado = true; pausa.textContent = 'Retomar'; pausa.setAttribute('aria-pressed', 'true'); para(); mostra(+b.dataset.cena); });
+    b.addEventListener('click', function () { parado = true; pausa.textContent = 'Retomar'; para(); mostra(+b.dataset.cena); });
   });
   pausa.addEventListener('click', function () {
-    parado = !parado; pausa.textContent = parado ? 'Retomar' : 'Pausar'; pausa.setAttribute('aria-pressed', String(parado)); roda();
+    parado = !parado; pausa.textContent = parado ? 'Retomar' : 'Pausar'; roda();
   });
   var menu = q('.menu');
   menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { menu.open = false; }); });
