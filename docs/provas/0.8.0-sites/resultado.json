@@ -22,7 +22,7 @@
    "titulos_cobertos": 0,
    "detalhe_cobertos": [],
    "camadas_fixas": 1,
-   "contraste_medidos": 204,
+   "contraste_medidos": 170,
    "contraste_falhas": 0,
    "contraste_pior": 5.68,
    "detalhe_falhas": []
@@ -49,9 +49,9 @@
    "titulos_cobertos": 0,
    "detalhe_cobertos": [],
    "camadas_fixas": 1,
-   "contraste_medidos": 200,
+   "contraste_medidos": 166,
    "contraste_falhas": 0,
-   "contraste_pior": 5.2,
+   "contraste_pior": 5.19,
    "detalhe_falhas": []
   },
   {
@@ -76,9 +76,9 @@
    "titulos_cobertos": 0,
    "detalhe_cobertos": [],
    "camadas_fixas": 1,
-   "contraste_medidos": 204,
+   "contraste_medidos": 170,
    "contraste_falhas": 0,
-   "contraste_pior": 4.84,
+   "contraste_pior": 5.68,
    "detalhe_falhas": []
   },
   {
@@ -103,9 +103,9 @@
    "titulos_cobertos": 0,
    "detalhe_cobertos": [],
    "camadas_fixas": 1,
-   "contraste_medidos": 200,
+   "contraste_medidos": 166,
    "contraste_falhas": 0,
-   "contraste_pior": 4.84,
+   "contraste_pior": 5.19,
    "detalhe_falhas": []
   }
  ],
@@ -132,14 +132,14 @@
   "com_desfoque": 0,
   "alfa_minimo": 1,
   "contraste_falhas": 0,
-  "contraste_pior": 4.84,
+  "contraste_pior": 5.68,
   "detalhe_falhas": []
  },
  "mais_contraste": {
   "media_ativa": true,
   "com_desfoque": 0,
   "contraste_falhas": 0,
-  "contraste_pior": 5.68
+  "contraste_pior": 5.56
  },
  "sem_js": {
   "h1": true,
@@ -199,6 +199,10 @@
    "pegou": true
   },
   {
+   "nome": "pergunta fora do Tab (tabindex -1)",
+   "pegou": true
+  },
+  {
    "nome": "botão de pausa escondido",
    "pegou": true
   },
@@ -231,7 +235,7 @@
    "pegou": true
   }
  ],
- "gerado_em": "2026-11-02T08:09:49.384Z",
+ "gerado_em": "2026-11-02T11:38:09.956Z",
  "navegador": "Edg/156.0.4314.58",
  "condicao": "Edge sem interface, uma máquina Windows; imagens renderizadas sem aparelho real",
  "efeitos": [
@@ -1022,6 +1026,9 @@
    "tema": "claro",
    "largura": 1440,
    "paradas": 24,
+   "esperadas": 24,
+   "faltam": [],
+   "sobram": [],
    "voltas": 23,
    "tem_pausa": true,
    "sob_a_barra": [],
@@ -1033,6 +1040,9 @@
    "tema": "escuro",
    "largura": 1440,
    "paradas": 24,
+   "esperadas": 24,
+   "faltam": [],
+   "sobram": [],
    "voltas": 23,
    "tem_pausa": true,
    "sob_a_barra": [],
@@ -1044,6 +1054,9 @@
    "tema": "claro",
    "largura": 390,
    "paradas": 20,
+   "esperadas": 20,
+   "faltam": [],
+   "sobram": [],
    "voltas": 19,
    "tem_pausa": true,
    "sob_a_barra": [],
