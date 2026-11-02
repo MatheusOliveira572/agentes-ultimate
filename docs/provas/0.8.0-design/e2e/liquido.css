@@ -1,0 +1,56 @@
+/* Liquid Glass na web (aproximação do material descrito na HIG › Materials › Liquid Glass). pv94.
+   O que a Apple descreve e como aproximamos:
+   - lente (o vidro entorta o que passa atrás, mais forte na borda) → backdrop-filter: url(#svg) com feDisplacementMap
+     (mapa de deslocamento gerado por liquido.js para o tamanho e o raio de cada peça); só Chromium. Fora dele, o
+     material regular: desfoque + saturação (reserva honesta, sem fingir refração);
+   - brilho especular na borda que reage à luz → anel em gradiente cujo ângulo (--luz) segue o ponteiro e a rolagem;
+   - tinta que se adapta ao que passa atrás → data-tom="claro|escuro" calculado da luminância real do conteúdo de trás;
+   - forma em cápsula, concêntrica → raio interno = raio externo − recuo (--lg-recuo);
+   - só na camada de controles e navegação (nunca no conteúdo).
+   Acessibilidade: prefers-reduced-transparency → fosco opaco, sem lente; prefers-contrast: more → sólido com borda;
+   prefers-reduced-motion → o brilho para de seguir o ponteiro. Contraste medido no pior ponto (verificar-v2.js). */
+.lg {
+  --lg-tinta: rgb(255 255 255 / 0.66); --lg-opaco: rgb(246 246 248); --lg-texto: #111114; --lg-texto-2: #2e2e34;
+  --lg-aro: 255 255 255; --lg-aro-forca: 0.95; --lg-sombra: 0 0 0;
+  position: relative; isolation: isolate; color: var(--lg-texto);
+  background: var(--lg-tinta);
+  -webkit-backdrop-filter: blur(14px) saturate(180%); backdrop-filter: blur(14px) saturate(180%);
+  box-shadow: 0 12px 32px -10px rgb(var(--lg-sombra) / 0.30), 0 2px 6px rgb(var(--lg-sombra) / 0.10),
+    inset 0 1px 0 rgb(var(--lg-aro) / 0.50), inset 0 -1px 1px rgb(var(--lg-aro) / 0.10);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+/* Aro especular: 1,25 px de luz que gira com --luz (o ponteiro). */
+.lg::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.25px; pointer-events: none; z-index: 2;
+  background: linear-gradient(var(--luz, 135deg), rgb(var(--lg-aro) / var(--lg-aro-forca)), rgb(var(--lg-aro) / 0.18) 26%,
+    rgb(var(--lg-aro) / 0) 50%, rgb(var(--lg-aro) / 0.14) 74%, rgb(var(--lg-aro) / calc(var(--lg-aro-forca) * 0.7)));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+/* Brilho interno do lado da luz (realce do volume, como a luz na superfície curva). */
+.lg::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+  background: radial-gradient(130% 100% at var(--lx, 25%) var(--ly, 0%), rgb(var(--lg-aro) / 0.30), rgb(var(--lg-aro) / 0) 58%);
+}
+/* Tons: o vidro escurece sobre conteúdo escuro (e no tema escuro) e clareia sobre conteúdo claro. */
+.lg[data-tom="escuro"] { --lg-tinta: rgb(22 22 26 / 0.60); --lg-texto: #ffffff; --lg-texto-2: #ececf0; --lg-aro-forca: 0.70; }
+.lg[data-tom="claro"] { --lg-tinta: rgb(255 255 255 / 0.64); --lg-texto: #111114; --lg-texto-2: #3a3a40; --lg-aro-forca: 0.95; }
+.lg[data-tom="escuro"][data-lg-misto] { --lg-tinta: rgb(22 22 26 / 0.72); }
+.lg[data-tom="claro"][data-lg-misto] { --lg-tinta: rgb(255 255 255 / 0.78); }
+@media (prefers-color-scheme: dark) {
+  .lg:not([data-tom]) { --lg-tinta: rgb(28 28 32 / 0.66); --lg-opaco: rgb(36 36 40); --lg-texto: #f5f5f7; --lg-texto-2: #e2e2e8; --lg-aro-forca: 0.55; }
+  .lg { --lg-opaco: rgb(36 36 40); }
+}
+/* Seleção dentro do vidro: cápsula concêntrica (raio = raio externo − recuo). */
+.lg-sel { border-radius: calc(var(--lg-raio, 26px) - var(--lg-recuo, 6px)); background: rgb(var(--lg-aro) / 0.0);
+  box-shadow: inset 0 0 0 100vmax rgb(127 127 140 / 0.20); }
+@media (prefers-reduced-transparency: reduce) {
+  .lg { background: var(--lg-opaco) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .lg[data-tom] { --lg-texto: inherit; }
+  .lg::after { display: none; }
+}
+@media (prefers-contrast: more) {
+  .lg { background: var(--lg-opaco) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+    outline: 1.5px solid currentColor; }
+  .lg::before, .lg::after { display: none; }
+}

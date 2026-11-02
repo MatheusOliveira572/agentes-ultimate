@@ -1,0 +1,618 @@
+<!doctype html>
+<!-- Caso A, "depois" v2 (pv94, designer-paineis): o mesmo app de tarefas fictício do caso-a-antes.html, redesenhado com uma
+     direção própria. Ideia: "o dia lido como uma linha do tempo, com o agora no meio" + a fita do dia (cada peça é uma
+     tarefa real e clicável). Conteúdo do "antes" mantido: as 6 tarefas, o detalhe e os números 12 tarefas / 5 feitas / 42%
+     (as 6 tarefas que faltavam para 12 são fictícias, marcadas aqui). Hora "agora" fixa em 11:20 para a captura ser
+     reproduzível (num app real vem do relógio). Parâmetros: ?mutar=contagem (erro proposital para o verificador),
+     ?estado=vazio (dia sem tarefas abertas). Direção e régua: LEIA-ME.md e diagnostico.md desta pasta. -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Hoje · Tarefas</title>
+<link rel="stylesheet" href="liquido.css">
+<style>
+  :root {
+    --fonte: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    --fonte-exib: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    /* Papel e tinta: neutros quentes, um acento (tinta) para ação, seleção e agora; ferrugem só para atraso. */
+    --fundo: #ecebe6; --palco: #faf9f6; --painel: #ffffff; --elevado: #ffffff;
+    --texto: #1b1a17; --texto-2: #57534b; --texto-3: #6b675e;
+    --linha: rgb(27 26 23 / 0.09); --linha-forte: rgb(27 26 23 / 0.16);
+    --tinta: #2b3fc4; --tinta-texto: #ffffff; --tinta-suave: rgb(43 63 196 / 0.09); --tinta-borda: rgb(43 63 196 / 0.28);
+    --atraso: #a8341a; --atraso-suave: rgb(168 52 26 / 0.08);
+    --marcador: #8a857b;
+    --p-aurora: #c75a22; --p-fornec: #23805f; --p-financas: #6b4fc6; --p-plan: #a8860f;
+    --hover: rgb(27 26 23 / 0.045);
+    --vidro: rgb(250 249 246 / 0.74); --vidro-borda: rgb(27 26 23 / 0.10); --vidro-opaco: #faf9f6;
+    --sombra-palco: 0 0 0 1px rgb(27 26 23 / 0.06), 0 1px 2px rgb(27 26 23 / 0.04), 0 12px 32px -8px rgb(27 26 23 / 0.10);
+    --sombra-flutua: 0 1px 2px rgb(27 26 23 / 0.06), 0 10px 30px -6px rgb(27 26 23 / 0.22);
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    /* Mola curta (quique ~7%), em linear(): entrada da lista, troca do detalhe e o círculo ao concluir. */
+    --mola: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 20.4%, 1.067, 1.077 26.1%, 1.069 28.6%, 1.033 33.5%, 0.997 39.6%, 0.988 44.3%, 0.997 55.6%, 1.001 69.1%, 1);
+    --raio: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fundo: #0c0c0e; --palco: #141417; --painel: #19191d; --elevado: #222227;
+      --texto: #f1efea; --texto-2: #b3afa7; --texto-3: #9b978f;
+      --linha: rgb(255 255 255 / 0.07); --linha-forte: rgb(255 255 255 / 0.14);
+      --tinta: #9fadff; --tinta-texto: #0d1240; --tinta-suave: rgb(159 173 255 / 0.12); --tinta-borda: rgb(159 173 255 / 0.36);
+      --atraso: #ff9a7a; --atraso-suave: rgb(255 154 122 / 0.09);
+      --marcador: #8f8b83;
+      --p-aurora: #f08a52; --p-fornec: #4cc79a; --p-financas: #a993ff; --p-plan: #e0bd45;
+      --hover: rgb(255 255 255 / 0.04);
+      --vidro: rgb(28 28 32 / 0.72); --vidro-borda: rgb(255 255 255 / 0.10); --vidro-opaco: #1c1c20;
+      --sombra-palco: 0 0 0 1px rgb(255 255 255 / 0.06), 0 12px 32px -8px rgb(0 0 0 / 0.6);
+      --sombra-flutua: 0 0 0 1px rgb(255 255 255 / 0.06), 0 12px 32px -6px rgb(0 0 0 / 0.7);
+    }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: var(--fundo); color: var(--texto); font: 15px/1.45 var(--fonte); caret-color: var(--tinta); }
+  ::selection { background: var(--tinta-suave); }
+  button { font: inherit; color: inherit; background: none; border: 1px solid transparent; padding: 0; cursor: pointer; text-align: start; }
+  :focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; border-radius: 8px; }
+  .icone { width: 18px; height: 18px; flex: none; }
+  .num { font-variant-numeric: tabular-nums; }
+  kbd { font: 500 11.5px/1 var(--fonte); color: var(--texto-2); padding: 3px 5px; border-radius: 5px; background: var(--hover);
+    box-shadow: inset 0 -1px 0 var(--linha-forte), 0 0 0 1px var(--linha); white-space: nowrap; }
+  .pular { position: absolute; left: 12px; top: -60px; z-index: 9; background: var(--tinta); color: var(--tinta-texto); padding: 10px 14px; border-radius: 10px; }
+  .pular:focus { top: 12px; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ===== Estrutura: barra lateral sobre o fundo + palco embutido (lista | detalhe) ===== */
+  .app { display: grid; grid-template-columns: 244px minmax(0, 1fr); height: 100dvh; }
+  .lateral { display: flex; flex-direction: column; gap: 22px; padding: 18px 14px 16px 16px; min-height: 0; }
+  .palco { display: grid; grid-template-columns: minmax(0, 1fr) 452px; margin: 8px 8px 8px 0; min-height: 0;
+    background: var(--palco); border-radius: 16px; box-shadow: var(--sombra-palco); overflow: hidden; }
+
+  /* Barra lateral */
+  .marca-app { display: flex; align-items: center; gap: 10px; padding: 2px 6px; font-weight: 650; font-size: 15px; letter-spacing: -0.01em; }
+  .marca-app i { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--tinta); color: var(--tinta-texto); }
+  .marca-app i svg { width: 16px; height: 16px; }
+  .busca { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; padding: 0 8px 0 10px; border-radius: 10px;
+    background: var(--palco); box-shadow: 0 0 0 1px var(--linha); color: var(--texto-2); }
+  .busca span { flex: 1; }
+  .nav { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+  .nav-titulo { margin: 0 0 6px 10px; font-size: 12px; font-weight: 600; color: var(--texto-3); }
+  .nav a { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 0 10px; border-radius: 9px; color: var(--texto); text-decoration: none; }
+  .nav a .icone { color: var(--texto-2); }
+  .nav a b { font-weight: 450; flex: 1; }
+  .nav a small { color: var(--texto-3); font-size: 13px; }
+  .nav a[aria-current="page"] { background: var(--palco); box-shadow: 0 0 0 1px var(--linha), 0 1px 2px rgb(0 0 0 / 0.05); }
+  .nav a[aria-current="page"] .icone { color: var(--tinta); }
+  .nav a[aria-current="page"] b { font-weight: 600; }
+  @media (hover: hover) { .nav a:not([aria-current]):hover { background: var(--hover); } }
+  .ponto { width: 9px; height: 9px; border-radius: 50%; flex: none; margin: 0 4px 0 4px; }
+  .rodape-lateral { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 8px 6px 0; border-top: 1px solid var(--linha); }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 650;
+    background: linear-gradient(135deg, #d9c6a5, #b99a6c); color: #2a2216; }
+  .rodape-lateral div { font-size: 13px; line-height: 1.3; }
+  .rodape-lateral small { display: flex; align-items: center; gap: 5px; color: var(--texto-3); font-size: 12px; }
+  .sinc { width: 7px; height: 7px; border-radius: 50%; background: var(--p-fornec); }
+
+  /* ===== Coluna da lista ===== */
+  .coluna-lista { position: relative; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scroll-padding-block-end: 96px; }
+  .cabeca { padding: 34px 44px 18px 44px; }
+  .cabeca-linha { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+  .cabeca h1 { margin: 0; font: 700 54px/0.98 var(--fonte-exib); letter-spacing: -0.035em; }
+  .data { margin: 6px 0 0; color: var(--texto-2); font-size: 15px; }
+  .placar { display: flex; align-items: flex-end; gap: 10px; text-align: end; }
+  .placar strong { font: 650 56px/0.86 var(--fonte-exib); letter-spacing: -0.04em; }
+  .placar span { display: block; font-size: 13px; line-height: 1.35; color: var(--texto-2); text-align: start; padding-bottom: 1px; }
+  .placar span b { color: var(--texto); font-weight: 600; }
+
+  /* A fita do dia: cada peça é uma tarefa (clicável, ligada à linha da lista). */
+  .fita { margin-top: 22px; display: grid; grid-template-columns: 8fr 4fr; gap: 14px; }
+  .fita-grupo { min-width: 0; }
+  .fita-pecas { display: flex; gap: 4px; }
+  .peca { flex: 1; height: 26px; min-width: 0; border-radius: 7px; border: 1.5px solid var(--marcador); background: transparent;
+    position: relative; transition: background-color 200ms ease, border-color 200ms ease, transform 160ms var(--ease-out); }
+  .peca.feita { background: var(--tinta); border-color: var(--tinta); }
+  .peca.atrasada { border-color: var(--atraso);
+    background: repeating-linear-gradient(-45deg, var(--atraso-suave) 0 4px, transparent 4px 8px), var(--atraso-suave); }
+  .peca.atrasada::after { content: "!"; position: absolute; inset: 0; display: grid; place-items: center; font: 700 13px/1 var(--fonte); color: var(--atraso); }
+  .peca[aria-current="true"] { box-shadow: 0 0 0 2px var(--palco), 0 0 0 4px var(--tinta); }
+  .peca.realce { transform: translateY(-2px); }
+  .peca:not(:disabled):active { transform: scale(0.96); }
+  .fita-rotulo { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12.5px; color: var(--texto-3); }
+  .fita-rotulo b { color: var(--texto-2); font-weight: 600; }
+  .agora-info { display: flex; align-items: center; gap: 8px; margin: 18px 0 0; padding: 10px 12px; border-radius: 12px; background: var(--tinta-suave);
+    font-size: 14px; color: var(--texto); }
+  .agora-info .icone { color: var(--tinta); }
+  .agora-info b { font-weight: 600; }
+  .agora-info em { font-style: normal; color: var(--texto-2); }
+
+  /* Lista em linha do tempo */
+  .grupos { padding: 4px 28px 120px 28px; }
+  .grupo-titulo { display: flex; align-items: baseline; gap: 8px; margin: 22px 16px 6px 16px; font-size: 13px; font-weight: 650; color: var(--texto); }
+  .grupo-titulo small { font-weight: 500; color: var(--texto-3); font-size: 13px; }
+  .grupo-titulo.atraso { color: var(--atraso); }
+  .linhas { list-style: none; margin: 0; padding: 0; position: relative; }
+  .linhas.tempo::before { content: ""; position: absolute; left: 87px; top: 8px; bottom: 8px; width: 1px; background: var(--linha-forte); }
+  .linha { position: relative; display: grid; grid-template-columns: 60px 44px minmax(0, 1fr); align-items: center; column-gap: 6px;
+    min-height: 52px; padding: 0 12px 0 4px; border-radius: 12px; transition: background-color 120ms ease; }
+  .linha.realce { background: var(--hover); }
+  @media (hover: hover) { .linha:hover { background: var(--hover); } }
+  .linha[aria-current="true"] { background: var(--tinta-suave); box-shadow: inset 0 0 0 1px var(--tinta-borda); }
+  .hora { justify-self: end; padding-right: 6px; font-size: 13px; font-weight: 600; color: var(--texto-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .marcar { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; position: relative; z-index: 1; }
+  .circulo { width: 22px; height: 22px; border-radius: 50%; border: 1.75px solid var(--marcador); background: var(--palco); display: grid; place-items: center;
+    transition: background-color 180ms var(--ease-out), border-color 180ms var(--ease-out), transform 160ms var(--ease-out); }
+  .marcar:not(:disabled):active .circulo { transform: scale(0.88); }
+  .feita .circulo { transition: background-color 180ms var(--ease-out), border-color 180ms var(--ease-out), transform 500ms var(--mola); }
+  .circulo svg { width: 14px; height: 14px; color: var(--tinta-texto); }
+  .circulo path { stroke-dasharray: 16; stroke-dashoffset: 16; transition: stroke-dashoffset 220ms var(--ease-out) 60ms; }
+  .feita .circulo { background: var(--tinta); border-color: var(--tinta); }
+  .feita .circulo path { stroke-dashoffset: 0; }
+  .atrasada .circulo { border-color: var(--atraso); }
+  @media (hover: hover) { .marcar:hover .circulo { border-color: var(--tinta); } }
+  .abrir { display: grid; gap: 1px; min-height: 52px; align-content: center; padding: 6px 0; border-radius: 8px; min-width: 0; }
+  .titulo { position: relative; justify-self: start; max-width: 100%; font-size: 15px; font-weight: 500; letter-spacing: -0.005em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 200ms ease; }
+  .titulo::after { content: ""; position: absolute; left: 0; right: 0; top: 52%; height: 1.5px; background: currentColor;
+    transform: scaleX(0); transform-origin: left; transition: transform 220ms var(--ease-out); }
+  .feita .titulo { color: var(--texto-3); }
+  .feita .titulo::after { transform: scaleX(1); }
+  .meta { display: flex; align-items: center; gap: 12px; font-size: 12.5px; color: var(--texto-3); white-space: nowrap; overflow: hidden; }
+  .meta span { display: inline-flex; align-items: center; gap: 5px; }
+  .meta .icone { width: 13px; height: 13px; }
+  .meta .ponto { width: 7px; height: 7px; margin: 0; }
+  .meta .alerta { color: var(--atraso); font-weight: 600; }
+  /* O passado se comprime (uma linha, sem metadados); o que está aberto ganha o espaço. */
+  .linha.feita { min-height: 34px; }
+  .linha.feita .abrir { min-height: 34px; padding: 2px 0; }
+  .linha.feita .marcar { height: 34px; }
+  .linha.feita .circulo { width: 18px; height: 18px; }
+  .linha.feita .circulo svg { width: 11px; height: 11px; }
+  .linha.feita .titulo { font-size: 14px; font-weight: 450; }
+  .linha.feita .meta { display: none; }
+  .linha.feita .hora { font-weight: 500; color: var(--texto-3); }
+  /* O agora: uma linha de tinta que corta a linha do tempo. */
+  .agora { position: relative; display: grid; grid-template-columns: 60px 44px 1fr; column-gap: 6px; align-items: center; height: 26px; padding: 0 12px 0 4px; }
+  .agora b { justify-self: end; padding: 2px 7px; border-radius: 6px; background: var(--tinta); color: var(--tinta-texto); font-size: 12px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .agora i { justify-self: center; width: 9px; height: 9px; border-radius: 50%; background: var(--tinta); box-shadow: 0 0 0 3px var(--palco); }
+  .agora span { height: 1.5px; background: var(--tinta); margin-left: -22px; }
+  .vazio { display: grid; justify-items: start; gap: 6px; margin: 8px 16px; padding: 22px; border-radius: 14px; background: var(--hover); }
+  .vazio b { font: 650 20px/1.2 var(--fonte-exib); letter-spacing: -0.02em; }
+  .vazio span { color: var(--texto-2); }
+
+  /* Barra de captura rápida: controle que flutua sobre a lista, em Liquid Glass (liquido.css/js, o mesmo material do caso B). */
+  .captura { position: sticky; bottom: 18px; margin: -96px 36px 18px; z-index: 3; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 10px 0 16px;
+    border-radius: 16px; border: 1px solid var(--vidro-borda); box-shadow: var(--sombra-flutua); color: var(--texto-2); width: calc(100% - 72px); }
+  .vidro { background: var(--vidro); -webkit-backdrop-filter: blur(18px) saturate(170%); backdrop-filter: blur(18px) saturate(170%); }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .vidro { background: var(--vidro-opaco); } }
+  @media (prefers-reduced-transparency: reduce) { .vidro { background: var(--vidro-opaco); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+  .captura .mais { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--tinta); color: var(--tinta-texto); flex: none; }
+  .captura .mais svg { width: 16px; height: 16px; }
+  .captura span { flex: 1; font-size: 15px; }
+  .captura .dicas { display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--texto-3); }
+
+  /* ===== Detalhe (inspetor) ===== */
+  .detalhe { min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: var(--painel); border-left: 1px solid var(--linha); }
+  .detalhe-barra { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 16px 0 28px; }
+  .trilha { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--texto-2); }
+  .trilha .ponto { margin: 0; }
+  .ferramentas { display: flex; gap: 2px; }
+  .ferramenta { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; color: var(--texto-2); }
+  @media (hover: hover) { .ferramenta:hover { background: var(--hover); color: var(--texto); } }
+  .detalhe-corpo { overflow-y: auto; padding: 18px 28px 24px; overscroll-behavior: contain; }
+  .detalhe-titulo { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; }
+  .detalhe-titulo .marcar { width: 44px; height: 44px; margin: -4px 0 0 -7px; }
+  .detalhe-titulo .circulo { width: 26px; height: 26px; }
+  .detalhe h2 { margin: 0; font: 650 28px/1.15 var(--fonte-exib); letter-spacing: -0.025em; text-wrap: balance; }
+  .props { display: grid; grid-template-columns: 92px 1fr; gap: 0; margin: 22px 0 0; font-size: 14px; }
+  .props dt, .props dd { margin: 0; min-height: 36px; display: flex; align-items: center; border-top: 1px solid var(--linha); }
+  .props dt { color: var(--texto-3); font-size: 13px; }
+  .props dd { gap: 8px; flex-wrap: wrap; }
+  .selo { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 7px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .selo.tinta { background: var(--tinta-suave); color: var(--tinta); }
+  .selo.neutro { background: var(--hover); color: var(--texto-2); box-shadow: inset 0 0 0 1px var(--linha); font-weight: 500; }
+  .secao { margin-top: 24px; }
+  .secao h3 { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 8px; font-size: 13px; font-weight: 650; }
+  .secao h3 small { font-weight: 500; color: var(--texto-3); font-size: 12.5px; }
+  .nota { margin: 0; max-width: 60ch; color: var(--texto); line-height: 1.55; text-wrap: pretty; }
+  .passos { list-style: none; margin: 0; padding: 0; }
+  .passos li { display: flex; align-items: center; gap: 4px; min-height: 40px; border-top: 1px solid var(--linha); }
+  .passos li:last-child { border-bottom: 1px solid var(--linha); }
+  .passos .marcar { width: 36px; height: 36px; margin-left: -8px; }
+  .passos .circulo { width: 18px; height: 18px; border-radius: 6px; }
+  .passos .circulo svg { width: 12px; height: 12px; }
+  .passos .titulo { font-weight: 450; font-size: 14.5px; white-space: normal; }
+  .anexo { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--linha); }
+  .anexo i { width: 34px; height: 40px; border-radius: 6px; background: var(--atraso-suave); color: var(--atraso); display: grid; place-items: end center;
+    padding-bottom: 5px; font: 700 9px/1 var(--fonte); letter-spacing: 0.04em; }
+  .anexo div { flex: 1; min-width: 0; font-size: 14px; }
+  .anexo small { display: block; color: var(--texto-3); font-size: 12.5px; }
+  .atividade { list-style: none; margin: 0; padding: 0; font-size: 13px; color: var(--texto-2); }
+  .atividade li { display: flex; gap: 10px; padding: 4px 0; }
+  .atividade time { color: var(--texto-3); margin-left: auto; white-space: nowrap; }
+  .acoes { display: flex; gap: 8px; padding: 14px 20px 16px 28px; border-top: 1px solid var(--linha); background: var(--painel); }
+  .botao { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 14px; border-radius: 11px; font-size: 14px; font-weight: 600;
+    transition: transform 160ms var(--ease-out), background-color 150ms ease; }
+  .botao.principal { background: var(--tinta); color: var(--tinta-texto); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 1px 2px rgb(0 0 0 / 0.12); }
+  .botao.principal kbd { background: rgb(255 255 255 / 0.16); color: var(--tinta-texto); box-shadow: none; }
+  .botao.secundario { box-shadow: inset 0 0 0 1px var(--linha-forte); }
+  @media (hover: hover) { .botao.secundario:hover { background: var(--hover); } }
+  .botao:not(:disabled):active { transform: scale(0.97); }
+
+  /* Aviso de desfazer (flutua; aparece depois de concluir). */
+  /* Fica acima da barra de captura: nunca vidro sobre vidro. */
+  .aviso { position: fixed; left: calc(244px + (100% - 244px - 452px - 8px) / 2); bottom: 96px; z-index: 6; display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 14px; border-radius: 14px;
+    border: 1px solid var(--vidro-borda); box-shadow: var(--sombra-flutua); font-size: 14px; opacity: 0; pointer-events: none;
+    transform: translate(-50%, 10px); transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out); }
+  .aviso.ativo { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+  .aviso .icone { color: var(--tinta); }
+  .aviso button { color: var(--tinta); font-weight: 650; padding: 6px 10px; border-radius: 9px; display: inline-flex; gap: 8px; align-items: center; }
+
+  /* Barra de abas no celular (vidro, flutua sobre a lista). */
+  .abas { display: none; }
+
+  /* ===== Larguras ===== */
+  @media (max-width: 1180px) { .palco { grid-template-columns: minmax(0, 1fr) 400px; } }
+  @media (max-width: 1000px) {
+    .app { grid-template-columns: 1fr; }
+    .lateral, .detalhe { display: none; }
+    .palco { grid-template-columns: 1fr; margin: 0; border-radius: 0; box-shadow: none; }
+  }
+  @media (max-width: 700px) {
+    body { font-size: 17px; }
+    .cabeca { padding: 22px 20px 10px; }
+    .cabeca h1 { font-size: 36px; }
+    .placar strong { font-size: 44px; }
+    .cabeca-linha { gap: 12px; }
+    .data { font-size: 14px; white-space: nowrap; }
+    .placar span { font-size: 12.5px; }
+    .fita-rotulo span { display: none; }
+    .fita { gap: 10px; margin-top: 18px; }
+    .fita-pecas { gap: 3px; }
+    .peca { height: 22px; border-radius: 6px; }
+    .agora-info { font-size: 14px; align-items: flex-start; }
+    .grupos { padding: 0 6px 150px; }
+    .grupo-titulo { margin: 20px 12px 4px; }
+    .linha, .agora { grid-template-columns: 48px 44px minmax(0, 1fr); column-gap: 4px; padding-right: 10px; }
+    .linhas.tempo::before { left: 74px; }
+    .linha.feita, .linha.feita .abrir, .linha.feita .marcar { min-height: 44px; height: auto; }
+    .linha.feita .marcar { height: 44px; }
+    .agora span { margin-left: -20px; }
+    .titulo { font-size: 17px; }
+    .meta { font-size: 13px; }
+    .hora { font-size: 12.5px; padding-right: 2px; }
+    .captura { display: none; }
+    .abas { position: fixed; z-index: 4; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 4px;
+      padding: 6px; border-radius: 22px; border: 1px solid var(--vidro-borda); box-shadow: var(--sombra-flutua); }
+    .abas a { flex: 1; display: grid; justify-items: center; gap: 2px; min-height: 48px; padding: 6px 0 4px; border-radius: 16px; font-size: 11px; font-weight: 600;
+      color: var(--lg-texto-2); text-decoration: none; }
+    .abas a[aria-current="page"] { color: var(--lg-texto); background: rgb(127 127 140 / 0.20); }
+    .abas a svg { width: 22px; height: 22px; }
+    .abas .nova { flex: none; width: 56px; height: 48px; border-radius: 16px; display: grid; place-items: center; background: var(--tinta); color: var(--tinta-texto); }
+    .abas .nova svg { width: 24px; height: 24px; }
+    .aviso { bottom: 92px; left: 50%; }
+  }
+
+  /* ===== Preferências ===== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: 0.01ms !important; transition-delay: 0s !important; animation: none !important; }
+    .aviso { transition: opacity 150ms ease !important; }
+    .peca.realce { transform: none; }
+  }
+  @media (prefers-contrast: more) {
+    :root { --texto-2: var(--texto); --texto-3: var(--texto); --linha: var(--texto-2); --marcador: var(--texto); }
+    .vidro { background: var(--vidro-opaco); border-color: var(--texto); }
+  }
+  @media (forced-colors: active) { .peca.feita, .feita .circulo { background: CanvasText; } }
+  /* Movimento (só sem redução): entrada em cascata com mola, uma vez; troca do detalhe com inclinação 3D vinda da lista;
+     "Próximos dias" se revela ao rolar (animation-timeline: view(), sem JS e sem prender a rolagem). */
+  @media (prefers-reduced-motion: no-preference) {
+    .entrada .grupo-titulo, .entrada .linha, .entrada .agora { animation: sobe 560ms var(--mola) both; animation-delay: calc(var(--i, 0) * 34ms + 60ms); }
+    .entrada .peca { transform-origin: 50% 100%; animation: cresce 520ms var(--mola) both; animation-delay: calc(var(--i, 0) * 30ms + 120ms); }
+    .entrada .cabeca h1, .entrada .placar { animation: sobe 600ms var(--mola) both; }
+    @keyframes sobe { from { opacity: 0; transform: translateY(14px) scale(0.985); } }
+    @keyframes cresce { from { opacity: 0; transform: scaleY(0.35); } }
+    .detalhe-corpo, .acoes { transform-origin: 0% 50%; }
+    .troca .detalhe-corpo, .troca .acoes, .troca .detalhe-barra { animation: vira 460ms var(--mola) both; }
+    @keyframes vira { from { opacity: 0; transform: perspective(1000px) rotateY(-8deg) translateX(18px); } }
+    @supports (animation-timeline: view()) {
+      .linhas.revela .linha { animation: revela linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+      @keyframes revela { from { opacity: 0.2; transform: perspective(800px) translateY(18px) rotateX(-12deg); } }
+    }
+  }
+  .sem-transicao, .sem-transicao * { transition: none !important; }
+</style>
+</head>
+<body class="sem-transicao entrada">
+<a class="pular" href="#lista">Pular para a lista</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-hoje" viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 8h14M7 2.5v3M13 2.5v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="12.4" r="1.9" fill="currentColor"/></symbol>
+  <symbol id="i-proximos" viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 8h14M7 2.5v3M13 2.5v3M7 11.5h2M11 11.5h2M7 14.2h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-feitas" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 10.2l2.1 2.1L13.2 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-busca" viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M13 13l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-mais" viewBox="0 0 20 20"><path d="M10 4.5v11M4.5 10h11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-relogio" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 6.2V10l2.6 1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-passos" viewBox="0 0 20 20"><path d="M4 6h1.5M4 10h1.5M4 14h1.5M8.5 6H16M8.5 10H16M8.5 14H16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-clipe" viewBox="0 0 20 20"><path d="M13.5 9.5l-4.6 4.6a2.6 2.6 0 01-3.7-3.7l5.3-5.3a1.7 1.7 0 012.4 2.4l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-adiar" viewBox="0 0 20 20"><path d="M4 10h10M10.5 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-reticencias" viewBox="0 0 20 20"><circle cx="5" cy="10" r="1.4" fill="currentColor"/><circle cx="10" cy="10" r="1.4" fill="currentColor"/><circle cx="15" cy="10" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-sino" viewBox="0 0 20 20"><path d="M6 13.5V9a4 4 0 018 0v4.5l1.3 1.5H4.7L6 13.5zM8.4 17h3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-desfazer" viewBox="0 0 20 20"><path d="M7.5 6L4 9.5 7.5 13M4.5 9.5H12a4 4 0 010 8h-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="app">
+  <nav class="lateral" aria-label="Navegação">
+    <div class="marca-app"><i><svg aria-hidden="true"><use href="#i-check"/></svg></i>Tarefas</div>
+    <button class="busca" type="button"><svg class="icone" aria-hidden="true"><use href="#i-busca"/></svg><span>Buscar</span><kbd class="atalho" data-tecla="K"></kbd></button>
+    <ul class="nav" id="nav-visoes"></ul>
+    <div>
+      <p class="nav-titulo">Projetos</p>
+      <ul class="nav" id="nav-projetos"></ul>
+    </div>
+    <div class="rodape-lateral">
+      <span class="avatar" aria-hidden="true">AR</span>
+      <div>Ana Ribeiro<small><i class="sinc" aria-hidden="true"></i>Sincronizado às 11:18</small></div>
+    </div>
+  </nav>
+
+  <main class="palco">
+    <section class="coluna-lista" id="lista" aria-labelledby="t-hoje" tabindex="-1">
+      <header class="cabeca">
+        <div class="cabeca-linha">
+          <div>
+            <h1 id="t-hoje">Hoje</h1>
+            <p class="data">segunda-feira, 2 de novembro</p>
+          </div>
+          <div class="placar" id="placar"></div>
+        </div>
+        <div class="fita" id="fita" aria-label="Fita do dia: uma peça por tarefa"></div>
+        <p class="agora-info" id="agora-info"></p>
+      </header>
+      <div class="grupos" id="grupos"></div>
+      <div class="captura lg" data-lg-desfoque="7" role="group" aria-label="Captura rápida">
+        <span class="mais" aria-hidden="true"><svg><use href="#i-mais"/></svg></span>
+        <span>Nova tarefa…</span>
+        <span class="dicas"><kbd>N</kbd> nova · <kbd>↑</kbd><kbd>↓</kbd> navegar · <kbd>Espaço</kbd> concluir</span>
+      </div>
+    </section>
+
+    <article class="detalhe" id="detalhe" aria-labelledby="t-detalhe"></article>
+  </main>
+</div>
+
+<nav class="abas lg" data-lg-desfoque="7" aria-label="Seções">
+  <a href="#" aria-current="page"><svg aria-hidden="true"><use href="#i-hoje"/></svg>Hoje</a>
+  <a href="#"><svg aria-hidden="true"><use href="#i-proximos"/></svg>Próximos</a>
+  <a href="#"><svg aria-hidden="true"><use href="#i-feitas"/></svg>Feitas</a>
+  <a href="#"><svg aria-hidden="true"><use href="#i-busca"/></svg>Buscar</a>
+  <button class="nova" type="button" aria-label="Nova tarefa"><svg aria-hidden="true"><use href="#i-mais"/></svg></button>
+</nav>
+
+<div class="aviso lg" data-lg-desfoque="7" id="aviso" role="status" aria-live="polite"></div>
+
+<script>
+/* Dados fictícios. As 6 tarefas do "antes" (marcadas com antes:true) + 6 que completam os 12 do placar do "antes". */
+const PROJ = {
+  aurora: { nome: 'Cliente Aurora', cor: 'var(--p-aurora)' }, fornec: { nome: 'Fornecedores', cor: 'var(--p-fornec)' },
+  financas: { nome: 'Finanças', cor: 'var(--p-financas)' }, plan: { nome: 'Planejamento', cor: 'var(--p-plan)' }
+};
+const T = [
+  { id: 't1', titulo: 'Renovar o seguro do escritório', proj: 'financas', grupo: 'atraso', quando: 'sex', desde: 'desde sex, 30 out' },
+  { id: 't2', titulo: 'Confirmar a reunião com o cliente', proj: 'aurora', grupo: 'hoje', hora: '08:52', feita: true },
+  { id: 't3', titulo: 'Enviar o relatório semanal', proj: 'plan', grupo: 'hoje', hora: '09:15', feita: true },
+  { id: 't4', titulo: 'Aprovar o pedido de compra nº 4471', proj: 'financas', grupo: 'hoje', hora: '09:40', feita: true },
+  { id: 't5', titulo: 'Agendar a revisão do contrato', proj: 'fornec', grupo: 'hoje', hora: '10:05', feita: true },
+  { id: 't6', titulo: 'Pagar o boleto da gráfica', proj: 'financas', grupo: 'hoje', hora: '10:30', feita: true },
+  { id: 't7', titulo: 'Revisar a proposta do cliente', proj: 'aurora', grupo: 'hoje', hora: '14:00', passos: [1, 3], anexos: 1, antes: true },
+  { id: 't8', titulo: 'Ligar para o fornecedor de embalagens', proj: 'fornec', grupo: 'hoje', hora: '16:30', antes: true },
+  { id: 't9', titulo: 'Enviar as amostras', proj: 'aurora', grupo: 'proximos', hora: 'ter 3', dia: 'Amanhã', antes: true },
+  { id: 't10', titulo: 'Montar a lista de ideias do trimestre', proj: 'plan', grupo: 'proximos', hora: 'sex 6', dia: 'Sexta', antes: true },
+  { id: 't11', titulo: 'Atualizar a planilha de custos', proj: 'financas', grupo: 'proximos', hora: 'seg 9', dia: 'Segunda', antes: true },
+  { id: 't12', titulo: 'Fechar o mês', proj: 'financas', grupo: 'proximos', hora: 'dia 30', dia: 'Dia 30', antes: true }
+];
+const AGORA = '11:20';
+const q = new URLSearchParams(location.search);
+if (q.get('estado') === 'vazio') T.forEach(t => { if (t.grupo !== 'proximos') { t.feita = true; t.grupo = 'hoje'; t.hora = t.hora || '08:30'; } });
+let selecionada = q.get('estado') === 'vazio' ? null : 't7';
+const mac = /Mac|iPhone|iPad/.test(navigator.platform);
+document.querySelectorAll('.atalho').forEach(k => k.textContent = (mac ? '⌘' : 'Ctrl ') + k.dataset.tecla);
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+const svg = (id, cls = 'icone') => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+
+function contar() {
+  const feitas = T.filter(t => t.feita).length;
+  return { total: T.length, feitas, abertasHoje: T.filter(t => t.grupo !== 'proximos' && !t.feita).length,
+    proximos: T.filter(t => t.grupo === 'proximos' && !t.feita).length, atrasadas: T.filter(t => t.grupo === 'atraso' && !t.feita).length };
+}
+
+function desenharPlacar() {
+  const c = contar();
+  const feitas = q.get('mutar') === 'contagem' ? c.feitas + 1 : c.feitas;   // erro proposital para provar o verificador
+  const pct = Math.round(100 * feitas / c.total);
+  document.getElementById('placar').innerHTML =
+    `<strong class="num" id="n-feitas">${feitas}</strong><span>de <b class="num" id="n-total">${c.total}</b> feitas<br><b class="num" id="n-pct">${pct}%</b> concluído</span>`;
+  document.getElementById('nav-visoes').innerHTML = [
+    ['i-hoje', 'Hoje', c.abertasHoje, true], ['i-proximos', 'Próximos', c.proximos], ['i-feitas', 'Feitas', c.feitas]
+  ].map(([i, n, k, at]) => `<li><a href="#"${at ? ' aria-current="page"' : ''}>${svg(i)}<b>${n}</b><small class="num" data-contagem="${n}">${k}</small></a></li>`).join('');
+  document.getElementById('nav-projetos').innerHTML = Object.entries(PROJ).map(([k, p]) =>
+    `<li><a href="#"><i class="ponto" style="background:${p.cor}" aria-hidden="true"></i><b>${p.nome}</b><small class="num">${T.filter(t => t.proj === k && !t.feita).length}</small></a></li>`).join('');
+}
+
+function desenharFita() {
+  const f = document.getElementById('fita'); f.innerHTML = '';
+  const grupos = [['Hoje', T.filter(t => t.grupo !== 'proximos')], ['Próximos dias', T.filter(t => t.grupo === 'proximos')]];
+  for (const [nome, lista] of grupos) {
+    const g = el('div', 'fita-grupo'); const pecas = el('div', 'fita-pecas');
+    for (const t of lista) {
+      const b = el('button', 'peca' + (t.feita ? ' feita' : '') + (t.grupo === 'atraso' && !t.feita ? ' atrasada' : ''));
+      b.type = 'button'; b.dataset.id = t.id; b.tabIndex = -1;
+      b.setAttribute('aria-label', `${t.titulo}: ${t.feita ? 'feita' : t.grupo === 'atraso' ? 'atrasada' : 'aberta'}`);
+      if (t.id === selecionada) b.setAttribute('aria-current', 'true');
+      b.title = t.titulo; b.onclick = () => selecionar(t.id, true);
+      b.style.setProperty('--i', f.querySelectorAll('.peca').length + pecas.children.length); pecas.append(b);
+    }
+    const feitas = lista.filter(t => t.feita).length;
+    g.append(pecas, el('div', 'fita-rotulo', `<b>${nome}</b><span class="num" data-fita="${nome}">${feitas} de ${lista.length}</span>`));
+    f.append(g);
+  }
+  desenharAgora();
+}
+function desenharAgora() {
+  const prox = T.find(t => t.grupo === 'hoje' && !t.feita && t.hora > AGORA);
+  document.getElementById('agora-info').innerHTML = prox
+    ? `${svg('i-relogio')}<span>Agora <b class="num">${AGORA}</b> · próxima: <b>${prox.titulo}</b> às <b class="num">${prox.hora}</b> <em class="num">· em ${dif(AGORA, prox.hora)}</em></span>`
+    : `${svg('i-feitas')}<span><b>Nada mais com horário hoje.</b> <em>Os próximos dias estão abaixo.</em></span>`;
+}
+function dif(a, b) { const m = (h) => +h.slice(0, 2) * 60 + +h.slice(3); const d = m(b) - m(a); return `${Math.floor(d / 60)} h ${String(d % 60).padStart(2, '0')} min`; }
+
+let indice = 0;
+function linha(t) {
+  const li = el('li', 'linha' + (t.feita ? ' feita' : '') + (t.grupo === 'atraso' && !t.feita ? ' atrasada' : ''));
+  li.style.setProperty('--i', indice++); li.dataset.id = t.id; if (t.id === selecionada) li.setAttribute('aria-current', 'true');
+  const p = PROJ[t.proj];
+  const meta = [];
+  if (t.grupo === 'atraso' && !t.feita) meta.push(`<span class="alerta">Atrasada · ${t.desde}</span>`);
+  if (t.feita) meta.push(`<span class="num">Feita às ${t.hora}</span>`);
+  meta.push(`<span><i class="ponto" style="background:${p.cor}" aria-hidden="true"></i>${p.nome}</span>`);
+  if (t.passos) meta.push(`<span class="num">${svg('i-passos')}${t.passos[0]} de ${t.passos[1]}</span>`);
+  if (t.anexos) meta.push(`<span class="num">${svg('i-clipe')}${t.anexos}</span>`);
+  if (t.id === 't7') meta.push(`<span>${svg('i-sino')}13:30</span>`);
+  const hora = t.grupo === 'atraso' ? 'sex 30' : (t.feita ? t.hora : t.hora);
+  li.innerHTML = `<span class="hora" aria-hidden="true">${hora}</span>
+    <button class="marcar" type="button" aria-pressed="${!!t.feita}" aria-label="${t.feita ? 'Reabrir' : 'Concluir'}: ${t.titulo}"><span class="circulo">${'<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'}</span></button>
+    <button class="abrir" type="button" aria-describedby="m-${t.id}"><span class="titulo">${t.titulo}</span><span class="meta" id="m-${t.id}">${meta.join('')}</span></button>`;
+  li.querySelector('.marcar').onclick = () => alternar(t.id);
+  li.querySelector('.abrir').onclick = () => selecionar(t.id);
+  li.onmouseenter = () => realce(t.id, true); li.onmouseleave = () => realce(t.id, false);
+  return li;
+}
+
+function desenharLista() {
+  const g = document.getElementById('grupos'); g.innerHTML = ''; indice = 0;
+  const atraso = T.filter(t => t.grupo === 'atraso');
+  if (atraso.length) {
+    g.append(el('h2', 'grupo-titulo atraso', `Atrasada <small class="num">${atraso.length}</small>`));
+    const ul = el('ul', 'linhas'); atraso.forEach(t => ul.append(linha(t))); g.append(ul);
+  }
+  const hoje = T.filter(t => t.grupo === 'hoje');
+  const abertasHoje = hoje.filter(t => !t.feita).length;
+  g.append(el('h2', 'grupo-titulo', `Hoje <small class="num" id="g-hoje">${resumoHoje()}</small>`));
+  const ul = el('ul', 'linhas tempo');
+  let agoraPosto = false;
+  for (const t of hoje) {
+    if (!agoraPosto && t.hora > AGORA) { ul.append(marcaAgora()); agoraPosto = true; }
+    ul.append(linha(t));
+  }
+  if (!agoraPosto) ul.append(marcaAgora());
+  g.append(ul);
+  if (!abertasHoje && !atraso.some(t => !t.feita)) {
+    g.append(el('div', 'vazio', `<b>Dia limpo.</b><span>Tudo de hoje está feito. A próxima tarefa é amanhã: ${T.find(t => t.grupo === 'proximos').titulo}.</span>`));
+  }
+  const prox = T.filter(t => t.grupo === 'proximos');
+  g.append(el('h2', 'grupo-titulo', `Próximos dias <small class="num">${prox.length}</small>`));
+  const up = el('ul', 'linhas tempo revela'); prox.forEach(t => up.append(linha(t))); g.append(up);
+}
+function resumoHoje() { const h = T.filter(t => t.grupo === 'hoje'); const a = h.filter(t => !t.feita).length, f = h.length - a; return `${a} ${a === 1 ? 'aberta' : 'abertas'} · ${f} ${f === 1 ? 'feita' : 'feitas'}`; }
+function marcaAgora() { const li = el('li', 'agora', `<b>${AGORA}</b><i aria-hidden="true"></i><span aria-hidden="true"></span>`); li.setAttribute('aria-label', 'Agora, ' + AGORA); li.style.setProperty('--i', indice++); return li; }
+
+function desenharDetalhe() {
+  const d = document.getElementById('detalhe');
+  const t = T.find(x => x.id === selecionada);
+  if (!t) { d.innerHTML = `<div class="detalhe-corpo"><div class="vazio" style="margin:40px 0"><b>Nenhuma tarefa aberta</b><span>Escolha uma tarefa na lista ou crie uma com <kbd>N</kbd>.</span></div></div>`; return; }
+  const p = PROJ[t.proj];
+  const ehAntes = t.id === 't7';
+  const passos = ehAntes ? [['Ler a proposta inteira', true], ['Anotar as dúvidas de prazo e preço', false], ['Responder ao cliente', false]] : [];
+  const feitosP = passos.filter(x => x[1]).length;
+  d.innerHTML = `
+    <div class="detalhe-barra">
+      <span class="trilha"><i class="ponto" style="background:${p.cor}" aria-hidden="true"></i>${p.nome}</span>
+      <span class="ferramentas">
+        <button class="ferramenta" type="button" aria-label="Adiar">${svg('i-adiar')}</button>
+        <button class="ferramenta" type="button" aria-label="Mais ações">${svg('i-reticencias')}</button>
+      </span>
+    </div>
+    <div class="detalhe-corpo">
+      <div class="detalhe-titulo ${t.feita ? 'feita' : ''}">
+        <button class="marcar" type="button" aria-pressed="${!!t.feita}" aria-label="${t.feita ? 'Reabrir' : 'Concluir'}: ${t.titulo}"><span class="circulo"><svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+        <h2 id="t-detalhe">${t.titulo}</h2>
+      </div>
+      <dl class="props">
+        <dt>Quando</dt><dd>${t.grupo === 'hoje' ? 'Hoje' : t.dia || 'Sexta, 30 out'}, <span class="num">${/:/.test(t.hora || '') ? t.hora : ''}</span>${ehAntes ? `<span class="selo tinta num" id="selo-prazo"${t.feita ? ' hidden' : ''}>${svg('i-relogio')}em ${dif(AGORA, t.hora)}</span>` : ''}</dd>
+        ${ehAntes ? `<dt>Lembrete</dt><dd><span class="num">13:30</span><span style="color:var(--texto-3)">· 30 min antes</span></dd>` : ''}
+        <dt>Projeto</dt><dd><i class="ponto" style="background:${p.cor};margin:0" aria-hidden="true"></i>${p.nome}</dd>
+        ${ehAntes ? `<dt>Etiquetas</dt><dd><span class="selo neutro">Proposta</span><span class="selo neutro">Prazo</span></dd>` : ''}
+      </dl>
+      ${ehAntes ? `
+      <section class="secao"><h3>Notas</h3>
+        <p class="nota">Ler a proposta enviada, marcar dúvidas e responder até as 14h.</p></section>
+      <section class="secao"><h3>Passos <small class="num">${feitosP} de ${passos.length}</small></h3>
+        <ul class="passos">${passos.map(([n, f]) => `<li class="${f ? 'feita' : ''}"><button class="marcar" type="button" aria-pressed="${f}" aria-label="${f ? 'Reabrir' : 'Concluir'} passo: ${n}"><span class="circulo"><svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><span class="titulo">${n}</span></li>`).join('')}</ul></section>
+      <section class="secao"><h3>Anexo</h3>
+        <div class="anexo"><i aria-hidden="true">PDF</i><div>Proposta Aurora v3.pdf<small class="num">2,4 MB · recebido ontem às 18:42</small></div></div></section>
+      <section class="secao"><h3>Atividade</h3>
+        <ul class="atividade"><li>Lembrete mudou para 13:30<time class="num">hoje, 09:02</time></li><li>Você criou a tarefa<time class="num">dom, 1 nov</time></li></ul></section>` : ''}
+    </div>
+    <div class="acoes">
+      <button class="botao principal" type="button" id="b-concluir">${t.feita ? 'Reabrir' : 'Concluir'} <kbd>${mac ? '⌘' : 'Ctrl'} ↵</kbd></button>
+      <button class="botao secundario" type="button">Adiar para amanhã</button>
+    </div>`;
+  d.querySelector('.detalhe-titulo .marcar').onclick = () => alternar(t.id);
+  d.querySelector('#b-concluir').onclick = () => alternar(t.id);
+}
+
+function realce(id, liga) {
+  document.querySelectorAll(`[data-id="${id}"]`).forEach(e => e.classList.toggle('realce', liga));
+}
+function selecionar(id, rolar) {
+  const mudou = id !== selecionada; selecionada = id; tudo();
+  const d = document.getElementById('detalhe');
+  if (mudou) { d.classList.remove('troca'); void d.offsetWidth; d.classList.add('troca'); }
+  const b = document.querySelector(`.linha[data-id="${id}"] .abrir`);
+  if (b) { b.focus({ preventScroll: !rolar }); if (rolar) b.scrollIntoView({ block: 'nearest' }); }
+}
+let ultimo = null, tAviso = null;
+function alternar(id) {
+  const t = T.find(x => x.id === id);
+  t.feita = !t.feita;
+  if (t.feita && !t.horaOriginal) { t.horaOriginal = t.hora; }
+  // Atualiza no lugar (sem redesenhar a linha) para a transição do círculo e do risco acontecer.
+  document.querySelectorAll(`.linha[data-id="${id}"], .peca[data-id="${id}"]`).forEach(e => e.classList.toggle('feita', t.feita));
+  document.querySelectorAll(`.linha[data-id="${id}"] .marcar`).forEach(b => b.setAttribute('aria-pressed', t.feita));
+  if (id === selecionada) { const dt = document.querySelector('.detalhe-titulo'); if (dt) dt.classList.toggle('feita', t.feita); }
+  desenharPlacar(); desenharAgora();
+  document.getElementById('g-hoje').textContent = resumoHoje();
+  for (const [nome, filtro] of [['Hoje', x => x.grupo !== 'proximos'], ['Próximos dias', x => x.grupo === 'proximos']]) {
+    const l = T.filter(filtro); const e = document.querySelector(`[data-fita="${nome}"]`); if (e) e.textContent = `${l.filter(x => x.feita).length} de ${l.length}`; }
+  if (id === selecionada) {
+    const b = document.getElementById('b-concluir'); if (b) b.firstChild.textContent = t.feita ? 'Reabrir ' : 'Concluir ';
+    const m = document.querySelector('.detalhe-titulo .marcar'); if (m) { m.setAttribute('aria-pressed', t.feita); m.setAttribute('aria-label', (t.feita ? 'Reabrir' : 'Concluir') + ': ' + t.titulo); }
+    const p = document.getElementById('selo-prazo'); if (p) p.hidden = t.feita; }
+  document.querySelectorAll(`.linha[data-id="${id}"] .marcar`).forEach(b => b.setAttribute('aria-label', (t.feita ? 'Reabrir' : 'Concluir') + ': ' + t.titulo));
+  ultimo = id; avisar(t);
+}
+function avisar(t) {
+  const a = document.getElementById('aviso');
+  a.innerHTML = `${svg(t.feita ? 'i-feitas' : 'i-desfazer')}<span>${t.feita ? 'Feita' : 'Reaberta'}: <b>${t.titulo}</b></span><button type="button" id="b-desfazer">Desfazer <kbd>${mac ? '⌘' : 'Ctrl'} Z</kbd></button>`;
+  a.querySelector('#b-desfazer').onclick = () => { alternar(t.id); a.classList.remove('ativo'); };
+  a.classList.add('ativo'); clearTimeout(tAviso); tAviso = setTimeout(() => a.classList.remove('ativo'), 6000);
+}
+function tudo() { desenharPlacar(); desenharFita(); desenharLista(); desenharDetalhe(); }
+
+document.addEventListener('keydown', (e) => {
+  const abrir = [...document.querySelectorAll('.linha .abrir')];
+  const i = abrir.indexOf(document.activeElement);
+  if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && i >= 0) {
+    e.preventDefault(); const n = abrir[Math.max(0, Math.min(abrir.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1)))];
+    selecionar(n.closest('.linha').dataset.id, true);
+  } else if (e.key === ' ' && i >= 0) { e.preventDefault(); alternar(abrir[i].closest('.linha').dataset.id); }
+  else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && selecionada) { e.preventDefault(); alternar(selecionada); }
+  else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && ultimo) { e.preventDefault(); alternar(ultimo); }
+});
+tudo();
+requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove('sem-transicao')));
+setTimeout(() => document.body.classList.remove('entrada'), 1400);   // a cascata é só da primeira aparição
+</script>
+<script src="liquido.js"></script>
+</body>
+</html>

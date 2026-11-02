@@ -1,0 +1,373 @@
+{
+  "data": "2026-11-02T16:10:27.807Z",
+  "totalErros": 0,
+  "relatorio": [
+    {
+      "caso": "caso-a-v2-claro-1440",
+      "erros": [],
+      "avisos": [
+        "fundo com imagem, medir à parte: \"AR\""
+      ],
+      "pares": 102,
+      "piorTexto": {
+        "txt": "Cliente Aurora",
+        "r": 4.65,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Nova tarefa…",
+          "pior": 7.45,
+          "min": 4.5
+        },
+        {
+          "txt": "N nova · ↑↓ navegar · Espaço c",
+          "pior": 5.49,
+          "min": 4.5
+        },
+        {
+          "txt": "N",
+          "pior": 7.45,
+          "min": 4.5
+        },
+        {
+          "txt": "↑",
+          "pior": 6.83,
+          "min": 4.5
+        },
+        {
+          "txt": "↓",
+          "pior": 6.83,
+          "min": 4.5
+        },
+        {
+          "txt": "Espaço",
+          "pior": 6.83,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Captura rápida:tema(-) aviso lg:tema(-)",
+      "somas": "5 feitas de 12",
+      "png": "caso-a-v2-claro-1440.png"
+    },
+    {
+      "caso": "caso-a-v2-claro-390",
+      "erros": [],
+      "avisos": [],
+      "pares": 43,
+      "piorTexto": {
+        "txt": "Cliente Aurora",
+        "r": 4.65,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Hoje",
+          "pior": 13.65,
+          "min": 4.5
+        },
+        {
+          "txt": "Próximos",
+          "pior": 12.28,
+          "min": 4.5
+        },
+        {
+          "txt": "Feitas",
+          "pior": 13.13,
+          "min": 4.5
+        },
+        {
+          "txt": "Buscar",
+          "pior": 13.13,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Seções:tema(-) aviso lg:tema(-)",
+      "somas": "5 feitas de 12",
+      "png": "caso-a-v2-claro-390.png"
+    },
+    {
+      "caso": "caso-a-v2-escuro-1440",
+      "erros": [],
+      "avisos": [
+        "fundo com imagem, medir à parte: \"AR\""
+      ],
+      "pares": 102,
+      "piorTexto": {
+        "txt": "Cliente Aurora",
+        "r": 5.15,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Nova tarefa…",
+          "pior": 5.43,
+          "min": 4.5
+        },
+        {
+          "txt": "N nova · ↑↓ navegar · Espaço c",
+          "pior": 4.91,
+          "min": 4.5
+        },
+        {
+          "txt": "N",
+          "pior": 6.54,
+          "min": 4.5
+        },
+        {
+          "txt": "↑",
+          "pior": 6.18,
+          "min": 4.5
+        },
+        {
+          "txt": "↓",
+          "pior": 6.35,
+          "min": 4.5
+        },
+        {
+          "txt": "Espaço",
+          "pior": 6.99,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Captura rápida:tema(-) aviso lg:tema(-)",
+      "somas": "5 feitas de 12",
+      "png": "caso-a-v2-escuro-1440.png"
+    },
+    {
+      "caso": "caso-a-v2-escuro-390",
+      "erros": [],
+      "avisos": [],
+      "pares": 43,
+      "piorTexto": {
+        "txt": "Cliente Aurora",
+        "r": 5.15,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Hoje",
+          "pior": 5.93,
+          "min": 4.5
+        },
+        {
+          "txt": "Próximos",
+          "pior": 5.58,
+          "min": 4.5
+        },
+        {
+          "txt": "Feitas",
+          "pior": 7.17,
+          "min": 4.5
+        },
+        {
+          "txt": "Buscar",
+          "pior": 9.06,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Seções:tema(-) aviso lg:tema(-)",
+      "somas": "5 feitas de 12",
+      "png": "caso-a-v2-escuro-390.png"
+    },
+    {
+      "caso": "caso-a-v2-claro-1440-concluir",
+      "erros": [],
+      "avisos": [
+        "fundo com imagem, medir à parte: \"AR\""
+      ],
+      "pares": 102,
+      "piorTexto": {
+        "txt": "Cliente Aurora",
+        "r": 4.65,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Nova tarefa…",
+          "pior": 7.45,
+          "min": 4.5
+        },
+        {
+          "txt": "N nova · ↑↓ navegar · Espaço c",
+          "pior": 5.49,
+          "min": 4.5
+        },
+        {
+          "txt": "N",
+          "pior": 7.45,
+          "min": 4.5
+        },
+        {
+          "txt": "↑",
+          "pior": 6.83,
+          "min": 4.5
+        },
+        {
+          "txt": "↓",
+          "pior": 6.83,
+          "min": 4.5
+        },
+        {
+          "txt": "Espaço",
+          "pior": 6.83,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Captura rápida:tema(-) aviso lg:tema(-)",
+      "somas": "5 feitas de 12",
+      "png": "caso-a-v2-claro-1440-concluir.png",
+      "interacao": "concluir → placar, fita, risco, aviso; desfazer → volta"
+    },
+    {
+      "caso": "caso-a-v2-escuro-1440-teclado",
+      "erros": [],
+      "avisos": [
+        "fundo com imagem, medir à parte: \"AR\""
+      ],
+      "pares": 102,
+      "piorTexto": {
+        "txt": "Cliente Aurora",
+        "r": 5.15,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Nova tarefa…",
+          "pior": 5.43,
+          "min": 4.5
+        },
+        {
+          "txt": "N nova · ↑↓ navegar · Espaço c",
+          "pior": 4.91,
+          "min": 4.5
+        },
+        {
+          "txt": "N",
+          "pior": 6.54,
+          "min": 4.5
+        },
+        {
+          "txt": "↑",
+          "pior": 6.18,
+          "min": 4.5
+        },
+        {
+          "txt": "↓",
+          "pior": 6.35,
+          "min": 4.5
+        },
+        {
+          "txt": "Espaço",
+          "pior": 6.99,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Captura rápida:tema(-) aviso lg:tema(-)",
+      "teclado": "Pular para a lista (solid 2px) → Ligar para o fornecedor de embalagensFor (solid 2px) → Enviar as amostrasCliente Aurora (solid 2px)"
+    },
+    {
+      "caso": "caso-a-v2-claro-1440-reduzido",
+      "erros": [],
+      "avisos": [
+        "fundo com imagem, medir à parte: \"AR\""
+      ],
+      "pares": 102,
+      "piorTexto": {
+        "txt": "Cliente Aurora",
+        "r": 4.65,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Nova tarefa…",
+          "pior": 6.08,
+          "min": 4.5
+        },
+        {
+          "txt": "N nova · ↑↓ navegar · Espaço c",
+          "pior": 5.49,
+          "min": 4.5
+        },
+        {
+          "txt": "N",
+          "pior": 7.45,
+          "min": 4.5
+        },
+        {
+          "txt": "↑",
+          "pior": 6.83,
+          "min": 4.5
+        },
+        {
+          "txt": "↓",
+          "pior": 6.83,
+          "min": 4.5
+        },
+        {
+          "txt": "Espaço",
+          "pior": 6.83,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Captura rápida:tema(-) aviso lg:tema(-)",
+      "reduzido": "nenhuma transição longa com movimento reduzido"
+    },
+    {
+      "caso": "caso-a-v2-claro-1440-vazio",
+      "erros": [],
+      "avisos": [
+        "fundo com imagem, medir à parte: \"AR\""
+      ],
+      "pares": 62,
+      "piorTexto": {
+        "txt": "4",
+        "r": 4.72,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Nova tarefa…",
+          "pior": 7.45,
+          "min": 4.5
+        },
+        {
+          "txt": "N nova · ↑↓ navegar · Espaço c",
+          "pior": 5.49,
+          "min": 4.5
+        },
+        {
+          "txt": "N",
+          "pior": 7.45,
+          "min": 4.5
+        },
+        {
+          "txt": "↑",
+          "pior": 6.83,
+          "min": 4.5
+        },
+        {
+          "txt": "↓",
+          "pior": 6.83,
+          "min": 4.5
+        },
+        {
+          "txt": "Espaço",
+          "pior": 6.83,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Captura rápida:tema(-) aviso lg:tema(-)",
+      "somas": "8 feitas de 12",
+      "png": "caso-a-v2-claro-1440-vazio.png"
+    }
+  ]
+}
