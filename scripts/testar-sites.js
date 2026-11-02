@@ -119,7 +119,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const cap = res.capturas || [];
     const esperadas = ['claro', 'escuro'].flatMap((t) => [1440, 390].map((l) => `site-${t}-${l}.png`));
     caso('0.8.0 sites prova: 4 PNGs do site (2 temas, 2 larguras) existem e não estão vazios', esperadas.every((p) => existe(...PROVA, 'png', p) && fs.statSync(path.join(RAIZ, ...PROVA, 'png', p)).size > 20000), esperadas.join(', '));
-    caso('0.8.0 sites prova: 0 erro de JS, 0 rolagem lateral, 0 texto cortado nas 4 capturas', cap.length === 4 && cap.every((c) => c.erros_js === 0 && c.rolagem_lateral === 0 && c.texto_cortado === 0), JSON.stringify(cap.map((c) => [c.png, c.erros_js, c.rolagem_lateral, c.texto_cortado])));
+    caso('0.8.0 sites prova: 0 erro de JS, 0 rolagem lateral, 0 texto cortado ou sobreposto, 0 título sob a barra nas 4 capturas', cap.length === 4 && cap.every((c) => c.erros_js === 0 && c.rolagem_lateral === 0 && c.texto_cortado === 0 && c.texto_sobreposto === 0 && c.titulos_cobertos === 0), JSON.stringify(cap.map((c) => [c.png, c.erros_js, c.rolagem_lateral, c.texto_cortado])));
     caso('0.8.0 sites prova: contraste medido no pior ponto do fundo (0 falha)', cap.length === 4 && cap.every((c) => c.contraste_falhas === 0 && c.contraste_medidos > 20), JSON.stringify(cap.map((c) => [c.png, c.contraste_falhas, c.contraste_medidos])));
     caso('0.8.0 sites prova: no celular, alvos ≥ 44 px e corpo ≥ 16 px', cap.filter((c) => c.largura === 390).every((c) => c.alvos_pequenos === 0 && c.corpo_pequeno === 0), JSON.stringify(cap.map((c) => [c.alvos_pequenos, c.corpo_pequeno])));
     const rm = res.reduzido_movimento || {}; const rt = res.reduzido_transparencia || {};
@@ -137,6 +137,8 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     caso('0.8.0 sites efeitos: o quadro de provas tem uma linha por efeito', !semLinha.length, semLinha.join(', '));
     const errados = IDS.filter((id) => { const e = pe.find((x) => x.id === id); const l = (quadro.match(new RegExp('^\\| ' + id + ' \\|.*$', 'm')) || [''])[0]; return e && e.provado ? !/PROVADO/.test(l) : !/\[ESTIMATIVA/.test(l); });
     caso('0.8.0 sites efeitos: só está PROVADO no quadro o que passou na bancada; o resto fica [ESTIMATIVA]', !errados.length, errados.join(', '));
+    const ctrl = (res.efeitos_controles || []).filter((c) => !c.informativo);
+    caso('0.8.0 sites efeitos: os controles da bancada falham no caso errado (quadros, mexeu, reduzido)', ctrl.length >= 3 && ctrl.every((c) => c.pegou === true), JSON.stringify(res.efeitos_controles));
     const provados = pe.filter((e) => e.provado);
     caso('0.8.0 sites efeitos: cada provado foi visto mexendo, parou com movimento reduzido e teve quadros medidos', provados.length > 0 && provados.every((e) => e.mexeu === true && e.reduzido_ok === true && (e.p95_ms > 0 || e.tipo === 'estatico')), JSON.stringify(provados.filter((e) => !(e.mexeu === true && e.reduzido_ok === true && (e.p95_ms > 0 || e.tipo === 'estatico'))).map((e) => e.id)));
   }

@@ -75,7 +75,7 @@ body { margin: 0; background: #0b1a22; color: var(--t); font: 16px/1.4 "Segoe UI
 #C5 .caixa.dir { margin-left: 200px; height: 120px; }
 ::view-transition-group(caixa-c5) { animation-duration: .3s; }
 #C6 .pilha { position: sticky; height: 130px; margin: 0 16px 24px; border-radius: 12px; padding: 16px; background: var(--f2); border: 1px solid #ffffff24; }
-#D5 .tit { font: 500 28px/1.2 Georgia, serif; margin: 40px 16px; }
+#D5 .tit { position: sticky; top: 30px; font: 500 28px/1.2 Georgia, serif; margin: 40px 16px; }
 
 /* D. Texto e números */
 #D1 .n { font: 500 48px Georgia, serif; font-variant-numeric: tabular-nums; margin-top: 60px; }
@@ -227,7 +227,7 @@ body { margin: 0; background: #0b1a22; color: var(--t); font: 16px/1.4 "Segoe UI
       if (ini[id]) ini[id]();
     },
     sem: function (id) { document.getElementById(id).classList.add('sem'); },
-    rolar: function (id, ms) { var r = document.getElementById(id).querySelector('.rola'); if (!r) return Promise.resolve(); var fim = r.scrollHeight - r.clientHeight, t0 = 0; return new Promise(function (ok) { var f = function (t) { t0 = t0 || t; var k = Math.min((t - t0) / ms, 1); r.scrollTop = fim * k; if (k < 1) requestAnimationFrame(f); else ok(); }; requestAnimationFrame(f); }); },
+    rolar: function (id, ms) { var r = document.getElementById(id).querySelector('.rola'); if (!r) return Promise.resolve(); var fim = (r.scrollHeight - r.clientHeight) * .3, t0 = 0; /* para com o conteúdo ainda à vista */ return new Promise(function (ok) { var f = function (t) { t0 = t0 || t; var k = Math.min((t - t0) / ms, 1); r.scrollTop = fim * k; if (k < 1) requestAnimationFrame(f); else ok(); }; requestAnimationFrame(f); }); },
     medir: function (ms) { return new Promise(function (ok) { var d = [], u = 0, t0 = 0; var f = function (t) { if (u) d.push(t - u); u = t; t0 = t0 || t; if (t - t0 < ms) requestAnimationFrame(f); else { d.sort(function (a, b) { return a - b; }); ok({ quadros: d.length, p95: d[Math.floor(d.length * .95)] || 0, longos: d.filter(function (x) { return x > 34; }).length }); } }; requestAnimationFrame(f); }); },
     props: function () { var p = {}; document.getAnimations().forEach(function (a) { var e = a.effect; if (!e || !e.getKeyframes) return; e.getKeyframes().forEach(function (k) { Object.keys(k).forEach(function (n) { if (['offset', 'computedOffset', 'easing', 'composite'].indexOf(n) < 0) p[n] = 1; }); }); if (a.transitionProperty) p[a.transitionProperty] = 1; }); return Object.keys(p).sort(); },
     rodando: function () { return document.getAnimations().filter(function (a) { var t = a.effect && a.effect.getTiming ? a.effect.getTiming() : {}; return a.playState === 'running' && t.iterations === Infinity; }).length; },

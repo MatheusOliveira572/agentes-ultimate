@@ -74,27 +74,28 @@ h1 { font-size: clamp(36px, 5vw, 68px); line-height: 1.04; letter-spacing: -0.02
 .metrica { display: flex; align-items: baseline; font-family: var(--serif); margin-top: 6px; color: var(--texto); }
 .metrica .s { font-size: 26px; margin-right: 6px; } .metrica .i { font-size: 54px; line-height: 1.1; letter-spacing: -0.01em; } .metrica .c { font-size: 26px; }
 .variacao { font-size: 14px; color: var(--texto-2); min-height: 22px; }
-.cenas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-.cenas button { min-height: 44px; padding: 0 12px; font: 500 14px/1.15 var(--sans); color: var(--texto); background: transparent; border: 1px solid var(--regua-forte); border-radius: 8px; cursor: pointer; transition: background-color .16s ease-out; }
-.cenas button[aria-pressed="true"] { background: var(--texto); color: var(--fundo); border-color: var(--texto); }
+.cenas { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+.cenas button { min-height: 44px; padding: 0 9px; font: 500 14px/1.15 var(--sans); color: var(--texto); background: transparent; border: 1px solid var(--regua-forte); border-radius: 8px; cursor: pointer; transition: background-color .16s ease-out; }
+.cenas button[data-cena][aria-pressed="true"] { background: var(--texto); color: var(--fundo); border-color: var(--texto); }
 .cenas .pausa { margin-left: auto; }
 table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 15px; }
 th { text-align: left; font-weight: 500; color: var(--texto-2); font-size: 13px; border-bottom: 1px solid var(--regua-forte); padding: 4px 0; }
 td { border-bottom: 1px solid var(--regua); padding: 7px 0; }
+th:first-child, td:first-child { padding-right: 14px; }
 tr:last-child td { border-bottom: 0; }
 .dir { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 .troca { transition: opacity .3s ease-out; }
 .troca.saindo { opacity: 0; }
 
-.mare { position: relative; margin-top: -24px; height: 240px; z-index: 1; }
+.mare { position: relative; margin-top: 16px; height: 240px; z-index: 1; }
 .mare svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .linha { fill: none; stroke: var(--mar); stroke-width: 2.5; vector-effect: non-scaling-stroke; transition: opacity .4s ease-out; opacity: 0; }
 .area { fill: var(--mar-suave); stroke: none; transition: opacity .4s ease-out; opacity: 0; }
 .linha.on, .area.on { opacity: 1; }
 .desenhar .linha.on { stroke-dasharray: 1; stroke-dashoffset: 1; animation: traca 1.2s var(--entra) forwards; }
 @keyframes traca { to { stroke-dashoffset: 0; } }
-.marco { position: absolute; transform: translate(-50%, -100%); font-size: 13px; line-height: 1.2; white-space: nowrap; padding-bottom: 8px; color: var(--texto); }
+.marco { position: absolute; transform: translate(-50%, -100%); font-size: 13px; line-height: 1.2; white-space: nowrap; padding-bottom: 18px; color: var(--texto); }
 .marco::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--mar); }
 .marco.b { color: var(--acento-forte); font-weight: 600; transform: translate(-50%, 8px); padding: 14px 0 0; }
 .marco.b::after { background: var(--acento); bottom: auto; top: -2px; }
@@ -106,7 +107,7 @@ tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 .semana, .dias { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; list-style: none; padding: 0; margin: 0; }
 .semana { font-size: 13px; color: var(--texto-2); margin-bottom: 6px; }
 .dia { position: relative; min-height: 76px; padding: 8px 10px; border-radius: 8px; color: var(--n-txt); display: flex; flex-direction: column; justify-content: space-between; }
-.dia .d { font-size: 13px; } .dia .v { font: 500 21px/1 var(--serif); font-variant-numeric: tabular-nums; }
+.dia .d { font-size: 13px; } .dia .v { font: 600 19px/1 var(--sans); font-variant-numeric: tabular-nums; }
 .n1 { background: var(--n1); } .n2 { background: var(--n2); } .n3 { background: var(--n3); } .n4 { background: var(--n4); } .n5 { background: var(--n5); }
 .baixa.dia { outline: 2px solid var(--acento-forte); outline-offset: 1px; }
 .tag { position: absolute; right: 8px; top: 8px; font-size: 12px; font-weight: 600; line-height: 1.1; }
@@ -149,7 +150,7 @@ tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 #p-anual:checked ~ .periodo label[for="p-anual"], #p-mensal:checked ~ .periodo label[for="p-mensal"] { background: var(--texto); color: var(--fundo); }
 #p-anual:focus-visible ~ .periodo label[for="p-anual"], #p-mensal:focus-visible ~ .periodo label[for="p-mensal"] { outline: 2px solid var(--acento-forte); outline-offset: 2px; }
 #p-anual:checked ~ .planos .so-mensal, #p-mensal:checked ~ .planos .so-anual { display: none; }
-.planos { display: grid; grid-template-columns: repeat(2, minmax(0, 380px)); gap: 20px; margin-top: 24px; align-items: stretch; }
+.planos { display: grid; grid-template-columns: repeat(2, minmax(0, 380px)) minmax(0, 1fr); gap: 20px; margin-top: 24px; align-items: stretch; }
 .plano { background: var(--cartao); border: 1px solid var(--regua); border-radius: 18px; padding: 28px; display: flex; flex-direction: column; }
 .plano.rec { border: 2px solid var(--acento); }
 .plano .selo { font-size: 13px; font-weight: 600; color: var(--acento-forte); margin-top: 4px; min-height: 20px; }
@@ -157,10 +158,11 @@ tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 .valor .s { font-size: 22px; margin-right: 5px; } .valor .i { font-size: 52px; line-height: 1; } .valor .c { font-size: 24px; } .valor .p { font: 400 15px var(--sans); color: var(--texto-2); margin-left: 6px; }
 .total { font-size: 15px; color: var(--texto-2); margin-top: 8px; }
 .plano ul { margin: 18px 0 22px; padding: 0; list-style: none; flex: 1; } .plano li { padding: 7px 0; font-size: 15px; border-top: 1px solid var(--regua); }
-.garantia { margin-top: 18px; font-size: 15px; color: var(--texto-2); }
+.garantia { align-self: end; padding: 0 0 8px 40px; font: 400 21px/1.4 var(--serif); }
+.garantia small { display: block; margin-top: 10px; font: 400 15px/1.4 var(--sans); color: var(--texto-2); }
 
 /* Perguntas */
-.perguntas { max-width: 780px; }
+.perguntas > * { max-width: 780px; }
 details.p { border-top: 1px solid var(--regua-forte); } details.p:last-child { border-bottom: 1px solid var(--regua-forte); }
 details.p summary { list-style: none; cursor: pointer; min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-weight: 500; padding: 10px 0; }
 details.p summary::-webkit-details-marker { display: none; }
@@ -175,7 +177,7 @@ details.p p { padding: 0 32px 18px 0; color: var(--texto-2); }
 @media (hover: hover) { .fim .btn:hover { background: var(--acento-txt); opacity: .92; } }
 footer { padding-block: 40px; font-size: 15px; color: var(--texto-2); }
 footer nav { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-bottom: 12px; }
-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+footer a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
 
 /* Preferências de quem visita */
 @media (prefers-reduced-transparency: reduce) {
@@ -216,13 +218,15 @@ footer a { display: inline-flex; align-items: center; min-height: 44px; }
   .bento { grid-template-columns: minmax(0, 1fr); margin-top: 32px; }
   .bento > * { grid-column: auto; grid-row: auto; }
   .vidro { padding: 22px; border-radius: 18px; }
-  .dia { min-height: 62px; padding: 6px; } .dia .v { font-size: 17px; } .semana { font-size: 12px; } .semana, .dias { gap: 4px; }
+  .dia { min-height: 62px; padding: 6px; } .dia .v { font-size: 16px; } .semana { font-size: 12px; } .semana, .dias { gap: 4px; }
   .tag { position: static; order: 3; font-size: 12px; } .baixa.dia { min-height: 76px; }
   .planos { grid-template-columns: minmax(0, 1fr); } .plano.rec { order: -1; }
   .dados { border-left: 0; padding-left: 0; border-top: 2px solid var(--regua-forte); padding-top: 22px; }
   .fim .btn { width: 100%; }
   .marco { font-size: 12px; }
-  .plano li, .total, .garantia, footer, .linhas-se li, .periodo label { font-size: 16px; }
+  .plano li, .total, footer, .linhas-se li, .periodo label, .menu summary, .nav .btn { font-size: 16px; }
+  .garantia { padding: 8px 0 0; }
+  .garantia small { font-size: 16px; }
 }
 </style>
 </head>
@@ -287,11 +291,11 @@ footer a { display: inline-flex; align-items: center; min-height: 44px; }
   </div>
   <div class="mare" role="img" aria-label="Curva do saldo em novembro: sobe no dia 5, com o salário, e tem o ponto mais baixo no dia 22, com o cartão.">
     <svg viewBox="0 0 1440 240" preserveAspectRatio="none" aria-hidden="true">
-      <path class="area on" data-c="0" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 140.9 794.5 141.6 C808.4 142.3 830.2 143.6 844.1 144.3 C858.0 145.1 879.9 146.1 893.8 146.7 C907.7 147.4 929.5 148.5 943.4 149.1 C957.4 149.8 979.2 143.3 993.1 151.2 C1007.0 159.1 1028.9 202.4 1042.8 205.3 C1056.7 208.2 1078.5 176.3 1092.4 171.8 C1106.3 167.2 1128.2 172.6 1142.1 172.8 C1156.0 173.0 1177.8 173.3 1191.7 173.5 C1205.6 173.7 1227.5 174.0 1241.4 174.2 C1255.3 174.4 1277.1 174.7 1291.0 174.9 C1304.9 175.0 1326.8 175.1 1340.7 175.2 C1354.6 175.3 1376.4 175.7 1390.3 175.9 C1404.2 176.1 1433.0 176.5 1440.0 176.6 L1440 240 L0 240 Z"/><path class="area" data-c="1" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 140.9 794.5 141.6 C808.4 142.3 830.2 143.6 844.1 144.3 C858.0 145.1 879.9 146.1 893.8 146.7 C907.7 147.4 929.5 148.5 943.4 149.1 C957.4 149.8 979.2 144.8 993.1 151.2 C1007.0 157.6 1028.9 193.4 1042.8 194.8 C1056.7 196.2 1078.5 165.8 1092.4 161.3 C1106.3 156.7 1128.2 162.1 1142.1 162.3 C1156.0 162.5 1177.8 162.8 1191.7 163.0 C1205.6 163.2 1227.5 163.5 1241.4 163.7 C1255.3 163.9 1277.1 164.2 1291.0 164.4 C1304.9 164.5 1326.8 164.6 1340.7 164.7 C1354.6 164.9 1376.4 165.2 1390.3 165.4 C1404.2 165.6 1433.0 166.0 1440.0 166.1 L1440 240 L0 240 Z"/><path class="area" data-c="2" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 144.3 794.5 141.6 C808.4 138.9 830.2 123.0 844.1 120.3 C858.0 117.7 879.9 122.1 893.8 122.7 C907.7 123.4 929.5 124.5 943.4 125.1 C957.4 125.8 979.2 119.3 993.1 127.2 C1007.0 135.1 1028.9 178.4 1042.8 181.3 C1056.7 184.2 1078.5 152.3 1092.4 147.8 C1106.3 143.2 1128.2 148.6 1142.1 148.8 C1156.0 149.0 1177.8 149.3 1191.7 149.5 C1205.6 149.7 1227.5 150.0 1241.4 150.2 C1255.3 150.4 1277.1 150.7 1291.0 150.9 C1304.9 151.0 1326.8 151.1 1340.7 151.2 C1354.6 151.3 1376.4 151.7 1390.3 151.9 C1404.2 152.1 1433.0 152.5 1440.0 152.6 L1440 240 L0 240 Z"/>
-      <path class="linha on" data-c="0" pathLength="1" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 140.9 794.5 141.6 C808.4 142.3 830.2 143.6 844.1 144.3 C858.0 145.1 879.9 146.1 893.8 146.7 C907.7 147.4 929.5 148.5 943.4 149.1 C957.4 149.8 979.2 143.3 993.1 151.2 C1007.0 159.1 1028.9 202.4 1042.8 205.3 C1056.7 208.2 1078.5 176.3 1092.4 171.8 C1106.3 167.2 1128.2 172.6 1142.1 172.8 C1156.0 173.0 1177.8 173.3 1191.7 173.5 C1205.6 173.7 1227.5 174.0 1241.4 174.2 C1255.3 174.4 1277.1 174.7 1291.0 174.9 C1304.9 175.0 1326.8 175.1 1340.7 175.2 C1354.6 175.3 1376.4 175.7 1390.3 175.9 C1404.2 176.1 1433.0 176.5 1440.0 176.6"/><path class="linha" data-c="1" pathLength="1" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 140.9 794.5 141.6 C808.4 142.3 830.2 143.6 844.1 144.3 C858.0 145.1 879.9 146.1 893.8 146.7 C907.7 147.4 929.5 148.5 943.4 149.1 C957.4 149.8 979.2 144.8 993.1 151.2 C1007.0 157.6 1028.9 193.4 1042.8 194.8 C1056.7 196.2 1078.5 165.8 1092.4 161.3 C1106.3 156.7 1128.2 162.1 1142.1 162.3 C1156.0 162.5 1177.8 162.8 1191.7 163.0 C1205.6 163.2 1227.5 163.5 1241.4 163.7 C1255.3 163.9 1277.1 164.2 1291.0 164.4 C1304.9 164.5 1326.8 164.6 1340.7 164.7 C1354.6 164.9 1376.4 165.2 1390.3 165.4 C1404.2 165.6 1433.0 166.0 1440.0 166.1"/><path class="linha" data-c="2" pathLength="1" d="M0.0 148.1 C7.0 148.3 35.8 149.1 49.7 149.5 C63.6 149.9 85.4 150.8 99.3 151.2 C113.2 151.6 135.1 166.6 149.0 152.6 C162.9 138.5 184.7 64.7 198.6 50.7 C212.5 36.8 234.4 52.2 248.3 52.8 C262.2 53.4 284.0 54.5 297.9 55.2 C311.8 55.9 333.7 57.3 347.6 57.9 C361.5 58.6 383.3 50.4 397.2 60.0 C411.1 69.6 433.0 117.0 446.9 126.5 C460.8 136.1 482.6 127.7 496.6 128.2 C510.5 128.8 532.3 129.7 546.2 130.3 C560.1 130.9 582.0 132.1 595.9 132.7 C609.8 133.3 631.6 133.7 645.5 134.4 C659.4 135.1 681.3 136.8 695.2 137.5 C709.1 138.2 730.9 139.0 744.8 139.5 C758.7 140.1 780.6 144.3 794.5 141.6 C808.4 138.9 830.2 123.0 844.1 120.3 C858.0 117.7 879.9 122.1 893.8 122.7 C907.7 123.4 929.5 124.5 943.4 125.1 C957.4 125.8 979.2 119.3 993.1 127.2 C1007.0 135.1 1028.9 178.4 1042.8 181.3 C1056.7 184.2 1078.5 152.3 1092.4 147.8 C1106.3 143.2 1128.2 148.6 1142.1 148.8 C1156.0 149.0 1177.8 149.3 1191.7 149.5 C1205.6 149.7 1227.5 150.0 1241.4 150.2 C1255.3 150.4 1277.1 150.7 1291.0 150.9 C1304.9 151.0 1326.8 151.1 1340.7 151.2 C1354.6 151.3 1376.4 151.7 1390.3 151.9 C1404.2 152.1 1433.0 152.5 1440.0 152.6"/>
+      <path class="area on" data-c="0" d="M0.0 123.0 C7.0 123.1 35.8 123.7 49.7 124.0 C63.6 124.4 85.4 125.0 99.3 125.4 C113.2 125.7 135.1 137.4 149.0 126.4 C162.9 115.5 184.7 57.8 198.6 46.9 C212.5 36.0 234.4 48.0 248.3 48.5 C262.2 49.0 284.0 49.8 297.9 50.4 C311.8 50.9 333.7 52.0 347.6 52.5 C361.5 53.0 383.3 46.6 397.2 54.1 C411.1 61.6 433.0 98.6 446.9 106.1 C460.8 113.6 482.6 107.0 496.6 107.4 C510.5 107.8 532.3 108.5 546.2 109.0 C560.1 109.5 582.0 110.5 595.9 110.9 C609.8 111.4 631.6 111.7 645.5 112.3 C659.4 112.8 681.3 114.1 695.2 114.7 C709.1 115.2 730.9 115.8 744.8 116.3 C758.7 116.7 780.6 117.3 794.5 117.9 C808.4 118.4 830.2 119.5 844.1 120.0 C858.0 120.6 879.9 121.4 893.8 121.9 C907.7 122.4 929.5 123.3 943.4 123.8 C957.4 124.3 979.2 119.2 993.1 125.4 C1007.0 131.5 1028.9 165.4 1042.8 167.6 C1056.7 169.9 1078.5 145.0 1092.4 141.4 C1106.3 137.9 1128.2 142.1 1142.1 142.3 C1156.0 142.4 1177.8 142.6 1191.7 142.8 C1205.6 142.9 1227.5 143.2 1241.4 143.3 C1255.3 143.5 1277.1 143.7 1291.0 143.9 C1304.9 144.0 1326.8 144.0 1340.7 144.1 C1354.6 144.2 1376.4 144.5 1390.3 144.7 C1404.2 144.8 1433.0 145.1 1440.0 145.2 L1440 240 L0 240 Z"/><path class="area" data-c="1" d="M0.0 123.0 C7.0 123.1 35.8 123.7 49.7 124.0 C63.6 124.4 85.4 125.0 99.3 125.4 C113.2 125.7 135.1 137.4 149.0 126.4 C162.9 115.5 184.7 57.8 198.6 46.9 C212.5 36.0 234.4 48.0 248.3 48.5 C262.2 49.0 284.0 49.8 297.9 50.4 C311.8 50.9 333.7 52.0 347.6 52.5 C361.5 53.0 383.3 46.6 397.2 54.1 C411.1 61.6 433.0 98.6 446.9 106.1 C460.8 113.6 482.6 107.0 496.6 107.4 C510.5 107.8 532.3 108.5 546.2 109.0 C560.1 109.5 582.0 110.5 595.9 110.9 C609.8 111.4 631.6 111.7 645.5 112.3 C659.4 112.8 681.3 114.1 695.2 114.7 C709.1 115.2 730.9 115.8 744.8 116.3 C758.7 116.7 780.6 117.3 794.5 117.9 C808.4 118.4 830.2 119.5 844.1 120.0 C858.0 120.6 879.9 121.4 893.8 121.9 C907.7 122.4 929.5 123.3 943.4 123.8 C957.4 124.3 979.2 120.4 993.1 125.4 C1007.0 130.4 1028.9 158.3 1042.8 159.4 C1056.7 160.5 1078.5 136.8 1092.4 133.3 C1106.3 129.7 1128.2 133.9 1142.1 134.1 C1156.0 134.2 1177.8 134.4 1191.7 134.6 C1205.6 134.7 1227.5 135.0 1241.4 135.1 C1255.3 135.3 1277.1 135.5 1291.0 135.7 C1304.9 135.8 1326.8 135.8 1340.7 135.9 C1354.6 136.0 1376.4 136.3 1390.3 136.5 C1404.2 136.6 1433.0 137.0 1440.0 137.0 L1440 240 L0 240 Z"/><path class="area" data-c="2" d="M0.0 123.0 C7.0 123.1 35.8 123.7 49.7 124.0 C63.6 124.4 85.4 125.0 99.3 125.4 C113.2 125.7 135.1 137.4 149.0 126.4 C162.9 115.5 184.7 57.8 198.6 46.9 C212.5 36.0 234.4 48.0 248.3 48.5 C262.2 49.0 284.0 49.8 297.9 50.4 C311.8 50.9 333.7 52.0 347.6 52.5 C361.5 53.0 383.3 46.6 397.2 54.1 C411.1 61.6 433.0 98.6 446.9 106.1 C460.8 113.6 482.6 107.0 496.6 107.4 C510.5 107.8 532.3 108.5 546.2 109.0 C560.1 109.5 582.0 110.5 595.9 110.9 C609.8 111.4 631.6 111.7 645.5 112.3 C659.4 112.8 681.3 114.1 695.2 114.7 C709.1 115.2 730.9 115.8 744.8 116.3 C758.7 116.7 780.6 120.0 794.5 117.9 C808.4 115.8 830.2 103.3 844.1 101.3 C858.0 99.2 879.9 102.6 893.8 103.1 C907.7 103.7 929.5 104.5 943.4 105.0 C957.4 105.5 979.2 100.5 993.1 106.6 C1007.0 112.8 1028.9 146.6 1042.8 148.9 C1056.7 151.1 1078.5 126.2 1092.4 122.7 C1106.3 119.1 1128.2 123.3 1142.1 123.5 C1156.0 123.7 1177.8 123.9 1191.7 124.0 C1205.6 124.2 1227.5 124.4 1241.4 124.6 C1255.3 124.7 1277.1 125.0 1291.0 125.1 C1304.9 125.2 1326.8 125.3 1340.7 125.4 C1354.6 125.5 1376.4 125.8 1390.3 125.9 C1404.2 126.1 1433.0 126.4 1440.0 126.5 L1440 240 L0 240 Z"/>
+      <path class="linha on" data-c="0" pathLength="1" d="M0.0 123.0 C7.0 123.1 35.8 123.7 49.7 124.0 C63.6 124.4 85.4 125.0 99.3 125.4 C113.2 125.7 135.1 137.4 149.0 126.4 C162.9 115.5 184.7 57.8 198.6 46.9 C212.5 36.0 234.4 48.0 248.3 48.5 C262.2 49.0 284.0 49.8 297.9 50.4 C311.8 50.9 333.7 52.0 347.6 52.5 C361.5 53.0 383.3 46.6 397.2 54.1 C411.1 61.6 433.0 98.6 446.9 106.1 C460.8 113.6 482.6 107.0 496.6 107.4 C510.5 107.8 532.3 108.5 546.2 109.0 C560.1 109.5 582.0 110.5 595.9 110.9 C609.8 111.4 631.6 111.7 645.5 112.3 C659.4 112.8 681.3 114.1 695.2 114.7 C709.1 115.2 730.9 115.8 744.8 116.3 C758.7 116.7 780.6 117.3 794.5 117.9 C808.4 118.4 830.2 119.5 844.1 120.0 C858.0 120.6 879.9 121.4 893.8 121.9 C907.7 122.4 929.5 123.3 943.4 123.8 C957.4 124.3 979.2 119.2 993.1 125.4 C1007.0 131.5 1028.9 165.4 1042.8 167.6 C1056.7 169.9 1078.5 145.0 1092.4 141.4 C1106.3 137.9 1128.2 142.1 1142.1 142.3 C1156.0 142.4 1177.8 142.6 1191.7 142.8 C1205.6 142.9 1227.5 143.2 1241.4 143.3 C1255.3 143.5 1277.1 143.7 1291.0 143.9 C1304.9 144.0 1326.8 144.0 1340.7 144.1 C1354.6 144.2 1376.4 144.5 1390.3 144.7 C1404.2 144.8 1433.0 145.1 1440.0 145.2"/><path class="linha" data-c="1" pathLength="1" d="M0.0 123.0 C7.0 123.1 35.8 123.7 49.7 124.0 C63.6 124.4 85.4 125.0 99.3 125.4 C113.2 125.7 135.1 137.4 149.0 126.4 C162.9 115.5 184.7 57.8 198.6 46.9 C212.5 36.0 234.4 48.0 248.3 48.5 C262.2 49.0 284.0 49.8 297.9 50.4 C311.8 50.9 333.7 52.0 347.6 52.5 C361.5 53.0 383.3 46.6 397.2 54.1 C411.1 61.6 433.0 98.6 446.9 106.1 C460.8 113.6 482.6 107.0 496.6 107.4 C510.5 107.8 532.3 108.5 546.2 109.0 C560.1 109.5 582.0 110.5 595.9 110.9 C609.8 111.4 631.6 111.7 645.5 112.3 C659.4 112.8 681.3 114.1 695.2 114.7 C709.1 115.2 730.9 115.8 744.8 116.3 C758.7 116.7 780.6 117.3 794.5 117.9 C808.4 118.4 830.2 119.5 844.1 120.0 C858.0 120.6 879.9 121.4 893.8 121.9 C907.7 122.4 929.5 123.3 943.4 123.8 C957.4 124.3 979.2 120.4 993.1 125.4 C1007.0 130.4 1028.9 158.3 1042.8 159.4 C1056.7 160.5 1078.5 136.8 1092.4 133.3 C1106.3 129.7 1128.2 133.9 1142.1 134.1 C1156.0 134.2 1177.8 134.4 1191.7 134.6 C1205.6 134.7 1227.5 135.0 1241.4 135.1 C1255.3 135.3 1277.1 135.5 1291.0 135.7 C1304.9 135.8 1326.8 135.8 1340.7 135.9 C1354.6 136.0 1376.4 136.3 1390.3 136.5 C1404.2 136.6 1433.0 137.0 1440.0 137.0"/><path class="linha" data-c="2" pathLength="1" d="M0.0 123.0 C7.0 123.1 35.8 123.7 49.7 124.0 C63.6 124.4 85.4 125.0 99.3 125.4 C113.2 125.7 135.1 137.4 149.0 126.4 C162.9 115.5 184.7 57.8 198.6 46.9 C212.5 36.0 234.4 48.0 248.3 48.5 C262.2 49.0 284.0 49.8 297.9 50.4 C311.8 50.9 333.7 52.0 347.6 52.5 C361.5 53.0 383.3 46.6 397.2 54.1 C411.1 61.6 433.0 98.6 446.9 106.1 C460.8 113.6 482.6 107.0 496.6 107.4 C510.5 107.8 532.3 108.5 546.2 109.0 C560.1 109.5 582.0 110.5 595.9 110.9 C609.8 111.4 631.6 111.7 645.5 112.3 C659.4 112.8 681.3 114.1 695.2 114.7 C709.1 115.2 730.9 115.8 744.8 116.3 C758.7 116.7 780.6 120.0 794.5 117.9 C808.4 115.8 830.2 103.3 844.1 101.3 C858.0 99.2 879.9 102.6 893.8 103.1 C907.7 103.7 929.5 104.5 943.4 105.0 C957.4 105.5 979.2 100.5 993.1 106.6 C1007.0 112.8 1028.9 146.6 1042.8 148.9 C1056.7 151.1 1078.5 126.2 1092.4 122.7 C1106.3 119.1 1128.2 123.3 1142.1 123.5 C1156.0 123.7 1177.8 123.9 1191.7 124.0 C1205.6 124.2 1227.5 124.4 1241.4 124.6 C1255.3 124.7 1277.1 125.0 1291.0 125.1 C1304.9 125.2 1326.8 125.3 1340.7 125.4 C1354.6 125.5 1376.4 125.8 1390.3 125.9 C1404.2 126.1 1433.0 126.4 1440.0 126.5"/>
     </svg>
-    <span class="marco" style="left:13.79%;top:21.14%">dia 5, maré alta</span>
-    <span class="marco b" style="left:72.41%;top:85.54%">dia 22, maré baixa</span>
+    <span class="marco" style="left:13.79%;top:19.54%">dia 5, maré alta</span>
+    <span class="marco b" style="left:72.41%;top:69.85%">dia 22, maré baixa</span>
   </div>
 </section>
 
@@ -437,8 +441,8 @@ footer a { display: inline-flex; align-items: center; min-height: 44px; }
         <ul><li>Tudo do Solo</li><li>2 pessoas na mesma curva</li><li>Contas sem limite</li></ul>
         <a class="btn btn-1" href="#perguntas">Testar o Casa</a>
       </article>
+      <p class="garantia">14 dias sem cobrança. Cancele pelo próprio aplicativo, sem multa.<small>Preços fictícios.</small></p>
     </div>
-    <p class="garantia">14 dias sem cobrança. Cancele pelo próprio aplicativo, sem multa. Preços fictícios.</p>
   </div>
 </section>
 

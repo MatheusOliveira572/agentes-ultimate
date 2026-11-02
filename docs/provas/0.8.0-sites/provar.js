@@ -92,7 +92,8 @@ const TEXTOS = `(function () {
   while (w.nextNode()) {
     var n = w.currentNode; if (!n.textContent.trim()) continue;
     var e = n.parentElement; if (!e || e.closest('script, style')) continue;
-    var cs = getComputedStyle(e); if (cs.visibility === 'hidden' || cs.display === 'none') continue;
+    var dt = e.closest('details:not([open])'); if (dt && !e.closest('summary')) continue;
+    var cs = getComputedStyle(e); if (cs.visibility === 'hidden' || cs.display === 'none' || !e.getClientRects().length) continue;
     var op = 1, a = e; while (a) { op *= +getComputedStyle(a).opacity; a = a.parentElement; }
     if (op < .05) continue; /* elemento fora de vista de propósito (ex.: botão pulado) não conta */
     var r = document.createRange(); r.selectNodeContents(n);
@@ -140,6 +141,7 @@ const CHECAGENS = `(function (celular) {
     var temTexto = Array.prototype.some.call(e.childNodes, function (n) { return n.nodeType === 3 && n.textContent.trim(); });
     if (temTexto && (q.right > innerWidth + 1 || q.left < -1)) cortado.push(e.tagName + ':' + e.textContent.trim().slice(0, 30));
     if (temTexto && /hidden|clip/.test(cs.overflowX) && e.scrollWidth > e.clientWidth + 1) cortado.push(e.tagName + ':' + e.textContent.trim().slice(0, 30));
+    if (temTexto && !e.closest('details:not([open])')) { for (var a = e.parentElement; a && a !== document.body; a = a.parentElement) { var ca = getComputedStyle(a); if (/hidden|clip/.test(ca.overflowY) || /hidden|clip/.test(ca.overflowX)) { var qa = a.getBoundingClientRect(); if (q.bottom > qa.bottom + 1 || q.top < qa.top - 1) { cortado.push('vertical ' + e.tagName + ':' + e.textContent.trim().slice(0, 30)); break; } } } }
   });
   r.texto_cortado = cortado.length; r.detalhe_cortado = cortado.slice(0, 8);
   var pequenos = [];
@@ -148,12 +150,26 @@ const CHECAGENS = `(function (celular) {
     var q = e.getBoundingClientRect(); if (!q.width) return;
     if (q.height < 43.5 || q.width < 43.5) pequenos.push(e.tagName + ':' + e.textContent.trim().slice(0, 24) + ':' + Math.round(q.width) + 'x' + Math.round(q.height));
   });
+  /* Texto sobre texto: a medida de contraste esconde o texto para ler o fundo, então não vê isto. */
+  var caixas = [], wt = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (wt.nextNode()) {
+    var nt = wt.currentNode; if (!nt.textContent.trim()) continue; var pe = nt.parentElement; if (!pe || pe.closest('script, style, .pular') || (pe.closest('details:not([open])') && !pe.closest('summary'))) continue;
+    var ce = getComputedStyle(pe); if (ce.visibility === 'hidden' || !pe.getClientRects().length) continue;
+    var rg = document.createRange(); rg.selectNodeContents(nt);
+    Array.prototype.forEach.call(rg.getClientRects(), function (x) { if (x.width > 1 && x.height > 1) caixas.push({ e: pe, t: nt.textContent.trim().slice(0, 24), l: x.left, r: x.right, a: x.top + 2, b: x.bottom - 2 }); });
+  }
+  var sobre = [];
+  for (var i = 0; i < caixas.length; i++) for (var j = i + 1; j < caixas.length; j++) {
+    var u = caixas[i], v = caixas[j]; if (u.e === v.e || u.e.contains(v.e) || v.e.contains(u.e)) continue;
+    if (u.l < v.r - 1 && v.l < u.r - 1 && u.a < v.b && v.a < u.b) sobre.push(u.t + ' × ' + v.t);
+  }
+  r.texto_sobreposto = sobre.length; r.detalhe_sobreposto = sobre.slice(0, 8);
   r.alvos_pequenos = pequenos.length; r.detalhe_alvos = pequenos.slice(0, 8);
   var leg = '.aviso, .unidade, .tabua-topo, .variacao, td, th, .dia, .semana, .m, .rotulos, .selo, .marco, .periodo, .tag, .cenas, .valor, .metrica';
   var corpo = [], w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (w.nextNode()) {
     var n = w.currentNode; if (!n.textContent.trim()) continue; var e = n.parentElement; if (!e || e.closest('script, style')) continue;
-    var cs2 = getComputedStyle(e); if (cs2.display === 'none') continue; var px = parseFloat(cs2.fontSize);
+    var cs2 = getComputedStyle(e); if (cs2.display === 'none' || !e.getClientRects().length) continue; var px = parseFloat(cs2.fontSize);
     if (px < 12 || (celular && px < 16 && !e.closest(leg))) corpo.push(e.tagName + '.' + e.className + ':' + px + ':' + n.textContent.trim().slice(0, 24));
   }
   r.corpo_pequeno = corpo.length; r.detalhe_corpo = corpo.slice(0, 8);
@@ -172,9 +188,11 @@ const CHECAGENS = `(function (celular) {
 })`;
 
 const ARQ_SITE = path.join(AQUI, 'site-preamar.html');
+// A cena gira sozinha: foto e contraste no meio da troca sairiam com o texto apagado. Parar pelo próprio botão da página.
+async function fixarCena(b) { await b.ev(`(function(){var c=document.querySelector('[data-cena="0"]');if(c)c.click()})()`); await espera(450); }
 async function capturaSite(b, url, tema, largura, nomePng) {
   await midia(b, [{ name: 'prefers-color-scheme', value: tema === 'escuro' ? 'dark' : 'light' }]);
-  await janela(b, largura); await ir(b, url); await espera(1700); // a curva termina de se desenhar; a cena ainda é a inicial
+  await janela(b, largura); await ir(b, url); await espera(1700); await fixarCena(b); // a curva já se desenhou; a cena para na inicial
   const foraDeVista = await b.ev(CHECAGENS + `(${largura < 500})`); await espera(120);
   if (nomePng) fs.writeFileSync(path.join(PNG, nomePng), await foto(b));
   const ct = await medirContraste(b);
@@ -189,7 +207,7 @@ async function provarSite() {
   for (const tema of ['claro', 'escuro']) for (const l of [1440, 390]) {
     if (capturas.length) await novo();
     const c = await capturaSite(b, url, tema, l, `site-${tema}-${l}.png`); capturas.push(c); gravarRes({ capturas });
-    console.log(`${c.png}: js ${c.erros_js}, lateral ${c.rolagem_lateral}, cortado ${c.texto_cortado}, contraste ${c.contraste_falhas}/${c.contraste_medidos} (pior ${c.contraste_pior}), alvos ${c.alvos_pequenos}, corpo ${c.corpo_pequeno}, cobertos ${c.titulos_cobertos}, fixas ${c.camadas_fixas}`);
+    console.log(`${c.png}: js ${c.erros_js}, lateral ${c.rolagem_lateral}, cortado ${c.texto_cortado}, contraste ${c.contraste_falhas}/${c.contraste_medidos} (pior ${c.contraste_pior}), alvos ${c.alvos_pequenos}, corpo ${c.corpo_pequeno}, cobertos ${c.titulos_cobertos}, sobre ${c.texto_sobreposto}, fixas ${c.camadas_fixas}`);
   }
   // Simulação: cicla sozinha, a pausa para, fora da tela para.
   await novo(); await midia(b, []); await janela(b, 1440); await ir(b, url); await espera(400);
@@ -230,7 +248,7 @@ async function provarSite() {
   gravarRes({ reduzido_movimento });
   // Transparência reduzida
   async function reduzTransp(u, png) {
-    await midia(b, [{ name: 'prefers-reduced-transparency', value: 'reduce' }, { name: 'prefers-color-scheme', value: 'dark' }]); await janela(b, 1440); await ir(b, u); await espera(1700);
+    await midia(b, [{ name: 'prefers-reduced-transparency', value: 'reduce' }, { name: 'prefers-color-scheme', value: 'dark' }]); await janela(b, 1440); await ir(b, u); await espera(1700); await fixarCena(b);
     const ativa = await b.ev(`matchMedia('(prefers-reduced-transparency: reduce)').matches`);
     const r = await b.ev(`(function(){var d=0,al=1;document.querySelectorAll('body *').forEach(function(e){if(getComputedStyle(e).backdropFilter!=='none')d++;});document.querySelectorAll('.vidro,.nav').forEach(function(e){var m=getComputedStyle(e).backgroundColor.match(/[\\d.]+/g);al=Math.min(al,m[3]===undefined?1:+m[3]);});return {com_desfoque:d,alfa_minimo:al}})()`);
     if (png) fs.writeFileSync(path.join(PNG, png), await foto(b));
@@ -242,7 +260,7 @@ async function provarSite() {
   gravarRes({ reduzido_transparencia });
   // Mais contraste
   await novo();
-  await midia(b, [{ name: 'prefers-contrast', value: 'more' }, { name: 'prefers-color-scheme', value: 'light' }]); await janela(b, 1440); await ir(b, url); await espera(1700);
+  await midia(b, [{ name: 'prefers-contrast', value: 'more' }, { name: 'prefers-color-scheme', value: 'light' }]); await janela(b, 1440); await ir(b, url); await espera(1700); await fixarCena(b);
   const mc = await b.ev(`({ativa:matchMedia('(prefers-contrast: more)').matches,desfoque:Array.prototype.filter.call(document.querySelectorAll('.vidro,.nav'),function(e){return getComputedStyle(e).backdropFilter!=='none'}).length})`);
   const ctMais = await medirContraste(b);
   const mais_contraste = { media_ativa: mc.ativa, com_desfoque: mc.desfoque, contraste_falhas: ctMais.contraste_falhas, contraste_pior: ctMais.contraste_pior };
@@ -285,12 +303,18 @@ async function provarSite() {
   gravarRes({ mutantes }); await novo();
   c = await semJs(mutante('sem-js', (t) => t.replace('h1 { font-size:', 'h1 { opacity: 0; font-size:')));
   mutantes.push({ nome: 'título invisível sem JS', pegou: c.texto_completo === false });
+  gravarRes({ mutantes }); await novo();
+  c = await capturaSite(b, mutante('rotulo', (t) => t.replace('transform: translate(-50%, 8px); padding: 14px 0 0;', 'transform: translate(-50%, 8px); padding: 120px 0 0;')), 'claro', 1440, null);
+  mutantes.push({ nome: 'rótulo cortado na vertical pela seção', pegou: c.texto_cortado > 0 });
+  gravarRes({ mutantes }); await novo();
+  c = await capturaSite(b, mutante('sobre', (t) => t.replace('.mare { position: relative; margin-top: 16px;', '.mare { position: relative; margin-top: -24px;')), 'claro', 1440, null);
+  mutantes.push({ nome: 'rótulo da curva em cima de outro texto', pegou: c.texto_sobreposto > 0 });
 
   const versao = b.versao; await b.fechar();
   gravarRes({ gerado_em: new Date().toISOString(), navegador: versao, condicao: 'Edge sem interface, uma máquina Windows; imagens renderizadas sem aparelho real', capturas, simulacao, interacoes, reduzido_movimento, reduzido_transparencia, mais_contraste, sem_js, mutantes });
-  const ruins = capturas.filter((x) => x.erros_js || x.rolagem_lateral || x.texto_cortado || x.contraste_falhas || x.alvos_pequenos || x.corpo_pequeno || x.titulos_cobertos).length;
+  const ruins = capturas.filter((x) => x.erros_js || x.rolagem_lateral || x.texto_cortado || x.contraste_falhas || x.alvos_pequenos || x.corpo_pequeno || x.titulos_cobertos || x.texto_sobreposto).length;
   console.log(JSON.stringify({ simulacao, interacoes, reduzido_movimento, reduzido_transparencia: { ...reduzido_transparencia, detalhe_falhas: reduzido_transparencia.detalhe_falhas.slice(0, 3) }, mais_contraste, sem_js, mutantes }));
-  for (const x of capturas) for (const k of ['detalhe_falhas', 'detalhe_cortado', 'detalhe_alvos', 'detalhe_corpo', 'detalhe_cobertos', 'detalhe_erros']) if (x[k] && x[k].length) console.log(x.png, k, JSON.stringify(x[k]));
+  for (const x of capturas) for (const k of ['detalhe_falhas', 'detalhe_cortado', 'detalhe_alvos', 'detalhe_corpo', 'detalhe_cobertos', 'detalhe_erros', 'detalhe_sobreposto']) if (x[k] && x[k].length) console.log(x.png, k, JSON.stringify(x[k]));
   console.log(`RESUMO site: ${capturas.length} capturas, ${ruins} com problema, ${mutantes.filter((m) => m.pegou).length}/${mutantes.length} mutantes pegos, ${Math.round((Date.now() - t0) / 1000)} s`);
 }
 
@@ -385,7 +409,33 @@ async function provarEfeitos() {
   await midia(b, []); await janela(b, 1000, 900); await ir(b, urlDe(folha)); await espera(800);
   fs.writeFileSync(path.join(PNG, 'bancada-efeitos.png'), await foto(b));
   const versao = b.versao; await b.fechar();
-  gravarRes({ efeitos: saida, efeitos_condicao: `${versao}, sem interface, 390 px, CPU freada 4×; quadros por requestAnimationFrame em 1,5 s. Sem aparelho real.` });
+  // Controles: a medida de quadros, o "mexeu" e o "reduzido" têm de falhar no caso errado.
+  await b.fechar(); b = await abrirEdge();
+  const controles = [];
+  await janela(b, 390, 844); await midia(b, []); await ir(b, url); await b.cdp('Emulation.setCPUThrottlingRate', { rate: 4 });
+  await b.ev(`bancada.ativar('A3'); (function q(){var t=performance.now();while(performance.now()-t<12){} requestAnimationFrame(q)})()`);
+  const qc = await b.ev('bancada.medir(1500)');
+  controles.push({ nome: 'carga de 12 ms por quadro na linha principal (só passa de 34 ms se a CPU estiver freada)', p95_ms: +qc.p95.toFixed(1), pegou: qc.p95 > 34 });
+  await b.fechar(); b = await abrirEdge();
+  await janela(b, 390, 844); await midia(b, []); await ir(b, url); await b.cdp('Emulation.setCPUThrottlingRate', { rate: 4 });
+  await b.ev(`(function(){var d=document.createElement('div');d.style.cssText='position:fixed;inset:0;background:linear-gradient(#2a7388,#7a3b2a)';document.body.appendChild(d);d.animate([{filter:'blur(0px)'},{filter:'blur(40px)'}],{duration:800,iterations:Infinity,direction:'alternate'})})()`);
+  const qb = await b.ev('bancada.medir(1500)');
+  controles.push({ nome: 'desfoque de 40 px animado na tela inteira (só informativo: mostra se a medida enxerga custo de pintura)', p95_ms: +qb.p95.toFixed(1), informativo: true, pegou: qb.p95 > 34 });
+  await b.fechar(); b = await abrirEdge();
+  const fonteB = fs.readFileSync(path.join(AQUI, 'bancada-efeitos.html'), 'utf8');
+  const mB = path.join(TEMP, 'b-sem-rm.html'); fs.writeFileSync(mB, fonteB.replace('@media (prefers-reduced-motion: reduce) {', '@media (max-width: 1px) {').split("matchMedia('(prefers-reduced-motion: reduce)')").join("matchMedia('(max-width: 1px)')"));
+  await janela(b, 390, 844); await midia(b, FM); await ir(b, urlDe(mB));
+  await b.ev("bancada.ativar('E1')"); await espera(300);
+  const ce = await b.ev("bancada.centro('E1')");
+  const r1 = await foto(b, clipDe(ce)); await espera(600); const r2 = await foto(b, clipDe(ce)); const rr = await b.ev('bancada.rodando()');
+  controles.push({ nome: 'marquee sem o ramo de movimento reduzido', pegou: !(r1.equals(r2) && rr === 0) });
+  const mC = path.join(TEMP, 'b-parado.html'); fs.writeFileSync(mC, fonteB.replace('animation: anda 30s linear infinite;', ''));
+  await midia(b, []); await ir(b, urlDe(mC));
+  await b.ev("bancada.ativar('E1')"); await espera(100);
+  const a1 = await foto(b, clipDe(ce)); await espera(1000); const a2 = await foto(b, clipDe(ce));
+  controles.push({ nome: 'marquee sem a animação (o "mexeu" tem de dar falso)', pegou: a1.equals(a2) });
+  console.log(JSON.stringify(controles));
+  gravarRes({ efeitos: saida, efeitos_controles: controles, efeitos_condicao: `${versao}, sem interface, 390 px, CPU freada 4×; quadros por requestAnimationFrame em 1,5 s. Sem aparelho real.` });
   const ruins = saida.filter((r) => !r.provado);
   for (const r of ruins) console.log('NÃO PROVADO', r.id, r.nome, JSON.stringify({ mexeu: r.mexeu, red: r.reduzido_ok, rod: r.reduzido_rodando, txtR: r.reduzido_texto_invisivel, txt: r.texto_invisivel_no_fim, p95: r.p95_ms, js: r.erros_js, pausa: r.pausa_ok }));
   console.log(`RESUMO efeitos: ${saida.length} efeitos, ${saida.length - ruins.length} provados, ${ruins.length} não, ${Math.round((Date.now() - t0) / 1000)} s`);
@@ -411,6 +461,7 @@ ${provados} de ${IDS.length} efeitos passaram na bancada (\`docs/provas/0.8.0-si
 
 **PROVADO quer dizer:** com o valor da coluna, em código próprio, o efeito apareceu ou mexeu, ficou parado e legível com
 \`prefers-reduced-motion\`, teve pausa quando o catálogo exige, 0 erro de JS e p95 do quadro até 34 ms na condição acima.
+**Controles:** ${(res.efeitos_controles || []).map((c) => `${c.nome}: ${c.p95_ms !== undefined ? c.p95_ms + ' ms, ' : ''}${c.informativo ? (c.pegou ? 'a medida subiu' : 'a medida não subiu: custo de pintura não aparece aqui') : (c.pegou ? 'pegou' : 'NÃO pegou')}`).join('; ') || '—'}.
 **Não prova:** aparelho real, GPU, bateria, nem o restante da faixa do catálogo, que continua [ESTIMATIVA: ponto de partida
 nosso]. Quadro por \`requestAnimationFrame\` mede a linha principal, não o compositor. Teclado e leitor de tela: só o
 que está na página de prova (\`site-preamar.html\`), não em cada efeito. Os avançados do grupo G não foram construídos.
