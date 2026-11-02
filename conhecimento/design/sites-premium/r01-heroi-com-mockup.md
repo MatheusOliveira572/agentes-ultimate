@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-heroi-mockup; palavras=heroi com mockup, mockup do produto, mockup, primeira dobra do site; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=coloque um herói com mockup do produto na página | o mockup do celular na primeira dobra do site ficou pequeno; nao=faça o rateio das despesas por centro de custo -->
 # R1. Herói com produto em mockup

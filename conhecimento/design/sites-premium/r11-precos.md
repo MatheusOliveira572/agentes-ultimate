@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-precos; palavras=secao de precos, tabela de precos, pagina de precos, planos e precos; agentes=designer-sites, estrategista-marketing, engenheiro-software -->
 <!-- teste-ref: sim=desenhe a seção de preços com três planos | monte a tabela de preços do site com planos e preços; nao=faça o rateio das despesas por centro de custo -->
 # R11. Seção de preços

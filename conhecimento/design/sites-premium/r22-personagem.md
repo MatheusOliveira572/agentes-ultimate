@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-personagem; palavras=mascote, personagem da marca, objeto assinatura; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=crie um mascote como personagem da marca para o site | quero um objeto assinatura em vez de mascote; nao=registre o boletim de ocorrência do furto -->
 # R22. Personagem ou objeto-assinatura

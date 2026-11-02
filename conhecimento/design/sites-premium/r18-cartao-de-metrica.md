@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-cartao-metrica; palavras=cartao de metrica, heroi de dado, numero em destaque, simbolo e centavos; agentes=designer-sites, designer-paineis, engenheiro-software -->
 <!-- teste-ref: sim=desenhe o cartão de métrica do saldo | quero um número em destaque com símbolo e centavos menores; nao=calcule o ponto de equilíbrio do produto -->
 # R18. Cartão de métrica (herói de dado)

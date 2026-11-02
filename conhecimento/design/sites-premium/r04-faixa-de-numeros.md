@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-faixa-numeros; palavras=faixa de numeros, faixa de prova, numeros de prova, prova com numeros; agentes=designer-sites, redator, engenheiro-software -->
 <!-- teste-ref: sim=monte a faixa de números de prova do site | quero uma faixa de prova com números logo depois do herói; nao=monte a escala de férias da equipe -->
 # R4. Faixa de prova com números

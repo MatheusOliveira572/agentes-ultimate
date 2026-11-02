@@ -5,7 +5,7 @@
 > As rodadas anteriores ficam abaixo como histórico.
 
 Revisor, 2026-10-28 (17h27–18h05). Escopo: commits `85899dd`..`b3764eb` sobre a 0.6.0 (`0cec368`), contra
-`docs/plano-0.7.md` e as decisões do usuário de 28/10. Só relato; nada foi corrigido.
+`docs/pesquisas/plano-0.7.md` e as decisões do usuário de 28/10. Só relato; nada foi corrigido.
 
 ## Veredito
 
@@ -174,7 +174,7 @@ original passa 89 de 89. **Pegou 4 de 7.**
 No Claude Code 2.1.302 medido hoje: `SubagentStop` veio 1 vez por agente e sem `last_assistant_message` (o código
 cobre os dois casos: lê o fim da transcrição, e a linha Placar já estava lá quando o gancho rodou); o `SubagentStart`
 pode chegar antes do `PostToolUse` com o `agentId`; agente parado não dispara `SubagentStop`. Vale atualizar o topo do
-`docs/plano-0.7.md`.
+`docs/pesquisas/plano-0.7.md`.
 
 ## O que só o usuário consegue provar
 
@@ -194,7 +194,7 @@ pode chegar antes do `PostToolUse` com o `agentId`; agente parado não dispara `
 pedido e `.gitignore`), `scripts/estimar.js`, `scripts/placar.js`, `scripts/validar.js` (trecho novo),
 `scripts/testar-hooks.js` (casos novos), `skills/ultimate`, `skills/placar`, `skills/registrar-defeito`,
 `fonte/comum.md`, `fonte/agentes/nucleo/revisor.md`, `evals/revisor.md`, `pacotes/classes-tarefa.json`, README,
-`docs/como-funciona.md`, CHANGELOG, `docs/plano-0.7.md`.
+`docs/como-funciona.md`, CHANGELOG, `docs/pesquisas/plano-0.7.md`.
 
 Placar: autor=engenheiro-software cod=v070 veredito=não B=0 A=1 M=6 b=7
 

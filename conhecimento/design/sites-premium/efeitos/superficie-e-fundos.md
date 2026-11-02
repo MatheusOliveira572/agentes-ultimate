@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo de efeitos de 2026-11-01 (docs/referencias-efeitos-2026-11.md): técnica descrita em palavras, nada copiado. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo de efeitos de 2026-11-01 (docs/pesquisas/referencias-efeitos-2026-11.md): técnica descrita em palavras, nada copiado. -->
 <!-- ref: tema=efeito-superficie; palavras=brilho que segue o mouse, spotlight, borda animada, borda de luz, shimmer, inclinacao 3d, tilt, aurora, gradiente animado, malha de gradiente, mesh gradient, ruido de fundo, grade de pontos; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=quero um brilho que segue o mouse nos cartões | faça um fundo com aurora e malha de gradiente; nao=calcule o custo médio ponderado do estoque -->
 # Superfície, luz e fundos

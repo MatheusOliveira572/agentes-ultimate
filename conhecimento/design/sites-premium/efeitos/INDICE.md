@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo de efeitos de 2026-11-01 (docs/referencias-efeitos-2026-11.md): técnica descrita em palavras, nada copiado. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo de efeitos de 2026-11-01 (docs/pesquisas/referencias-efeitos-2026-11.md): técnica descrita em palavras, nada copiado. -->
 <!-- ref: tema=efeitos-de-site; palavras=efeito de site, efeitos de site, animacao de site, efeito na landing, efeitos visuais, efeito premium; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=quais efeitos de site usar na página do produto | quero um efeito premium, efeitos visuais na página; nao=calcule o custo médio ponderado do estoque -->
 # Efeitos de site: regras e índice

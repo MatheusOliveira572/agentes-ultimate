@@ -74,13 +74,13 @@ público: as menções à empresa (M-2), o peso dos PNGs (M-3) e o CHANGELOG (M-
 **M-2 · Menções à empresa e ao repositório do usuário no repositório público** (dono: `engenheiro-software`; decisão do usuário)
 - **Novas na 0.8.0 (ainda não publicadas):**
   - `docs/provas/0.8.0-design/vitrine/LEIA-ME.md:3` (a frase que dizia que nada era da empresa do usuário);
-  - `docs/revisao-0.8.0-parteA.md`, linhas 65, 101, 194, 317, 394, 576, 606, 612, 617 e 623–627 (o nome da empresa, a árvore e o repositório
+  - `docs/historico/revisao-0.8.0-parteA.md`, linhas 65, 101, 194, 317, 394, 576, 606, 612, 617 e 623–627 (o nome da empresa, a árvore e o repositório
     do projeto piloto do usuário);
-  - `docs/revisao-0.8.0-sites.md:223`.
+  - `docs/historico/revisao-0.8.0-sites.md:223`.
 - **Já publicadas na 0.7.0:**
   - `scripts/testar-hooks.js:84` (o pedido de teste citava a empresa e dois clientes reais);
-  - `docs/revisao-0.7.0.md:331` e `:388` (nomes reais de empresa e de cliente);
-  - `docs/plano-0.7.md:225`.
+  - `docs/historico/revisao-0.7.0.md:331` e `:388` (nomes reais de empresa e de cliente);
+  - `docs/pesquisas/plano-0.7.md:225`.
 - **Nada achado de:** segredo (busca por padrões de chave AWS, GitHub, Anthropic, OpenAI, Slack e PEM), caminho de pasta de usuário,
   nome de usuário do Windows, e-mail real (só exemplos fictícios), dado real. As mensagens dos 144 commits a publicar não citam nenhum desses
   termos.
@@ -156,8 +156,8 @@ público: as menções à empresa (M-2), o peso dos PNGs (M-3) e o CHANGELOG (M-
   linha 121 diz que as referências de mercado estão "(a confirmar)", mas nenhum agente tem mais essa marca.
 - **b-3** Fontes nos agentes:
   - o `designer-interface:35` e o `designer-paineis:42` atribuem "regra do pico e do fim" ao artigo `scrolljacking-101` da NN/g.
-    A pesquisa do próprio plugin cita a URL certa (`nngroup.com/articles/peak-end-rule/`, `docs/pesquisa-impressionar-2026-11.md:36`);
-  - o `designer-paineis:42` cita `docs/pesquisa-impressionar-2026-11.md` sem `${CLAUDE_PLUGIN_ROOT}`, e no projeto do usuário esse
+    A pesquisa do próprio plugin cita a URL certa (`nngroup.com/articles/peak-end-rule/`, `docs/pesquisas/pesquisa-impressionar-2026-11.md:36`);
+  - o `designer-paineis:42` cita `docs/pesquisas/pesquisa-impressionar-2026-11.md` sem `${CLAUDE_PLUGIN_ROOT}`, e no projeto do usuário esse
     caminho não existe;
   - os "Erros conhecidos" do `designer-interface` citam "(prova pv92)" e "(prova pv94)", códigos internos.
 - **b-4** O `apple/materiais.md` diz "grade 4 × 4 por foto" para a tinta. O modelo usa 8 × 8, e o LEIA-ME da e2e diz que o 4 × 4
@@ -210,7 +210,7 @@ Pegou 4 de 15. O controle sem mutação passou nos 4 testes. A lista dos que esc
 | PNGs v1 da e2e (`caso-a-depois-*`, `caso-b-produto-*`, `caso-b-landing-*`) | 3,1 MB | história antes e depois da v1; o LEIA-ME cita | manter 1 par antes e depois e apagar o resto |
 | `docs/provas/0.8.0-sites/png/site-claro-1920.png`, `-768.png`, `-905.png` | 2,1 MB | não são citados pelo nome | apagar ou citar |
 | `docs/revisao-*.md` (7 arquivos) | cerca de 200 KB | registros de revisão, com as menções do M-2 e tempos desta máquina; o CHANGELOG cita | mover para `docs/revisoes/` e limpar as menções, ou tirar do repositório público (decisão do usuário) |
-| `docs/inventario-plugins-2026-11*.md`, `pesquisa-*.md`, `regras-pdfs-2026-11.md`, `referencias-*-2026-11.md`, `plano-0.7.md` | cerca de 300 KB | pesquisas e planos de entrada; o CHANGELOG e o `designer-paineis` citam | manter, agrupados em `docs/pesquisas/` (corrigindo as citações) |
+| `docs/inventario-plugins-2026-11*.md`, `pesquisa-*.md`, `../pesquisas/regras-pdfs-2026-11.md`, `referencias-*-2026-11.md`, `../pesquisas/plano-0.7.md` | cerca de 300 KB | pesquisas e planos de entrada; o CHANGELOG e o `designer-paineis` citam | manter, agrupados em `docs/pesquisas/` (corrigindo as citações) |
 | Fora do push: 4 worktrees (`au-prova`, `au-seg`, `au-sites`, `au-vigia`) e os ramos `prova-design`, `lotes-seguranca`, `lote-sites`, `vigia-fontes` | — | todos já juntados (0 commit fora da `main`), sem mudança pendente | `git worktree remove` e `git branch -d` |
 | Falsos órfãos (ficam) | — | os 4 `test-*.cjs` do `teardown` são usados pela ferramenta; os `assets/` citados em `referencia-original/` são do original, que é mantido como veio | nada |
 

@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo de efeitos de 2026-11-01 (docs/referencias-efeitos-2026-11.md): técnica descrita em palavras, nada copiado. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo de efeitos de 2026-11-01 (docs/pesquisas/referencias-efeitos-2026-11.md): técnica descrita em palavras, nada copiado. -->
 <!-- ref: tema=efeito-repeticao; palavras=marquee, orbita de logos, flutuacao de cartao, confete, botao magnetico, cursor proprio, seletor deslizante, esqueleto de carga, skeleton, webgl, shader de fundo; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=faça um marquee de logos e um botão magnético | quero cursor próprio e esqueleto de carga; nao=calcule o custo médio ponderado do estoque -->
 # Repetição, micro-interações e avançados

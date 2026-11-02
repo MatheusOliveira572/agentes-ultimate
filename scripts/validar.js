@@ -113,7 +113,7 @@ if (fs.existsSync(dirCL)) {
   }
 }
 
-// Referências sob demanda (0.8.0, docs/inventario-plugins-2026-11.md): os agentes leem arquivos da pasta do plugin pelo
+// Referências sob demanda (0.8.0, docs/pesquisas/inventario-plugins-2026-11.md): os agentes leem arquivos da pasta do plugin pelo
 // caminho `${CLAUDE_PLUGIN_ROOT}/...` (o Claude Code troca a variável no corpo do agente; provado num `claude -p` real).
 // Regras: todo caminho citado existe; no máximo 8 linhas "- Quando …" por agente; arquivo de referência ≤ 15 KB e com a
 // linha de crédito (adaptado, com a licença em terceiros/, ou texto próprio).

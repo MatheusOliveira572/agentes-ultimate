@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-heroi-simulacao; palavras=heroi com simulacao, simulacao viva, produto vivo, heroi animado; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=faça um herói com simulação viva do produto | quero mostrar o produto vivo no herói animado da página; nao=registre o boletim de ocorrência do furto -->
 # R2. Herói com produto vivo (simulação)

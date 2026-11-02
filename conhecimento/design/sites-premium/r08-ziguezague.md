@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-ziguezague; palavras=ziguezague, problema e resposta, blocos alternados, fileiras alternadas; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=monte blocos alternados em ziguezague com as dores do cliente | quero o bloco de problema e resposta com fileiras alternadas; nao=calcule o ponto de equilíbrio do produto -->
 # R8. Ziguezague problema → resposta

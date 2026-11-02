@@ -148,7 +148,7 @@ ou tela de dados (→ designer-paineis)". Do jeito que está, o pedido chega a q
   ("Da próxima vez, a maré baixa…", com a página terminando na preamar) também saem da ideia.
 - A página inteira tem ideia própria.
 
-**O que ainda segue de perto o Calen,** pelas notas de estudo em `docs/referencias-visuais-2026-11.md`, linhas 51 e 61–62
+**O que ainda segue de perto o Calen,** pelas notas de estudo em `docs/pesquisas/referencias-visuais-2026-11.md`, linhas 51 e 61–62
 ("para quem quer saber antes quanto vai sobrar"; "mapa de calor do calendário mostra a promessa em um golpe de vista"):
 - o produto fictício é o mesmo do Calen, previsão de saldo do mês;
 - tem o mesmo calendário de calor, com o título "Um mês inteiro, de relance.";

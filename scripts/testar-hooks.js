@@ -885,7 +885,7 @@ fs.writeFileSync(path.join(b16, '.agentes.jsonl'), JSON.stringify({ em: h12(0), 
 const z16 = (registro().agentesAgora(p16, { resumo: null }) || []).find((x) => x.id === 'z1') || {};
 caso('faixa vencida antes do início não vale (nada de "passou da previsão" no início)', z16.estado === 'trabalhando' && z16.fonte !== 'registrada' && z16.passou == null, JSON.stringify(z16));
 
-// ==== 0.8.0 · regras dos checklists do autor do plugin (docs/regras-pdfs-2026-11.md), um bloco por grupo G1–G11 ====
+// ==== 0.8.0 · regras dos checklists do autor do plugin (docs/pesquisas/regras-pdfs-2026-11.md), um bloco por grupo G1–G11 ====
 const lerV8 = (...p) => { try { return fs.readFileSync(path.join(RAIZ, ...p), 'utf8'); } catch (e) { return ''; } };
 const agV8 = (n) => lerV8('agents', n + '.md');
 const evV8 = (n) => lerV8('evals', n + '.md');

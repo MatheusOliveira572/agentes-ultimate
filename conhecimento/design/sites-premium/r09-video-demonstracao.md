@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-video-demonstracao; palavras=video de demonstracao, demonstracao em video, video do produto; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=coloque um vídeo de demonstração do produto na página | quero a demonstração em vídeo logo depois do herói; nao=monte a escala de férias da equipe -->
 # R9. Demonstração em vídeo

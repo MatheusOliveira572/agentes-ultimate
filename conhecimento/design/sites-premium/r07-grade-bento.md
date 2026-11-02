@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-grade-bento; palavras=grade bento, bento grid, bento, grade de recursos; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=monte uma grade bento com os recursos do produto | quero um bento grid de recursos no site; nao=registre o boletim de ocorrência do furto -->
 # R7. Grade bento de recursos

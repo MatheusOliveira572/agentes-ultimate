@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-hub-integracoes; palavras=hub de integracoes, secao de integracoes, logos de bancos, integracoes em orbita; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=desenhe o hub de integrações com os logos de bancos | preciso de uma seção de integrações na página; nao=faça o rateio das despesas por centro de custo -->
 # R21. Hub de integrações

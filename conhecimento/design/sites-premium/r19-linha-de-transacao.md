@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-linha-transacao; palavras=linha de transacao, lista de transacoes, lista de lancamentos do extrato, extrato no mockup; agentes=designer-sites, designer-paineis, engenheiro-software -->
 <!-- teste-ref: sim=desenhe a linha de transação do extrato | preciso de uma lista de transações no mockup; nao=monte a escala de férias da equipe -->
 # R19. Linha de transação ou de item

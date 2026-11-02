@@ -6,7 +6,7 @@ o lote de sites, as rodadas da trava de segredo, o vigia das fontes, as provas d
 revisão final antes de publicar. Revisões independentes em `docs/historico/`.
 
 ### Parte A: regras dos checklists do autor do plugin
-Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
+Fonte: `docs/pesquisas/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
 "Pre-launch Security Toolkit", 2026). Artigos de lei ainda não conferidos no texto oficial ficam marcados **[conferir]**
 até o `especialista-lgpd` confirmar. Um commit por grupo (G1 a G11), cada item com um caso em `scripts/testar-hooks.js`
 visto falhando antes.
@@ -138,7 +138,7 @@ visto falhando antes.
   número certo é 15.
 
 ### Parte B: conteúdo dos 10 projetos lido sob demanda
-Fonte: `docs/inventario-plugins-2026-11.md`. O desenho do plugin não muda: cada agente ganha até 8 linhas "quando X, leia
+Fonte: `docs/pesquisas/inventario-plugins-2026-11.md`. O desenho do plugin não muda: cada agente ganha até 8 linhas "quando X, leia
 `${CLAUDE_PLUGIN_ROOT}/...`" e o conteúdo fica em `conhecimento/`. Casos em `scripts/testar-referencias.js`, cada um visto
 falhando antes.
 - **B0 · infraestrutura:**
@@ -240,7 +240,7 @@ falhando antes.
   o contrário). Passam a ser pegos: texto ADO com a senha antes do servidor (bloqueia), `API_KEY=valor` sem aspas e
   `aws_secret_access_key` sem o id (perguntam).
 - **Revisão da parte A, baixos:** b-3, casos da condição do bloco S-web e da carga sob demanda dos roteiros; b-4, a bateria roda
-  com `AGENTES_ULTIMATE_SEM_PASTA=1` no ambiente; b-5, registro no topo de `docs/regras-pdfs-2026-11.md` (os PDFs são do usuário); b-6,
+  com `AGENTES_ULTIMATE_SEM_PASTA=1` no ambiente; b-5, registro no topo de `docs/pesquisas/regras-pdfs-2026-11.md` (os PDFs são do usuário); b-6,
   o eval do engenheiro aponta para o item S-12, onde ficaram os campos do log. b-7, duas mensagens de commit não descrevem o conteúdo
   e o histórico não será reescrito: o `5544502` ("G8 correção: H-5") também traz o vigia das fontes da parte B, e o `9fc1af7` altera
   conteúdo jurídico (é a conferência da `especialista-lgpd`), embora diga "sem alteração de conteúdo".
@@ -271,7 +271,7 @@ falhando antes.
 - **B10 · skill `integracoes` e README:** por ferramenta, o que faz, que dado sai, como ligar, como desligar e o risco. O plugin não instala nada.
 - **B11 · T1 detector de interface** (`ferramentas/detector-interface/detector.js`, 18 regras, texto nosso): no commit usado, o detector do impeccable é em Rust,
   então só a ideia veio. Desligado por padrão; liga pelo `verificador`.
-- **Revisão da parte A, 2ª rodada: a trava muda de desenho** (`docs/revisao-0.8.0-parteA.md`; foram 2 correções do leitor de comando sem
+- **Revisão da parte A, 2ª rodada: a trava muda de desenho** (`docs/historico/revisao-0.8.0-parteA.md`; foram 2 correções do leitor de comando sem
   sucesso, então parei de remendar). A trava não tenta mais prever o que um comando vai preparar:
   - **B-1:** a trava nunca executa texto do comando. `hooks/leitor-segredos.js` só chama o git com `execFile`, sem shell, com os caminhos
     depois de `--` e `-c core.fsmonitor=false`, `--no-ext-diff`, `--no-textconv`. Commit em outra pasta pergunta, porque rodar git que lê
@@ -300,7 +300,7 @@ falhando antes.
   Passa a olhar `ferramentas/` e `modelos/`; as 6 chamadas do `ferramentas/teardown` ganharam a opção (alteração marcada no LEIA-ME).
 - **Revisão da parte A, b-6:** o `engenheiro-software` volta a ter os campos do log de segurança (passo 8 do método, com o S-12), que é o que
   o caso 8 do eval cobra.
-- **Revisão da parte A, 3ª rodada** (`docs/revisao-0.8.0-parteA.md`, seção "3ª rodada"; só o que vale em qualquer desenho):
+- **Revisão da parte A, 3ª rodada** (`docs/historico/revisao-0.8.0-parteA.md`, seção "3ª rodada"; só o que vale em qualquer desenho):
   - **B-2:** nenhum git roda fora da pasta da sessão, nem antes nem depois do comando; fora, a trava pergunta sem ler e diz qual pasta.
     Dentro da sessão, inclusive outro repositório lá dentro (decisão do usuário), as leituras desligam verificação de assinatura,
     `core.fsmonitor`, diff externo, pager e `trace2`. Prova: o repositório com `gpg.program` espião (sonda do revisor) não rodou nos 5
@@ -320,7 +320,7 @@ falhando antes.
   - **Declarados, sem correção** (decisão do usuário, no README): UTF-16 (M-8), formas pouco comuns que perguntam (M-9), prazo em
     repositório grande (M-11), `com$'mit'` (b-10), `SessionEnd` cancelado no `claude -p` (b-11), cerca de 0,4 s por comando (b-12), além
     de script, alias e palavra montada.
-- **B14 · cloudflare/security-audit-skill em `conhecimento/seguranca/`** (`docs/inventario-plugins-2026-11b.md`; MIT, commit fixo `c1c8a8c`,
+- **B14 · cloudflare/security-audit-skill em `conhecimento/seguranca/`** (`docs/pesquisas/inventario-plugins-2026-11b.md`; MIT, commit fixo `c1c8a8c`,
   arquivo bruto lido inteiro antes de copiar; nada suspeito): 20 arquivos em inglês, cerca de 187 KB, com a alteração marcada. São os modos
   (orientar × auditoria completa), o reconhecimento com o livro de cobertura, a caça por ondas com crítico de cobertura, a validação por
   verificador novo e o relatório, as classes de ataque e 10 blocos por tipo de alvo. Saíram: o procedimento de promoção de artefatos (pede
@@ -360,23 +360,23 @@ falhando antes.
   só com commit novo (2 pedidos por fonte) e o motivo da falha fica em `ultimoErro` no estado.
 
 ### Lote sites-premium
-Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11.md`. Casos em `scripts/testar-sites.js`, vistos falhando antes.
+Fontes: `docs/pesquisas/referencias-visuais-2026-11.md`, `docs/pesquisas/referencias-efeitos-2026-11.md`. Casos em `scripts/testar-sites.js`, vistos falhando antes.
 - **Agente `designer-sites`** (`fonte/agentes/design/`, 10 evals), dono de site e landing page; pacote `sites`. O `designer-paineis` fica com painel e tela de dados: descrições separadas, e "site", "site institucional" e "landing page" saíram do pacote `interface`, que passa a se chamar "Interface (app)". O roteador não mudou.
 - **Biblioteca `conhecimento/design/sites-premium/`:** 25 receitas, uma por arquivo, método de montagem e 39 efeitos, com cabeçalho do índice e pedidos de teste. Repertório, não molde: nenhuma ordem é obrigatória.
 - **Vidro em `apple/materiais.md`** (decisão do usuário): em landing page, permitido em cartão, com pouca transparência e sobre fundo calmo; em tela de produto ou de tarefa, a regra da Apple. Mais os acréscimos do estudo.
 - **Prova em `docs/provas/0.8.0-sites/`:** página fictícia, feita seguindo o agente, e bancada dos efeitos no Edge sem interface; contraste medido nos pixels do fundo, mutantes para cada checagem. O que passou está em `sites-premium/efeitos/provas.md`; o resto fica [ESTIMATIVA].
 - **Pendência:** Nivora e Code and Chill não foram estudados (rede da organização). Registro em `fontes/fontes.json`.
-- **Correções da revisão do lote** (`docs/revisao-0.8.0-sites.md`): roteamento por expressão de criação de site (A-1, só `pacotes.json`;
+- **Correções da revisão do lote** (`docs/historico/revisao-0.8.0-sites.md`): roteamento por expressão de criação de site (A-1, só `pacotes.json`;
   html, css, react e frontend sem site vão ao engenheiro); teclado na prova, no método e no critério (A-2); bancada com tolerância
   de 3 níveis por canal (M-1); objeção e títulos nascidos do produto (M-2); vidro sem contradição (M-3); ponto preso à curva (M-4);
   20 mutantes na prova da página (M-5); 8 larguras (M-6); a maré até o fim da página (b-1); b-2 a b-7.
 - **Correção de relato (b-11 da 2ª revisão):** a mensagem do commit 4e28d29 diz que os 2 mutantes que escapavam "agora são
   pegos". Um deles não foi pego: foi **trocado**. "Tábua de preços sem empilhar" em 768 px não é defeito (fica apertada, mas
   legível, como o revisor confirmou no PNG), e passou a rodar em 320 px, onde o cabeçalho da tábua se sobrepõe e é pego.
-- **2ª revisão do lote** (`docs/revisao-0.8.0-sites-r2.md`): junção com a `main` antes de mexer no roteador; desempate site ×
+- **2ª revisão do lote** (`docs/historico/revisao-0.8.0-sites-r2.md`): junção com a `main` antes de mexer no roteador; desempate site ×
   interface (`pacotes.json` → `desempate`, regra genérica no `roteador.js`); 160 frases na bateria; teclado comparado com a
   lista real de controles; tábua das semanas no lugar do calendário; PROVADO só com 3 rodadas estáveis.
-- **3ª revisão do lote** (`docs/revisao-0.8.0-sites-r3.md`, decisões do usuário de 2026-11-02): verbo só pontua junto do alvo
+- **3ª revisão do lote** (`docs/historico/revisao-0.8.0-sites-r3.md`, decisões do usuário de 2026-11-02): verbo só pontua junto do alvo
   (`sites.pares`: verbo + artigo + "novo" + site, landing, homepage, página web ou lp = 2 pontos; os 16 verbos e "web" saíram
   das palavras firmes); o desempate site × interface olha primeiro a âncora (site × app) e depois a soma; empate = os dois,
   com caso; o quadro mostra a pior das 3 rodadas; a tábua das semanas marca a mais baixa por texto e forma.
@@ -385,14 +385,14 @@ Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11
   caso "corrija o css e o html do botão no react → só engenheiro" saiu da bateria por isso: a frase agora vai ao designer de
   painéis e ao engenheiro, e está na lista "o orquestrador decide". O eval de roteamento não acusa mais palavra repetida
   entre pacotes (eram 3).
-- **4ª revisão do lote** (`docs/revisao-0.8.0-sites-r4.md`, rv93): "tela de", "tela do" e "tela da" viram ambíguas
+- **4ª revisão do lote** (`docs/historico/revisao-0.8.0-sites-r4.md`, rv93): "tela de", "tela do" e "tela da" viram ambíguas
   (A-1; puxavam o designer de painéis em pedidos de tela do SAP); as frases da sonda entram na bateria; ganho barato ("novo
   site de", "site moderno", "site para o meu/a minha"; "onboarding do app" no `interface`); "página inicial" e "página de
   vendas" saem dos alvos e das âncoras (M-11, são nomes de página de relatório); âncora negada ("não é um app: crie o site")
   com caso (b-15); pares, âncora e desempate em `como-funciona` e `criar-pacote`, e os limites no README (b-16).
 - **5ª revisão do lote** (rv96): as expressões do ganho barato viram ambíguas (A-2); as 6 formas de "página de vendas" também,
   e a biblioteca só entra por "página de vendas do curso/ebook" (M-11); o "era com <agente>" vale depois do desempate (M-12);
-  o limite 1 diz quando vale (b-17); caso de "página inicial" de painel (b-18). Registro em `docs/revisao-0.8.0-sites-r5.md`.
+  o limite 1 diz quando vale (b-17); caso de "página inicial" de painel (b-18). Registro em `docs/historico/revisao-0.8.0-sites-r5.md`.
 
 ### Trava de segredo: 4ª rodada da revisão e arquivo binário
 - **M-12:** o limite do README diz o pior caso: script que também publica não pergunta nada; fora da pasta da sessão nada é lido.
@@ -428,7 +428,7 @@ Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11
   plugin) e a tela de app → `interface`.
 - **Fontes:** a correção do emilkowalski/skills (Motion 14.2 acelera x/y/scale) e as 4 fontes conferidas.
 
-### Revisão final antes de publicar (`docs/revisao-0.8.0-final.md`)
+### Revisão final antes de publicar (`docs/historico/revisao-0.8.0-final.md`)
 - **A-1:** versão 0.8.0 no `plugin.json` (sem subir o número, quem tem a 0.7.0 não recebe a nova).
 - **A-2:** a atualização diária não abre mais janela de console: um `node` destacado, sem shell, roda o `claude` com
   `spawnSync` e `windowsHide` (com shell + detached, o Windows dá console visível a cada programa chamado). O `validar.js`
@@ -448,7 +448,7 @@ Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11
   revisões vão para `docs/historico/` e pesquisas e planos para `docs/pesquisas/`.
 
 ## 0.7.0 · 2026-10-28
-- **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**
+- **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/pesquisas/plano-0.7.md`):**
   - o plugin liga a barra pelo próprio `settings.json` (o plano supunha que não; a skill `instalar-barra` não foi
     necessária);
   - `claude plugin eval` existe;
@@ -489,7 +489,7 @@ Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11
 - Testes dos ganchos: 89 casos (37 novos, cada um visto falhando antes da mudança). Os commits dos blocos 1 a 3
   dizem 65, 70 e 78 casos; os números certos são 63, 68 e 76.
 
-### Correções da revisão independente (`docs/revisao-0.7.0.md`), antes de publicar
+### Correções da revisão independente (`docs/historico/revisao-0.7.0.md`), antes de publicar
 A versão continua 0.7.0 (não tinha sido publicada). Um commit por item.
 - **A-1 · fim do agente lento com o histórico:**
   - antes, o `SubagentStop` refazia o placar inteiro, com custo quadrático (2,4 s com 10 mil execuções, 122 s com

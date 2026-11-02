@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-passos-linha; palavras=passos com linha, secao como funciona, bloco como funciona, tres passos do produto; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=crie a seção como funciona da página | desenhe os três passos do produto em passos com linha; nao=faça o rateio das despesas por centro de custo -->
 # R6. Passos com linha ("como funciona")

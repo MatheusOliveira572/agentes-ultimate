@@ -2,7 +2,7 @@
 
 Fonte de um lote de construção do plugin. **Repertório, não molde:** os sites são fonte de ideias. O designer parte da
 direção própria de cada projeto, escolhe e combina o que serve e pode ir além. Nenhuma receita é obrigatória, e nenhuma
-sequência de seções é regra. Efeitos estão em `docs/referencias-efeitos-2026-11.md`.
+sequência de seções é regra. Efeitos estão em `docs/pesquisas/referencias-efeitos-2026-11.md`.
 
 ## 0. O que foi estudado e o que ficou de fora
 
@@ -500,7 +500,7 @@ Para o lote de construção. Não foi criado nada: outro engenheiro está nessa 
 | `conhecimento/design/site/estrutura.md` | R16, R23–R25 | idem | Quando definir navegação, ritmo, fundo ou rodapé, leia `site/estrutura.md`. |
 | `conhecimento/design/numeros.md` | R18–R20 | `designer-paineis`, `dev-powerbi`, `designer-documentos`, `engenheiro-software` | Quando mostrar número, progresso ou lista de valores, leia `numeros.md`. |
 | `conhecimento/design/apple/materiais.md` (acrescentar) ou `site/vidro.md` | seção 4 | quem já lê materiais | Quando usar vidro, leia `apple/materiais.md`; em site, também `site/vidro.md`. |
-| `conhecimento/design/efeitos/INDICE.md` + grupos | `docs/referencias-efeitos-2026-11.md` | `designer-paineis`, `engenheiro-software` | Quando pedirem um efeito ou animação de site, leia `efeitos/INDICE.md`, depois `movimento/INDICE.md`. |
+| `conhecimento/design/efeitos/INDICE.md` + grupos | `docs/pesquisas/referencias-efeitos-2026-11.md` | `designer-paineis`, `engenheiro-software` | Quando pedirem um efeito ou animação de site, leia `efeitos/INDICE.md`, depois `movimento/INDICE.md`. |
 | `conhecimento/design/modos/persuadir.md` e `INDICE.md` | ponteiros para `site/` | quem já lê | acrescentar uma linha em cada um |
 
 Atenção:

@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir da pesquisa docs/pesquisa-impressionar-2026-11.md (régua de 14 itens, armadilhas) e da prova pv94 (docs/provas/0.8.0-design/e2e/). -->
+<!-- Texto próprio do agentes-ultimate, a partir da pesquisa docs/pesquisas/pesquisa-impressionar-2026-11.md (régua de 14 itens, armadilhas) e da prova pv94 (docs/provas/0.8.0-design/e2e/). -->
 <!-- ref: tema=impressionar; palavras=impressiona, impressionar, visual premium, premium, app premium, site premium, bonito, uau, wow, redesenhe, redesenho, landing, vitrine, cara de apple, estilo apple, liquid glass, efeito vidro, 3d, aparecer ao rolar; agentes=designer-sites, designer-interface, designer-paineis, designer-documentos, revisor -->
 <!-- teste-ref: sim=redesenhe meu app com visual premium que impressione | quero uma landing com cara de Apple que impressione; nao=concilie o extrato bancário de outubro -->
 # Impressionar: a régua do plugin (piso obrigatório + camada que impressiona)

@@ -1,6 +1,6 @@
 # Catálogo de efeitos para sites (2026-11-01)
 
-Par de `docs/referencias-visuais-2026-11.md`. **Repertório, não lista de compras:** escolha um movimento dominante por tela,
+Par de `docs/pesquisas/referencias-visuais-2026-11.md`. **Repertório, não lista de compras:** escolha um movimento dominante por tela,
 a serviço da ideia do projeto, e vá além quando fizer sentido.
 
 **Origem de cada item:**

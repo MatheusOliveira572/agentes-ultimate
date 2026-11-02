@@ -1,7 +1,7 @@
 # Inventário complementar: ponytail e security-audit-skill → agentes-ultimate (2026-11-02)
 
 > Só inventário e proposta. Nada do plugin foi alterado e nada destes projetos foi instalado ou executado.
-> Continua `docs/inventario-plugins-2026-11.md` (legenda, regra de crédito e numeração de ferramentas, T1–T32).
+> Continua `docs/pesquisas/inventario-plugins-2026-11.md` (legenda, regra de crédito e numeração de ferramentas, T1–T32).
 > **Desenho do plugin mantido:** cada conteúdo vai para o agente que faz sentido. O padrão é trazer.
 
 **Pergunta:** quais repositórios são "ponytail" e "secrity-audit-skill", o que existe neles, para onde vai cada item e há

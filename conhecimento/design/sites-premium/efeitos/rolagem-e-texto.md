@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo de efeitos de 2026-11-01 (docs/referencias-efeitos-2026-11.md): técnica descrita em palavras, nada copiado. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo de efeitos de 2026-11-01 (docs/pesquisas/referencias-efeitos-2026-11.md): técnica descrita em palavras, nada copiado. -->
 <!-- ref: tema=efeito-rolagem; palavras=entrada ao rolar, parallax, scrollytelling, linha que se desenha, cartoes empilhados, numero que sobe, contador animado, titulo que entra, texto que troca, view transitions; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=coloque parallax e entrada ao rolar na página | quero um número que sobe e uma linha que se desenha; nao=calcule o custo médio ponderado do estoque -->
 # Rolagem, texto e números

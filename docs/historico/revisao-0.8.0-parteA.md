@@ -28,7 +28,7 @@ concentrado na trava (A-1, M-1 a M-4).
 | b-2 | Baixo | Alarmes à toa: UUID ou hash atribuído a `token` pergunta; " -a" no texto da mensagem faz varrer o não preparado | `engenheiro-software` |
 | b-3 | Baixo | Nenhum teste protege a escolha de blocos por perfil nem o "sob demanda" da skill | `engenheiro-software` |
 | b-4 | Baixo | A bateria quebra com `AGENTES_ULTIMATE_SEM_PASTA=1` no ambiente | `engenheiro-software` |
-| b-5 | Baixo | A proposta `docs/regras-pdfs-2026-11.md` contradiz o que foi feito | `curador` |
+| b-5 | Baixo | A proposta `docs/pesquisas/regras-pdfs-2026-11.md` contradiz o que foi feito | `curador` |
 | b-6 | Baixo | Condensação do `engenheiro-software` tirou do agente os campos do log; CHANGELOG e eval ainda os citam | `engenheiro-software` |
 | b-7 | Baixo | Mensagens de commit não descrevem o conteúdo (5544502 e 9fc1af7) | `engenheiro-software` |
 
@@ -191,7 +191,7 @@ Mutante R1 pego. Como os demais, o eval está como "não rodado".
 - `validar.js` sem aviso de 90 linhas; maior parte específica em 87 linhas.
 - Texto antes e depois: LGPD, marketing e compliance não perderam regra. Saíram frases de motivo, referências repetidas e a "origem" de
   um erro conhecido. "Preliminar" e "data-limite calculada" continuam no passo 5 do método.
-- Nome da empresa do usuário: nada na parte A. As menções em `plano-0.7.md`, `revisao-0.7.0.md` e `testar-hooks.js` (nome fictício de teste) já existiam.
+- Nome da empresa do usuário: nada na parte A. As menções em `../pesquisas/plano-0.7.md`, `revisao-0.7.0.md` e `testar-hooks.js` (nome fictício de teste) já existiam.
 - Os PDFs não estão no git.
 
 **7. [conferir] e [HIPÓTESE]: confere, inclusive no 9fc1af7.**
@@ -609,7 +609,7 @@ que o usuário roda uma vez (por exemplo, o `/checklist-lancamento`).
   - o `LICENSE` está em `terceiros/usestrix-strix/`, e o `CREDITOS.md` e o `fontes.json` têm o registro;
   - **não verificado:** se o strix tem um arquivo `NOTICE` (Apache §4d manda copiar). Esta máquina não tem rede para o GitHub, e o
     inventário não registra;
-  - Nome da empresa, CFO, caminhos e e-mails do usuário: 0 nos commits 56de65b..a13ea41. As menções antigas (`plano-0.7.md`, revisões e nome de
+  - Nome da empresa, CFO, caminhos e e-mails do usuário: 0 nos commits 56de65b..a13ea41. As menções antigas (`../pesquisas/plano-0.7.md`, revisões e nome de
     teste) continuam como na 2ª rodada.
 - **(f) As 2 decisões:** abaixo.
 

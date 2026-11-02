@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-rodape; palavras=rodape, rodape do site; agentes=designer-sites, estrategista-marketing, engenheiro-software -->
 <!-- teste-ref: sim=desenhe o rodapé do site | o rodapé precisa ter identificação legal e links; nao=calcule a depreciação do imobilizado -->
 # R25. Rodapé

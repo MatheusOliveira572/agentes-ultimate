@@ -1,4 +1,4 @@
-// Casos da parte B da 0.8.0 (referências sob demanda, docs/inventario-plugins-2026-11.md), chamados pelo
+// Casos da parte B da 0.8.0 (referências sob demanda, docs/pesquisas/inventario-plugins-2026-11.md), chamados pelo
 // scripts/testar-hooks.js. Fica num arquivo à parte para não misturar com os casos da parte A.
 'use strict';
 const fs = require('fs');

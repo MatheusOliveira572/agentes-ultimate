@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-ritmo-blocos; palavras=ritmo de blocos, bloco invertido, alternar fundos, ritmo da pagina; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=defina o ritmo de blocos da página longa | quero alternar fundos com um bloco invertido; nao=calcule o ponto de equilíbrio do produto -->
 # R23. Ritmo de blocos (fundo como estrutura)

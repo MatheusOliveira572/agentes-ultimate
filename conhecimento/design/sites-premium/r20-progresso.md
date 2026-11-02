@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-progresso; palavras=anel de progresso, barra de progresso, calendario termometro, mapa de calor do calendario; agentes=designer-sites, designer-paineis, engenheiro-software -->
 <!-- teste-ref: sim=faça um anel de progresso com a meta do mês | quero um calendário termômetro com mapa de calor do calendário; nao=calcule a depreciação do imobilizado -->
 # R20. Progresso em anel, barra e calendário

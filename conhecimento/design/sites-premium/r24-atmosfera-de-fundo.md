@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-atmosfera-fundo; palavras=atmosfera de fundo, fundo atmosferico, luzes radiais, granulado no fundo; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=crie uma atmosfera de fundo com luzes radiais | quero um fundo atmosférico com granulado no fundo; nao=monte a escala de férias da equipe -->
 # R24. Atmosfera de fundo

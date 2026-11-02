@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-depoimentos; palavras=depoimentos, depoimento, parede de depoimentos, prova social; agentes=designer-sites, redator, engenheiro-software -->
 <!-- teste-ref: sim=monte a seção de depoimentos de clientes | preciso de prova social com uma parede de depoimentos; nao=calcule a depreciação do imobilizado -->
 # R10. Depoimentos

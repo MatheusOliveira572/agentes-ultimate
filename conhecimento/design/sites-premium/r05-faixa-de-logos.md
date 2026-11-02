@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-faixa-logos; palavras=faixa de logos, logos de clientes, parede de logos, logos de parceiros; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=monte a faixa de logos de clientes da página | preciso de uma parede de logos de parceiros no site; nao=calcule a depreciação do imobilizado -->
 # R5. Faixa de logos

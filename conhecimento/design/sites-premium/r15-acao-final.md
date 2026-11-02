@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-acao-final; palavras=acao final, chamada final, cta final, qr code para baixar; agentes=designer-sites, estrategista-marketing, engenheiro-software -->
 <!-- teste-ref: sim=desenhe a ação final da página com a chamada final | quero um cta final com qr code para baixar o app; nao=calcule a depreciação do imobilizado -->
 # R15. Ação final e passagem ao celular

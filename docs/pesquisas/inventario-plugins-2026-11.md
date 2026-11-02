@@ -1,6 +1,6 @@
 # Inventário completo: 10 projetos → conteúdo para os agentes do agentes-ultimate (2026-11-01)
 
-> Só inventário e proposta. Nada do plugin foi alterado. Continua a pesquisa `docs/pesquisa-plugins-2026-11.md`.
+> Só inventário e proposta. Nada do plugin foi alterado. Continua a pesquisa `docs/pesquisas/pesquisa-plugins-2026-11.md`.
 > **Desenho do plugin mantido** (mesmos agentes, roteador e protocolo): cada agente nosso passa a **ler sob demanda** o
 > conteúdo dos 10 projetos que serve para ele. Agente ou skill novos só quando nenhum agente nosso cobre o item.
 

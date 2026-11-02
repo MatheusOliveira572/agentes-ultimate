@@ -1,4 +1,4 @@
-<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
+<!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/pesquisas/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
 <!-- ref: tema=site-navegacao-site; palavras=navegacao do site, menu do site, navegacao flutuante, barra do site; agentes=designer-sites, engenheiro-software -->
 <!-- teste-ref: sim=desenhe a navegação do site com menu fixo | quero uma navegação flutuante em pílula no menu do site; nao=faça o rateio das despesas por centro de custo -->
 # R16. Navegação de site

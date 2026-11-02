@@ -101,7 +101,7 @@ Power BI) e o de app (teclado, momento-pico, material) disputam as mesmas 90 lin
 
 ## 5. "Impressiona" como padrão de todos os agentes de design
 Duas camadas, uma junção (texto completo em `propostas/impressionar.md`, a partir da régua de 14 itens da pesquisa
-`docs/pesquisa-impressionar-2026-11.md` §5 e desta prova):
+`docs/pesquisas/pesquisa-impressionar-2026-11.md` §5 e desta prova):
 - **Camada 1, obrigatória:** funciona, responde, acessível, estados, teclado, coerência depois de cada ação, contraste no
   pior ponto, 390 px, as 3 preferências. Um "não" e não entrega.
 - **Camada 2, impressiona (não é opcional):** uma ideia, composição de uma olhada com o primeiro quadro ocupado,
