@@ -15,7 +15,7 @@ function config(cwd) {
 }
 function rodar(comando, cwd, limiteMs) {
   const opc = { windowsHide: true, cwd, encoding: 'utf8', timeout: limiteMs, maxBuffer: 1024 * 1024 };
-  const r = Array.isArray(comando) ? spawnSync(String(comando[0]), comando.slice(1).map(String), { ...opc, shell: false }) : spawnSync(String(comando), { ...opc, shell: true });
+  const r = Array.isArray(comando) ? spawnSync(String(comando[0]), comando.slice(1).map(String), { windowsHide: true, ...opc, shell: false }) : spawnSync(String(comando), { windowsHide: true, ...opc, shell: true });
   const nome = (Array.isArray(comando) ? comando.join(' ') : String(comando)).slice(0, 80);
   if (r.error && r.error.code === 'ETIMEDOUT') return `verificador cortado em ${limiteMs / 1000} s: ${nome}`;
   if (r.error) return `verificador não rodou (${r.error.code || r.error.message}): ${nome}`;
