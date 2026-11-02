@@ -1,6 +1,143 @@
 # Mudanças
 
-## 0.8.0 · em construção (parte B: conteúdo dos 10 projetos lido sob demanda)
+## 0.8.0 · 2026-11-03
+Partes, na ordem em que foram feitas: A (regras dos checklists do autor), B (conteúdo dos 10 projetos lido sob demanda),
+o lote de sites, as rodadas da trava de segredo, o vigia das fontes, as provas de design, o padrão "impressiona" e a
+revisão final antes de publicar. Revisões independentes em `docs/historico/`.
+
+### Parte A: regras dos checklists do autor do plugin
+Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
+"Pre-launch Security Toolkit", 2026). Artigos de lei ainda não conferidos no texto oficial ficam marcados **[conferir]**
+até o `especialista-lgpd` confirmar. Um commit por grupo (G1 a G11), cada item com um caso em `scripts/testar-hooks.js`
+visto falhando antes.
+- **G11 · fechamento antes de publicar:**
+  - skill nova `checklist-lancamento`: pergunta o perfil (público ou interno, dado pessoal, login próprio, IA,
+    entrada de fora, repositório público, cobrança), aplica só os blocos que cabem (S, S-web, P, A, H, L), prova o
+    comportamento de cada item e entrega o relatório com Passou / Corrigido e retestado / Aberto / Não se aplica (com
+    motivo) / Só o usuário faz; repete as verificações na versão final; tabela "mexeu em X, rode Y"; cartão de
+    incidente;
+  - os itens ficam em `skills/checklist-lancamento/itens.md` e os roteiros detalhados de segurança (auditar,
+    corrigir, verificar, feito quando) em `referencias/`, um arquivo por área, carregados só quando o item é executado;
+  - `validar.js`: todo item do checklist tem "Verificar:" e, se cita lei, o link oficial (gov.br);
+  - `revisor`: teste apagado ou enfraquecido para passar, e item crítico "não se aplica" sem motivo, são achado Alto
+    (caso 7 no eval);
+  - skill `rodada`: o contrato inclui os itens do checklist quando a rodada mexe em login, dado pessoal, pacote, chave,
+    IA, upload ou publicação;
+  - a trava do `git push` (e de npm publish e deploy) continua só perguntando e passa a lembrar o
+    `/checklist-lancamento`.
+- **G1 · segredos e chaves:**
+  - protocolo comum, passo 11: segredo se cita pelo nome da variável, nunca pelo valor (não pedir, não colar, não
+    imprimir); vale para os 30 agentes;
+  - `hooks/travas.js` passa a ler o conteúdo do commit (as linhas acrescentadas de `git diff --cached -U0`, e também
+    as do `-a`). Bloqueia os padrões de alta certeza: chave privada PEM (cabeçalho seguido do corpo), chaves da AWS,
+    GitHub, Anthropic, OpenAI, Google, Slack, Stripe, npm e Azure Storage, e texto de conexão com senha (URL ou
+    `Server=…;Password=…`). Pergunta nos de média certeza (senha, chave ou token atribuído no código; JWT). A mensagem dá
+    `arquivo:linha` e o tipo, nunca o valor. Marcadores (`<senha>`, `${VAR}`, `...`) e a chave de exemplo da AWS passam;
+  - `auditor-seguranca`: histórico com todas as branches e tags e valor mascarado; segredo exposto trocado na ordem
+    (novo, no ar, revoga o antigo, prova que o antigo falha; reescrever o histórico depois); seção "não deu para
+    verificar"; caso 5 no eval;
+  - checklist, bloco S: S-1 segredo fora do que é entregue, S-2 variáveis de ambiente, S-3 histórico, S-4 troca na
+    ordem, S-5 MFA nas contas e S-10 limite de gasto (os dois últimos "só o usuário faz"); roteiros 02, 11, 24 e 25 e
+    extras B4 e B5 em `referencias/`.
+- **G2 · pacotes e cadeia de suprimentos:**
+  - protocolo comum, passo 11 (agora "Segredos e pacotes"): pacote novo só depois de conferir no registro oficial que
+    existe e é o conhecido, não um nome parecido;
+  - `auditor-seguranca`, novo passo 3: auditoria de dependências (`npm audit`, `pip-audit`, `osv-scanner`), diretas
+    conferidas no registro e lockfile no git;
+  - `engenheiro-software`: critério de pronto com pacote conferido, auditoria sem Crítico/Alto em produção e lockfile;
+    caso 7 no eval (pacote sugerido que pode não existir);
+  - checklist: S-7 dependências e S-8 o que não se usa; roteiros 21 e 22 em `referencias/seguranca-publicacao.md`.
+- **G3 · o que vai ao ar expõe demais?**
+  - `auditor-seguranca`: na pasta ou no pacote publicado não há `.env`, `.git`, dump, backup nem `.map`; no Power BI,
+    confere "Publicar na web", link para "qualquer pessoa da organização", exportação de dados e RLS desligada; caso 6
+    no eval;
+  - `engenheiro-software`: erro ao usuário é genérico, com código de referência, e o detalhe vai só para o log;
+  - `especialista-lgpd`: o inventário inclui os serviços de terceiros que recebem dado, conferidos no tráfego real;
+  - checklist: S-9 nada privado no que vai ao ar (com os pontos do Power BI) e S-11 erro sem detalhe; roteiros 20 e 23.
+- **G4 · logs sem segredo e rastreáveis:**
+  - `engenheiro-software`: log sem senha, token nem perfil inteiro (registra o ID, não o perfil), com hora UTC, ID do
+    usuário e da requisição e resultado; caso 8 no eval (log e erro ao usuário);
+  - checklist: S-12 log de segurança, com a guarda de 6 meses do Marco Civil (art. 15 [conferir]) para app público com
+    fins econômicos e a [HIPÓTESE] de que ferramenta interna não se enquadra; roteiro 08.
+- **G5 · controle de acesso e app web:**
+  - checklist, bloco S-web (entra quando há login próprio ou entrada de fora), 17 itens: login no servidor, senhas,
+    banco e IDOR, XSS, cookies, CSRF, validação e consulta parametrizada, links de redefinição, upload, pagamento, SSRF,
+    IA, administração, HTTPS, limite de requisições, CORS e cabeçalhos de segurança;
+  - S-6 no bloco S (vale para todo produto): A não vê o dado de B, testado com dois usuários; no Power BI, "ver como"
+    com dois papéis da RLS;
+  - roteiros em `referencias/`: identidade (01, 05, 09, 15, 17), dados (03, 06, 07, 10, 18, 19), rede (04, 12, 13, 14,
+    16) e extras B1 (IA) e B2 (SSRF);
+  - `engenheiro-software`, passo 7: código com login ou entrada de fora confere identidade no servidor, nunca aceita ID,
+    papel ou preço do navegador, valida a entrada, usa consulta parametrizada e roda os itens S-web que toca; caso 9 no
+    eval.
+- **G6 · privacidade e LGPD** (os artigos não conferidos no texto oficial levam **[conferir]**):
+  - `especialista-lgpd`: aviso de privacidade pelos fluxos reais, com versão e data; operador, suboperadores e
+    transferência internacional; pedidos do titular com identidade conferida, resposta em até 15 dias e registro; guarda
+    contando backups e ferramentas de terceiros; criança e adolescente com o ECA Digital (vigência como [HIPÓTESE]);
+    erros conhecidos: aviso copiado de modelo, "li e aceito" não é consentimento, treinar IA com dado de usuário é
+    finalidade nova; caso 6 no eval. Texto do agente condensado para caber nas 90 linhas;
+  - `advogado-contratos`: termos de uso batendo com o produto e registro do aceite (quem, versão, quando, como, sem
+    sobrescrever); caso 5 no eval;
+  - `estrategista-marketing`: consentimento de marketing separado, desmarcado e revogável; caso 6 no eval;
+  - checklist, bloco P: P-1 a P-11 (inventário, aviso, ciência × consentimento, guarda, terceiros, pedidos do titular,
+    criança, treino de IA, cookies só depois da escolha, registro do aceite, painel interno com dado de empregado),
+    todos com o link oficial; extra B6.
+- **G7 · acessibilidade:**
+  - `designer-paineis`: contraste de 3:1 também para o que não é texto (barra, borda de campo, foco; WCAG 1.4.11) e em
+    todos os estados; ordem de tabulação igual à de leitura, foco visível, nada preso; a NBR 17225:2025 entra no método;
+    critério de pronto com texto alternativo de cada visual e resumo em texto; caso 6 no eval;
+  - checklist, bloco A: A-1 contraste em tudo e em todos os estados, A-2 texto alternativo e resumo, A-3 só com o
+    teclado, A-4 teste com quem usa tecnologia assistiva; LBI art. 63 [conferir] e a [HIPÓTESE] do art. 34 para
+    ferramenta interna.
+- **G8 · honestidade do que se afirma:**
+  - `estrategista-marketing`: alegação objetiva com evidência datada (sem evidência, sai) e depoimento só de cliente
+    real, com incentivo declarado; caso 7 no eval;
+  - `analista-compliance`: selo ou certificação sem relatório vigente, com escopo e período, é alegação falsa; caso 6;
+  - `designer-paineis`: "atualizado em" vem da carga real, nunca texto fixo; caso 7;
+  - `advogado-contratos`: a lista de risco ganha uso de marca e publicidade (logo com permissão escrita) e nível de
+    serviço medível; caso 6;
+  - `redator` e `designer-documentos` (decisão D-4, opção b): conteúdo feito com IA para terceiros leva rótulo quando
+    alguém puder ser enganado; caso 5 em cada eval;
+  - checklist, bloco H: H-1 a H-7 (alegação, "atualizado em", disponibilidade, depoimentos, selos, logos, rótulo de IA),
+    com CDC e Lei 9.279 [conferir] e a [HIPÓTESE] do PL 2338/2023;
+  - Papel e Fora do escopo de marketing e compliance condensados para caber nas 90 linhas.
+- **G9 · licenças e propriedade intelectual:**
+  - protocolo comum, passo 6: material de terceiro sem licença (texto, imagem, prompt) entra só como ideia, com as nossas
+    palavras e a fonte citada; nunca copiado (decisão do orquestrador: no protocolo, para valer nos 30 agentes);
+  - `pesquisador`: o mesmo nos erros conhecidos, com a Lei 9.610 [conferir]; caso 5 no eval (perguntar antes se o
+    material é do usuário: os PDFs desta versão eram dele); regra nova em `skills/ultimate/regras-gerais.md`;
+  - `designer-paineis` e `designer-documentos`: fonte, ícone e imagem com licença que cobre o uso;
+  - `engenheiro-software`: inventário de licenças das dependências com os avisos (MIT, NOTICE do Apache); copyleft vai
+    para revisão; caso 10 no eval;
+  - checklist, bloco L: L-1 recursos visuais, L-2 dependências, L-3 material de terceiro.
+- **G10 · venda ao consumidor:** só os padrões enganosos entram agora (o resto do grupo, com o bloco C-venda, fica fora
+  até haver projeto que venda ao consumidor): `estrategista-marketing` ganha o erro conhecido (urgência falsa, caixa já
+  marcada, recusa escondida; CDC [conferir]) e o caso 8 no eval; checklist H-8.
+- **Validador (D-e):** norma brasileira citada em `fonte/` ("Lei", "Decreto", "Resolução", "LC" ou "MP" com número) sem
+  link oficial (gov.br) na mesma linha ou nas 2 seguintes vira aviso; citar de novo, no mesmo arquivo, uma norma já
+  linkada não pede outro link. As normas citadas hoje passam (0 aviso). O doc pedia "na linha ou na seguinte"; ficaram 2
+  linhas porque duas citações antigas (compliance e comprador) quebram a linha antes do link.
+- **Backup (D-i):** `engenheiro-dados` só dá por pronto, com banco próprio, o backup provado por restauração num
+  ambiente separado (com `RESTORE.md`); caso 6 no eval; checklist S-13 e extra B3.
+- `engenheiro-software` condensado para voltar às 90 linhas depois da seção de referências da parte B.
+- **Leis conferidas no texto oficial (2026-11-01, `especialista-lgpd`):** LGPD, CDC, LBI, Marco Civil, Leis 9.279,
+  9.609 e 9.610, MP 2.200-2, ECA Digital (vigência 17/03/2026, art. 41-A), Resolução CD/ANPD 19/2024, medida
+  preventiva da ANPD de 02/07/2024 (treino de IA) e PL 2338/2023 (aguarda parecer na Câmara): saem as marcas
+  [conferir]; corrigidos o prazo de 15 dias (só confirmação e acesso, art. 19), o art. 39 (instruções do controlador) e
+  o registro do aceite (entre particulares vale a MP 2.200-2, art. 10, §2º; a Lei 14.063 só rege assinatura com ente
+  público); ficam [HIPÓTESE] o Marco Civil e a LBI para ferramenta interna e a ausência de lei sobre rótulo de IA, e
+  [conferir] o alinhamento da NBR 17225 à WCAG 2.2 (texto da ABNT não aberto); casos de `testar-hooks.js` ajustados.
+- **Trava de segredos, falso positivo:** senha sem nenhuma letra ou número (`…`, `***`) conta como marcador; o próprio
+  CHANGELOG, que descreve o formato `Server=…;Password=…`, era bloqueado. Correção (M-3 da revisão): a afirmação de que a árvore inteira
+  do plugin passava estava errada, ela era bloqueada no próprio arquivo de testes. Agora passa sem bloqueio nem pergunta, e um
+  caso em `scripts/testar-travas.js` prova isso a cada rodada. A árvore de um projeto real (671 arquivos) passou em 3,1 s
+  na conferência do revisor.
+- Testes: 103 casos novos da parte A em `scripts/testar-hooks.js`, rodados contra a cópia do commit 60cf275 (antes da
+  parte A): 90 falham lá e passam aqui; os outros 13 guardam a regressão (falso positivo da trava, commit que só remove o
+  segredo, limite de 90 linhas, validador sem aviso no plugin real). O commit do G1 diz "14 vistos falhando"; o
+  número certo é 15.
+
+### Parte B: conteúdo dos 10 projetos lido sob demanda
 Fonte: `docs/inventario-plugins-2026-11.md`. O desenho do plugin não muda: cada agente ganha até 8 linhas "quando X, leia
 `${CLAUDE_PLUGIN_ROOT}/...`" e o conteúdo fica em `conhecimento/`. Casos em `scripts/testar-referencias.js`, cada um visto
 falhando antes.
@@ -222,137 +359,93 @@ falhando antes.
   da API (sem token, 60 pedidos por hora; com 3 por fonte, a 2ª conferência na mesma hora saía calada e deixava o aviso velho). Releases
   só com commit novo (2 pedidos por fonte) e o motivo da falha fica em `ultimoErro` no estado.
 
-## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
-Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
-"Pre-launch Security Toolkit", 2026). Artigos de lei ainda não conferidos no texto oficial ficam marcados **[conferir]**
-até o `especialista-lgpd` confirmar. Um commit por grupo (G1 a G11), cada item com um caso em `scripts/testar-hooks.js`
-visto falhando antes.
-- **G11 · fechamento antes de publicar:**
-  - skill nova `checklist-lancamento`: pergunta o perfil (público ou interno, dado pessoal, login próprio, IA,
-    entrada de fora, repositório público, cobrança), aplica só os blocos que cabem (S, S-web, P, A, H, L), prova o
-    comportamento de cada item e entrega o relatório com Passou / Corrigido e retestado / Aberto / Não se aplica (com
-    motivo) / Só o usuário faz; repete as verificações na versão final; tabela "mexeu em X, rode Y"; cartão de
-    incidente;
-  - os itens ficam em `skills/checklist-lancamento/itens.md` e os roteiros detalhados de segurança (auditar,
-    corrigir, verificar, feito quando) em `referencias/`, um arquivo por área, carregados só quando o item é executado;
-  - `validar.js`: todo item do checklist tem "Verificar:" e, se cita lei, o link oficial (gov.br);
-  - `revisor`: teste apagado ou enfraquecido para passar, e item crítico "não se aplica" sem motivo, são achado Alto
-    (caso 7 no eval);
-  - skill `rodada`: o contrato inclui os itens do checklist quando a rodada mexe em login, dado pessoal, pacote, chave,
-    IA, upload ou publicação;
-  - a trava do `git push` (e de npm publish e deploy) continua só perguntando e passa a lembrar o
-    `/checklist-lancamento`.
-- **G1 · segredos e chaves:**
-  - protocolo comum, passo 11: segredo se cita pelo nome da variável, nunca pelo valor (não pedir, não colar, não
-    imprimir); vale para os 30 agentes;
-  - `hooks/travas.js` passa a ler o conteúdo do commit (as linhas acrescentadas de `git diff --cached -U0`, e também
-    as do `-a`). Bloqueia os padrões de alta certeza: chave privada PEM (cabeçalho seguido do corpo), chaves da AWS,
-    GitHub, Anthropic, OpenAI, Google, Slack, Stripe, npm e Azure Storage, e texto de conexão com senha (URL ou
-    `Server=…;Password=…`). Pergunta nos de média certeza (senha, chave ou token atribuído no código; JWT). A mensagem dá
-    `arquivo:linha` e o tipo, nunca o valor. Marcadores (`<senha>`, `${VAR}`, `...`) e a chave de exemplo da AWS passam;
-  - `auditor-seguranca`: histórico com todas as branches e tags e valor mascarado; segredo exposto trocado na ordem
-    (novo, no ar, revoga o antigo, prova que o antigo falha; reescrever o histórico depois); seção "não deu para
-    verificar"; caso 5 no eval;
-  - checklist, bloco S: S-1 segredo fora do que é entregue, S-2 variáveis de ambiente, S-3 histórico, S-4 troca na
-    ordem, S-5 MFA nas contas e S-10 limite de gasto (os dois últimos "só o usuário faz"); roteiros 02, 11, 24 e 25 e
-    extras B4 e B5 em `referencias/`.
-- **G2 · pacotes e cadeia de suprimentos:**
-  - protocolo comum, passo 11 (agora "Segredos e pacotes"): pacote novo só depois de conferir no registro oficial que
-    existe e é o conhecido, não um nome parecido;
-  - `auditor-seguranca`, novo passo 3: auditoria de dependências (`npm audit`, `pip-audit`, `osv-scanner`), diretas
-    conferidas no registro e lockfile no git;
-  - `engenheiro-software`: critério de pronto com pacote conferido, auditoria sem Crítico/Alto em produção e lockfile;
-    caso 7 no eval (pacote sugerido que pode não existir);
-  - checklist: S-7 dependências e S-8 o que não se usa; roteiros 21 e 22 em `referencias/seguranca-publicacao.md`.
-- **G3 · o que vai ao ar expõe demais?**
-  - `auditor-seguranca`: na pasta ou no pacote publicado não há `.env`, `.git`, dump, backup nem `.map`; no Power BI,
-    confere "Publicar na web", link para "qualquer pessoa da organização", exportação de dados e RLS desligada; caso 6
-    no eval;
-  - `engenheiro-software`: erro ao usuário é genérico, com código de referência, e o detalhe vai só para o log;
-  - `especialista-lgpd`: o inventário inclui os serviços de terceiros que recebem dado, conferidos no tráfego real;
-  - checklist: S-9 nada privado no que vai ao ar (com os pontos do Power BI) e S-11 erro sem detalhe; roteiros 20 e 23.
-- **G4 · logs sem segredo e rastreáveis:**
-  - `engenheiro-software`: log sem senha, token nem perfil inteiro (registra o ID, não o perfil), com hora UTC, ID do
-    usuário e da requisição e resultado; caso 8 no eval (log e erro ao usuário);
-  - checklist: S-12 log de segurança, com a guarda de 6 meses do Marco Civil (art. 15 [conferir]) para app público com
-    fins econômicos e a [HIPÓTESE] de que ferramenta interna não se enquadra; roteiro 08.
-- **G5 · controle de acesso e app web:**
-  - checklist, bloco S-web (entra quando há login próprio ou entrada de fora), 17 itens: login no servidor, senhas,
-    banco e IDOR, XSS, cookies, CSRF, validação e consulta parametrizada, links de redefinição, upload, pagamento, SSRF,
-    IA, administração, HTTPS, limite de requisições, CORS e cabeçalhos de segurança;
-  - S-6 no bloco S (vale para todo produto): A não vê o dado de B, testado com dois usuários; no Power BI, "ver como"
-    com dois papéis da RLS;
-  - roteiros em `referencias/`: identidade (01, 05, 09, 15, 17), dados (03, 06, 07, 10, 18, 19), rede (04, 12, 13, 14,
-    16) e extras B1 (IA) e B2 (SSRF);
-  - `engenheiro-software`, passo 7: código com login ou entrada de fora confere identidade no servidor, nunca aceita ID,
-    papel ou preço do navegador, valida a entrada, usa consulta parametrizada e roda os itens S-web que toca; caso 9 no
-    eval.
-- **G6 · privacidade e LGPD** (os artigos não conferidos no texto oficial levam **[conferir]**):
-  - `especialista-lgpd`: aviso de privacidade pelos fluxos reais, com versão e data; operador, suboperadores e
-    transferência internacional; pedidos do titular com identidade conferida, resposta em até 15 dias e registro; guarda
-    contando backups e ferramentas de terceiros; criança e adolescente com o ECA Digital (vigência como [HIPÓTESE]);
-    erros conhecidos: aviso copiado de modelo, "li e aceito" não é consentimento, treinar IA com dado de usuário é
-    finalidade nova; caso 6 no eval. Texto do agente condensado para caber nas 90 linhas;
-  - `advogado-contratos`: termos de uso batendo com o produto e registro do aceite (quem, versão, quando, como, sem
-    sobrescrever); caso 5 no eval;
-  - `estrategista-marketing`: consentimento de marketing separado, desmarcado e revogável; caso 6 no eval;
-  - checklist, bloco P: P-1 a P-11 (inventário, aviso, ciência × consentimento, guarda, terceiros, pedidos do titular,
-    criança, treino de IA, cookies só depois da escolha, registro do aceite, painel interno com dado de empregado),
-    todos com o link oficial; extra B6.
-- **G7 · acessibilidade:**
-  - `designer-paineis`: contraste de 3:1 também para o que não é texto (barra, borda de campo, foco; WCAG 1.4.11) e em
-    todos os estados; ordem de tabulação igual à de leitura, foco visível, nada preso; a NBR 17225:2025 entra no método;
-    critério de pronto com texto alternativo de cada visual e resumo em texto; caso 6 no eval;
-  - checklist, bloco A: A-1 contraste em tudo e em todos os estados, A-2 texto alternativo e resumo, A-3 só com o
-    teclado, A-4 teste com quem usa tecnologia assistiva; LBI art. 63 [conferir] e a [HIPÓTESE] do art. 34 para
-    ferramenta interna.
-- **G8 · honestidade do que se afirma:**
-  - `estrategista-marketing`: alegação objetiva com evidência datada (sem evidência, sai) e depoimento só de cliente
-    real, com incentivo declarado; caso 7 no eval;
-  - `analista-compliance`: selo ou certificação sem relatório vigente, com escopo e período, é alegação falsa; caso 6;
-  - `designer-paineis`: "atualizado em" vem da carga real, nunca texto fixo; caso 7;
-  - `advogado-contratos`: a lista de risco ganha uso de marca e publicidade (logo com permissão escrita) e nível de
-    serviço medível; caso 6;
-  - `redator` e `designer-documentos` (decisão D-4, opção b): conteúdo feito com IA para terceiros leva rótulo quando
-    alguém puder ser enganado; caso 5 em cada eval;
-  - checklist, bloco H: H-1 a H-7 (alegação, "atualizado em", disponibilidade, depoimentos, selos, logos, rótulo de IA),
-    com CDC e Lei 9.279 [conferir] e a [HIPÓTESE] do PL 2338/2023;
-  - Papel e Fora do escopo de marketing e compliance condensados para caber nas 90 linhas.
-- **G9 · licenças e propriedade intelectual:**
-  - protocolo comum, passo 6: material de terceiro sem licença (texto, imagem, prompt) entra só como ideia, com as nossas
-    palavras e a fonte citada; nunca copiado (decisão do orquestrador: no protocolo, para valer nos 30 agentes);
-  - `pesquisador`: o mesmo nos erros conhecidos, com a Lei 9.610 [conferir]; caso 5 no eval (perguntar antes se o
-    material é do usuário: os PDFs desta versão eram dele); regra nova em `skills/ultimate/regras-gerais.md`;
-  - `designer-paineis` e `designer-documentos`: fonte, ícone e imagem com licença que cobre o uso;
-  - `engenheiro-software`: inventário de licenças das dependências com os avisos (MIT, NOTICE do Apache); copyleft vai
-    para revisão; caso 10 no eval;
-  - checklist, bloco L: L-1 recursos visuais, L-2 dependências, L-3 material de terceiro.
-- **G10 · venda ao consumidor:** só os padrões enganosos entram agora (o resto do grupo, com o bloco C-venda, fica fora
-  até haver projeto que venda ao consumidor): `estrategista-marketing` ganha o erro conhecido (urgência falsa, caixa já
-  marcada, recusa escondida; CDC [conferir]) e o caso 8 no eval; checklist H-8.
-- **Validador (D-e):** norma brasileira citada em `fonte/` ("Lei", "Decreto", "Resolução", "LC" ou "MP" com número) sem
-  link oficial (gov.br) na mesma linha ou nas 2 seguintes vira aviso; citar de novo, no mesmo arquivo, uma norma já
-  linkada não pede outro link. As normas citadas hoje passam (0 aviso). O doc pedia "na linha ou na seguinte"; ficaram 2
-  linhas porque duas citações antigas (compliance e comprador) quebram a linha antes do link.
-- **Backup (D-i):** `engenheiro-dados` só dá por pronto, com banco próprio, o backup provado por restauração num
-  ambiente separado (com `RESTORE.md`); caso 6 no eval; checklist S-13 e extra B3.
-- `engenheiro-software` condensado para voltar às 90 linhas depois da seção de referências da parte B.
-- **Leis conferidas no texto oficial (2026-11-01, `especialista-lgpd`):** LGPD, CDC, LBI, Marco Civil, Leis 9.279,
-  9.609 e 9.610, MP 2.200-2, ECA Digital (vigência 17/03/2026, art. 41-A), Resolução CD/ANPD 19/2024, medida
-  preventiva da ANPD de 02/07/2024 (treino de IA) e PL 2338/2023 (aguarda parecer na Câmara): saem as marcas
-  [conferir]; corrigidos o prazo de 15 dias (só confirmação e acesso, art. 19), o art. 39 (instruções do controlador) e
-  o registro do aceite (entre particulares vale a MP 2.200-2, art. 10, §2º; a Lei 14.063 só rege assinatura com ente
-  público); ficam [HIPÓTESE] o Marco Civil e a LBI para ferramenta interna e a ausência de lei sobre rótulo de IA, e
-  [conferir] o alinhamento da NBR 17225 à WCAG 2.2 (texto da ABNT não aberto); casos de `testar-hooks.js` ajustados.
-- **Trava de segredos, falso positivo:** senha sem nenhuma letra ou número (`…`, `***`) conta como marcador; o próprio
-  CHANGELOG, que descreve o formato `Server=…;Password=…`, era bloqueado. Correção (M-3 da revisão): a afirmação de que a árvore inteira
-  do plugin passava estava errada, ela era bloqueada no próprio arquivo de testes. Agora passa sem bloqueio nem pergunta, e um
-  caso em `scripts/testar-travas.js` prova isso a cada rodada. A árvore de um projeto real (671 arquivos) passou em 3,1 s
-  na conferência do revisor.
-- Testes: 103 casos novos da parte A em `scripts/testar-hooks.js`, rodados contra a cópia do commit 60cf275 (antes da
-  parte A): 90 falham lá e passam aqui; os outros 13 guardam a regressão (falso positivo da trava, commit que só remove o
-  segredo, limite de 90 linhas, validador sem aviso no plugin real). O commit do G1 diz "14 vistos falhando"; o
-  número certo é 15.
+### Lote sites-premium
+Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11.md`. Casos em `scripts/testar-sites.js`, vistos falhando antes.
+- **Agente `designer-sites`** (`fonte/agentes/design/`, 10 evals), dono de site e landing page; pacote `sites`. O `designer-paineis` fica com painel e tela de dados: descrições separadas, e "site", "site institucional" e "landing page" saíram do pacote `interface`, que passa a se chamar "Interface (app)". O roteador não mudou.
+- **Biblioteca `conhecimento/design/sites-premium/`:** 25 receitas, uma por arquivo, método de montagem e 39 efeitos, com cabeçalho do índice e pedidos de teste. Repertório, não molde: nenhuma ordem é obrigatória.
+- **Vidro em `apple/materiais.md`** (decisão do usuário): em landing page, permitido em cartão, com pouca transparência e sobre fundo calmo; em tela de produto ou de tarefa, a regra da Apple. Mais os acréscimos do estudo.
+- **Prova em `docs/provas/0.8.0-sites/`:** página fictícia, feita seguindo o agente, e bancada dos efeitos no Edge sem interface; contraste medido nos pixels do fundo, mutantes para cada checagem. O que passou está em `sites-premium/efeitos/provas.md`; o resto fica [ESTIMATIVA].
+- **Pendência:** Nivora e Code and Chill não foram estudados (rede da organização). Registro em `fontes/fontes.json`.
+- **Correções da revisão do lote** (`docs/revisao-0.8.0-sites.md`): roteamento por expressão de criação de site (A-1, só `pacotes.json`;
+  html, css, react e frontend sem site vão ao engenheiro); teclado na prova, no método e no critério (A-2); bancada com tolerância
+  de 3 níveis por canal (M-1); objeção e títulos nascidos do produto (M-2); vidro sem contradição (M-3); ponto preso à curva (M-4);
+  20 mutantes na prova da página (M-5); 8 larguras (M-6); a maré até o fim da página (b-1); b-2 a b-7.
+- **Correção de relato (b-11 da 2ª revisão):** a mensagem do commit 4e28d29 diz que os 2 mutantes que escapavam "agora são
+  pegos". Um deles não foi pego: foi **trocado**. "Tábua de preços sem empilhar" em 768 px não é defeito (fica apertada, mas
+  legível, como o revisor confirmou no PNG), e passou a rodar em 320 px, onde o cabeçalho da tábua se sobrepõe e é pego.
+- **2ª revisão do lote** (`docs/revisao-0.8.0-sites-r2.md`): junção com a `main` antes de mexer no roteador; desempate site ×
+  interface (`pacotes.json` → `desempate`, regra genérica no `roteador.js`); 160 frases na bateria; teclado comparado com a
+  lista real de controles; tábua das semanas no lugar do calendário; PROVADO só com 3 rodadas estáveis.
+- **3ª revisão do lote** (`docs/revisao-0.8.0-sites-r3.md`, decisões do usuário de 2026-11-02): verbo só pontua junto do alvo
+  (`sites.pares`: verbo + artigo + "novo" + site, landing, homepage, página web ou lp = 2 pontos; os 16 verbos e "web" saíram
+  das palavras firmes); o desempate site × interface olha primeiro a âncora (site × app) e depois a soma; empate = os dois,
+  com caso; o quadro mostra a pior das 3 rodadas; a tábua das semanas marca a mais baixa por texto e forma.
+- **Correção (b-14):** a entrada da 2ª rodada acima diz "html, css, react e frontend sem site vão ao engenheiro". Isso valeu
+  só de fa570e5 a c7e7adb. Desde a A-3 da 2ª rodada, essas palavras voltaram ao pacote `interface` (designer de painéis), e o
+  caso "corrija o css e o html do botão no react → só engenheiro" saiu da bateria por isso: a frase agora vai ao designer de
+  painéis e ao engenheiro, e está na lista "o orquestrador decide". O eval de roteamento não acusa mais palavra repetida
+  entre pacotes (eram 3).
+- **4ª revisão do lote** (`docs/revisao-0.8.0-sites-r4.md`, rv93): "tela de", "tela do" e "tela da" viram ambíguas
+  (A-1; puxavam o designer de painéis em pedidos de tela do SAP); as frases da sonda entram na bateria; ganho barato ("novo
+  site de", "site moderno", "site para o meu/a minha"; "onboarding do app" no `interface`); "página inicial" e "página de
+  vendas" saem dos alvos e das âncoras (M-11, são nomes de página de relatório); âncora negada ("não é um app: crie o site")
+  com caso (b-15); pares, âncora e desempate em `como-funciona` e `criar-pacote`, e os limites no README (b-16).
+- **5ª revisão do lote** (rv96): as expressões do ganho barato viram ambíguas (A-2); as 6 formas de "página de vendas" também,
+  e a biblioteca só entra por "página de vendas do curso/ebook" (M-11); o "era com <agente>" vale depois do desempate (M-12);
+  o limite 1 diz quando vale (b-17); caso de "página inicial" de painel (b-18). Registro em `docs/revisao-0.8.0-sites-r5.md`.
+
+### Trava de segredo: 4ª rodada da revisão e arquivo binário
+- **M-12:** o limite do README diz o pior caso: script que também publica não pergunta nada; fora da pasta da sessão nada é lido.
+- **M-13:** caso que confere que nenhum git roda na pasta de fora (o registro do HEAD dela não é criado).
+- **b-13:** com o envio no comando e sem ramo de rastreio, o "depois" diz que pode já ter sido publicado (troque a chave).
+- **b-14:** exemplo do verificador que roda no Windows (node + .js) e nome que começa com "-" vai como argumento.
+- **b-15:** `switch -c`, `npm test && git commit` e `commit -S` entram na lista de formas que perguntam.
+- **Binário fora do teto de leitura** (`hooks/leitor-segredos.js`): imagem e PDF não contam no teto (as provas com PNG deixavam
+  a árvore do plugin "grande demais"); só os primeiros 8 KB são lidos para saber se é binário.
+
+### Provas de design e vitrine
+- **pv92** (`docs/provas/0.8.0-design/`): app de tarefas antes e depois do visual premium (caso A) e vidro estilo Apple na
+  landing e no produto (caso B), feitos pelas referências que o roteador acionou; contraste no pior ponto medido com o texto
+  transparente; eval do efeito vidro no `designer-paineis`.
+- **Diagnóstico** (`docs/provas/0.8.0-design/e2e/`): por que a prova ficou "normal" (a execução seguiu as instruções; as
+  instruções paravam no piso) e a proposta de "impressiona" como padrão.
+- **pv94** (`e2e/`, v2): caso A refeito (o dia como linha do tempo, inspetor, teclado, momento de concluir) e caso B com Liquid
+  Glass só na navegação e nos controles, capa sangrando por trás da barra lateral, conferência com mutações.
+- **Vitrine "Clara 35"** (`docs/provas/0.8.0-design/vitrine/`): produto fictício feito pelo `designer-sites` pelo padrão
+  "impressiona" (Apple, Liquid Glass, 3D e revelação ao rolar numa peça só), com o acabamento da revisão final (b-5).
+
+### Padrão "impressiona" e designer de apps (im99)
+- **Régua `conhecimento/design/impressionar.md`** (decisão do usuário: impressionar é o alvo; correto é o piso): camada 1
+  (8 itens que, se falham, não entregam) e camada 2 (8 itens que impressionam), teste de junção ("um efeito dominante, uma
+  curva, um material, uma luz") e autocrítica. Nos 4 designers (critério de pronto e passo da junção) e no revisor (roda a
+  régua antes da autocrítica; camada 1 falhou ou 2+ itens da camada 2 = VERMELHO).
+- **Agente `designer-interface`** (32º): telas de app; o pacote "Interface (app)" passa a chamá-lo e o `designer-paineis`
+  fica com BI e painéis. 32 referências passam a listá-lo.
+- **Liquid Glass:** receita no `apple/materiais.md` (teste "parece Apple", vidro de landing sobre foto só com contraste medido
+  pixel a pixel) e o modelo `modelos/liquid-glass/` (lente só no Chromium, aro de luz, tinta pela grade 8 × 8, sem somar
+  `[data-lum]` aninhados), com `scripts/testar-liquid-glass.js`; efeito "H. Vitrine Apple" (`efeitos/vitrine-apple.md`).
+- **Eval de roteamento:** os 3 erros reais de rota do usuário (visual → BI, testes → Software, BI numa pergunta sobre o
+  plugin) e a tela de app → `interface`.
+- **Fontes:** a correção do emilkowalski/skills (Motion 14.2 acelera x/y/scale) e as 4 fontes conferidas.
+
+### Revisão final antes de publicar (`docs/revisao-0.8.0-final.md`)
+- **A-1:** versão 0.8.0 no `plugin.json` (sem subir o número, quem tem a 0.7.0 não recebe a nova).
+- **A-2:** a atualização diária não abre mais janela de console: um `node` destacado, sem shell, roda o `claude` com
+  `spawnSync` e `windowsHide` (com shell + detached, o Windows dá console visível a cada programa chamado). O `validar.js`
+  acusa shell + detached; caso que mede a janela (antes visível, depois não).
+- **M-1:** este CHANGELOG, num cabeçalho só, com data.
+- **M-2:** nomes fictícios no lugar da empresa, dos clientes e do projeto do usuário em todo o repositório.
+- **M-4:** `scripts/testar-impressionar.js`: a régua, a junção, o VERMELHO do revisor e a vitrine no índice, vistos pegando os
+  11 mutantes que escapavam.
+- **M-5:** a régua vai também ao `designer-interface`; as referências de painel (`modos/operar.md`, `apple/materiais.md`) vão
+  ao `designer-paineis`; desempate BI × interface pelos termos do Power BI ("liquid glass no painel do power bi" → só BI).
+- **M-6:** licença de fonte, ícone e imagem e texto alternativo no `designer-interface` e no `designer-sites`; "da referência
+  estudada, só a ideia" nos 4 designers e na régua (b-7).
+- **Baixos:** README com as 13 skills (b-1); `como-funciona` com o `designer-interface` (b-2); fontes da NN/g e sem códigos
+  internos nos agentes (b-3); grade 8 × 8 no `materiais.md` (b-4); LEIA-MEs em dia (b-6).
+- **Limpeza (M-3, pedido do usuário):** sai a 1ª tentativa da prova de design (2026-11-01), as propostas já aplicadas, a
+  cópia antiga do Liquid Glass (as páginas usam `modelos/liquid-glass/`), 15 PNGs da v1 e 3 PNGs do site sem citação;
+  revisões vão para `docs/historico/` e pesquisas e planos para `docs/pesquisas/`.
 
 ## 0.7.0 · 2026-10-28
 - **Verificações (bloco 0, Claude Code 2.1.302, detalhes no topo de `docs/plano-0.7.md`):**
@@ -582,30 +675,3 @@ A versão continua 0.7.0 (não tinha sido publicada). Um commit por item.
 - Memória do projeto criada na primeira vez (`.claude/base/`).
 - Travas: confirmação para publicar; bloqueio de commit com arquivo sensível e de heredoc com barra invertida.
 - Validador, gerador e testes dos ganchos (15 casos).
-
-## 0.8.0 · lote sites-premium (ramo lote-sites)
-Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11.md`. Casos em `scripts/testar-sites.js`, vistos falhando antes.
-- **Agente `designer-sites`** (`fonte/agentes/design/`, 10 evals), dono de site e landing page; pacote `sites`. O `designer-paineis` fica com painel e tela de dados: descrições separadas, e "site", "site institucional" e "landing page" saíram do pacote `interface`, que passa a se chamar "Interface (app)". O roteador não mudou.
-- **Biblioteca `conhecimento/design/sites-premium/`:** 25 receitas, uma por arquivo, método de montagem e 39 efeitos, com cabeçalho do índice e pedidos de teste. Repertório, não molde: nenhuma ordem é obrigatória.
-- **Vidro em `apple/materiais.md`** (decisão do usuário): em landing page, permitido em cartão, com pouca transparência e sobre fundo calmo; em tela de produto ou de tarefa, a regra da Apple. Mais os acréscimos do estudo.
-- **Prova em `docs/provas/0.8.0-sites/`:** página fictícia, feita seguindo o agente, e bancada dos efeitos no Edge sem interface; contraste medido nos pixels do fundo, mutantes para cada checagem. O que passou está em `sites-premium/efeitos/provas.md`; o resto fica [ESTIMATIVA].
-- **Pendência:** Nivora e Code and Chill não foram estudados (rede da organização). Registro em `fontes/fontes.json`.
-- **Correções da revisão do lote** (`docs/revisao-0.8.0-sites.md`): roteamento por expressão de criação de site (A-1, só `pacotes.json`;
-  html, css, react e frontend sem site vão ao engenheiro); teclado na prova, no método e no critério (A-2); bancada com tolerância
-  de 3 níveis por canal (M-1); objeção e títulos nascidos do produto (M-2); vidro sem contradição (M-3); ponto preso à curva (M-4);
-  20 mutantes na prova da página (M-5); 8 larguras (M-6); a maré até o fim da página (b-1); b-2 a b-7.
-- **Correção de relato (b-11 da 2ª revisão):** a mensagem do commit 4e28d29 diz que os 2 mutantes que escapavam "agora são
-  pegos". Um deles não foi pego: foi **trocado**. "Tábua de preços sem empilhar" em 768 px não é defeito (fica apertada, mas
-  legível, como o revisor confirmou no PNG), e passou a rodar em 320 px, onde o cabeçalho da tábua se sobrepõe e é pego.
-- **2ª revisão do lote** (`docs/revisao-0.8.0-sites-r2.md`): junção com a `main` antes de mexer no roteador; desempate site ×
-  interface (`pacotes.json` → `desempate`, regra genérica no `roteador.js`); 160 frases na bateria; teclado comparado com a
-  lista real de controles; tábua das semanas no lugar do calendário; PROVADO só com 3 rodadas estáveis.
-- **3ª revisão do lote** (`docs/revisao-0.8.0-sites-r3.md`, decisões do usuário de 2026-11-02): verbo só pontua junto do alvo
-  (`sites.pares`: verbo + artigo + "novo" + site, landing, homepage, página web ou lp = 2 pontos; os 16 verbos e "web" saíram
-  das palavras firmes); o desempate site × interface olha primeiro a âncora (site × app) e depois a soma; empate = os dois,
-  com caso; o quadro mostra a pior das 3 rodadas; a tábua das semanas marca a mais baixa por texto e forma.
-- **Correção (b-14):** a entrada da 2ª rodada acima diz "html, css, react e frontend sem site vão ao engenheiro". Isso valeu
-  só de fa570e5 a c7e7adb. Desde a A-3 da 2ª rodada, essas palavras voltaram ao pacote `interface` (designer de painéis), e o
-  caso "corrija o css e o html do botão no react → só engenheiro" saiu da bateria por isso: a frase agora vai ao designer de
-  painéis e ao engenheiro, e está na lista "o orquestrador decide". O eval de roteamento não acusa mais palavra repetida
-  entre pacotes (eram 3).
