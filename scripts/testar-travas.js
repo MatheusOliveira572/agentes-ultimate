@@ -79,10 +79,40 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   p = repo(); fs.writeFileSync(path.join(p, 'grande.txt'), 'linha comum\n'.repeat(4000));
   x = comTeto('git add -A && git commit -m x', p, 1000);
   caso('0.8.0 M-1 trava: arquivo novo acima do teto também pergunta', x.code === 0 && pede(x) && /grande demais/.test(x.out), `code ${x.code} ${x.out}`);
-  p = repo(); fs.writeFileSync(path.join(p, 'muitos.json'), '{"token": "abc123def456ghi"}\n'.repeat(40000)); git('git add muitos.json', p);
+  p = repo(); fs.writeFileSync(path.join(p, 'muitos.json'), ('{"tok' + 'en": "abc123def456ghi"}\n').repeat(40000)); git('git add muitos.json', p);
   let t0 = Date.now(); x = trava('git commit -m x', p); let ms = Date.now() - t0;
   caso('0.8.0 M-1 trava: 40 mil linhas com achado levam menos de 6 s (era 48 s: custo quadrático)', ms < 6000 && pede(x), `${ms} ms ${x.out.slice(0, 120)}`);
   p = repo(); fs.writeFileSync(path.join(p, 'host.txt'), 'Host=a;'.repeat(60000) + '\n'); git('git add host.txt', p);
   t0 = Date.now(); x = trava('git commit -m x', p); ms = Date.now() - t0;
   caso('0.8.0 M-1 trava: linha de 420 KB com "Host=a;" leva menos de 3 s (era 19,9 s)', ms < 3000, `${ms} ms`);
+
+  // ---- M-2: exemplo legítimo não bloqueia; exemplo de desenvolvimento pergunta; segredo real continua bloqueado ----
+  const noCommit = (texto, arq = 'doc.md') => { const q = repo(); fs.writeFileSync(path.join(q, arq), texto); git('git add ' + arq, q); return trava('git commit -m x', q); };
+  const PW = 'Pass' + 'word=', SV = 'Serv' + 'er=', PG = 'postgres' + '://';
+  for (const [nome, texto] of [
+    ['marcador seguido de crase', '`' + SV + 'db;' + PW + '<senha>`\n'],
+    ['variável seguida de crase', '`' + SV + 'db;' + PW + '$' + '{DB_SENHA}`\n'],
+    ['marcador seguido de ponto', 'Use ' + SV + 'db;' + PW + '<senha>.\n'],
+    ['chave de exemplo da Anthropic só com x', 'sk-' + 'ant-' + 'x'.repeat(32) + '\n'],
+    ['chave de exemplo do GitHub só com x', 'gh' + 'p_' + 'x'.repeat(36) + '\n'],
+    ['chave de exemplo do Stripe só com X', 'rk_' + 'live_' + 'X'.repeat(24) + '\n'],
+    ['exemplo do Slack só com x', 'xo' + 'xb-' + 'x'.repeat(24) + '\n'],
+  ]) { const y = noCommit(texto); caso('0.8.0 M-2 trava: passa (' + nome + ')', y.code === 0 && !y.out, `code ${y.code} ${y.err} ${y.out}`); }
+  for (const [nome, texto] of [
+    ['banco em localhost', 'db = "' + PG + 'admin:' + 'Forte9Senha' + '@localhost:5432/app"\n'],
+    ['senha igual ao usuário', 'db = "' + PG + 'admin:' + 'admin' + '@db.interno:5432/app"\n'],
+    ['texto ADO em localhost', SV + 'localhost;User Id=app;' + PW + 'Forte9Senha;\n'],
+    ['exemplo clássico da documentação', SV + 'db01;User Id=app;' + PW + 'my' + 'Password;\n'],
+  ]) { const y = noCommit(texto); caso('0.8.0 M-2 trava: pergunta em vez de bloquear (' + nome + ')', y.code === 0 && pede(y), `code ${y.code} ${y.err} ${y.out}`); }
+  let y2 = noCommit('db = "' + PG + 'app:' + 'Forte9Senha' + '@db.interno:5432/app"\n');
+  caso('0.8.0 M-2 trava: senha real em servidor de verdade continua bloqueada', y2.code === 2, `code ${y2.code} ${y2.out}`);
+
+  // ---- b-1: segredos que passavam ----
+  y2 = noCommit(PW + 'Forte9Senha;' + SV + 'db01;Database=x;\n');
+  caso('0.8.0 b-1 trava: texto ADO com a senha antes do servidor é bloqueado', y2.code === 2, `code ${y2.code} ${y2.out}`);
+  y2 = noCommit('API_' + 'KEY=' + 'q8W2e4R6t8Y0u2I4\n', 'run.sh');
+  caso('0.8.0 b-1 trava: API_KEY=valor sem aspas pergunta', y2.code === 0 && pede(y2), `code ${y2.code} ${y2.out}`);
+  y2 = noCommit('aws_' + 'secret_access_key = "' + 'q8W2e4R6t8Y0u2I4o6P8a1S3d5F7g9H1j3K5l7Z9"\n', 'cfg.ini');
+  caso('0.8.0 b-1 trava: aws_secret_access_key sem o id pergunta', y2.code === 0 && pede(y2), `code ${y2.code} ${y2.out}`);
+
 };

@@ -29,13 +29,25 @@ const ALTOS = [
   { tipo: 'chave de conta do Azure Storage', re: /\bAccountKey=[A-Za-z0-9+/]{40,}={0,2}/ },
   { tipo: 'texto de conexão com senha', re: /\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|rediss?|amqps?|mssql|sqlserver):\/\/[^\s:/@'"]+:([^\s@'"/]+)@[^\s'"]+/i, senha: 1 },
   { tipo: 'texto de conexão com senha', re: /\b(?:Server|Data Source|Host)\s*=[^;\n]{1,200};.{0,500}?\b(?:Password|Pwd)\s*=\s*([^;'"\s]+)/i, senha: 1 },
+  { tipo: 'texto de conexão com senha', re: /\b(?:Password|Pwd)\s*=\s*([^;'"\s]+)\s*;.{0,500}?\b(?:Server|Data Source|Host)\s*=/i, senha: 1 },
 ];
 const MEDIOS = [
-  { tipo: 'senha, chave ou token atribuído no código', re: /\b(?:api[_-]?key|apikey|client[_-]?secret|secret|access[_-]?token|auth[_-]?token|token|senha|password|passwd|pwd)["']?\s*[:=]\s*["']([^"'\s]{12,})["']/i, senha: 1, valor: (v) => /\d/.test(v) && /[A-Za-z]/.test(v) },
+  { tipo: 'senha, chave ou token atribuído no código', re: /(?:^|[^A-Za-z0-9])(?:api[_-]?key|apikey|client[_-]?secret|secret[_-]?access[_-]?key|secret|access[_-]?token|auth[_-]?token|token|senha|password|passwd|pwd)["']?\s*[:=]\s*["']([^"'\s]{12,})["']/i, senha: 1, valor: (v) => /\d/.test(v) && /[A-Za-z]/.test(v) },
+  { tipo: 'senha, chave ou token atribuído sem aspas', re: /(?:^|[^A-Za-z0-9])[A-Z0-9_]*(?:API_KEY|APIKEY|SECRET|SECRET_KEY|ACCESS_TOKEN|AUTH_TOKEN|PASSWORD)\s*=\s*([^\s"'#]{12,})/, senha: 1, valor: (v) => /\d/.test(v) && /[A-Za-z]/.test(v) },
   { tipo: 'token JWT', re: /\beyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/ },
 ];
-const marcador = (v) => !/[A-Za-z0-9]/.test(v) || /^(\.{2,}|\*+|x{3,}|<[^>]*>|\$\{[^}]*\}|\$\(?\w+\)?|\{\{?[^}]*\}?\}|%[sd]|\[[^\]]*\])$/i.test(v) ||
-  /^(senha|password|pass|pwd|secret|changeme|sua[_-]?senha|your[_-]?password|usuario|user)$/i.test(v) || /process\.env|os\.environ|getenv|EXAMPLE|exemplo/i.test(v);
+// Pontuação colada e "\n" literal não são parte do valor. Em chave de formato conhecido, só "x" depois do prefixo é exemplo.
+const limpaValor = (v) => String(v).replace(/\\.*$/, '').replace(/[.,;:`)\]]+$/, '');
+const soX = (v) => /^[^xX]{0,20}[xX]{16,}=*$/.test(String(v).replace(/^xox[a-z]-/i, ''));
+// Texto de conexão que parece exemplo de desenvolvimento: pergunta em vez de bloquear.
+function exemploDeDev(trecho, v) {
+  if (/(?:@|=\s*)(?:localhost|127\.0\.0\.1|\[?::1\]?|\(local\)|\(localdb\))/i.test(trecho)) return true;
+  if (/^(?:my)?pass(?:word)?\d*$/i.test(v)) return true;
+  const u = (trecho.match(/:\/\/([^:/@\s]+):/) || trecho.match(/\b(?:User(?: Id)?|Uid|Username)\s*=\s*([^;'"\s]+)/i) || [])[1];
+  return !!u && u.toLowerCase() === String(v).toLowerCase();
+}
+const marcador = (v0) => { const v = limpaValor(v0); return !/[A-Za-z0-9]/.test(v) || soX(v) || /^(\.{2,}|\*+|x{3,}|<[^>]*>|\$\{[^}]*\}|\$\(?\w+\)?|\{\{?[^}]*\}?\}|%[sd]|\[[^\]]*\])$/i.test(v) ||
+  /^(senha|password|pass|pwd|secret|changeme|sua[_-]?senha|your[_-]?password|usuario|user)$/i.test(v) || /process\.env|os\.environ|getenv|EXAMPLE|exemplo/i.test(v); };
 
 // Linhas acrescentadas do diff (-U0), com arquivo e número da linha no arquivo novo.
 function acrescentadas(diff) {
@@ -51,7 +63,7 @@ function acrescentadas(diff) {
 // Teto de leitura e prazo: o gancho tem 10 s. O que não couber vira pergunta ("grande demais"), nunca passa calado.
 const TETO_BYTES = Number(process.env.AGENTES_ULTIMATE_TRAVA_TETO) || 24 * 1024 * 1024;
 const PRAZO = Date.now() + 7000;
-const leitura = { incompleta: false };
+const leitura = { incompleta: false, fracos: [] };
 function achar(linhas, regras) {
   const achados = [];
   const porArq = {};
@@ -68,7 +80,9 @@ function achar(linhas, regras) {
       while ((m = re.exec(texto))) {
         const v = r.senha ? m[r.senha] : m[0];
         if (!marcador(v) && (!r.valor || r.valor(v))) {
-          achados.push(`${arq}:${ls[linhaDe(m.index)].linha} · ${r.tipo}`);
+          if (r.senha && r.tipo === 'texto de conexão com senha' && exemploDeDev(texto.slice(m.index, m.index + m[0].length + 200).split('\n')[0], limpaValor(v))) {
+            leitura.fracos.push(`${arq}:${ls[linhaDe(m.index)].linha} · texto de conexão que parece exemplo de desenvolvimento`);
+          } else achados.push(`${arq}:${ls[linhaDe(m.index)].linha} · ${r.tipo}`);
         }
         if (!m[0].length) re.lastIndex++;
       }
@@ -279,7 +293,7 @@ process.stdin.on('end', () => {
           'saiu desta máquina, troque-o: crie o novo, ponha no ar, revogue o antigo e prove que o antigo falha. É exemplo? ' +
           'Troque o valor por um marcador como <senha> ou ${VARIAVEL}.');
       }
-      const medios = achar(linhas, MEDIOS);
+      const medios = [...new Set(achar(linhas, MEDIOS).concat(leitura.fracos))]; leitura.fracos = [];
       if (medios.length) paraPerguntar.push(`o commit parece levar um segredo (média certeza; o valor não é mostrado):\n  ${curta(medios)}\nConfirme só se for valor de exemplo ou de teste.`);
     }
     if (leitura.incompleta) paraPerguntar.push('este commit é grande demais para conferir no tempo do gancho: parte dele não foi lida. Confira que não vai segredo (ou faça commits menores).');

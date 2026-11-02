@@ -98,6 +98,10 @@ falhando antes.
 - **Revisão da parte A, M-1:** commit grande não passa calado. Sem o custo quadrático (40 mil linhas: de 23,6 s para 0,5 s;
   linha de 420 KB: de 9,8 s para menos de 3 s) e, se não couber no teto de 24 MB ou no prazo de 7 s, a trava pergunta ("grande
   demais para conferir"). A lista da mensagem vai cortada em 20 itens: com milhares, a saída era truncada e a pergunta se perdia.
+- **Revisão da parte A, M-2 e b-1:** marcador seguido de crase ou ponto e chave de exemplo só com "x" passam; banco em
+  `localhost`, senha igual ao usuário e o exemplo clássico da documentação perguntam em vez de bloquear (padrão até o usuário dizer
+  o contrário). Passam a ser pegos: texto ADO com a senha antes do servidor (bloqueia), `API_KEY=valor` sem aspas e
+  `aws_secret_access_key` sem o id (perguntam).
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e
