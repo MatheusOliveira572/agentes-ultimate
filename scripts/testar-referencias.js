@@ -432,6 +432,18 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const vd = rotRef('um card com efeito vidro estilo Apple');
   caso('0.8.0 ponta a ponta: "um card com efeito vidro estilo Apple" → designer e engenheiro, materiais e Apple, e o /checklist-lancamento', /designer-interface/.test(vd.agentes) && /engenheiro-software/.test(vd.agentes) && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/materiais.md') && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/INDICE.md') && /\/checklist-lancamento/.test(vd.t), JSON.stringify(vd.refs));
 
+  // Revisão final M-5: pedido de painel ou Power BI não vai ao designer de apps, nem as referências de painel e Apple.
+  const vp = rotRef('melhore o visual do painel de vendas');
+  caso('revisão final M-5: "melhore o visual do painel de vendas" → modos/operar.md para o designer-paineis, nada para o designer-interface',
+    vp.refs.some((y) => y.arquivo === 'conhecimento/design/modos/operar.md' && y.agente === 'designer-paineis') && !vp.refs.some((y) => y.agente === 'designer-interface'), JSON.stringify(vp.refs));
+  const vl = rotRef('liquid glass no painel do power bi');
+  caso('revisão final M-5: "liquid glass no painel do power bi" → designer-paineis com materiais e Apple; designer-interface fora',
+    /designer-paineis/.test(vl.agentes) && !/designer-interface/.test(vl.agentes) && !vl.refs.some((y) => y.agente === 'designer-interface') &&
+    vl.refs.some((y) => y.arquivo === 'conhecimento/design/apple/materiais.md' && y.agente === 'designer-paineis'), `agentes: ${vl.agentes}; refs: ${JSON.stringify(vl.refs)}`);
+  const va = rotRef('redesenhe meu app com visual premium que impressione');
+  caso('revisão final M-5: app premium → a régua impressionar.md vai ao designer-interface',
+    va.refs.some((y) => y.arquivo === 'conhecimento/design/impressionar.md' && y.agente === 'designer-interface'), JSON.stringify(va.refs));
+
   // Ponta a ponta (critério do usuário): pedido amplo aciona tudo sozinho. Liga no lote 3 (conteúdo de design).
   const E2E = existe('conhecimento', 'design', 'metodo.md');
   const espera = [
@@ -446,9 +458,12 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
       fs.writeFileSync(cfgRef, JSON.stringify(ligado ? { integracoes: ['21st'] } : {}));
       const x = rotRef(pedido);
       // App é do designer-interface (im99); site é do designer-sites, que recebe a biblioteca de sites no lugar dos detalhes de interface (teto de 3 por agente).
+      // No app, a régua impressionar.md vai ao designer (revisão final, M-5) e os detalhes de interface ao engenheiro, que constrói
+      // (o designer-interface os lê pelo próprio corpo).
       const ehSite = /site/.test(pedido);
       const designer = ehSite ? 'designer-sites' : 'designer-interface';
-      const esperaPedido = ehSite ? espera.filter((e) => !/detalhes/.test(e[2])).concat([['conhecimento/design/sites-premium/INDICE.md', 'DESIGNER', 'biblioteca de sites']]) : espera;
+      const esperaPedido = ehSite ? espera.filter((e) => !/detalhes/.test(e[2])).concat([['conhecimento/design/sites-premium/INDICE.md', 'DESIGNER', 'biblioteca de sites']])
+        : espera.map((e) => (/detalhes/.test(e[2]) ? [e[0], 'engenheiro-software', e[2]] : e)).concat([['conhecimento/design/impressionar.md', 'DESIGNER', 'régua impressionar']]);
       const faltam = esperaPedido.filter(([a, ag]) => !x.refs.some((y) => y.arquivo === a && y.agente === (ag === 'DESIGNER' ? designer : ag))).map((e) => e[2]);
       const c21 = x.refs.some((y) => y.arquivo === 'conhecimento/design/componentes.md' && y.agente === 'engenheiro-software');
       const ags = [designer, 'engenheiro-software', 'revisor'].every((a) => x.agentes.includes('agentes-ultimate:' + a));

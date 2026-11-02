@@ -276,8 +276,8 @@
       ],
       "agentes": [
         "designer-sites",
-        "designer-interface",
         "designer-paineis",
+        "designer-interface",
         "engenheiro-software",
         "designer-documentos"
       ],
@@ -539,6 +539,7 @@
       ],
       "agentes": [
         "designer-sites",
+        "designer-interface",
         "designer-paineis",
         "designer-documentos",
         "revisor"
@@ -667,8 +668,8 @@
         "densidade de informacao"
       ],
       "agentes": [
-        "designer-interface",
         "designer-paineis",
+        "designer-interface",
         "engenheiro-software"
       ],
       "teste": {

@@ -109,6 +109,14 @@
     {
       "pedido": "redesenhe a tela de tarefas do meu aplicativo com visual premium",
       "pacote": "interface"
+    },
+    {
+      "pedido": "liquid glass no painel do power bi",
+      "pacote": "bi",
+      "nao": [
+        "interface"
+      ],
+      "_por_que": "revisão final M-5: vidro num painel do Power BI é do designer-paineis"
     }
   ]
 }

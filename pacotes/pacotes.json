@@ -28,6 +28,34 @@
           "sistema"
         ]
       }
+    },
+    {
+      "_por_que": "Revisão final M-5: \"liquid glass no painel do power bi\" chamava também o designer de apps. Só termos do Power BI são âncora do BI (painel e dashboard sozinhos também são de app).",
+      "areas": [
+        "bi",
+        "interface"
+      ],
+      "ancoras": {
+        "bi": [
+          "power bi",
+          "powerbi",
+          "pbip",
+          "pbix",
+          "dax",
+          "tmdl",
+          "power query",
+          "painel de bi",
+          "painel de indicadores"
+        ],
+        "interface": [
+          "app",
+          "aplicativo",
+          "aplicativos",
+          "apps",
+          "tela do app",
+          "sistema"
+        ]
+      }
     }
   ],
   "pacotes": {
