@@ -140,7 +140,7 @@ const CHECAGENS = `(function (celular) {
   var cortado = [];
   document.querySelectorAll('body *').forEach(function (e) {
     var cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden' || e.closest('svg, script, style, .oculto, .pular')) return;
-    var q = e.getBoundingClientRect(); if (!q.width || !q.height) return;
+    var q = e.getBoundingClientRect(); if (q.width <= 1 || q.height <= 1) return;
     var temTexto = Array.prototype.some.call(e.childNodes, function (n) { return n.nodeType === 3 && n.textContent.trim(); });
     if (temTexto && (q.right > innerWidth + 1 || q.left < -1)) cortado.push(e.tagName + ':' + e.textContent.trim().slice(0, 30));
     if (temTexto && /hidden|clip/.test(cs.overflowX) && e.scrollWidth > e.clientWidth + 1) cortado.push(e.tagName + ':' + e.textContent.trim().slice(0, 30));
@@ -178,7 +178,7 @@ const CHECAGENS = `(function (celular) {
   var caixas = [], wt = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (wt.nextNode()) {
     var nt = wt.currentNode; if (!nt.textContent.trim()) continue; var pe = nt.parentElement; if (!pe || pe.closest('script, style, .pular') || (pe.closest('details:not([open])') && !pe.closest('summary'))) continue;
-    var ce = getComputedStyle(pe); if (ce.visibility === 'hidden' || !pe.getClientRects().length) continue;
+    var ce = getComputedStyle(pe); if (ce.visibility === 'hidden' || !pe.getClientRects().length || pe.getBoundingClientRect().width <= 1) continue;
     var rg = document.createRange(); rg.selectNodeContents(nt);
     Array.prototype.forEach.call(rg.getClientRects(), function (x) { if (x.width > 1 && x.height > 1) caixas.push({ e: pe, t: nt.textContent.trim().slice(0, 24), l: x.left, r: x.right, a: x.top + 2, b: x.bottom - 2 }); });
   }
@@ -430,17 +430,56 @@ async function provarSite() {
   mutantes.push({ nome: 'ação do cabeçalho pequena no celular', pegou: c.alvos_pequenos > 0 });
   c = await capturaSite(b, mutante('corpo', (t) => t.replace('body { font-size: 16px; }', 'body { font-size: 14px; }')), 'claro', 390, null);
   mutantes.push({ nome: 'corpo pequeno no celular', pegou: c.corpo_pequeno > 0 });
-  c = await capturaSite(b, mutante('coberto', (t) => t.replace('scroll-margin-top: 88px;', 'scroll-margin-top: 0;')), 'claro', 1440, null);
+  c = await capturaSite(b, mutante('coberto', (t) => t.replace('scroll-margin-top: 88px;', 'scroll-margin-top: 0;').replace('scroll-padding-top: 88px;', 'scroll-padding-top: 0;')), 'claro', 1440, null);
   mutantes.push({ nome: 'âncora deixa o título sob a barra', pegou: c.titulos_cobertos > 0 });
   gravarRes({ mutantes }); await novo();
   c = await semJs(mutante('sem-js', (t) => t.replace('h1 { font-size:', 'h1 { opacity: 0; font-size:')));
   mutantes.push({ nome: 'título invisível sem JS', pegou: c.texto_completo === false });
   gravarRes({ mutantes }); await novo();
-  c = await capturaSite(b, mutante('rotulo', (t) => t.replace('transform: translate(-50%, 8px); padding: 14px 0 0;', 'transform: translate(-50%, 8px); padding: 120px 0 0;')), 'claro', 1440, null);
+  c = await capturaSite(b, mutante('rotulo', (t) => t.replace('transform: translate(-50%, 0); padding: 12px 0 0;', 'transform: translate(-50%, 0); padding: 120px 0 0;')), 'claro', 1440, null);
   mutantes.push({ nome: 'rótulo cortado na vertical pela seção', pegou: c.texto_cortado > 0 });
   gravarRes({ mutantes }); await novo();
-  c = await capturaSite(b, mutante('sobre', (t) => t.replace('.mare { position: relative; margin-top: 16px;', '.mare { position: relative; margin-top: -24px;')), 'claro', 1440, null);
+  c = await capturaSite(b, mutante('sobre', (t) => t.replace('.mare { position: relative; margin-top: 16px;', '.mare { position: relative; margin-top: -150px;')), 'claro', 1440, null);
   mutantes.push({ nome: 'rótulo da curva em cima de outro texto', pegou: c.texto_sobreposto > 0 });
+
+  // Pontos cegos da revisão (M-5) e as checagens de teclado, curva, cenas e larguras.
+  const mut = (nome, de, para) => mutante(nome, (x) => { if (!x.includes(de)) throw new Error('mutante sem âncora: ' + nome); return x.replace(de, para); });
+  gravarRes({ mutantes }); await novo();
+  c = await medirTeclado(b, mut('foco', ':focus-visible { outline: 2px solid var(--anel);', ':focus-visible { outline: none;'), 'claro', 1440);
+  mutantes.push({ nome: 'foco invisível', pegou: !tecladoOk(c) });
+  gravarRes({ mutantes }); await novo();
+  c = await medirTeclado(b, mut('pausa', '</style>', '.pausa { display: none !important; }</style>'), 'claro', 1440);
+  mutantes.push({ nome: 'botão de pausa escondido', pegou: !c.tem_pausa });
+  gravarRes({ mutantes }); await novo();
+  c = await medirTeclado(b, mut('anel-rodape', 'footer { --anel: #f7a48f;', 'footer {'), 'claro', 1440);
+  mutantes.push({ nome: 'anel de foco sem contraste no rodapé', pegou: c.anel_fraco.length > 0 });
+  gravarRes({ mutantes }); await novo();
+  c = await medirTeclado(b, mutante('padding', (x) => x.replace('scroll-padding-top: 88px;', 'scroll-padding-top: 0;').replace('.nav-in { display: flex; align-items: center; gap: 28px; min-height: 64px; }', '.nav-in { display: flex; align-items: center; gap: 28px; min-height: 360px; }')), 'claro', 1440);
+  mutantes.push({ nome: 'barra alta sem scroll-padding (foco sob a barra)', pegou: c.sob_a_barra.length > 0 });
+  gravarRes({ mutantes }); await novo();
+  c = await medirMenu(b, mut('menu', "a.addEventListener('click', function () { menu.open = false; });", "a.addEventListener('click', function () {});"));
+  mutantes.push({ nome: 'menu do celular não fecha ao seguir link', pegou: !menuOk(c) });
+  gravarRes({ mutantes }); await novo();
+  c = await capturaSite(b, mut('vidro45', '.vidro { background: rgb(18 44 56 / 0.82); -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%);', '.vidro { background: rgb(18 44 56 / 0.45);'), 'escuro', 1440, null);
+  mutantes.push({ nome: 'vidro a 45% sem desfoque', pegou: c.vidro_fora_da_regra > 0 });
+  gravarRes({ mutantes }); await novo();
+  c = (await medirCenas(b, mut('nome-longo', "nome: 'Antecipar o freela', i: '1.012'", "nome: 'Antecipar o freela', i: '1.012.345.678.901.234'"), 'claro', 390)).filter((x) => !cenaOk(x));
+  mutantes.push({ nome: 'valor longo só na 3ª cena', pegou: c.length > 0 });
+  gravarRes({ mutantes }); await novo();
+  c = await medirCurva(b, mut('ponto', '.ponto { position: absolute; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, -50%);', '.ponto { position: absolute; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, 40%);'), 1440);
+  mutantes.push({ nome: 'ponto da maré baixa solto da curva', pegou: c.some((x) => !x.ok) });
+  gravarRes({ mutantes }); await novo();
+  c = await medirLargura(b, mut('planos', '@media (max-width: 1120px) {', '@media (max-width: 1px) {'), 768);
+  mutantes.push({ nome: 'tábua de preços sem empilhar (768 px)', pegou: !larguraOk(c) });
+  gravarRes({ mutantes });
+
+  const teclado = []; for (const [tm, l] of [['claro', 1440], ['escuro', 1440], ['claro', 390]]) { await novo(); teclado.push(await medirTeclado(b, url, tm, l)); }
+  await novo(); const menuTeclado = await medirMenu(b, url);
+  const curva = []; for (const l of [1440, 390]) { await novo(); curva.push(...await medirCurva(b, url, l)); }
+  const cenas = []; for (const [tm, l] of [['claro', 390], ['escuro', 1440]]) { await novo(); cenas.push(...await medirCenas(b, url, tm, l)); }
+  const larguras = []; for (const l of LARGURAS) { await novo(); larguras.push(await medirLargura(b, url, l)); }
+  gravarRes({ teclado, menu: menuTeclado, curva, cenas, larguras });
+  console.log('teclado', teclado.map(tecladoOk).join(' '), '| menu', menuOk(menuTeclado), '| curva', curva.every((x) => x.ok), '| cenas', cenas.every(cenaOk), '| larguras', larguras.map((x) => x.largura + ':' + larguraOk(x)).join(' '));
 
   const versao = b.versao; await b.fechar();
   gravarRes({ gerado_em: new Date().toISOString(), navegador: versao, condicao: 'Edge sem interface, uma máquina Windows; imagens renderizadas sem aparelho real', capturas, simulacao, interacoes, reduzido_movimento, reduzido_transparencia, mais_contraste, sem_js, mutantes });
