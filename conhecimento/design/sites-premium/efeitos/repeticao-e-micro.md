@@ -56,6 +56,7 @@ Repertório, não lista de compras. Origem: [VISTO] nas referências estudadas, 
 
 ### F2. Botão magnético [MERCADO]
 - **O que é:** o botão se aproxima do ponteiro quando perto.
+- **Técnica:** evento de ponteiro na área em volta; deslocamento proporcional à distância, limitado, só em `transform`; ao sair, volta com transição.
 - **Medidas:** 4–12 px; área 40–80 px; volta com mola em 0,3–0,5 s.
 - **Onde:** portfólio, marca ousada. **Exagera:** em fluxo de compra: alvo que se move.
 - **Celular:** desligado.
@@ -71,6 +72,7 @@ Repertório, não lista de compras. Origem: [VISTO] nas referências estudadas, 
 
 ### F4. Cartão ao passar o mouse [VISTO, MEDIDO em tempos]
 - **O que é:** sobe −2 a −4 px, sombra cresce, imagem cresce 2–4% dentro do recorte.
+- **Técnica:** `:hover` dentro de `@media (hover: hover)`; `transform` no cartão e na imagem; a sombra maior num pseudo-elemento que só muda `opacity`.
 - **Medidas:** 0,16–0,3 s.
 - **Exagera:** em cartão que não é clicável.
 - **Celular:** nada; estado `:active` se tocável.
@@ -91,11 +93,13 @@ Repertório, não lista de compras. Origem: [VISTO] nas referências estudadas, 
 
 ### F7. Confirmação e notificação [VISTO em parte]
 - **O que é:** marca de OK que se desenha; aviso que entra, some, e permite desfazer.
+- **Técnica:** traço SVG com `pathLength="1"` e `stroke-dashoffset`; aviso em região `role="status"` já presente na página, com `transform` e `opacity`; o tempo para quando o aviso recebe foco ou ponteiro.
 - **Medidas:** OK 0,3–0,5 s; aviso visível ≥ 5 s, com tempo pausado ao focar.
 - **Reduzido:** aparece direto, com `aria-live="polite"`.
 
 ### F8. Esqueleto de carga [MERCADO]
 - **O que é:** blocos do tamanho do conteúdo, com brilho lento.
+- **Técnica:** blocos com a altura do conteúdo final (sem pulo ao trocar); brilho num pseudo-elemento movido por `transform`; só aparecem depois de um `setTimeout` de 200–300 ms.
 - **Medidas:** brilho 1,2–2 s; aparece só depois de 200–300 ms de espera.
 - **Reduzido:** sem brilho.
 

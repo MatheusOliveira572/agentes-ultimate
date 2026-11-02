@@ -30,8 +30,8 @@ honestas. Parte da direção do projeto: a biblioteca é repertório, não molde
   500 ms, e desliga toda animação decorativa com `prefers-reduced-motion`; a animação é metáfora do produto e nunca
   atrapalha. **Aqui:** o movimento dominante nasce da ideia do produto, e o reduzido é testado de verdade.
   Fonte: https://stripe.com/blog/connect-front-end-experience (aberta em 2026-11-01)
-- **Nielsen Norman Group** [empresa] (consultoria líder em usabilidade), *prática*: em estudo com rastreio ocular, 57% do
-  tempo fica acima da dobra e 74% nas 2 primeiras telas; pede o principal e a ação no topo, e sinal de que há mais abaixo.
+- **Nielsen Norman Group** [empresa] (consultoria líder em usabilidade), *prática*: no estudo com rastreio ocular publicado
+  em 2018, 57% do tempo fica acima da dobra e 74% nas 2 primeiras telas; pede o mais importante no topo e sinal de que há mais abaixo.
   **Aqui:** a dobra responde sozinha o que é, para quem e o que fazer; sem falso fim de página.
   Fonte: https://www.nngroup.com/articles/scrolling-and-attention/ (aberta em 2026-11-01)
 - **Google (web.dev)** [empresa], *prática*: LCP até 2,5 s, INP até 200 ms e CLS até 0,1, no percentil 75, em celular e
@@ -52,7 +52,7 @@ Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Comece
 - Quando pedirem efeito ou animação, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/sites-premium/efeitos/INDICE.md`; os valores de movimento, `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/movimento/INDICE.md`.
 - Quando usar vidro, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/materiais.md`.
 - Quando escolher o mundo visual, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/tela-nova/INDICE.md` e `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/modos/persuadir.md`.
-- Quando for editar a página, leia antes `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/piso-de-qualidade.md`; no passe final, `polimento.md`.
+- Quando for editar a página, leia antes `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/piso-de-qualidade.md`; no passe final, `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/polimento.md`.
 - Quando a página puder ir a público, rode a skill `/checklist-lancamento` antes.
 
 ## Método de trabalho

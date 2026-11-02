@@ -70,6 +70,8 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     !['landing page', 'site institucional'].some((w) => ((pac.pacotes.interface || {}).palavras || []).includes(w)), JSON.stringify(comAg.map((p) => p.nome)));
   caso('0.8.0 sites A-2: teclado no método e no critério de pronto', /Shift\+Tab/.test(ag.split('## Método de trabalho')[1].split('## Critério')[0]) && /Teclado/.test(ag.split('## Critério de pronto')[1].split('## Erros')[0]) && /Caso \d+ · Teclado/.test(ler('evals', 'designer-sites.md')), 'falta');
   caso('0.8.0 sites M-2: agente e critério proíbem imitar argumento e ordem de referência', /sem imitar os de uma referência/.test(ag) && /nem o argumento e a ordem de um bloco/.test(ag.split('## Critério de pronto')[1].split('## Erros')[0]), 'falta');
+  caso('0.8.0 sites b-3: polimento com caminho completo e checklist de lançamento aponta o designer de sites', /\$\{CLAUDE_PLUGIN_ROOT\}\/conhecimento\/design\/polimento\.md/.test(ag) && /designer-sites/.test(ler('skills', 'checklist-lancamento', 'SKILL.md')), 'falta');
+  caso('0.8.0 sites b-5: referência da NNG com a data do estudo e sem afirmar o que o artigo não diz', /publicado\s+em 2018/.test(ag) && !/principal e a ação no topo/.test(ag), 'falta');
   caso('0.8.0 sites agente: método diz repertório, não molde, e direção própria', /repertório/i.test(ag) && /direção própria/i.test(ag), 'falta');
 
   // ---- Evals: vidro para os dois lados e os gatilhos ----
@@ -95,6 +97,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   const IDS = [...'ABCDEF'].flatMap((g) => Array.from({ length: { A: 7, B: 7, C: 6, D: 6, E: 5, F: 8 }[g] }, (_, i) => g + (i + 1)));
   const faltamE = IDS.filter((id) => !new RegExp('### ' + id + '\\.').test(efeitosTxt));
   caso('0.8.0 sites efeitos: os 39 efeitos do catálogo', IDS.length === 39 && !faltamE.length, faltamE.join(', '));
+  caso('0.8.0 sites b-6: todo efeito de A a F tem "Técnica"', IDS.every((id) => /\*\*Técnica:\*\*/.test((efeitosTxt.split('### ' + id + '.')[1] || '').split('\n### ')[0]) || id === 'A1'), IDS.filter((id) => !/\*\*Técnica:\*\*/.test((efeitosTxt.split('### ' + id + '.')[1] || '').split('\n### ')[0])).join(', '));
   caso('0.8.0 sites efeitos: regras comuns (só transform e opacity, pausa em 5 s, conteúdo sem o efeito, teto)', /`transform` e `opacity`/.test(efeitosTxt) && /WCAG 2\.2\.2/.test(efeitosTxt) && /sem JS/i.test(efeitosTxt) && /até 3 tipos/.test(efeitosTxt), 'falta');
   const indGeral = ler('conhecimento', 'design', 'INDICE.md') + ler('conhecimento', 'design', 'modos', 'persuadir.md');
   caso('0.8.0 sites biblioteca: índice de design e modo Persuadir apontam para a biblioteca', (indGeral.match(/sites-premium\/INDICE\.md/g) || []).length >= 2, 'falta ponteiro');
@@ -181,7 +184,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const lgs = res.larguras || [];
     caso('0.8.0 sites M-6: 320, 768, 905, 960, 1024, 1100, 1440 e 1920 px sem rolagem lateral, texto cortado, espremido ou sobreposto', [320, 768, 905, 960, 1024, 1100, 1440, 1920].every((l) => lgs.some((x) => x.largura === l && !x.erros_js && !x.rolagem_lateral && !x.texto_cortado && !x.texto_espremido && !x.texto_sobreposto && !x.contraste_falhas)), JSON.stringify(lgs.map((x) => [x.largura, x.rolagem_lateral, x.texto_espremido])));
     caso('0.8.0 sites M-5: vidro dentro da regra nas 4 capturas', cap.every((c) => c.vidro_fora_da_regra === 0), JSON.stringify(cap.map((c) => c.detalhe_vidro)));
-    const nomesM = ['foco invisível', 'botão de pausa escondido', 'anel de foco sem contraste no rodapé', 'barra alta sem scroll-padding (foco sob a barra)', 'menu do celular não fecha ao seguir link', 'vidro a 45% sem desfoque', 'valor longo só na 3ª cena', 'ponto da maré baixa solto da curva', 'tábua de preços sem empilhar (768 px)'];
+    const nomesM = ['foco invisível', 'botão de pausa escondido', 'anel de foco sem contraste no rodapé', 'barra alta sem scroll-padding (foco sob a barra)', 'menu do celular não fecha ao seguir link', 'vidro a 45% sem desfoque', 'valor longo só na 3ª cena', 'ponto da maré baixa solto da curva', 'tábua de preços sem empilhar (320 px)'];
     caso('0.8.0 sites M-5: os pontos cegos da revisão viraram mutantes, todos pegos', nomesM.every((n) => (res.mutantes || []).some((m) => m.nome === n && m.pegou)), nomesM.filter((n) => !(res.mutantes || []).some((m) => m.nome === n && m.pegou)).join(', '));
     const html = ler(...PROVA, 'site-preamar.html');
     caso('0.8.0 sites M-2: sem o bloco e os títulos parecidos com os de uma referência', !/Por que é pago|quanto sobra|Perguntas de quem/i.test(html), 'sobrou');
@@ -196,6 +199,9 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     caso('0.8.0 sites efeitos: só está PROVADO no quadro o que passou na bancada; o resto fica [ESTIMATIVA]', !errados.length, errados.join(', '));
     const ctrl = (res.efeitos_controles || []).filter((c) => !c.informativo);
     caso('0.8.0 sites efeitos: os controles da bancada falham no caso errado (quadros, mexeu, reduzido)', ctrl.length >= 3 && ctrl.every((c) => c.pegou === true), JSON.stringify(res.efeitos_controles));
+    const rods = res.efeitos_rodadas || [];
+    caso('0.8.0 sites M-1: a bancada repete o resultado (2 rodadas seguidas com o mesmo número de provados)', rods.length >= 2 && rods.slice(-2).every((x) => x.provados === rods[rods.length - 1].provados), JSON.stringify(rods));
+    caso('0.8.0 sites b-2: quadro sem número fixo no texto e sem "sem animação" em efeito animado', !/49,9 e 16,8/.test(quadro) && !(res.efeitos || []).some((e) => e.tipo !== 'estatico' && new RegExp('^\\| ' + e.id + ' \\|.*sem animação \\|$', 'm').test(quadro)), 'texto antigo');
     const provados = pe.filter((e) => e.provado);
     caso('0.8.0 sites efeitos: cada provado foi visto mexendo, parou com movimento reduzido e teve quadros medidos', provados.length > 0 && provados.every((e) => e.mexeu === true && e.reduzido_ok === true && (e.p95_ms > 0 || e.tipo === 'estatico')), JSON.stringify(provados.filter((e) => !(e.mexeu === true && e.reduzido_ok === true && (e.p95_ms > 0 || e.tipo === 'estatico'))).map((e) => e.id)));
   }
