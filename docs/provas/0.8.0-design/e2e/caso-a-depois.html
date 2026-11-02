@@ -1,0 +1,135 @@
+<!doctype html>
+<!-- Caso A, "depois": o mesmo app de tarefas fictício, redesenhado seguindo só o que o plugin manda ao designer-paineis
+     (método → modo Operar → Apple: acessibilidade, cor e modo escuro, materiais → piso de qualidade → movimento →
+     detalhes de interface). Arquivos lidos e decisões: LEIA-ME.md desta pasta. Dados fictícios. -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Tarefas</title>
+<style>
+  /* Tokens semânticos claro/escuro (apple/cor-e-modo-escuro.md: uma cor, um significado; contraste ≥ 4,5:1 nos 2 modos). */
+  :root {
+    --fundo: #f5f5f7; --superficie: #ffffff; --texto: #1d1d1f; --texto-2: #5e5e66; --linha: rgb(0 0 0 / 0.08);
+    --destaque: #0a66d8; --destaque-texto: #ffffff; --atrasada: #b3261e; --feito: #2e7d32;
+    --barra: rgb(245 245 247 / 0.72); --barra-borda: rgb(0 0 0 / 0.08);
+    --sombra: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px rgb(0 0 0 / 0.06);
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fundo: #000000; --superficie: #1c1c1e; --texto: #f5f5f7; --texto-2: #a1a1aa; --linha: rgb(255 255 255 / 0.1);
+      --destaque: #4d9cff; --destaque-texto: #00152e; --atrasada: #ff8a80; --feito: #81c995;
+      --barra: rgb(28 28 30 / 0.72); --barra-borda: rgb(255 255 255 / 0.1);
+      --sombra: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.3);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--fundo); color: var(--texto); font: 17px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  ::selection { background: color-mix(in srgb, var(--destaque) 25%, transparent); }
+  /* Barra superior: a única superfície de vidro (camada funcional que flutua sobre o conteúdo; apple/materiais.md). */
+  .barra { position: sticky; top: 0; z-index: 2;
+    background: var(--barra); -webkit-backdrop-filter: blur(16px) saturate(170%); backdrop-filter: blur(16px) saturate(170%);
+    border-bottom: 1px solid var(--barra-borda); }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .barra { background: var(--superficie); } }
+  @media (prefers-reduced-transparency: reduce) { .barra { background: var(--superficie); backdrop-filter: none; -webkit-backdrop-filter: none; } }
+  .barra-in { display: flex; align-items: center; gap: 12px; max-width: 1180px; margin: 0 auto; padding: 10px 20px; }
+  .barra h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; flex: 1; }
+  .icone { width: 20px; height: 20px; flex: none; }
+  .botao { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; min-width: 44px; padding: 0 16px;
+    border: 1px solid transparent; border-radius: 12px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+    background: var(--destaque); color: var(--destaque-texto); transition: transform 160ms var(--ease-out), background-color 150ms ease; }
+  .botao.secundario { background: transparent; color: var(--destaque); }
+  .botao:not(:disabled):active { transform: scale(0.97); }
+  .botao:focus-visible, .linha:focus-visible, .marca:focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+  .conteudo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; max-width: 1180px; margin: 0 auto; padding: 20px; }
+  @media (min-width: 900px) { .conteudo { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: start; } }
+  .resumo { margin: 0 0 12px; color: var(--texto-2); font-size: 15px; font-variant-numeric: tabular-nums; }
+  .lista { list-style: none; margin: 0; padding: 4px; background: var(--superficie); border-radius: 16px; box-shadow: var(--sombra); }
+  .grupo { margin: 14px 12px 4px; font-size: 13px; font-weight: 600; color: var(--texto-2); }
+  .linha { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 12px; border-radius: 12px; cursor: pointer; }
+  .linha[aria-current="true"] { background: color-mix(in srgb, var(--destaque) 12%, transparent); }
+  @media (hover: hover) { .linha:hover { background: color-mix(in srgb, var(--texto) 5%, transparent); } }
+  .marca { width: 44px; height: 44px; margin: -6px; display: grid; place-items: center; border: 0; background: none; cursor: pointer; color: var(--texto-2); border-radius: 22px; }
+  .marca svg { width: 24px; height: 24px; }
+  .marca[aria-pressed="true"] { color: var(--feito); }
+  .titulo { flex: 1; min-width: 0; }
+  .titulo b { display: block; font-weight: 500; overflow-wrap: anywhere; }
+  .titulo small { display: block; font-size: 14px; color: var(--texto-2); font-variant-numeric: tabular-nums; }
+  .titulo small.atrasada { color: var(--atrasada); }
+  .feita b { color: var(--texto-2); text-decoration: line-through; }
+  .detalhe { background: var(--superficie); border-radius: 16px; box-shadow: var(--sombra); padding: 24px; }
+  .detalhe h2 { margin: 0 0 4px; font-size: 28px; line-height: 1.2; letter-spacing: -0.02em; text-wrap: balance; }
+  .detalhe .quando { margin: 0 0 20px; color: var(--texto-2); font-size: 15px; font-variant-numeric: tabular-nums; }
+  .detalhe p { max-width: 65ch; margin: 0 0 16px; }
+  .passos { margin: 0 0 24px; padding: 0; list-style: none; border-top: 1px solid var(--linha); }
+  .passos li { display: flex; gap: 10px; align-items: center; min-height: 48px; border-bottom: 1px solid var(--linha); }
+  .passos li svg { width: 20px; height: 20px; color: var(--texto-2); flex: none; }
+  .acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+  .vazio { color: var(--texto-2); font-size: 15px; padding: 12px; }
+  /* Entrada rara: só a primeira aparição do detalhe, 180 ms, de um estado já visível (movimento/INDICE.md). */
+  @media (prefers-reduced-motion: no-preference) {
+    .detalhe { animation: entra 180ms var(--ease-out) both; }
+    @keyframes entra { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
+  }
+  @media (prefers-contrast: more) { :root { --texto-2: var(--texto); --linha: currentColor; } .barra { background: var(--superficie); border-bottom-color: var(--texto); } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-circulo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.75"/></symbol>
+  <symbol id="i-feito" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><path d="M8 12.5l2.7 2.7L16 9.8" fill="none" stroke="var(--superficie)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-mais" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-passo" viewBox="0 0 24 24"><path d="M5 12.5l4 4L19 7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+<header class="barra"><div class="barra-in">
+  <h1>Tarefas</h1>
+  <button class="botao" type="button"><svg class="icone" aria-hidden="true"><use href="#i-mais"/></svg>Nova tarefa</button>
+</div></header>
+<div class="conteudo">
+  <section aria-labelledby="t-lista">
+    <h2 id="t-lista" class="resumo">Hoje: 3 de 6 feitas · 1 atrasada</h2>
+    <ul class="lista" role="list">
+      <li class="grupo" role="presentation">Hoje</li>
+      <li class="linha" tabindex="0" aria-current="true">
+        <button class="marca" type="button" aria-pressed="false" aria-label="Marcar como feita: Revisar a proposta do cliente"><svg aria-hidden="true"><use href="#i-circulo"/></svg></button>
+        <span class="titulo"><b>Revisar a proposta do cliente</b><small>14:00</small></span>
+      </li>
+      <li class="linha" tabindex="0">
+        <button class="marca" type="button" aria-pressed="false" aria-label="Marcar como feita: Ligar para o fornecedor de embalagens"><svg aria-hidden="true"><use href="#i-circulo"/></svg></button>
+        <span class="titulo"><b>Ligar para o fornecedor de embalagens</b><small class="atrasada">Atrasada · ontem, 16:30</small></span>
+      </li>
+      <li class="linha feita" tabindex="0">
+        <button class="marca" type="button" aria-pressed="true" aria-label="Feita: Enviar as amostras"><svg aria-hidden="true"><use href="#i-feito"/></svg></button>
+        <span class="titulo"><b>Enviar as amostras</b><small>Feita às 09:12</small></span>
+      </li>
+      <li class="grupo" role="presentation">Esta semana</li>
+      <li class="linha" tabindex="0">
+        <button class="marca" type="button" aria-pressed="false" aria-label="Marcar como feita: Montar a lista de ideias do trimestre"><svg aria-hidden="true"><use href="#i-circulo"/></svg></button>
+        <span class="titulo"><b>Montar a lista de ideias do trimestre</b><small>Sexta</small></span>
+      </li>
+      <li class="linha" tabindex="0">
+        <button class="marca" type="button" aria-pressed="false" aria-label="Marcar como feita: Atualizar a planilha de custos"><svg aria-hidden="true"><use href="#i-circulo"/></svg></button>
+        <span class="titulo"><b>Atualizar a planilha de custos</b><small>Segunda</small></span>
+      </li>
+    </ul>
+  </section>
+  <article class="detalhe" aria-labelledby="t-detalhe">
+    <h2 id="t-detalhe">Revisar a proposta do cliente</h2>
+    <p class="quando">Hoje, 14:00 · lembrete 30 min antes</p>
+    <p>Ler a proposta enviada ontem, marcar as dúvidas sobre prazo e preço e responder antes da reunião.</p>
+    <ul class="passos">
+      <li><svg aria-hidden="true"><use href="#i-passo"/></svg>Ler a proposta inteira</li>
+      <li><svg aria-hidden="true"><use href="#i-passo"/></svg>Anotar as dúvidas de prazo e preço</li>
+      <li><svg aria-hidden="true"><use href="#i-passo"/></svg>Responder ao cliente</li>
+    </ul>
+    <div class="acoes">
+      <button class="botao" type="button">Marcar como feita</button>
+      <button class="botao secundario" type="button">Adiar para amanhã</button>
+    </div>
+  </article>
+</div>
+</body>
+</html>

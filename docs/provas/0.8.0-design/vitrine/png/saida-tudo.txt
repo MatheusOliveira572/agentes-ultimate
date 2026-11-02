@@ -1,0 +1,83 @@
+ok   vitrine-claro-1440: 0 textos sólidos, pior 99:1; pior pixel 5.78:1 "Ver a lente por dentro"
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-claro-390: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-escuro-1440: 0 textos sólidos, pior 99:1; pior pixel 9.03:1 "Reservar"
+     · nav:escuro(0.05) url("#lg-1") | cartao:escuro(0.05) url("#lg-2")
+ok   vitrine-escuro-390: 0 textos sólidos, pior 99:1; pior pixel 9.03:1 "Reservar"
+     · nav:escuro(0.05) url("#lg-1") | cartao:escuro(0.05) url("#lg-2")
+ok   vitrine-claro-1440-q1-girando: 0 textos sólidos, pior 99:1; pior pixel 5.78:1 "Ver a lente por dentro"
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-claro-1440-q2-aberta: 5 textos sólidos, pior 16.83:1; pior pixel 6.02:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-escuro-1440-q2-aberta: 5 textos sólidos, pior 16.18:1; pior pixel 9.03:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:escuro(0.05) url("#lg-2")
+ok   vitrine-claro-1440-q3-abertura: 3 textos sólidos, pior 5.95:1; pior pixel 6.02:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-claro-1440-q3b-barra-sobre-foto: 1 textos sólidos, pior 5.34:1; pior pixel 5.36:1 "Abertura"
+     · nav:escuro(0.06) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-escuro-1440-q4-reservar: 0 textos sólidos, pior 99:1; pior pixel 7.74:1 "Clara 35"
+     · nav:escuro(0.05) url("#lg-1") | cartao:escuro(0.05) url("#lg-2")
+ok   vitrine-claro-1440-q4-reservar: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · reservar → "Reservada" + ✓ + aviso + Desfazer; desfazer → volta e devolve o foco
+     · nav:claro(0.62) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-claro-390-q2-aberta: 5 textos sólidos, pior 16.83:1; pior pixel 6.02:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-escuro-390-q4-reservar: 0 textos sólidos, pior 99:1; pior pixel 7.14:1 "Clara 35"
+     · nav:escuro(0.05) url("#lg-1") | cartao:escuro(0.05) url("#lg-2")
+ok   vitrine-claro-1440-reduzido-aberta: 5 textos sólidos, pior 16.83:1; pior pixel 6.02:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   vitrine-claro-1440-transparencia-reduzida: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:claro(0.62) none | cartao:claro(0.62) none
+ok   largura-320: 0 textos sólidos, pior 99:1; pior pixel 5.36:1 "Ver a lente por dentro"
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   largura-320-rolado: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+     aviso: texto em transição (opacidade 0.93): "3·4"
+     aviso: texto em transição (opacidade 0.93): "Dupla colada"
+     aviso: texto em transição (opacidade 0.93): "Dois vidros, um ponto: o azul e o vermel"
+ok   largura-320-rolado: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:claro(0.62) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   largura-768: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   largura-768-rolado: 2 textos sólidos, pior 16.83:1; pior pixel 6.02:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   largura-768-rolado: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:claro(0.62) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   largura-1024: 0 textos sólidos, pior 99:1; pior pixel 5.28:1 "Ver a lente por dentro"
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   largura-1024-rolado: 5 textos sólidos, pior 16.83:1; pior pixel 6.02:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+     aviso: texto em transição (opacidade 0.95): "3·4"
+     aviso: texto em transição (opacidade 0.95): "Dupla colada"
+     aviso: texto em transição (opacidade 0.95): "Dois vidros, um ponto: o azul e o vermel"
+ok   largura-1024-rolado: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:claro(0.62) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   largura-1920: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   largura-1920-rolado: 5 textos sólidos, pior 16.83:1; pior pixel 6.02:1 "Reservar"
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+     aviso: texto em transição (opacidade 0.83): "3·4"
+     aviso: texto em transição (opacidade 0.83): "Dupla colada"
+     aviso: texto em transição (opacidade 0.83): "Dois vidros, um ponto: o azul e o vermel"
+ok   largura-1920-rolado: 0 textos sólidos, pior 99:1; pior pixel 6.02:1 "Reservar"
+     · nav:claro(0.62) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   teclado-escuro-1440: 0 textos sólidos, pior 99:1; pior pixel 9.03:1 "Reservar"
+     · Pular para o conteúdo → Clara, início[escuro] → Lente[escuro] → Abertura[escuro] → Reservar[escuro] → Reservar → Ver a lente por dentro → abertura-faixa → Reservar[escuro] → Pular para o conteúdo Clara Lente  → Pular para o conteúdo → Clara, início[escuro] → Lente[escuro] ⟵ Clara, início
+     · nav:escuro(0.05) url("#lg-1") | cartao:escuro(0.05) url("#lg-2")
+ok   coerencia-claro-1440: 0 textos sólidos, pior 99:1; pior pixel 5.78:1 "Ver a lente por dentro"
+     · 7 vidros, 5 grupos, 11 lâminas, formas 1.4:circle( 2:circle( 2.8:circle( 4:circle( 5.6:polygon 8:polygon; linha do tempo: lente --abre, revela view()
+     · nav:claro(0.80) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   reduzido-animacoes: 5 textos sólidos, pior 16.83:1; pior pixel 6.02:1 "Reservar"
+     · animações rodando: 0; lente aberta (sem movimento): true
+     · nav:tema(-) url("#lg-1") | cartao:claro(0.62) url("#lg-2")
+ok   contraste-mais-escuro-1440: 0 textos sólidos, pior 99:1; pior pixel 9.03:1 "Reservar"
+     · nav:escuro(0.05) none | cartao:escuro(0.05) none
+ok   sem-js-1440: 0 textos sólidos, pior 99:1; pior pixel 5.78:1 "Ver a lente por dentro"
+     · sem JS: 0 de 22 textos escondidos no meio da tela
+     · nav:tema(-) blur(14px) sat | cartao:tema(-) blur(14px) sat
+ok   desempenho-cpu4x-1440: 0 textos sólidos, pior -
+     · LCP 648 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 33.3 ms, p95 50 ms, 3 de 90 acima de 50 ms (CPU 4×)
+ok   desempenho-cpu4x-390: 0 textos sólidos, pior -
+     · LCP 664 ms (H1.titulo-heroi), CLS 0.000, quadros na abertura: mediana 33.3 ms, p95 50.1 ms, 6 de 90 acima de 50 ms (CPU 4×)
+     aviso: p95 de quadro 50.1 ms com CPU 4× (headless, sem GPU real)

@@ -1,0 +1,79 @@
+<!doctype html>
+<!-- Caso B, landing: um cartão de vidro estilo Apple sobre fundo calmo. Regra decidida para landing: o cartão pode ter
+     vidro, com opacidade de 72–88% e fundo calmo (sem foto movimentada atrás do texto). Receita de apple/materiais.md:
+     desfoque 16 px, saturação 170%, borda clara e fina, sombra suave; @supports, prefers-reduced-transparency e
+     prefers-contrast. Dados fictícios. -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Lumen — agenda para equipes pequenas</title>
+<style>
+  :root {
+    --fundo: #eef1f6; --texto: #1d1d1f; --texto-2: #4a4a52; --destaque: #0a62cf; --destaque-texto: #fff;
+    --vidro: rgb(255 255 255 / 0.78); --vidro-borda: rgb(255 255 255 / 0.6); --vidro-opaco: rgb(255 255 255 / 0.97);
+    --sombra: 0 2px 4px rgb(0 0 0 / 0.04), 0 16px 40px rgb(30 40 70 / 0.12);
+    --mancha-1: #b9d3ff; --mancha-2: #d9c8ff; --mancha-3: #c7ecdf;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fundo: #0b0d12; --texto: #f5f5f7; --texto-2: #b4b4bd; --destaque: #5aa2ff; --destaque-texto: #001833;
+      --vidro: rgb(30 31 36 / 0.8); --vidro-borda: rgb(255 255 255 / 0.12); --vidro-opaco: rgb(30 31 36 / 0.98);
+      --sombra: 0 2px 4px rgb(0 0 0 / 0.3), 0 16px 40px rgb(0 0 0 / 0.45);
+      --mancha-1: #1f3d75; --mancha-2: #3b2a66; --mancha-3: #15453a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100dvh; background: var(--fundo); color: var(--texto); font: 17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; overflow-x: hidden; }
+  /* Fundo calmo: 3 manchas grandes e suaves, paradas (nada se mexe atrás do texto). */
+  .fundo { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+  .fundo span { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.9; }
+  .fundo .m1 { width: 52vw; height: 52vw; left: -8vw; top: -10vw; background: var(--mancha-1); }
+  /* A mancha 2 passa por trás do cartão (sem isso o vidro não mostra nada). */
+  .fundo .m2 { width: 40vw; height: 40vw; right: 6vw; top: 12vh; background: var(--mancha-2); }
+  @media (max-width: 899px) { .fundo .m2 { width: 90vw; height: 90vw; right: -30vw; top: 52vh; } .fundo .m1 { width: 90vw; height: 90vw; } }
+  .fundo .m3 { width: 40vw; height: 40vw; left: 30vw; bottom: -14vw; background: var(--mancha-3); }
+  main { display: grid; gap: 32px; align-items: center; max-width: 1120px; margin: 0 auto; padding: 72px 24px; min-height: 100dvh; }
+  @media (min-width: 900px) { main { grid-template-columns: 1.1fr 1fr; } }
+  h1 { margin: 0 0 16px; font-size: clamp(36px, 6vw, 64px); line-height: 1.05; letter-spacing: -0.03em; text-wrap: balance; }
+  .lead { margin: 0 0 28px; max-width: 34ch; font-size: 20px; color: var(--texto-2); }
+  .botao { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border: 1px solid transparent; border-radius: 14px;
+    background: var(--destaque); color: var(--destaque-texto); font: inherit; font-weight: 600; cursor: pointer; text-decoration: none;
+    transition: transform 160ms var(--ease-out); }
+  .botao:not(:disabled):active { transform: scale(0.97); }
+  .botao:focus-visible { outline: 3px solid var(--destaque); outline-offset: 3px; }
+  /* O cartão de vidro. */
+  .cartao { padding: 28px; border-radius: 16px; background: var(--vidro); border: 1px solid var(--vidro-borda); box-shadow: var(--sombra);
+    -webkit-backdrop-filter: blur(16px) saturate(170%); backdrop-filter: blur(16px) saturate(170%); }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .cartao { background: var(--vidro-opaco); } }
+  @media (prefers-reduced-transparency: reduce) { .cartao { background: var(--vidro-opaco); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+  @media (prefers-contrast: more) { .cartao { background: var(--vidro-opaco); border: 2px solid var(--texto); } :root { --texto-2: var(--texto); } }
+  .cartao h2 { margin: 0 0 6px; font-size: 22px; letter-spacing: -0.01em; }
+  .cartao .sub { margin: 0 0 18px; color: var(--texto-2); font-size: 15px; }
+  .itens { list-style: none; margin: 0; padding: 0; }
+  .itens li { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid color-mix(in srgb, var(--texto) 10%, transparent); font-variant-numeric: tabular-nums; }
+  .itens li span:last-child { color: var(--texto-2); }
+</style>
+</head>
+<body>
+<div class="fundo" aria-hidden="true"><span class="m1"></span><span class="m2"></span><span class="m3"></span></div>
+<main>
+  <section>
+    <h1>A semana da equipe, num lugar só.</h1>
+    <p class="lead">Lumen junta as reuniões, os prazos e as folgas de equipes de até 20 pessoas, sem planilha.</p>
+    <a class="botao" href="#">Testar 14 dias grátis</a>
+  </section>
+  <aside class="cartao" aria-labelledby="t-cartao">
+    <h2 id="t-cartao">Quinta, 6 de novembro</h2>
+    <p class="sub">Exemplo ilustrativo da agenda</p>
+    <ul class="itens">
+      <li><span>Planejamento semanal</span><span>09:00</span></li>
+      <li><span>Revisão do site com a Ana</span><span>11:30</span></li>
+      <li><span>Entrega do relatório</span><span>16:00</span></li>
+    </ul>
+  </aside>
+</main>
+</body>
+</html>

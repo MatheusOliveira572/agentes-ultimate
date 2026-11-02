@@ -413,6 +413,16 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B3 vidro: quando usar, receita web com reserva, acessibilidade, desempenho e limites por plataforma (Power BI sem desfoque)',
     /camada funcional que flutua/.test(vidro) && /backdrop-filter: blur/.test(vidro) && /saturate/.test(vidro) && /@supports not/.test(vidro) && /prefers-reduced-transparency/.test(vidro) &&
     /prefers-reduced-motion/.test(vidro) && /prefers-contrast/.test(vidro) && /pior fundo/i.test(vidro) && /no máximo 2–3 superfícies/.test(vidro) && /Power BI\*\* \| \*\*não há desfoque/.test(vidro) && /imagem de fundo pronta/.test(vidro), 'falta item');
+  const evDP = ler('evals', 'designer-paineis.md');
+  caso('pv92 eval do vidro: regressão (landing 72–88%, produto só navegação, preferências, pior ponto) e gatilho negativo (vidro em KPI e tabela)',
+    /Caso 14 · Efeito vidro: landing × tela de produto/.test(evDP) && /72–88%/.test(evDP) && /prefers-reduced-transparency/.test(evDP) && /pior ponto do fundo/.test(evDP) &&
+    /Caso 15 · Vidro pedido no lugar errado\n- Tipo: gatilho negativo/.test(evDP), 'falta');
+  const pv = (n) => ler('docs', 'provas', '0.8.0-design', 'e2e', n);
+  caso('pv92 prova: as páginas do vidro trazem @supports, transparência reduzida e contraste mais; o produto não põe vidro nos cartões',
+    ['caso-b-landing.html', 'caso-b-produto.html'].every((n) => /@supports not/.test(pv(n)) && /prefers-reduced-transparency: reduce/.test(pv(n)) && /prefers-contrast: more/.test(pv(n))) &&
+    !/\.foto[^{]*\{[^}]*backdrop-filter/.test(pv('caso-b-produto.html')) && /--vidro: rgb\(255 255 255 \/ 0\.7[2-9]\)|--vidro: rgb\(255 255 255 \/ 0\.8[0-8]\)/.test(pv('caso-b-landing.html')), 'falta');
+  caso('pv92 prova: 17 PNGs e o pior contraste medido acima de 4,5:1 em toda medida', (() => {
+    try { const m = JSON.parse(pv('png/medidas.json')); return m.relatorio.length >= 17 && m.erros.length === 0 && m.relatorio.every((l) => !l.rolagemLateral && l.medidas.every((x) => parseFloat(x.split('pior ')[1]) >= 4.5)); } catch (e) { return false; } })(), 'medidas');
   caso('0.8.0 B3 evals: designer-paineis e designer-documentos com os casos de equivalência Apple e o efeito vidro',
     /equivalência Apple/i.test(ler('evals', 'designer-paineis.md')) && /Efeito vidro/i.test(ler('evals', 'designer-paineis.md')) && /equivalência Apple/i.test(ler('evals', 'designer-documentos.md')), 'falta caso');
 

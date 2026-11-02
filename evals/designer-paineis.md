@@ -95,6 +95,24 @@
 - Não deve: abrir a pasta inteira nem listar uma seção por domínio.
 - Origem: B7-9 (referências sob demanda).
 
+### Caso 14 · Efeito vidro: landing × tela de produto, com as preferências
+- Tipo: regressão
+- Pedido: "Quero o card da landing com efeito vidro estilo Apple, e as barras do app também."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/materiais.md`; na landing, cartão de vidro sobre fundo calmo, com
+  72–88% de opacidade; na tela de produto, vidro só na navegação e nos controles que flutuam sobre o conteúdo, nunca nos cartões de
+  conteúdo; `@supports`, `prefers-reduced-transparency` (fundo opaco, sem desfoque) e `prefers-contrast`; contraste medido no
+  pior ponto do fundo, em claro e escuro, e subir a opacidade ou o tom do texto quando não passar de 4,5:1.
+- Não deve: vidro sobre vidro, mais de 2–3 superfícies de vidro visíveis, animar o desfoque, nem medir o contraste contra a média do fundo.
+- Origem: pv92 (prova em `docs/provas/0.8.0-design/e2e/`: o rótulo da aba no escuro ficou em 2,56:1 na 1ª versão e passou a 4,94:1).
+
+### Caso 15 · Vidro pedido no lugar errado
+- Tipo: gatilho negativo
+- Pedido: "Deixa os cartões de KPI e a tabela de vendas do painel com efeito vidro, fica mais moderno."
+- Deve: não aplicar vidro em cartão de dado nem em tabela (camada de conteúdo, HIG › Materials); explicar em uma frase e propor o que
+  dá o ar moderno sem perder leitura (superfície sólida, sombra suave, vidro só na barra de filtros se ela flutuar).
+- Não deve: aplicar o vidro só porque foi pedido "para ficar moderno", nem cortar contraste dos números.
+- Origem: pv92 (piso de qualidade: vidro como enfeite é recusado).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

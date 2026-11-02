@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- Caso A, "antes": a versão comum de um app de tarefas fictício, com os vícios que o piso de qualidade recusa
+     (grade de cartões iguais, rótulo acima do título, texto em gradiente, emoji no lugar de ícone, sombra dura,
+     borda lateral colorida, transition: all, hover solto). Serve só de comparação. -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarefas</title>
+<style>
+  body { margin: 0; font-family: Arial, sans-serif; background: #eef1f6; color: #333; }
+  header { background: linear-gradient(90deg, #6a5cff, #ff5cae); color: #fff; padding: 24px; text-align: center; }
+  .eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; opacity: .8; }
+  h1 { margin: 6px 0 0; font-size: 34px; }
+  .grad { background: linear-gradient(90deg, #6a5cff, #ff5cae); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  main { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat { background: #fff; border-radius: 6px; padding: 18px; box-shadow: 4px 4px 0 #6a5cff; text-align: center; }
+  .stat b { display: block; font-size: 30px; }
+  .stat span { color: #999; font-size: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: #fff; border-radius: 6px; padding: 16px; border-left: 5px solid #ff5cae; transition: all .3s; }
+  .card:hover { transform: translateY(-4px) scale(1.02); }
+  .card .ico { font-size: 26px; }
+  .card h3 { margin: 8px 0 4px; font-size: 16px; }
+  .card p { margin: 0; color: #aaa; font-size: 13px; }
+  .btn { display: inline-block; margin-top: 10px; background: linear-gradient(90deg, #6a5cff, #ff5cae); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; }
+  .detalhe { margin-top: 24px; background: #fff; border-radius: 6px; padding: 20px; box-shadow: 4px 4px 0 #6a5cff; }
+  .detalhe h2 { margin-top: 0; }
+  @media (max-width: 700px) { .stats, .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header><div class="eyebrow">Produtividade</div><h1>Minhas tarefas</h1></header>
+<main>
+  <div class="stats">
+    <div class="stat"><b class="grad">12</b><span>Tarefas</span></div>
+    <div class="stat"><b class="grad">5</b><span>Concluídas</span></div>
+    <div class="stat"><b class="grad">42%</b><span>Progresso</span></div>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="ico">📝</div><h3>Revisar proposta</h3><p>Hoje, 14:00</p><span class="btn">Abrir</span></div>
+    <div class="card"><div class="ico">📞</div><h3>Ligar para o fornecedor</h3><p>Hoje, 16:30</p><span class="btn">Abrir</span></div>
+    <div class="card"><div class="ico">📦</div><h3>Enviar amostras</h3><p>Amanhã</p><span class="btn">Abrir</span></div>
+    <div class="card"><div class="ico">💡</div><h3>Ideias do trimestre</h3><p>Sexta</p><span class="btn">Abrir</span></div>
+    <div class="card"><div class="ico">📊</div><h3>Planilha de custos</h3><p>Segunda</p><span class="btn">Abrir</span></div>
+    <div class="card"><div class="ico">✅</div><h3>Fechar o mês</h3><p>Dia 30</p><span class="btn">Abrir</span></div>
+  </div>
+  <div class="detalhe">
+    <div class="eyebrow" style="color:#999">Detalhe</div>
+    <h2 class="grad">Revisar proposta</h2>
+    <p>Ler a proposta enviada, marcar dúvidas e responder até as 14h.</p>
+    <span class="btn">Concluir</span>
+  </div>
+</main>
+</body>
+</html>

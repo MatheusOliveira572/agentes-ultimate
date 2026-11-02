@@ -1,0 +1,355 @@
+<!doctype html>
+<!-- Caso B, tela de produto v2 (pv94, designer-paineis): álbum "Viagem ao litoral" de um app de fotos fictício.
+     Ideia: "a luz da viagem atravessa o vidro". As fotos são a luz; os controles são Liquid Glass (liquido.css/js): entortam o
+     que passa atrás na borda, pegam a cor e o tom das fotos e o brilho do aro segue a mesma luz (o ponteiro) que inclina as
+     fotos. Vidro só em navegação e controles (HIG › Materials: nunca no conteúdo); as fotos são sólidas.
+     Conteúdo do caso-b-produto.html mantido: 24 fotos, mesmos nomes e datas (1 a 24 de outubro), abas Fotos/Álbuns/Pessoas.
+     As "fotos" são paisagens pintadas por código (canvas), ilustrativas: não há foto real nem de banco. Os 3 lugares são fictícios. -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Viagem ao litoral · Fotos</title>
+<link rel="stylesheet" href="liquido.css">
+<style>
+  :root {
+    --fonte: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    --fonte-exib: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    --fundo: #fbfbfd; --texto: #1d1d1f; --texto-2: #5c5c63; --acento: #0a63d6; --linha: rgb(0 0 0 / 0.08);
+    --mola: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 20.4%, 1.067, 1.077 26.1%, 1.069 28.6%, 1.033 33.5%, 0.997 39.6%, 0.988 44.3%, 0.997 55.6%, 1.001 69.1%, 1);
+    --lateral: 256px;
+  }
+  @media (prefers-color-scheme: dark) { :root { --fundo: #0a0a0b; --texto: #f5f5f7; --texto-2: #a8a8b0; --acento: #5ea4ff; --linha: rgb(255 255 255 / 0.1); } }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: var(--fundo); color: var(--texto); font: 15px/1.45 var(--fonte); }
+  button { font: inherit; color: inherit; background: none; border: 1px solid transparent; padding: 0; cursor: pointer; }
+  :focus-visible { outline: 2.5px solid var(--acento); outline-offset: 3px; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  svg.i { width: 20px; height: 20px; flex: none; }
+  .pular { position: absolute; left: 12px; top: -60px; z-index: 30; background: var(--acento); color: #fff; padding: 10px 14px; border-radius: 12px; }
+  .pular:focus { top: 12px; }
+
+  /* ===== Capa: a foto que abre o álbum, sangrando por trás da barra lateral ===== */
+  .capa { position: relative; height: 500px; overflow: hidden; }
+  .capa canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .capa::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 0 0 / 0) 42%, rgb(0 0 0 / 0.58) 100%); }
+  .capa-texto { position: absolute; z-index: 1; left: calc(var(--lateral) + 40px); right: 40px; bottom: 34px; color: #fff; }
+  .capa h1 { margin: 0; font: 700 68px/1 var(--fonte-exib); letter-spacing: -0.035em; text-wrap: balance; }
+  .capa p { margin: 10px 0 0; font-size: 17px; color: rgb(255 255 255 / 0.92); font-variant-numeric: tabular-nums; }
+  .capa .ilustr { margin-top: 6px; font-size: 13px; color: rgb(255 255 255 / 0.86); }
+
+  /* ===== Barra lateral (Liquid Glass, flutua; a capa passa por trás) ===== */
+  .lateral { position: fixed; z-index: 10; left: 12px; top: 12px; bottom: 12px; width: calc(var(--lateral) - 24px); padding: 18px 10px 14px; border-radius: 28px;
+    --lg-raio: 28px; --lg-recuo: 10px; display: flex; flex-direction: column; gap: 20px;
+    --lg-tinta: rgb(255 255 255 / 0.72); }   /* superfície grande: material mais grosso que o dos controles */
+  @media (prefers-color-scheme: dark) { .lateral.lg { --lg-tinta: rgb(26 26 30 / 0.76); } }
+  .lateral .app { display: flex; align-items: center; gap: 10px; padding: 0 10px; font: 700 20px/1 var(--fonte-exib); letter-spacing: -0.02em; }
+  .lateral h2 { margin: 0 0 4px 12px; font-size: 12px; font-weight: 650; color: var(--lg-texto-2); }
+  .lateral ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .lateral a { display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 12px; border-radius: 18px; color: var(--lg-texto); text-decoration: none; font-weight: 500; }
+  .lateral a small { margin-left: auto; color: var(--lg-texto-2); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .lateral a[aria-current="page"] { font-weight: 650; }
+  .lateral a .mini { width: 22px; height: 22px; border-radius: 6px; overflow: hidden; flex: none; }
+  .lateral a .mini canvas { width: 100%; height: 100%; display: block; }
+  @media (hover: hover) { .lateral a:not([aria-current]):hover { background: rgb(127 127 140 / 0.14); } }
+
+  /* ===== Barra de ferramentas (cápsulas de vidro, adaptam o tom ao que passa atrás) ===== */
+  .ferramentas { position: fixed; z-index: 10; top: 16px; right: 18px; display: flex; gap: 10px; }
+  .capsula { display: flex; align-items: center; height: 44px; padding: 0 4px; border-radius: 22px; --lg-raio: 22px; --lg-recuo: 4px; }
+  .capsula button { display: inline-flex; align-items: center; gap: 7px; height: 36px; min-width: 36px; padding: 0 12px; border-radius: 18px; font-weight: 600; font-size: 14.5px; justify-content: center; }
+  .capsula.redonda { width: 44px; padding: 0; justify-content: center; }
+  .capsula.redonda button { padding: 0; }
+  .capsula .sep { width: 1px; height: 18px; background: currentColor; opacity: 0.22; }
+  @media (hover: hover) { .capsula button:hover { background: rgb(127 127 140 / 0.18); } }
+  .voltar { display: none; }
+
+  /* ===== Fotos: mosaico por lugar ===== */
+  main { position: relative; }
+  .lugares { position: relative; padding: 8px 32px 120px calc(var(--lateral) + 24px); }
+  /* Extensão de fundo (macOS 26: o conteúdo junto da barra lateral continua por baixo dela, espelhado e desfocado),
+     para o vidro ter conteúdo atrás do começo ao fim, sem corte onde a capa acaba. */
+  .extensao { position: absolute; z-index: 0; left: 0; top: 0; bottom: 0; width: calc(var(--lateral) + 24px); overflow: hidden; pointer-events: none;
+    -webkit-mask: linear-gradient(90deg, #000 calc(100% - 44px), transparent calc(100% - 12px)); mask: linear-gradient(90deg, #000 calc(100% - 44px), transparent calc(100% - 12px)); }
+  .extensao canvas { position: absolute; inset: -40px -40px -40px -40px; width: calc(100% + 80px); height: calc(100% + 80px); filter: blur(10px) saturate(1.15); }
+  .lugar, .rodape { position: relative; z-index: 1; }
+  @media (prefers-color-scheme: dark) { .extensao canvas { filter: blur(10px) saturate(1.15) brightness(0.72); } }
+  .lugar { margin-top: 44px; }
+  .lugar header { display: flex; align-items: baseline; gap: 12px; margin: 0 4px 16px; }
+  .lugar h2 { margin: 0; font: 700 28px/1.1 var(--fonte-exib); letter-spacing: -0.025em; }
+  .lugar header p { margin: 0; color: var(--texto-2); font-size: 15px; font-variant-numeric: tabular-nums; }
+  .lugar { container-type: inline-size; }
+  .mosaico { --col: 6; --vao: 6px; display: grid; grid-template-columns: repeat(var(--col), minmax(0, 1fr));
+    grid-auto-rows: calc((100cqw - (var(--col) - 1) * var(--vao)) / var(--col)); gap: var(--vao); grid-auto-flow: dense; }
+  .foto { position: relative; display: block; width: 100%; height: 100%; border-radius: 12px; overflow: hidden; background: #888; padding: 0;
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 500ms var(--mola), box-shadow 300ms ease; }
+  .foto.g { grid-column: span 2; grid-row: span 2; }
+  .foto.l { grid-column: span 2; }
+  .foto canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .foto::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08); background: radial-gradient(80% 80% at var(--bx, 30%) var(--by, 0%), rgb(255 255 255 / var(--brilho, 0)), transparent 60%); }
+  @media (prefers-color-scheme: dark) { .foto::after { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08); } }
+  .legenda { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; padding: 64px 16px 14px; text-align: left; color: #fff;
+    background: linear-gradient(180deg, rgb(0 0 0 / 0), rgb(0 0 0 / 0.55) 45%, rgb(0 0 0 / 0.74)); opacity: 0; transition: opacity 200ms ease; }
+  .legenda b { display: block; font-size: 15px; font-weight: 650; }
+  .legenda small { font-size: 13px; color: rgb(255 255 255 / 0.9); font-variant-numeric: tabular-nums; }
+  .foto.g .legenda { opacity: 1; }
+  .foto.g .legenda b { font: 650 20px/1.2 var(--fonte-exib); letter-spacing: -0.015em; }
+  .foto:focus-visible .legenda { opacity: 1; }
+  @media (hover: hover) { .foto:hover .legenda { opacity: 1; } .foto:hover { box-shadow: 0 18px 40px -16px rgb(0 0 0 / 0.45); z-index: 2; } }
+  .rodape { margin: 48px 4px 0; color: var(--texto-2); font-size: 13px; }
+
+  /* ===== Abas no celular (Liquid Glass: cápsula + busca separada) ===== */
+  .abas { display: none; }
+
+  /* ===== Movimento ===== */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* As fotos pousam ao entrar na tela: sobem e deitam (inclinação 3D), na rolagem, sem prender nada. */
+      .foto { animation: pousa linear both; animation-timeline: view(); animation-range: entry 0% entry 85%; }
+      @keyframes pousa { from { opacity: 0.15; transform: perspective(900px) translateY(36px) rotateX(18deg) scale(0.94); } }
+    }
+    .entrada .capa-texto > * { animation: sobe 700ms var(--mola) both; }
+    .entrada .capa-texto p { animation-delay: 80ms; }
+    .entrada .lateral, .entrada .ferramentas > * { animation: surge 620ms var(--mola) both; animation-delay: 120ms; }
+    .entrada .ferramentas > :nth-child(2) { animation-delay: 170ms; }
+    @keyframes sobe { from { opacity: 0; transform: translateY(18px); } }
+    @keyframes surge { from { opacity: 0; transform: scale(0.94); } }
+  }
+
+  /* ===== Celular ===== */
+  @media (max-width: 760px) {
+    :root { --lateral: 0px; }
+    .lateral { display: none; }
+    .capa { height: 380px; }
+    .capa-texto { left: 20px; right: 20px; bottom: 24px; }
+    .capa h1 { font-size: 38px; }
+    .capa p { font-size: 15px; }
+    .ferramentas { top: calc(12px + env(safe-area-inset-top)); right: 14px; left: 14px; }
+    .voltar { display: flex; margin-right: auto; }
+    .ferramentas { gap: 8px; }
+    .capsula .rot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .capsula button { padding: 0 11px; }
+    .lugares { padding: 0 0 130px; }
+    .extensao { display: none; }
+    .lugar { margin-top: 30px; }
+    .lugar header { margin: 0 16px 10px; flex-wrap: wrap; row-gap: 0; }
+    .lugar h2 { font-size: 22px; }
+    .mosaico { --col: 3; --vao: 2px; }
+    .foto { border-radius: 0; }
+    .foto.g .legenda { padding: 30px 12px 10px; }
+    .foto.g .legenda b { font-size: 17px; }
+    .rodape { margin: 28px 16px 0; }
+    .abas { position: fixed; z-index: 10; left: 14px; right: 14px; bottom: calc(18px + env(safe-area-inset-bottom)); display: flex; gap: 10px; align-items: center; }
+    .abas nav { flex: 1; display: flex; height: 62px; padding: 4px; border-radius: 31px; --lg-raio: 31px; --lg-recuo: 4px;
+      transition: flex-grow 520ms var(--mola); }
+    .abas a { flex: 1; display: grid; justify-items: center; align-content: center; gap: 1px; border-radius: 27px; color: var(--lg-texto); text-decoration: none;
+      font-size: 11px; font-weight: 600; min-width: 44px; transition: flex-grow 520ms var(--mola), opacity 200ms ease; }
+    .abas a svg { width: 24px; height: 24px; }
+    .abas a[aria-current="page"] { color: var(--acento-vidro, var(--lg-texto)); }
+    .abas .busca { width: 62px; height: 62px; border-radius: 31px; display: grid; place-items: center; --lg-raio: 31px; flex: none; }
+    .abas .busca svg { width: 24px; height: 24px; }
+    /* Ao rolar para baixo, as abas se recolhem só na selecionada e a busca se aproxima (camadas que se separam e se juntam). */
+    .compacto .abas nav { flex-grow: 0; }
+    .compacto .abas a:not([aria-current]) { flex-grow: 0; width: 0; min-width: 0; opacity: 0; overflow: hidden; pointer-events: none; }
+    .compacto .abas a[aria-current] { width: 62px; flex: none; }
+    .compacto .abas a span { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; } }
+</style>
+</head>
+<body class="entrada">
+<a class="pular" href="#fotos">Pular para as fotos</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-fotos" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 16l5-4.6 4 3.6 2.4-2 5 4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="15.5" cy="9.5" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-album" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="4" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="13" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="13" width="7" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+  <symbol id="i-pessoa" viewBox="0 0 24 24"><circle cx="12" cy="8.8" r="3.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5 19.5c1.4-3.6 4-5.3 7-5.3s5.6 1.7 7 5.3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-busca" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.3" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M15.8 15.8l4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-partilhar" viewBox="0 0 24 24"><path d="M12 3.8v11M8 7.6l4-3.8 4 3.8M7 10.5H6a2 2 0 00-2 2V18a2 2 0 002 2h12a2 2 0 002-2v-5.5a2 2 0 00-2-2h-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-mais" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="18" cy="12" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-voltar" viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.5 6.2v11.6c0 .6.7 1 1.2.6l8.4-5.8a.7.7 0 000-1.2L9.7 5.6c-.5-.4-1.2 0-1.2.6z" fill="currentColor"/></symbol>
+</svg>
+
+<nav class="lateral lg" aria-label="Biblioteca">
+  <div class="app">Fotos</div>
+  <ul>
+    <li><a href="#"><svg class="i" aria-hidden="true"><use href="#i-fotos"/></svg>Fotos<small>3.418</small></a></li>
+    <li><a href="#"><svg class="i" aria-hidden="true"><use href="#i-album"/></svg>Álbuns<small>12</small></a></li>
+    <li><a href="#"><svg class="i" aria-hidden="true"><use href="#i-pessoa"/></svg>Pessoas<small>9</small></a></li>
+  </ul>
+  <div>
+    <h2>Álbuns fixados</h2>
+    <ul id="fixados"></ul>
+  </div>
+</nav>
+
+<div class="ferramentas">
+  <div class="capsula redonda lg voltar" data-lg-adapta="[data-lum]"><button type="button" aria-label="Voltar para Álbuns"><svg class="i" aria-hidden="true"><use href="#i-voltar"/></svg></button></div>
+  <div class="capsula lg" data-lg-adapta="[data-lum]" role="toolbar" aria-label="Ações do álbum">
+    <button type="button"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg><span class="rot">Apresentação</span></button>
+    <span class="sep" aria-hidden="true"></span>
+    <button type="button" aria-label="Compartilhar"><svg class="i" aria-hidden="true"><use href="#i-partilhar"/></svg></button>
+    <span class="sep" aria-hidden="true"></span>
+    <button type="button">Selecionar</button>
+  </div>
+  <div class="capsula redonda lg" data-lg-adapta="[data-lum]"><button type="button" aria-label="Mais ações"><svg class="i" aria-hidden="true"><use href="#i-mais"/></svg></button></div>
+</div>
+
+<main id="fotos" tabindex="-1">
+  <header class="capa" data-lum="0.5">
+    <canvas id="capa" aria-hidden="true"></canvas>
+    <div class="capa-texto sobre-foto">
+      <h1>Viagem ao litoral</h1>
+      <p>1 a 24 de outubro · <span id="n-fotos">24</span> fotos · 3 lugares</p>
+      <p class="ilustr">Imagens ilustrativas geradas por código (sem foto real)</p>
+    </div>
+  </header>
+  <div class="lugares" id="lugares"></div>
+</main>
+
+<div class="abas">
+  <nav class="lg" data-lg-adapta="[data-lum]" aria-label="Seções">
+    <a href="#" aria-current="page"><svg aria-hidden="true"><use href="#i-fotos"/></svg><span>Fotos</span></a>
+    <a href="#"><svg aria-hidden="true"><use href="#i-album"/></svg><span>Álbuns</span></a>
+    <a href="#"><svg aria-hidden="true"><use href="#i-pessoa"/></svg><span>Pessoas</span></a>
+  </nav>
+  <button class="busca lg" data-lg-adapta="[data-lum]" type="button" aria-label="Buscar"><svg aria-hidden="true"><use href="#i-busca"/></svg></button>
+</div>
+
+<script>
+/* ---------- Paisagens pintadas por código (ilustrativas, sem foto real) ---------- */
+function rnd(seed) { let s = seed * 9301 + 49297; return () => ((s = (s * 9301 + 49297) % 233280) / 233280); }
+function lin(g, x0, y0, x1, y1, stops) { const l = g.createLinearGradient(x0, y0, x1, y1); stops.forEach(([o, c]) => l.addColorStop(o, c)); return l; }
+function sol(g, x, y, r, nucleo, brilho) { const k = g.createRadialGradient(x, y, 0, x, y, r * 5); k.addColorStop(0, nucleo); k.addColorStop(0.18, brilho); k.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = k; g.fillRect(x - r * 5, y - r * 5, r * 10, r * 10); g.fillStyle = nucleo; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+function morro(g, w, h, base, amp, fase, cor, rr) { g.fillStyle = cor; g.beginPath(); g.moveTo(0, h); for (let x = 0; x <= w; x += w / 40) g.lineTo(x, base - amp * (0.6 * Math.sin(x / w * 5 + fase) + 0.4 * Math.sin(x / w * 11 + fase * 2.3))); g.lineTo(w, h); g.fill(); }
+function reflexo(g, x, y0, y1, w, cor, r) { g.save(); g.globalAlpha = 0.55; g.filter = 'blur(0.8px)'; g.fillStyle = cor; for (let y = y0; y < y1; y += 4 + r() * 3) { const ww = w * (0.3 + r() * 0.9) * (1 - (y - y0) / (y1 - y0) * 0.4); g.fillRect(x - ww / 2 + (r() - 0.5) * w * 0.3, y, ww, 1.4); } g.restore(); }
+const PINTAR = {
+  'Praia ao nascer do sol'(g, w, h, r) { const hz = h * 0.58; g.fillStyle = lin(g, 0, 0, 0, hz, [[0, '#7fa6d6'], [0.6, '#f2c3a0'], [1, '#ffe2b4']]); g.fillRect(0, 0, w, hz);
+    sol(g, w * (0.3 + r() * 0.4), hz - h * 0.02, h * 0.045, '#fff7dd', 'rgba(255,214,150,0.55)');
+    g.fillStyle = lin(g, 0, hz, 0, h * 0.8, [[0, '#6aa0b4'], [1, '#2d6b86']]); g.fillRect(0, hz, w, h * 0.22); reflexo(g, w * 0.5, hz + 2, h * 0.8, w * 0.18, 'rgba(255,236,200,0.55)', r);
+    g.fillStyle = lin(g, 0, h * 0.78, 0, h, [[0, '#ead5b2'], [1, '#d4b88c']]); g.beginPath(); g.moveTo(0, h * 0.82); g.quadraticCurveTo(w * 0.5, h * 0.76, w, h * 0.84); g.lineTo(w, h); g.lineTo(0, h); g.fill(); },
+  'Mergulho'(g, w, h, r) { g.fillStyle = lin(g, 0, 0, 0, h, [[0, '#46c1df'], [0.45, '#0e6aa3'], [1, '#04223f']]); g.fillRect(0, 0, w, h);
+    g.save(); g.filter = 'blur(' + Math.max(2, w / 60) + 'px)'; for (let i = 0; i < 6; i++) { const x = w * (0.1 + r() * 0.8); g.fillStyle = 'rgba(255,255,255,0.13)'; g.beginPath(); g.moveTo(x - w * 0.04, 0); g.lineTo(x + w * 0.04, 0); g.lineTo(x + w * 0.2, h); g.lineTo(x + w * 0.05, h); g.fill(); } g.restore();
+    for (let i = 0; i < 14; i++) { g.strokeStyle = 'rgba(255,255,255,0.55)'; g.lineWidth = 1; g.beginPath(); g.arc(w * (0.55 + r() * 0.3), h * (0.2 + r() * 0.6), 1 + r() * w / 90, 0, 7); g.stroke(); }
+    morro(g, w, h, h * 0.9, h * 0.05, r() * 6, '#031a2e', r); },
+  'Trilha'(g, w, h, r) { g.fillStyle = lin(g, 0, 0, 0, h, [[0, '#cfe2e6'], [1, '#eef2e4']]); g.fillRect(0, 0, w, h);
+    [['#a9c6a3', 0.45, 0.07], ['#79a57c', 0.58, 0.08], ['#4c7d56', 0.72, 0.08], ['#24503a', 0.88, 0.06]].forEach(([c, b, a], i) => { morro(g, w, h, h * b, h * a, r() * 6 + i, c, r); g.fillStyle = 'rgba(238,242,228,0.18)'; g.fillRect(0, h * b - h * 0.06, w, h * 0.05); }); },
+  'Pôr do sol'(g, w, h, r) { const hz = h * 0.6; g.fillStyle = lin(g, 0, 0, 0, hz, [[0, '#2e1a55'], [0.45, '#b8406f'], [0.85, '#f5874c'], [1, '#ffc173']]); g.fillRect(0, 0, w, hz);
+    sol(g, w * (0.35 + r() * 0.3), hz - h * 0.035, h * 0.07, '#ffe1a0', 'rgba(255,150,80,0.5)');
+    g.fillStyle = lin(g, 0, hz, 0, h, [[0, '#4a2552'], [1, '#120c24']]); g.fillRect(0, hz, w, h - hz); reflexo(g, w * 0.5, hz + 2, h, w * 0.22, 'rgba(255,170,90,0.6)', r);
+    morro(g, w, h, hz + 1, h * 0.03, 1.2, 'rgba(30,16,48,0.85)', r); g.fillStyle = 'rgba(30,16,48,1)'; },
+  'Noite no píer'(g, w, h, r) { const hz = h * 0.6; g.fillStyle = lin(g, 0, 0, 0, hz, [[0, '#060b22'], [1, '#1f2c5c']]); g.fillRect(0, 0, w, hz);
+    for (let i = 0; i < 70; i++) { g.fillStyle = `rgba(255,255,255,${0.3 + r() * 0.6})`; g.fillRect(r() * w, r() * hz * 0.85, 1.2, 1.2); }
+    g.fillStyle = lin(g, 0, hz, 0, h, [[0, '#0d1638'], [1, '#03060f']]); g.fillRect(0, hz, w, h - hz);
+    g.fillStyle = '#02040b'; g.fillRect(0, hz - h * 0.03, w * 0.72, h * 0.022); for (let x = w * 0.04; x < w * 0.72; x += w * 0.09) g.fillRect(x, hz - h * 0.03, w * 0.012, h * 0.12);
+    for (let x = w * 0.08; x < w * 0.72; x += w * 0.18) { sol(g, x, hz - h * 0.07, h * 0.012, '#ffe9a8', 'rgba(255,200,90,0.35)'); reflexo(g, x, hz + h * 0.05, h, w * 0.05, 'rgba(255,210,120,0.45)', r); } },
+  'Areia branca'(g, w, h, r) { g.fillStyle = lin(g, 0, 0, 0, h * 0.45, [[0, '#8fcdf0'], [1, '#e6f5fb']]); g.fillRect(0, 0, w, h * 0.45);
+    g.fillStyle = lin(g, 0, h * 0.45, 0, h * 0.58, [[0, '#2fb8c4'], [1, '#8fe0d6']]); g.fillRect(0, h * 0.45, w, h * 0.13);
+    g.fillStyle = lin(g, 0, h * 0.56, 0, h, [[0, '#f7edd8'], [1, '#e3cfa6']]); g.beginPath(); g.moveTo(0, h * 0.6); g.quadraticCurveTo(w * 0.55, h * 0.52, w, h * 0.6); g.lineTo(w, h); g.lineTo(0, h); g.fill();
+    g.strokeStyle = 'rgba(255,255,255,0.6)'; g.lineWidth = Math.max(1, w / 200); for (let i = 0; i < 4; i++) { g.beginPath(); const y = h * (0.66 + i * 0.08); g.moveTo(0, y); g.quadraticCurveTo(w * (0.3 + r() * 0.4), y - h * 0.05, w, y + h * 0.02); g.stroke(); } },
+  'Lagoa'(g, w, h, r) { g.fillStyle = lin(g, 0, 0, 0, h * 0.4, [[0, '#c6e4ea'], [1, '#e9f3ec']]); g.fillRect(0, 0, w, h * 0.4); g.fillStyle = lin(g, 0, h * 0.4, 0, h, [[0, '#3d7a50'], [1, '#24563a']]); g.fillRect(0, h * 0.4, w, h * 0.6); morro(g, w, h, h * 0.42, h * 0.08, r() * 6, '#2f6a46', r);
+    g.fillStyle = lin(g, 0, h * 0.45, 0, h, [[0, '#1aa59b'], [1, '#0d5f6a']]); g.beginPath(); g.ellipse(w * 0.5, h * 0.72, w * 0.62, h * 0.28, 0, 0, 7); g.fill();
+    reflexo(g, w * 0.5, h * 0.5, h * 0.95, w * 0.5, 'rgba(255,255,255,0.22)', r); },
+  'Fogueira'(g, w, h, r) { g.fillStyle = lin(g, 0, 0, 0, h, [[0, '#07060d'], [1, '#1b1018']]); g.fillRect(0, 0, w, h);
+    const x = w * 0.5, y = h * 0.78; const k = g.createRadialGradient(x, y, 0, x, y, h * 0.6); k.addColorStop(0, 'rgba(255,170,60,0.95)'); k.addColorStop(0.25, 'rgba(230,90,30,0.45)'); k.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = k; g.fillRect(0, 0, w, h);
+    g.save(); g.filter = 'blur(' + Math.max(1, w / 90) + 'px)'; for (let i = 0; i < 5; i++) { g.fillStyle = ['#ffd27a', '#ff9a3c', '#ff6a2a'][i % 3]; g.beginPath(); const fx = x + (r() - 0.5) * w * 0.12, fh = h * (0.18 + r() * 0.16); g.moveTo(fx - w * 0.04, y); g.quadraticCurveTo(fx, y - fh * 1.3, fx + w * 0.04, y); g.fill(); } g.restore();
+    for (let i = 0; i < 26; i++) { g.fillStyle = `rgba(255,${150 + r() * 80},80,${0.4 + r() * 0.5})`; g.fillRect(x + (r() - 0.5) * w * 0.4, y - r() * h * 0.6, 1.5, 1.5); }
+    g.fillStyle = '#0a0607'; g.fillRect(x - w * 0.12, y, w * 0.24, h * 0.03); }
+};
+const NUVENS = { 'Praia ao nascer do sol': [0.58, 'rgba(255,236,220,A)'], 'Pôr do sol': [0.6, 'rgba(255,170,150,A)'], 'Areia branca': [0.45, 'rgba(255,255,255,A)'], 'Trilha': [0.45, 'rgba(255,255,255,A)'], 'Lagoa': [0.4, 'rgba(255,255,255,A)'] };
+function pintar(canvas, nome, seed) {
+  const dpr = Math.min(2, devicePixelRatio || 1); const w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
+  if (!w || !h) return 0.5; canvas.width = w; canvas.height = h; const g = canvas.getContext('2d', { willReadFrequently: true });
+  const r0 = rnd(seed); g.filter = `hue-rotate(${((r0() - 0.5) * 26).toFixed(1)}deg) saturate(${(0.92 + r0() * 0.2).toFixed(2)})`;
+  PINTAR[nome](g, w, h, rnd(seed)); g.filter = 'none';
+  const nv = NUVENS[nome]; if (nv) { const r2 = rnd(seed + 11); g.save(); g.filter = 'blur(' + Math.max(3, w / 40) + 'px)';
+    for (let i = 0; i < 7; i++) { g.fillStyle = nv[1].replace('A', (0.18 + r2() * 0.25).toFixed(2)); g.beginPath(); g.ellipse(r2() * w, h * nv[0] * (0.25 + r2() * 0.7), w * (0.12 + r2() * 0.22), h * (0.02 + r2() * 0.035), 0, 0, 7); g.fill(); } g.restore(); }
+  g.save(); g.filter = 'blur(' + (w > 600 ? 0.9 : 0.5) + 'px)'; g.drawImage(canvas, 0, 0); g.restore();   // tira o fio de vetor
+  const px = g.getImageData(0, 0, w, h); const dd = px.data; const r3 = rnd(seed + 97);
+  for (let i = 0; i < dd.length; i += 4) { const n = (r3() - 0.5) * 9; dd[i] += n; dd[i + 1] += n; dd[i + 2] += n; }   // grão leve de sensor (±4,5)
+  g.putImageData(px, 0, 0);
+  const v = g.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.35, w / 2, h / 2, Math.max(w, h) * 0.75); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.22)'); g.fillStyle = v; g.fillRect(0, 0, w, h);   // vinheta de lente
+  const p = document.createElement('canvas'); p.width = p.height = 24; const q = p.getContext('2d', { willReadFrequently: true }); q.drawImage(canvas, 0, 0, 24, 24);
+  const d = q.getImageData(0, 0, 24, 24).data; let s = 0; const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const grade = new Array(64).fill(0);   // 8 × 8: pega nuvem e sol que a média esconde
+  for (let i = 0; i < d.length; i += 4) { const L = 0.2126 * f(d[i]) + 0.7152 * f(d[i + 1]) + 0.0722 * f(d[i + 2]); s += L; const p = i / 4, gx = Math.floor((p % 24) / 3), gy = Math.floor(Math.floor(p / 24) / 3); grade[gy * 8 + gx] += L / 9; }
+  canvas.closest('[data-lum]') && (canvas.closest('[data-lum]').dataset.lumGrade = grade.map((x) => x.toFixed(3)).join(','));
+  return s / 576;
+}
+
+/* ---------- Dados: os 24 do caso B original (mesmos nomes e datas) ---------- */
+const NOMES = ['Praia ao nascer do sol', 'Mergulho', 'Trilha', 'Pôr do sol', 'Noite no píer', 'Areia branca', 'Lagoa', 'Fogueira'];
+const FOTOS = Array.from({ length: 24 }, (_, i) => ({ nome: NOMES[i % 8], dia: i + 1 }));
+const LUGARES = [['Ilhabela', 0, 8], ['Paraty', 8, 16], ['Ubatuba', 16, 24]];
+/* Um arranjo por lugar (o destaque muda de lado), para o álbum não ler como molde repetido. Cada linha soma 12 células. */
+const FORMAS = { largo: [['g', '', '', '', '', 'l', '', ''], ['', '', 'g', '', '', '', 'l', ''], ['l', '', '', 'g', '', '', '', '']],
+  estreito: [['g', '', '', '', '', '', 'l', ''], ['', 'l', 'g', '', '', '', '', ''], ['', '', '', 'g', '', '', '', 'l']] };
+
+function montar() {
+  const largo = innerWidth > 760; const jogos = largo ? FORMAS.largo : FORMAS.estreito; let jogo = 0;
+  const L = document.getElementById('lugares'); L.innerHTML = '';
+  for (const [nome, a, b] of LUGARES) { const formas = jogos[jogo++];
+    const s = document.createElement('section'); s.className = 'lugar'; s.setAttribute('aria-labelledby', 'l-' + nome);
+    s.innerHTML = `<header><h2 id="l-${nome}">${a + 1} a ${b} de outubro</h2><p>${nome} · ${b - a} fotos</p></header>`;
+    const m = document.createElement('div'); m.className = 'mosaico';
+    FOTOS.slice(a, b).forEach((f, k) => {
+      const bt = document.createElement('button'); bt.type = 'button'; bt.className = 'foto ' + formas[k]; bt.dataset.lum = '0.5';
+      bt.setAttribute('aria-label', `${f.nome}, ${f.dia} de outubro`);
+      bt.innerHTML = `<canvas aria-hidden="true"></canvas><span class="legenda${formas[k] === 'g' ? ' sobre-foto' : ''}" aria-hidden="true"><b>${f.nome}</b><small>${f.dia} de outubro</small></span>`;
+      m.appendChild(bt);
+    });
+    s.appendChild(m); L.appendChild(s);
+  }
+  L.insertAdjacentHTML('beforeend', `<p class="rodape">${FOTOS.length} fotos · imagens ilustrativas pintadas por código, sem foto real</p>`);
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.foto').forEach((bt, i) => { bt.dataset.lum = pintar(bt.querySelector('canvas'), FOTOS[i].nome, i + 3).toFixed(3); });
+    const capa = document.getElementById('capa'); capa.closest('.capa').dataset.lum = pintar(capa, 'Pôr do sol', 7).toFixed(3);
+    document.getElementById('fixados').innerHTML = [['Viagem ao litoral', 24, 'Pôr do sol', true], ['Família', 312, 'Lagoa'], ['Receitas', 58, 'Fogueira']].map(([n, c, p, at]) =>
+      `<li><a href="#"${at ? ' aria-current="page" class="lg-sel"' : ''}><span class="mini"><canvas data-p="${p}" aria-hidden="true"></canvas></span>${n}<small>${c}</small></a></li>`).join('');
+    document.querySelectorAll('#fixados canvas').forEach((c, i) => pintar(c, c.dataset.p, 40 + i));
+    estender();
+    window.liquido && liquido.montar();
+  });
+}
+function estender() {
+  const L = document.getElementById('lugares'); let ext = L.querySelector('.extensao');
+  if (innerWidth <= 760) { ext && ext.remove(); return; }
+  if (!ext) { ext = document.createElement('div'); ext.className = 'extensao'; ext.setAttribute('aria-hidden', 'true'); ext.innerHTML = '<canvas></canvas>'; L.prepend(ext); }
+  const c = ext.querySelector('canvas'); const cw = c.clientWidth, ch = c.clientHeight; c.width = Math.round(cw / 2); c.height = Math.round(ch / 2);
+  const g = c.getContext('2d'); const base = L.getBoundingClientRect(); const ox = 40, oy = 40;
+  g.fillStyle = getComputedStyle(document.body).backgroundColor; g.fillRect(0, 0, c.width, c.height);
+  // cada foto encostada na borda esquerda do mosaico é espelhada para baixo da barra (esticada para cobrir os vãos)
+  const fotos = [...L.querySelectorAll('.foto')]; const esq = Math.min(...fotos.map((f) => f.getBoundingClientRect().left));
+  const daBorda = fotos.filter((f) => Math.abs(f.getBoundingClientRect().left - esq) < 2);
+  daBorda.forEach((f, k) => { const r = f.getBoundingClientRect(); const fc = f.querySelector('canvas');
+    const y0 = k === 0 ? 0 : (r.top - base.top + oy) - 50, y1 = k === daBorda.length - 1 ? ch : (r.bottom - base.top + oy) + 50;
+    g.save(); g.translate((r.left - base.left + ox) / 2, 0); g.scale(-1, 1); g.drawImage(fc, 0, y0 / 2, (r.left - base.left + ox) / 2 + 2, (y1 - y0) / 2); g.restore(); });
+  // a capa continua no topo da extensão (cor real do pé da capa, esmaecendo em 180 px): sem linha seca na barra lateral
+  const capa = document.getElementById('capa'); const pc = capa.getContext('2d').getImageData(0, capa.height - 2, Math.max(1, Math.round(capa.width * 0.2)), 1).data;
+  let cr = 0, cg = 0, cb = 0, n = pc.length / 4; for (let i = 0; i < pc.length; i += 4) { cr += pc[i]; cg += pc[i + 1]; cb += pc[i + 2]; }
+  const cor = (al) => 'rgba(' + Math.round(cr / n) + ',' + Math.round(cg / n) + ',' + Math.round(cb / n) + ',' + al + ')';
+  const gr = g.createLinearGradient(0, 0, 0, (oy + 180) / 2); gr.addColorStop(0, cor(1)); gr.addColorStop(0.35, cor(0.85)); gr.addColorStop(1, cor(0)); g.fillStyle = gr; g.fillRect(0, 0, c.width, (oy + 180) / 2);
+}
+montar();
+let largoAntes = innerWidth > 760;
+addEventListener('resize', () => { if ((innerWidth > 760) !== largoAntes) { largoAntes = !largoAntes; montar(); } });
+
+/* ---------- A mesma luz: o ponteiro inclina as fotos e dá brilho do lado dela (o vidro segue a mesma luz em liquido.js) ---------- */
+const semMov = matchMedia('(prefers-reduced-motion: reduce)');
+document.addEventListener('pointermove', (e) => {
+  if (e.pointerType !== 'mouse' || semMov.matches) return;
+  const f = e.target.closest && e.target.closest('.foto'); document.querySelectorAll('.foto.inclina').forEach((x) => { if (x !== f) { x.classList.remove('inclina'); x.style.removeProperty('--rx'); x.style.removeProperty('--ry'); x.style.setProperty('--brilho', 0); } });
+  if (!f) return; const r = f.getBoundingClientRect(); const u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
+  f.classList.add('inclina'); f.style.setProperty('--ry', ((u - 0.5) * 7).toFixed(2) + 'deg'); f.style.setProperty('--rx', ((0.5 - v) * 7).toFixed(2) + 'deg');
+  f.style.setProperty('--bx', (u * 100).toFixed(0) + '%'); f.style.setProperty('--by', (v * 100).toFixed(0) + '%'); f.style.setProperty('--brilho', 0.22);
+}, { passive: true });
+/* Abas que se recolhem ao rolar para baixo e voltam ao subir (celular). */
+let yAntes = 0;
+addEventListener('scroll', () => { const y = scrollY; document.body.classList.toggle('compacto', y > 260 && y > yAntes); yAntes = y; }, { passive: true });
+setTimeout(() => document.body.classList.remove('entrada'), 1500);
+</script>
+<script src="liquido.js"></script>
+</body>
+</html>

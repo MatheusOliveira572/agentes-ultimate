@@ -1,0 +1,191 @@
+{
+  "erros": [],
+  "relatorio": [
+    {
+      "arq": "caso-a-antes-claro-1440.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "",
+      "medidas": []
+    },
+    {
+      "arq": "caso-a-antes-claro-390.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "",
+      "medidas": []
+    },
+    {
+      "arq": "caso-a-depois-claro-1440.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": []
+    },
+    {
+      "arq": "caso-a-depois-claro-390.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": []
+    },
+    {
+      "arq": "caso-a-depois-escuro-1440.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": []
+    },
+    {
+      "arq": "caso-a-depois-escuro-390.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": []
+    },
+    {
+      "arq": "caso-b-landing-claro-1440.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": [
+        ".cartao h2: pior 15.43:1, melhor 15.88:1",
+        ".cartao .sub: pior 8.05:1, melhor 8.21:1",
+        ".itens li span:first-child: pior 15.43:1, melhor 15.85:1",
+        ".itens li span:last-child: pior 8.05:1, melhor 8.06:1"
+      ]
+    },
+    {
+      "arq": "caso-b-landing-escuro-1440.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": [
+        ".cartao h2: pior 14.56:1, melhor 15.16:1",
+        ".cartao .sub: pior 7.71:1, melhor 7.93:1",
+        ".itens li span:first-child: pior 14.56:1, melhor 15.05:1",
+        ".itens li span:last-child: pior 7.71:1, melhor 7.71:1"
+      ]
+    },
+    {
+      "arq": "caso-b-landing-claro-transparencia-reduzida-1440.png",
+      "rolagemLateral": false,
+      "reduzida": true,
+      "contrasteMais": false,
+      "backdrop": "none",
+      "medidas": [
+        ".cartao h2: pior 16.70:1, melhor 16.73:1",
+        ".cartao .sub: pior 8.71:1, melhor 8.72:1",
+        ".itens li span:first-child: pior 16.70:1, melhor 16.73:1",
+        ".itens li span:last-child: pior 8.71:1, melhor 8.71:1"
+      ]
+    },
+    {
+      "arq": "caso-b-landing-claro-contraste-mais-1440.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": true,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": [
+        ".cartao h2: pior 16.60:1, melhor 16.73:1",
+        ".cartao .sub: pior 16.60:1, melhor 16.73:1",
+        ".itens li span:first-child: pior 16.60:1, melhor 16.73:1",
+        ".itens li span:last-child: pior 16.60:1, melhor 16.70:1"
+      ]
+    },
+    {
+      "arq": "caso-b-landing-claro-390.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": [
+        ".cartao h2: pior 15.65:1, melhor 16.39:1",
+        ".cartao .sub: pior 8.11:1, melhor 8.55:1",
+        ".itens li span:first-child: pior 15.65:1, melhor 16.39:1",
+        ".itens li span:last-child: pior 8.06:1, melhor 8.06:1"
+      ]
+    },
+    {
+      "arq": "caso-b-landing-escuro-390.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7)",
+      "medidas": [
+        ".cartao h2: pior 14.88:1, melhor 15.81:1",
+        ".cartao .sub: pior 7.75:1, melhor 8.36:1",
+        ".itens li span:first-child: pior 14.90:1, melhor 15.76:1",
+        ".itens li span:last-child: pior 7.71:1, melhor 7.73:1"
+      ]
+    },
+    {
+      "arq": "caso-b-produto-claro-390.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7) | blur(16px) saturate(1.7)",
+      "medidas": [
+        ".topo h1: pior 13.97:1, melhor 15.13:1",
+        ".abas a[aria-current]: pior 5.07:1, melhor 6.21:1",
+        ".abas a:not([aria-current]): pior 7.28:1, melhor 7.84:1"
+      ]
+    },
+    {
+      "arq": "caso-b-produto-escuro-390.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7) | blur(16px) saturate(1.7)",
+      "medidas": [
+        ".topo h1: pior 11.45:1, melhor 13.32:1",
+        ".abas a[aria-current]: pior 4.94:1, melhor 7.02:1",
+        ".abas a:not([aria-current]): pior 8.28:1, melhor 9.70:1"
+      ]
+    },
+    {
+      "arq": "caso-b-produto-claro-transparencia-reduzida-390.png",
+      "rolagemLateral": false,
+      "reduzida": true,
+      "contrasteMais": false,
+      "backdrop": "none | none",
+      "medidas": [
+        ".topo h1: pior 16.01:1, melhor 16.01:1",
+        ".abas a[aria-current]: pior 5.56:1, melhor 6.75:1",
+        ".abas a:not([aria-current]): pior 8.35:1, melhor 8.35:1"
+      ]
+    },
+    {
+      "arq": "caso-b-produto-claro-1440.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7) | blur(16px) saturate(1.7)",
+      "medidas": [
+        ".topo h1: pior 12.70:1, melhor 14.52:1",
+        ".abas a[aria-current]: pior 5.70:1, melhor 6.70:1",
+        ".abas a:not([aria-current]): pior 8.29:1, melhor 8.29:1"
+      ]
+    },
+    {
+      "arq": "caso-b-produto-escuro-1440.png",
+      "rolagemLateral": false,
+      "reduzida": false,
+      "contrasteMais": false,
+      "backdrop": "blur(16px) saturate(1.7) | blur(16px) saturate(1.7)",
+      "medidas": [
+        ".topo h1: pior 12.05:1, melhor 14.54:1",
+        ".abas a[aria-current]: pior 7.71:1, melhor 9.67:1",
+        ".abas a:not([aria-current]): pior 11.65:1, melhor 11.65:1"
+      ]
+    }
+  ]
+}

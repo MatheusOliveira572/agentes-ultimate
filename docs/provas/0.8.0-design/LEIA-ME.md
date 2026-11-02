@@ -1,5 +1,7 @@
 # Prova visual da 0.8.0 (design): agentes de verdade, dados fictícios
 
+> **Prova mais nova (pv92, 2026-11-02):** `e2e/LEIA-ME.md`: antes e depois do app, vidro na landing e no produto, transparência reduzida, contraste no pior ponto. O texto abaixo é da tentativa de 2026-11-01.
+
 Duas execuções reais de `claude -p` com o plugin desta pasta (`--plugin-dir`), `designer-paineis` e `engenheiro-software`
 chamados pelo orquestrador a partir do pedido. PNGs gerados no Edge sem interface (perfil próprio, nada na tela do
 usuário), temas claro e escuro, 1440 e 390 px: 8 imagens em `png/`, 0 erro de JavaScript e 0 rolagem lateral.
