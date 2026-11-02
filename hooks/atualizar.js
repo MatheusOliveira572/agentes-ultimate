@@ -67,12 +67,12 @@ function programaClaude() {
 // e sem detached (este node já está destacado: o console novo nasce escondido). O motivo de cada falha vai para atualizacao.log.
 function executar() {
   const [prog, ini] = programaClaude();
-  const opc = { windowsHide: true, stdio: 'inherit', timeout: 5 * 60 * 1000 };
+  const TEMPO = 5 * 60 * 1000;
   const roda = (args) => {
-    let r = spawnSync(prog, [...ini, ...args], opc);
+    let r = spawnSync(prog, [...ini, ...args], { windowsHide: true, stdio: 'inherit', timeout: TEMPO });
     if (r.error && r.error.code === 'ENOENT' && process.platform === 'win32' && prog === 'claude') {
       console.log(`claude ${args.join(' ')}: claude.exe não encontrado sem shell (ENOENT); tentando claude.cmd pelo cmd.exe`);
-      r = spawnSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', ['claude', ...args].join(' ')], opc);
+      r = spawnSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', ['claude', ...args].join(' ')], { windowsHide: true, stdio: 'inherit', timeout: TEMPO });
     }
     if (r.error) console.log(`claude ${args.join(' ')}: falhou (${r.error.code || r.error.message})`);
     else if (r.status !== 0) console.log(`claude ${args.join(' ')}: saiu com código ${r.status}`);
