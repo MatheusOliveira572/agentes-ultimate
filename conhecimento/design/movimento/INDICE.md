@@ -1,5 +1,5 @@
 <!-- Adaptado de emilkowalski/skills/skills/review-animations/STANDARDS.md e skills/animate/SKILL.md @f1090be, © 2026 Emil Kowalski, MIT. Alterações: tradução, condensação, junção dos padrões de criação e de revisão; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->
-<!-- ref: tema=movimento; palavras=animacao, animacoes, animar, movimento, transicao, transicoes, easing, curva de animacao, duracao da animacao, mola, spring, micro interacao, hover animado, entrada da tela, visual premium, redesenhe, redesenho, site bonito, bonito, site institucional; agentes=engenheiro-software, designer-paineis, designer-documentos -->
+<!-- ref: tema=movimento; palavras=animacao, animacoes, animar, movimento, transicao, transicoes, easing, curva de animacao, duracao da animacao, mola, spring, micro interacao, hover animado, entrada da tela, visual premium, redesenhe, redesenho, site bonito, bonito, site institucional; agentes=engenheiro-software, designer-paineis, designer-documentos, designer-sites -->
 <!-- teste-ref: sim=crie a animação de entrada do modal com a curva e a duração certas | revise as animações e transições do app, estão lentas e com easing estranho; nao=calcule o ponto de equilíbrio do produto -->
 # Movimento (Emil Kowalski manda nos valores)
 

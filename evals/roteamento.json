@@ -6,7 +6,7 @@
     { "pedido": "corrija o bug no script python que lê a planilha", "pacote": "software" },
     { "pedido": "refatorar o código da api e rodar os testes", "pacote": "software" },
     { "pedido": "redesenhe a tela do aplicativo com visual premium", "pacote": "interface" },
-    { "pedido": "faça a landing page com animação e formulário em react", "pacote": "interface" },
+    { "pedido": "faça a landing page com animação e formulário em react", "pacote": "sites" },
     { "pedido": "escreva o manual do usuário em PDF para a diretoria", "pacote": "documentos" },
     { "pedido": "monte a descrição da vaga e o roteiro de entrevista estruturada", "pacote": "pessoas" },
     { "pedido": "revise a cláusula de limitação de responsabilidade do contrato com o fornecedor", "pacote": "juridico" },

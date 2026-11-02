@@ -1,7 +1,15 @@
-<!-- Texto próprio do agentes-ultimate, a partir da HIG pública da Apple (página materials, aberta em 2026-11-01; Liquid Glass, mudança de 2025-09-09) e da documentação pública do CSS (MDN). Nada copiado; cada regra cita a fonte. -->
-<!-- ref: tema=apple-materiais; palavras=efeito vidro, vidro, glass, glassmorphism, liquid glass, desfoque, blur, backdrop-filter, translucido, translucidez, fosco, card de vidro; agentes=designer-paineis, engenheiro-software, designer-documentos -->
+<!-- Texto próprio do agentes-ultimate, a partir da HIG pública da Apple (página materials, aberta em 2026-11-01; Liquid Glass, mudança de 2025-09-09), da documentação pública do CSS (MDN) e do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md, seção 4). Nada copiado; cada regra cita a fonte. -->
+<!-- ref: tema=apple-materiais; palavras=efeito vidro, vidro, glass, glassmorphism, liquid glass, desfoque, blur, backdrop-filter, translucido, translucidez, fosco, card de vidro; agentes=designer-sites, designer-paineis, engenheiro-software, designer-documentos -->
 <!-- teste-ref: sim=faça um card com efeito vidro estilo Apple | quero glassmorphism com backdrop-filter na barra de navegação, translúcido; nao=calcule o custo médio ponderado do estoque -->
 # Materiais e efeito vidro (Liquid Glass)
+
+## Onde vale cada regra (decisão do usuário, 2026-11-01)
+| Onde | Regra |
+|---|---|
+| **Tela de produto ou de tarefa** (app, painel, formulário, extrato) | a regra da Apple, abaixo: só navegação e controles. Nunca em cartão de dado, lista ou texto |
+| **Landing page** e página de marketing | também **cartão**, com **pouca transparência** e sobre **fundo calmo** (ver "Cartão de vidro em landing page") |
+
+Na dúvida se a página é uma coisa ou outra: a pessoa veio ler e decidir (landing) ou veio trabalhar (produto)?
 
 ## Quando usar vidro (HIG › Materials › Liquid Glass)
 - **Só na camada funcional que flutua sobre o conteúdo:** barras de navegação, barras de ferramentas, abas, controles,
@@ -18,11 +26,11 @@
 - Texto sobre material com os níveis de vibração do sistema: normal para texto padrão, secundário para nota e subtítulo,
   terciário só para inativo que não precisa ser muito legível. (HIG › Materials › visionOS)
 - O piso de qualidade recusa **vidro como enfeite** (`../piso-de-qualidade.md`): se o vidro não separa controle de
-  conteúdo, tire.
+  conteúdo, tire, em tela de produto. Em landing page vale a seção "Cartão de vidro em landing page".
 
 ## Como fazer na web (CSS; MDN: `backdrop-filter`, `@supports`, `prefers-reduced-transparency`)
 ```css
-.vidro {                               /* barra ou cartão FLUTUANTE sobre conteúdo */
+.vidro {                               /* barra, menu ou controle FLUTUANTE (cartão de landing: receita abaixo) */
   background: rgb(255 255 255 / 0.55); /* fundo translúcido (escuro: rgb(28 28 30 / 0.55)) */
   -webkit-backdrop-filter: blur(16px) saturate(170%);
   backdrop-filter: blur(16px) saturate(170%);
@@ -38,11 +46,45 @@
 **[ESTIMATIVA: ponto de partida nosso, não da Apple]** desfoque 12–20 px, saturação 150–180%, fundo com 50–70% de
 opacidade; ajuste medindo o contraste. A Apple não publica valores de CSS.
 
+## Cartão de vidro em landing page
+Só em landing page. **Pouca transparência:** atrás do cartão passam só cor e luz, nunca forma que se leia. **Fundo calmo:**
+cor única ou luz larga, sem foto, sem texto e sem nada em movimento por trás.
+```css
+.cartao-landing {                                   /* cor própria do cartão, quase opaca */
+  background: rgb(22 42 58 / 0.82);                 /* claro: rgb(255 255 255 / 0.82) */
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgb(255 255 255 / 0.10);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); /* a luz de 1 px no topo é o que faz parecer vidro no escuro */
+}
+```
+- **[ESTIMATIVA: ponto de partida nosso]** fundo 72–88% de opacidade, desfoque 8–12 px, borda a 10–15%. O valor exato acima
+  (82%, 10 px) foi usado e medido em `docs/provas/0.8.0-sites/`; a faixa não foi medida.
+- **Superfície tonal** (visto nas referências estudadas, [MEDIDO]): branco a 3–10% sobre escuro homogêneo. É o
+  contrário de pouca transparência: não use no cartão. Fica registrada como medida, não como opção.
+- **Não serve em landing:** sobre foto ou vídeo, sobre gradiente em movimento, vidro sobre vidro, tabela ou texto longo.
+
+## Variantes [ESTIMATIVA: ponto de partida nosso]
+| Variante | Cor | Desfoque e saturação | Borda | Sombra | Uso |
+|---|---|---|---|---|---|
+| Barra | claro ou escuro 60–75% | 12–20 px, 150–180% | 1 px a 10–45% | leve ao rolar | navegação |
+| Painel | 50–70% | 16–24 px, 150–180% | 1 px a 20–45% | 0 8–24 px 24–60 px a 0,12–0,25 | menu, modal |
+| Sobre foto | preto 35–60% | 4–12 px | nenhuma ou 10% | nenhuma | legenda, selo, controle |
+
+## Por que não funcionou (estudo de 2026-11-01; MDN: `backdrop-filter`)
+- **Translúcido sem desfoque é defeito, não economia:** a 82%, sem desfoque, o conteúdo de trás vira ruído legível.
+- **Raiz do fundo:** um pai com `opacity` menor que 1, `filter`, `mask`, `clip-path`, `mix-blend-mode` ou o próprio
+  `backdrop-filter` vira a raiz; o filho só desfoca o que está dentro dele.
+- **Desfoque em superfície opaca** custa e não aparece: retire.
+- **Falta luz:** no escuro, o que faz parecer vidro é a borda de luz de 1 px no topo, não o desfoque.
+- **Sem variação atrás** o efeito não aparece: nesse caso, use cor sólida.
+
 ## Acessibilidade do vidro
 - **Contraste no pior fundo:** meça o texto contra a parte mais clara (e a mais escura) do que pode passar por trás, não
   contra a média. Não passou: mais opacidade, a camada escura de 35% (variante clara) ou texto mais forte.
 - `prefers-reduced-transparency: reduce` → fundo opaco, sem desfoque (equivale ao Reduzir Transparência da Apple).
-  Suporte ainda parcial nos navegadores: trate como melhoria progressiva.
+  Suporte ainda parcial ("Limited availability" e experimental no MDN, enquanto `backdrop-filter` é Baseline 2024): a base do
+  desenho precisa passar no contraste **sem contar com o efeito**.
 - `prefers-contrast: more` → fundo sólido e borda forte. `prefers-reduced-motion: reduce` → nada de reflexo que se mexe,
   paralaxe ou "brilho" animado no vidro.
 
@@ -52,6 +94,7 @@ opacidade; ajuste medindo o contraste. A Apple não publica valores de CSS.
 - No celular, o desfoque grande em área grande pesa (bateria, quadros perdidos): área pequena, desfoque menor, e meça
   rolando num aparelho de alguns anos (`../../engenharia/desempenho-web.md`).
 - Não anime o raio do desfoque; anime só `opacity`/`transform` do elemento.
+- **[ESTIMATIVA]** no celular, desfoque de até 8–12 px e poucas superfícies.
 
 ## O que não funciona em cada plataforma
 | Plataforma | Vidro real | O que fazer |

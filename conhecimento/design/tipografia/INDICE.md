@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/better-typography/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT. Alterações: tradução, corte, ajuste ao protocolo (a marca do projeto vence); alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/. -->
-<!-- ref: tema=tipografia; palavras=tipografia, fonte, fontes, tipo de letra, escala tipografica, entrelinha, altura da linha, espacamento entre letras, hierarquia do texto, titulos e corpo, tamanho da fonte, formatar documento; agentes=designer-documentos, designer-paineis, engenheiro-software -->
+<!-- ref: tema=tipografia; palavras=tipografia, fonte, fontes, tipo de letra, escala tipografica, entrelinha, altura da linha, espacamento entre letras, hierarquia do texto, titulos e corpo, tamanho da fonte, formatar documento; agentes=designer-documentos, designer-paineis, engenheiro-software, designer-sites -->
 <!-- teste-ref: sim=acerte a tipografia do relatório: escala, entrelinha e hierarquia dos títulos | a fonte do slide está pequena e a altura da linha apertada, revise a tipografia; nao=reconcilie os lançamentos do banco com o razão -->
 # Tipografia: como o texto aparece (escala, espaço, carga, quebra, pontuação)
 

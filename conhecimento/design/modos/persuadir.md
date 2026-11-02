@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/mode-persuade.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução, corte dos comandos da ferramenta, extensão a apresentações; alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=modo-persuadir; palavras=landing page, pagina de vendas, pagina de campanha, convencer, persuasao, apresentacao para investidores, pitch, portfolio, site institucional, campanha; agentes=estrategista-marketing, designer-documentos, designer-paineis -->
+<!-- ref: tema=modo-persuadir; palavras=landing page, pagina de vendas do curso, pagina de campanha, convencer, persuasao, apresentacao para investidores, pitch, portfolio, site institucional, campanha, pagina de vendas do ebook; agentes=estrategista-marketing, designer-documentos, designer-paineis, designer-sites -->
 <!-- teste-ref: sim=desenhe a landing page da campanha de lançamento para convencer o visitante | monte a apresentação para investidores, o pitch precisa convencer; nao=registre o boletim de ocorrência do furto -->
 # Modo Persuadir (e Experiência): o desenho é o que o visitante julga
 
@@ -20,6 +20,9 @@ plataforma.
   real: um livro abre em duas páginas com uma lombada, nunca num terceiro painel.
 - As variações 2 e 3 vão **mais longe** que a primeira, nunca mais limpas: uso mais ousado do mesmo mundo (ainda com um
   movimento dominante), um ponto focal maior ou mais estranho, ou outra composição.
+
+## Sites e landing pages
+Receitas, método de montagem e efeitos: `../sites-premium/INDICE.md` (repertório, não molde).
 
 ## Ousar e encantar, com freio
 - Ousadia vem de escala, contraste e um movimento dominante por tela, não de somar efeitos.

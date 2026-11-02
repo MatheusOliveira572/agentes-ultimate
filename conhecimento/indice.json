@@ -21,7 +21,8 @@
         "designer-paineis",
         "designer-documentos",
         "engenheiro-software",
-        "testador-qa"
+        "testador-qa",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -60,6 +61,7 @@
       "agentes": [
         "designer-paineis",
         "designer-documentos",
+        "designer-sites",
         "engenheiro-software"
       ],
       "teste": {
@@ -266,6 +268,7 @@
         "card de vidro"
       ],
       "agentes": [
+        "designer-sites",
         "designer-paineis",
         "engenheiro-software",
         "designer-documentos"
@@ -388,7 +391,8 @@
       "agentes": [
         "designer-paineis",
         "designer-documentos",
-        "engenheiro-software"
+        "engenheiro-software",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -481,7 +485,8 @@
       ],
       "agentes": [
         "designer-paineis",
-        "engenheiro-software"
+        "engenheiro-software",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -512,7 +517,8 @@
       "agentes": [
         "designer-paineis",
         "designer-documentos",
-        "engenheiro-software"
+        "engenheiro-software",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -542,12 +548,12 @@
         "landing page",
         "novo visual",
         "app",
-        "aplicativo",
-        "site"
+        "aplicativo"
       ],
       "agentes": [
         "designer-paineis",
-        "designer-documentos"
+        "designer-documentos",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -622,7 +628,7 @@
       "tema": "modo-persuadir",
       "palavras": [
         "landing page",
-        "pagina de vendas",
+        "pagina de vendas do curso",
         "pagina de campanha",
         "convencer",
         "persuasao",
@@ -630,12 +636,14 @@
         "pitch",
         "portfolio",
         "site institucional",
-        "campanha"
+        "campanha",
+        "pagina de vendas do ebook"
       ],
       "agentes": [
         "estrategista-marketing",
         "designer-documentos",
-        "designer-paineis"
+        "designer-paineis",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -675,7 +683,8 @@
       "agentes": [
         "engenheiro-software",
         "designer-paineis",
-        "designer-documentos"
+        "designer-documentos",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -705,7 +714,8 @@
       "agentes": [
         "designer-paineis",
         "testador-qa",
-        "engenheiro-software"
+        "engenheiro-software",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -734,7 +744,8 @@
       ],
       "agentes": [
         "designer-paineis",
-        "designer-documentos"
+        "designer-documentos",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -762,7 +773,8 @@
       "agentes": [
         "designer-paineis",
         "designer-documentos",
-        "gerente-produto"
+        "gerente-produto",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -789,7 +801,8 @@
       ],
       "agentes": [
         "designer-paineis",
-        "designer-documentos"
+        "designer-documentos",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -849,7 +862,8 @@
       ],
       "agentes": [
         "revisor",
-        "designer-paineis"
+        "designer-paineis",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -862,12 +876,822 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/sites-premium/INDICE.md",
+      "tema": "sites-premium",
+      "palavras": [
+        "landing page",
+        "pagina de vendas do curso",
+        "pagina de captura",
+        "site institucional",
+        "site premium",
+        "site bonito",
+        "lp de vendas",
+        "portfolio online",
+        "site de portfolio",
+        "web site",
+        "web page",
+        "site novo",
+        "quero uma landing",
+        "do meu site",
+        "site para minha",
+        "site pra minha",
+        "crie um site",
+        "cria um site",
+        "criar um site",
+        "criar site",
+        "faca um site",
+        "faz um site",
+        "fazer um site",
+        "monte um site",
+        "desenvolva um site",
+        "construa um site",
+        "redesenhe o site",
+        "redesign do site",
+        "desenhe o site",
+        "efeito vidro no site",
+        "visual premium para o site",
+        "html e css do site",
+        "crie um website",
+        "crie a homepage",
+        "crie uma homepage",
+        "homepage da empresa",
+        "pagina inicial do meu",
+        "pagina de contato",
+        "site com animacao",
+        "animacao no site",
+        "pagina de vendas do ebook"
+      ],
+      "agentes": [
+        "designer-sites",
+        "estrategista-marketing",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "crie uma landing page para o meu curso",
+          "faça o site institucional da clínica"
+        ],
+        "nao": [
+          "calcule o valor presente líquido do projeto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/efeitos/INDICE.md",
+      "tema": "efeitos-de-site",
+      "palavras": [
+        "efeito de site",
+        "efeitos de site",
+        "animacao de site",
+        "efeito na landing",
+        "efeitos visuais",
+        "efeito premium"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "quais efeitos de site usar na página do produto",
+          "quero um efeito premium, efeitos visuais na página"
+        ],
+        "nao": [
+          "calcule o custo médio ponderado do estoque"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/efeitos/provas.md",
+      "tema": "efeitos-provados",
+      "palavras": [
+        "prova dos efeitos",
+        "efeito provado",
+        "quadros do efeito",
+        "efeito pesa"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "este efeito pesa, qual a prova dos efeitos",
+          "mostre o efeito provado e os quadros do efeito"
+        ],
+        "nao": [
+          "calcule o custo médio ponderado do estoque"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/efeitos/repeticao-e-micro.md",
+      "tema": "efeito-repeticao",
+      "palavras": [
+        "marquee",
+        "orbita de logos",
+        "flutuacao de cartao",
+        "confete",
+        "botao magnetico",
+        "cursor proprio",
+        "seletor deslizante",
+        "esqueleto de carga",
+        "skeleton",
+        "webgl",
+        "shader de fundo"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça um marquee de logos e um botão magnético",
+          "quero cursor próprio e esqueleto de carga"
+        ],
+        "nao": [
+          "calcule o custo médio ponderado do estoque"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/efeitos/rolagem-e-texto.md",
+      "tema": "efeito-rolagem",
+      "palavras": [
+        "entrada ao rolar",
+        "parallax",
+        "scrollytelling",
+        "linha que se desenha",
+        "cartoes empilhados",
+        "numero que sobe",
+        "contador animado",
+        "titulo que entra",
+        "texto que troca",
+        "view transitions"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "coloque parallax e entrada ao rolar na página",
+          "quero um número que sobe e uma linha que se desenha"
+        ],
+        "nao": [
+          "calcule o custo médio ponderado do estoque"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/efeitos/superficie-e-fundos.md",
+      "tema": "efeito-superficie",
+      "palavras": [
+        "brilho que segue o mouse",
+        "spotlight",
+        "borda animada",
+        "borda de luz",
+        "shimmer",
+        "inclinacao 3d",
+        "tilt",
+        "aurora",
+        "gradiente animado",
+        "malha de gradiente",
+        "mesh gradient",
+        "ruido de fundo",
+        "grade de pontos"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "quero um brilho que segue o mouse nos cartões",
+          "faça um fundo com aurora e malha de gradiente"
+        ],
+        "nao": [
+          "calcule o custo médio ponderado do estoque"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/metodo-de-montagem.md",
+      "tema": "site-metodo-de-montagem",
+      "palavras": [
+        "montar um site",
+        "site inteiro",
+        "site completo",
+        "ordem dos blocos",
+        "landing page",
+        "pagina de vendas do curso",
+        "site premium",
+        "teste do recorte",
+        "pagina de vendas do ebook"
+      ],
+      "agentes": [
+        "designer-sites",
+        "estrategista-marketing",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte o site inteiro do produto com a ordem dos blocos",
+          "crie a landing page completa do aplicativo"
+        ],
+        "nao": [
+          "faça a provisão para devedores duvidosos"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r01-heroi-com-mockup.md",
+      "tema": "site-heroi-mockup",
+      "palavras": [
+        "heroi com mockup",
+        "mockup do produto",
+        "mockup",
+        "primeira dobra do site"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "coloque um herói com mockup do produto na página",
+          "o mockup do celular na primeira dobra do site ficou pequeno"
+        ],
+        "nao": [
+          "faça o rateio das despesas por centro de custo"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r02-heroi-com-simulacao.md",
+      "tema": "site-heroi-simulacao",
+      "palavras": [
+        "heroi com simulacao",
+        "simulacao viva",
+        "produto vivo",
+        "heroi animado"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça um herói com simulação viva do produto",
+          "quero mostrar o produto vivo no herói animado da página"
+        ],
+        "nao": [
+          "registre o boletim de ocorrência do furto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r03-heroi-de-conversa.md",
+      "tema": "site-heroi-conversa",
+      "palavras": [
+        "heroi de conversa",
+        "conversa simulada",
+        "bolhas de conversa",
+        "produto no mensageiro"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça um herói de conversa mostrando o produto no mensageiro",
+          "quero uma conversa simulada com bolhas de conversa na abertura do site"
+        ],
+        "nao": [
+          "calcule o ponto de equilíbrio do produto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r04-faixa-de-numeros.md",
+      "tema": "site-faixa-numeros",
+      "palavras": [
+        "faixa de numeros",
+        "faixa de prova",
+        "numeros de prova",
+        "prova com numeros"
+      ],
+      "agentes": [
+        "designer-sites",
+        "redator",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte a faixa de números de prova do site",
+          "quero uma faixa de prova com números logo depois do herói"
+        ],
+        "nao": [
+          "monte a escala de férias da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r05-faixa-de-logos.md",
+      "tema": "site-faixa-logos",
+      "palavras": [
+        "faixa de logos",
+        "logos de clientes",
+        "parede de logos",
+        "logos de parceiros"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte a faixa de logos de clientes da página",
+          "preciso de uma parede de logos de parceiros no site"
+        ],
+        "nao": [
+          "calcule a depreciação do imobilizado"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r06-passos-com-linha.md",
+      "tema": "site-passos-linha",
+      "palavras": [
+        "passos com linha",
+        "secao como funciona",
+        "bloco como funciona",
+        "tres passos do produto"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "crie a seção como funciona da página",
+          "desenhe os três passos do produto em passos com linha"
+        ],
+        "nao": [
+          "faça o rateio das despesas por centro de custo"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r07-grade-bento.md",
+      "tema": "site-grade-bento",
+      "palavras": [
+        "grade bento",
+        "bento grid",
+        "bento",
+        "grade de recursos"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte uma grade bento com os recursos do produto",
+          "quero um bento grid de recursos no site"
+        ],
+        "nao": [
+          "registre o boletim de ocorrência do furto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r08-ziguezague.md",
+      "tema": "site-ziguezague",
+      "palavras": [
+        "ziguezague",
+        "problema e resposta",
+        "blocos alternados",
+        "fileiras alternadas"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte blocos alternados em ziguezague com as dores do cliente",
+          "quero o bloco de problema e resposta com fileiras alternadas"
+        ],
+        "nao": [
+          "calcule o ponto de equilíbrio do produto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r09-video-demonstracao.md",
+      "tema": "site-video-demonstracao",
+      "palavras": [
+        "video de demonstracao",
+        "demonstracao em video",
+        "video do produto"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "coloque um vídeo de demonstração do produto na página",
+          "quero a demonstração em vídeo logo depois do herói"
+        ],
+        "nao": [
+          "monte a escala de férias da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r10-depoimentos.md",
+      "tema": "site-depoimentos",
+      "palavras": [
+        "depoimentos",
+        "depoimento",
+        "parede de depoimentos",
+        "prova social"
+      ],
+      "agentes": [
+        "designer-sites",
+        "redator",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte a seção de depoimentos de clientes",
+          "preciso de prova social com uma parede de depoimentos"
+        ],
+        "nao": [
+          "calcule a depreciação do imobilizado"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r11-precos.md",
+      "tema": "site-precos",
+      "palavras": [
+        "secao de precos",
+        "tabela de precos",
+        "pagina de precos",
+        "planos e precos"
+      ],
+      "agentes": [
+        "designer-sites",
+        "estrategista-marketing",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe a seção de preços com três planos",
+          "monte a tabela de preços do site com planos e preços"
+        ],
+        "nao": [
+          "faça o rateio das despesas por centro de custo"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r12-objecao-franca.md",
+      "tema": "site-objecao",
+      "palavras": [
+        "objecao franca",
+        "quebra de objecao",
+        "por que e pago",
+        "bloco de objecao"
+      ],
+      "agentes": [
+        "designer-sites",
+        "redator",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça um bloco de objeção franca explicando por que é pago",
+          "preciso de uma quebra de objeção na página"
+        ],
+        "nao": [
+          "registre o boletim de ocorrência do furto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r13-seguranca-e-confianca.md",
+      "tema": "site-seguranca-confianca",
+      "palavras": [
+        "secao de seguranca",
+        "selos de confianca",
+        "bloco de confianca",
+        "selo de seguranca"
+      ],
+      "agentes": [
+        "designer-sites",
+        "redator",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça a seção de segurança da página com selos de confiança",
+          "quero um bloco de confiança com selo de segurança no site"
+        ],
+        "nao": [
+          "calcule o ponto de equilíbrio do produto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r14-perguntas-frequentes.md",
+      "tema": "site-perguntas-frequentes",
+      "palavras": [
+        "perguntas frequentes",
+        "faq",
+        "acordeao de perguntas"
+      ],
+      "agentes": [
+        "designer-sites",
+        "estrategista-marketing",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "monte as perguntas frequentes da página",
+          "quero um faq em acordeão de perguntas no site"
+        ],
+        "nao": [
+          "monte a escala de férias da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r15-acao-final.md",
+      "tema": "site-acao-final",
+      "palavras": [
+        "acao final",
+        "chamada final",
+        "cta final",
+        "qr code para baixar"
+      ],
+      "agentes": [
+        "designer-sites",
+        "estrategista-marketing",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe a ação final da página com a chamada final",
+          "quero um cta final com qr code para baixar o app"
+        ],
+        "nao": [
+          "calcule a depreciação do imobilizado"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r16-navegacao.md",
+      "tema": "site-navegacao-site",
+      "palavras": [
+        "navegacao do site",
+        "menu do site",
+        "navegacao flutuante",
+        "barra do site"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe a navegação do site com menu fixo",
+          "quero uma navegação flutuante em pílula no menu do site"
+        ],
+        "nao": [
+          "faça o rateio das despesas por centro de custo"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r17-promocao-e-botao-fixo.md",
+      "tema": "site-promocao-botao-fixo",
+      "palavras": [
+        "barra de promocao",
+        "faixa de promocao",
+        "botao fixo",
+        "botao flutuante"
+      ],
+      "agentes": [
+        "designer-sites",
+        "estrategista-marketing",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "coloque uma barra de promoção no topo da página",
+          "quero um botão fixo de assinar, um botão flutuante no canto"
+        ],
+        "nao": [
+          "registre o boletim de ocorrência do furto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r18-cartao-de-metrica.md",
+      "tema": "site-cartao-metrica",
+      "palavras": [
+        "cartao de metrica",
+        "heroi de dado",
+        "numero em destaque",
+        "simbolo e centavos"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe o cartão de métrica do saldo",
+          "quero um número em destaque com símbolo e centavos menores"
+        ],
+        "nao": [
+          "calcule o ponto de equilíbrio do produto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r19-linha-de-transacao.md",
+      "tema": "site-linha-transacao",
+      "palavras": [
+        "linha de transacao",
+        "lista de transacoes",
+        "lista de lancamentos do extrato",
+        "extrato no mockup"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe a linha de transação do extrato",
+          "preciso de uma lista de transações no mockup"
+        ],
+        "nao": [
+          "monte a escala de férias da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r20-progresso.md",
+      "tema": "site-progresso",
+      "palavras": [
+        "anel de progresso",
+        "barra de progresso",
+        "calendario termometro",
+        "mapa de calor do calendario"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-paineis",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "faça um anel de progresso com a meta do mês",
+          "quero um calendário termômetro com mapa de calor do calendário"
+        ],
+        "nao": [
+          "calcule a depreciação do imobilizado"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r21-hub-de-integracoes.md",
+      "tema": "site-hub-integracoes",
+      "palavras": [
+        "hub de integracoes",
+        "secao de integracoes",
+        "logos de bancos",
+        "integracoes em orbita"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe o hub de integrações com os logos de bancos",
+          "preciso de uma seção de integrações na página"
+        ],
+        "nao": [
+          "faça o rateio das despesas por centro de custo"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r22-personagem.md",
+      "tema": "site-personagem",
+      "palavras": [
+        "mascote",
+        "personagem da marca",
+        "objeto assinatura"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "crie um mascote como personagem da marca para o site",
+          "quero um objeto assinatura em vez de mascote"
+        ],
+        "nao": [
+          "registre o boletim de ocorrência do furto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r23-ritmo-de-blocos.md",
+      "tema": "site-ritmo-blocos",
+      "palavras": [
+        "ritmo de blocos",
+        "bloco invertido",
+        "alternar fundos",
+        "ritmo da pagina"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "defina o ritmo de blocos da página longa",
+          "quero alternar fundos com um bloco invertido"
+        ],
+        "nao": [
+          "calcule o ponto de equilíbrio do produto"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r24-atmosfera-de-fundo.md",
+      "tema": "site-atmosfera-fundo",
+      "palavras": [
+        "atmosfera de fundo",
+        "fundo atmosferico",
+        "luzes radiais",
+        "granulado no fundo"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "crie uma atmosfera de fundo com luzes radiais",
+          "quero um fundo atmosférico com granulado no fundo"
+        ],
+        "nao": [
+          "monte a escala de férias da equipe"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/design/sites-premium/r25-rodape.md",
+      "tema": "site-rodape",
+      "palavras": [
+        "rodape",
+        "rodape do site"
+      ],
+      "agentes": [
+        "designer-sites",
+        "estrategista-marketing",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "desenhe o rodapé do site",
+          "o rodapé precisa ter identificação legal e links"
+        ],
+        "nao": [
+          "calcule a depreciação do imobilizado"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/tela-nova/INDICE.md",
       "tema": "tela-nova",
       "palavras": [
         "tela nova",
         "pagina nova",
-        "novo site",
         "novo app",
         "mundo visual",
         "direcao visual",
@@ -878,7 +1702,8 @@
       ],
       "agentes": [
         "designer-paineis",
-        "designer-documentos"
+        "designer-documentos",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -910,7 +1735,8 @@
       "agentes": [
         "designer-documentos",
         "designer-paineis",
-        "engenheiro-software"
+        "engenheiro-software",
+        "designer-sites"
       ],
       "teste": {
         "sim": [
@@ -940,7 +1766,8 @@
       "agentes": [
         "designer-paineis",
         "designer-documentos",
-        "testador-qa"
+        "testador-qa",
+        "designer-sites"
       ],
       "teste": {
         "sim": [

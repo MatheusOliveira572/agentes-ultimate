@@ -7,6 +7,15 @@ Roda a cada pedido, antes do Claude responder. Sem IA, em milissegundos.
 1. **Pedido trivial** (curto e sem assunto de nenhum pacote): não faz nada. O Claude responde direto.
 2. **Pontos por pacote** (`pacotes/pacotes.json`): palavra do pedido = 1; expressão de 2+ palavras = 2; arquivo na
    pasta (raiz + 1 nível) = 2. Entram os pacotes com pontos ≥ `minimo` (2). Acentos e maiúsculas não importam.
+   - **Ambíguas** (`pacotes.json` → `ambiguas`): palavra que serve a várias áreas ("visual", "tela de") vale 0,5 e,
+     sozinha, não escolhe pacote.
+   - **Pares** (`pacotes.json` → `<pacote>.pares`): verbo + artigo opcional + "novo" opcional + alvo vale 2 ("crie um
+     site", "refaça a homepage"). O verbo solto vale 0: "faça login no site do banco" não é pedido de site.
+   - **Desempate entre áreas vizinhas** (`pacotes.json` → `desempate`, hoje sites × interface): primeiro a **âncora**,
+     o que o pedido diz que é o produto (site, landing, homepage × app, aplicativo, sistema). Se só um lado tem âncora e
+     algum dos dois passou do mínimo, esse lado fica com o pedido e com os pontos do outro ("site em react com efeito
+     vidro" é site). Âncora nos dois, ou em nenhum: fica o de mais pontos; empate, os dois. Âncora negada ("não é um
+     app") não conta.
 3. **Suas correções:** quando você diz `era com <agente>`, o pedido anterior é guardado com esse agente. Um pedido novo
    que divida ≥ 50% das palavras com um guardado ganha +3 pontos no pacote daquele agente.
 4. **Já feito (`hooks/grafo.js`):** o grafo do projeto tem como nós os arquivos (cada um com uma linha tirada do 1º
@@ -101,6 +110,12 @@ Barra e mapa usam a mesma conta (`previsao` em `hooks/registro.js`):
 
 - A escolha é por palavras e arquivos: pedidos ambíguos podem cair no pacote errado; a linha `Usando:` e o
   `era com <agente>` existem para isso.
+- **Âncora em qualquer lugar do pedido:** quando o pedido não diz app, aplicativo ou sistema, uma menção a "site" decide o
+  desempate mesmo quando o site é de outra pessoa e
+  o pedido é de tela de app ("o componente react de tabela quebra quando colo dados do site do IBGE" vai ao designer de
+  sites). Corrija com `era com designer-paineis`.
+- **Site e app no mesmo pedido** vão a um lado só (o da âncora, ou o de mais pontos), salvo empate, quando vão os dois.
+  Peça em dois pedidos ou diga quem você quer.
 - O "já feito" entende os sinônimos da lista e as ligações por nome de arquivo, não o significado livre do texto.
   Acrescente grupos de sinônimos do seu domínio em `pacotes/sinonimos.json`.
 - As referências de mercado dos agentes estão marcadas "(a confirmar)" até alguém abrir e conferir cada fonte.

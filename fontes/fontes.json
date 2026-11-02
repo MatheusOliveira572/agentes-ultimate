@@ -904,5 +904,47 @@
       "conferido_em": "2026-11-02",
       "vigiar": true
     }
+  ],
+  "_referencias_estudadas": "Sites só estudados: extraímos padrão e proporção, nada de texto, imagem, código ou identidade. Não são fontes de cópia: não têm pasta em terceiros/ nem entram no vigia.",
+  "referencias_estudadas": [
+    {
+      "site": "finmate.com.br",
+      "situacao": "estudado",
+      "estudado_em": "2026-11-01",
+      "como": "Edge sem interface, 1440 e 390 px, rolado até o fim, HTML e CSS públicos",
+      "licenca": "sem licença de reprodução",
+      "uso": "só padrão e proporção",
+      "destino": "docs/referencias-visuais-2026-11.md"
+    },
+    {
+      "site": "usecalen.com.br",
+      "situacao": "estudado",
+      "estudado_em": "2026-11-01",
+      "como": "Edge sem interface, 1440 e 390 px, rolado até o fim, HTML e CSS públicos",
+      "licenca": "sem licença de reprodução",
+      "uso": "só padrão e proporção",
+      "destino": "docs/referencias-visuais-2026-11.md"
+    },
+    {
+      "site": "dinzo.com.br",
+      "situacao": "estudado",
+      "estudado_em": "2026-11-01",
+      "como": "Edge sem interface, 1440 e 390 px, rolado até o fim, HTML e CSS públicos",
+      "licenca": "sem licença de reprodução",
+      "uso": "só padrão e proporção",
+      "destino": "docs/referencias-visuais-2026-11.md"
+    },
+    {
+      "site": "usenivora.com.br",
+      "situacao": "nao_aberto",
+      "motivo": "bloqueio da rede da organização; não foi contornado",
+      "pendencia": "estudar quando houver acesso; nada do plugin vem dele"
+    },
+    {
+      "site": "codeandchill.store",
+      "situacao": "nao_aberto",
+      "motivo": "bloqueio da rede da organização; não foi contornado; termos não lidos",
+      "pendencia": "estudar quando houver acesso; nada do plugin vem dele"
+    }
   ]
 }

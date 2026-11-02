@@ -1,6 +1,35 @@
 {
-  "_como_usar": "Cada pacote diz quando entra (palavras do pedido e arquivos da pasta) e quais agentes traz. O roteador soma pontos: palavra = 1, expressão de 2+ palavras = 2, arquivo da pasta = 2. Entram os pacotes com pontos >= minimo. O núcleo entra sempre que o pedido não é trivial. Para criar um pacote novo, veja docs/criar-pacote.md. Palavra é pista, não decisão: as de \"ambiguas\" servem a várias áreas, valem 0,5 e sozinhas não escolhem pacote; o arquivo da pasta só conta com uma palavra firme do assunto.",
+  "_como_usar": "Cada pacote diz quando entra (palavras do pedido e arquivos da pasta) e quais agentes traz. O roteador soma pontos: palavra = 1, expressão de 2+ palavras = 2, arquivo da pasta = 2. Entram os pacotes com pontos >= minimo. O núcleo entra sempre que o pedido não é trivial. Para criar um pacote novo, veja docs/criar-pacote.md. Palavra é pista, não decisão: as de \"ambiguas\" servem a várias áreas, valem 0,5 e sozinhas não escolhem pacote; o arquivo da pasta só conta com uma palavra firme do assunto. \"pares\" (em sites): verbo + alvo valem 2, verbo solto vale 0. \"desempate\": entre áreas vizinhas decide primeiro a âncora (o que o pedido é: site ou app) e depois a soma; empate, as duas.",
   "minimo": 2,
+  "desempate": [
+    {
+      "_como_usar": "Quem tem âncora e o outro não fica com o pedido (e com os pontos do outro), se um dos dois já passou do mínimo. Âncora nos dois, ou em nenhum: fica o de mais pontos; empate, os dois.",
+      "areas": [
+        "sites",
+        "interface"
+      ],
+      "ancoras": {
+        "sites": [
+          "site",
+          "sites",
+          "website",
+          "web site",
+          "landing",
+          "homepage",
+          "pagina web",
+          "lp de vendas"
+        ],
+        "interface": [
+          "app",
+          "aplicativo",
+          "aplicativos",
+          "apps",
+          "tela do app",
+          "sistema"
+        ]
+      }
+    }
+  ],
   "pacotes": {
     "nucleo": {
       "nome": "Núcleo",
@@ -37,7 +66,13 @@
         "medida",
         "kpi",
         "drill",
-        "bi"
+        "bi",
+        "dashboard de",
+        "painel de bi",
+        "painel de indicadores",
+        "dashboard para",
+        "dashboard no",
+        "dashboard na"
       ],
       "arquivos": [
         ".pbip",
@@ -158,7 +193,7 @@
       "lancamento": true
     },
     "interface": {
-      "nome": "Interface (app e site)",
+      "nome": "Interface (app)",
       "agentes": [
         "designer-paineis",
         "engenheiro-software"
@@ -167,10 +202,6 @@
       "palavras": [
         "app",
         "aplicativo",
-        "site",
-        "site institucional",
-        "landing page",
-        "pagina web",
         "interface",
         "ux",
         "ui",
@@ -178,21 +209,145 @@
         "redesenhar",
         "redesenhe",
         "redesign",
-        "visual premium",
-        "frontend",
-        "front-end",
         "componente",
         "animacao",
-        "efeito vidro",
-        "glassmorphism",
-        "liquid glass",
         "formulario",
+        "tela do app",
+        "visual premium",
+        "efeito vidro",
+        "liquid glass",
+        "glassmorphism",
         "html",
         "css",
         "tailwind",
         "react",
-        "tela do app"
+        "frontend",
+        "front-end",
+        "checkout",
+        "painel administrativo",
+        "tela",
+        "sistema",
+        "tela de",
+        "tela do",
+        "tela da",
+        "ui do sistema",
+        "interface do sistema",
+        "front-end do sistema",
+        "frontend do sistema",
+        "onboarding do app"
       ]
+    },
+    "sites": {
+      "nome": "Sites e landing pages",
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "lancamento": true,
+      "palavras": [
+        "landing page",
+        "landing pages",
+        "pagina de captura",
+        "pagina de campanha",
+        "site institucional",
+        "site premium",
+        "site bonito",
+        "lp de vendas",
+        "portfolio online",
+        "site de portfolio",
+        "web site",
+        "web page",
+        "site novo",
+        "quero uma landing",
+        "homepage da empresa",
+        "pagina inicial do meu",
+        "pagina inicial do site",
+        "pagina de contato",
+        "do meu site",
+        "site para minha",
+        "site pra minha",
+        "site para meu",
+        "site pro meu",
+        "site com dashboard",
+        "site com painel",
+        "efeito vidro no site",
+        "efeito vidro no meu site",
+        "visual premium para o site",
+        "visual premium do site",
+        "html e css do site",
+        "site com animacao",
+        "animacao no site",
+        "site responsivo com",
+        "formulario de contato",
+        "redesign do site",
+        "site",
+        "website",
+        "homepage",
+        "landing",
+        "dashboard para o site",
+        "ux do site",
+        "ux do meu site",
+        "ui do site",
+        "site com glassmorphism",
+        "site com efeito vidro",
+        "uma pagina de vendas",
+        "pagina de vendas do meu",
+        "pagina de vendas da minha",
+        "pagina de vendas para",
+        "pagina de vendas do curso",
+        "pagina de vendas do produto",
+        "novo site de",
+        "site para o meu",
+        "site para a minha",
+        "site moderno"
+      ],
+      "pares": {
+        "_como_usar": "Verbo + artigo opcional + \"novo\" opcional + alvo = 2 pontos (ex.: \"crie um site\", \"refaça a homepage\", \"faça o site novo\"). Verbo sem o alvo logo depois não pontua.",
+        "verbos": [
+          "crie",
+          "cria",
+          "criar",
+          "faca",
+          "faz",
+          "fazer",
+          "monte",
+          "montar",
+          "desenvolva",
+          "desenvolver",
+          "construa",
+          "construir",
+          "desenhe",
+          "desenhar",
+          "redesenhe",
+          "redesenhar",
+          "melhore",
+          "melhorar",
+          "refaca",
+          "refazer"
+        ],
+        "artigos": [
+          "um",
+          "uma",
+          "o",
+          "a",
+          "meu",
+          "minha",
+          "nosso",
+          "nossa",
+          "seu",
+          "sua"
+        ],
+        "alvos": [
+          "site",
+          "website",
+          "web site",
+          "landing",
+          "landing page",
+          "homepage",
+          "pagina web",
+          "lp"
+        ]
+      }
     },
     "documentos": {
       "nome": "Documentos e apresentações",
@@ -592,6 +747,19 @@
     "publicar",
     "medida",
     "custo",
-    "tela"
+    "tela",
+    "tela de",
+    "tela do",
+    "tela da",
+    "novo site de",
+    "site moderno",
+    "site para o meu",
+    "site para a minha",
+    "uma pagina de vendas",
+    "pagina de vendas do meu",
+    "pagina de vendas da minha",
+    "pagina de vendas para",
+    "pagina de vendas do curso",
+    "pagina de vendas do produto"
   ]
 }

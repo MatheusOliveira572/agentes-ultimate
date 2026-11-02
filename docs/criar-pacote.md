@@ -14,7 +14,10 @@ Exemplo: um pacote "Jurídico" com um agente `analista-juridico`.
      "arquivos": []
    }
    ```
-   Escolha palavras que só aparecem nesse assunto. Expressões de 2+ palavras valem o dobro.
+   Escolha palavras que só aparecem nesse assunto. Expressões de 2+ palavras valem o dobro. Palavra que serve a várias
+   áreas vai em `ambiguas` (vale 0,5). Verbo comum ("crie", "faça") **nunca** como palavra solta: use `pares`, que só
+   pontua o verbo seguido do alvo do assunto (ex.: o pacote `sites`). Se o assunto é vizinho de outro (site × tela de
+   app), declare o par em `desempate`, com as âncoras de cada lado, e teste frases dos dois lados e de empate.
 3. **Gere e confira:**
    ```bash
    node scripts/gerar-agentes.js

@@ -423,9 +423,9 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   // Ponta a ponta (critério do usuário): pedido amplo aciona tudo sozinho. Liga no lote 3 (conteúdo de design).
   const E2E = existe('conhecimento', 'design', 'metodo.md');
   const espera = [
-    ['conhecimento/design/metodo.md', 'designer-paineis', 'método do impeccable'],
-    ['conhecimento/design/apple/INDICE.md', 'designer-paineis', 'regras da Apple'],
-    ['conhecimento/design/detalhes-interface.md', 'designer-paineis', 'detalhes de interface do Jakub'],
+    ['conhecimento/design/metodo.md', 'DESIGNER', 'método do impeccable'],
+    ['conhecimento/design/apple/INDICE.md', 'DESIGNER', 'regras da Apple'],
+    ['conhecimento/design/detalhes-interface.md', 'DESIGNER', 'detalhes de interface do Jakub'],
     ['conhecimento/design/movimento/INDICE.md', 'engenheiro-software', 'animação do Emil'],
     ['conhecimento/design/revisao-tela.md', 'revisor', 'revisão de design (Superfuture)'],
   ];
@@ -433,9 +433,13 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     for (const ligado of [false, true]) {
       fs.writeFileSync(cfgRef, JSON.stringify(ligado ? { integracoes: ['21st'] } : {}));
       const x = rotRef(pedido);
-      const faltam = espera.filter(([a, ag]) => !x.refs.some((y) => y.arquivo === a && y.agente === ag)).map((e) => e[2]);
+      // App é do designer-paineis; site é do designer-sites, que recebe a biblioteca de sites no lugar dos detalhes de interface (teto de 3 por agente).
+      const ehSite = /site/.test(pedido);
+      const designer = ehSite ? 'designer-sites' : 'designer-paineis';
+      const esperaPedido = ehSite ? espera.filter((e) => !/detalhes/.test(e[2])).concat([['conhecimento/design/sites-premium/INDICE.md', 'DESIGNER', 'biblioteca de sites']]) : espera;
+      const faltam = esperaPedido.filter(([a, ag]) => !x.refs.some((y) => y.arquivo === a && y.agente === (ag === 'DESIGNER' ? designer : ag))).map((e) => e[2]);
       const c21 = x.refs.some((y) => y.arquivo === 'conhecimento/design/componentes.md' && y.agente === 'engenheiro-software');
-      const ags = ['designer-paineis', 'engenheiro-software', 'revisor'].every((a) => x.agentes.includes('agentes-ultimate:' + a));
+      const ags = [designer, 'engenheiro-software', 'revisor'].every((a) => x.agentes.includes('agentes-ultimate:' + a));
       const ok2 = ags && !faltam.length && c21 === ligado && /\/checklist-lancamento/.test(x.t);
       const nome = `0.8.0 B ponta a ponta: "${pedido}"${ligado ? ' com o 21st ligado' : ''} → designer, engenheiro e revisor, referências certas, ${ligado ? 'componentes do 21st' : 'sem o 21st'} e o /checklist-lancamento`;
       const det = `agentes: ${x.agentes || 'nenhum'}; faltam: ${faltam.join(', ') || '-'}; 21st: ${c21}; checklist: ${/checklist-lancamento/.test(x.t)}`;

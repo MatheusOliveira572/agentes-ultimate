@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/better-interface/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT. Alterações: tradução, corte; semáforo por impacto e "o que funciona" pela ideia do Superfuture design review (Figma Community, só a ideia, texto nosso); alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/. -->
-<!-- ref: tema=revisao-de-tela; palavras=revisar a tela, revisao de tela, revisao de design, revisar o design, revisar a interface, semaforo, o que funciona, site institucional, site bonito, visual premium, redesenhe, redesenho, app; agentes=revisor, designer-paineis -->
+<!-- ref: tema=revisao-de-tela; palavras=revisar a tela, revisao de tela, revisao de design, revisar o design, revisar a interface, semaforo, o que funciona, site institucional, site bonito, visual premium, redesenhe, redesenho, app; agentes=revisor, designer-paineis, designer-sites -->
 <!-- teste-ref: sim=revise a tela nova antes de ir ao usuário, com semáforo por impacto | faça a revisão de design da interface do app com o que funciona e o que corrigir; nao=faça a declaração do imposto de renda -->
 # Revisão de tela: prova, não gosto
 

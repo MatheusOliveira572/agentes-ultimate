@@ -582,3 +582,30 @@ A versão continua 0.7.0 (não tinha sido publicada). Um commit por item.
 - Memória do projeto criada na primeira vez (`.claude/base/`).
 - Travas: confirmação para publicar; bloqueio de commit com arquivo sensível e de heredoc com barra invertida.
 - Validador, gerador e testes dos ganchos (15 casos).
+
+## 0.8.0 · lote sites-premium (ramo lote-sites)
+Fontes: `docs/referencias-visuais-2026-11.md`, `docs/referencias-efeitos-2026-11.md`. Casos em `scripts/testar-sites.js`, vistos falhando antes.
+- **Agente `designer-sites`** (`fonte/agentes/design/`, 10 evals), dono de site e landing page; pacote `sites`. O `designer-paineis` fica com painel e tela de dados: descrições separadas, e "site", "site institucional" e "landing page" saíram do pacote `interface`, que passa a se chamar "Interface (app)". O roteador não mudou.
+- **Biblioteca `conhecimento/design/sites-premium/`:** 25 receitas, uma por arquivo, método de montagem e 39 efeitos, com cabeçalho do índice e pedidos de teste. Repertório, não molde: nenhuma ordem é obrigatória.
+- **Vidro em `apple/materiais.md`** (decisão do usuário): em landing page, permitido em cartão, com pouca transparência e sobre fundo calmo; em tela de produto ou de tarefa, a regra da Apple. Mais os acréscimos do estudo.
+- **Prova em `docs/provas/0.8.0-sites/`:** página fictícia, feita seguindo o agente, e bancada dos efeitos no Edge sem interface; contraste medido nos pixels do fundo, mutantes para cada checagem. O que passou está em `sites-premium/efeitos/provas.md`; o resto fica [ESTIMATIVA].
+- **Pendência:** Nivora e Code and Chill não foram estudados (rede da organização). Registro em `fontes/fontes.json`.
+- **Correções da revisão do lote** (`docs/revisao-0.8.0-sites.md`): roteamento por expressão de criação de site (A-1, só `pacotes.json`;
+  html, css, react e frontend sem site vão ao engenheiro); teclado na prova, no método e no critério (A-2); bancada com tolerância
+  de 3 níveis por canal (M-1); objeção e títulos nascidos do produto (M-2); vidro sem contradição (M-3); ponto preso à curva (M-4);
+  20 mutantes na prova da página (M-5); 8 larguras (M-6); a maré até o fim da página (b-1); b-2 a b-7.
+- **Correção de relato (b-11 da 2ª revisão):** a mensagem do commit 4e28d29 diz que os 2 mutantes que escapavam "agora são
+  pegos". Um deles não foi pego: foi **trocado**. "Tábua de preços sem empilhar" em 768 px não é defeito (fica apertada, mas
+  legível, como o revisor confirmou no PNG), e passou a rodar em 320 px, onde o cabeçalho da tábua se sobrepõe e é pego.
+- **2ª revisão do lote** (`docs/revisao-0.8.0-sites-r2.md`): junção com a `main` antes de mexer no roteador; desempate site ×
+  interface (`pacotes.json` → `desempate`, regra genérica no `roteador.js`); 160 frases na bateria; teclado comparado com a
+  lista real de controles; tábua das semanas no lugar do calendário; PROVADO só com 3 rodadas estáveis.
+- **3ª revisão do lote** (`docs/revisao-0.8.0-sites-r3.md`, decisões do usuário de 2026-11-02): verbo só pontua junto do alvo
+  (`sites.pares`: verbo + artigo + "novo" + site, landing, homepage, página web ou lp = 2 pontos; os 16 verbos e "web" saíram
+  das palavras firmes); o desempate site × interface olha primeiro a âncora (site × app) e depois a soma; empate = os dois,
+  com caso; o quadro mostra a pior das 3 rodadas; a tábua das semanas marca a mais baixa por texto e forma.
+- **Correção (b-14):** a entrada da 2ª rodada acima diz "html, css, react e frontend sem site vão ao engenheiro". Isso valeu
+  só de fa570e5 a c7e7adb. Desde a A-3 da 2ª rodada, essas palavras voltaram ao pacote `interface` (designer de painéis), e o
+  caso "corrija o css e o html do botão no react → só engenheiro" saiu da bateria por isso: a frase agora vai ao designer de
+  painéis e ao engenheiro, e está na lista "o orquestrador decide". O eval de roteamento não acusa mais palavra repetida
+  entre pacotes (eram 3).

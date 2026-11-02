@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/SKILL.src.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução, corte dos comandos e do carregador do impeccable, o método virou 5 etapas ligadas aos nossos arquivos; alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=metodo-de-design; palavras=redesenhe, redesenho, redesenhar, redesign, visual premium, app premium, site institucional, site bonito, bonito, tela nova, pagina nova, landing page, novo visual, app, aplicativo, site; agentes=designer-paineis, designer-documentos -->
+<!-- ref: tema=metodo-de-design; palavras=redesenhe, redesenho, redesenhar, redesign, visual premium, app premium, site institucional, site bonito, bonito, tela nova, pagina nova, landing page, novo visual, app, aplicativo; agentes=designer-paineis, designer-documentos, designer-sites -->
 <!-- teste-ref: sim=redesenhe meu app com visual premium | crie um site institucional bonito para a empresa; nao=faça o controle de ponto dos funcionários -->
 # Método de design: entender → direção → construir → auditar → polir
 

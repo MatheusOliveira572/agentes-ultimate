@@ -14,6 +14,7 @@ Ordem de quem manda: marca e decisões do projeto → norma (WCAG) → referênc
 | teclado, foco, leitor de tela, áreas de toque | `acessibilidade/INDICE.md` |
 | documento longo, documentação, relatório de leitura | `modos/ler.md` |
 | campanha, venda, apresentação que convence | `modos/persuadir.md` |
+| site, landing page, página de vendas: receitas, método e efeitos | `sites-premium/INDICE.md` |
 | ilustração técnica (vista explodida, corte) | `../documentos/ilustracao-tecnica.md` |
 | pedido amplo (redesenhar, app, site, visual premium): o método inteiro | `metodo.md` |
 | planejar a tela antes do código (o brief) | `planejar-tela.md` |

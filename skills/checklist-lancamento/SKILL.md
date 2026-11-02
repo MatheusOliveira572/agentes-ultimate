@@ -50,7 +50,7 @@ verificar, feito quando) ficam em `referencias/`, um arquivo por área; abra só
 ## 3. Cada item
 Para cada item do bloco: faça o "Verificar:" (comportamento, não existência), registre o dono, o status e a evidência.
 Delegue pela função: segurança → `auditor-seguranca` (só relata) e `engenheiro-software` (corrige, com teste que falha
-antes); LGPD → `especialista-lgpd`; acessibilidade e "atualizado em" → `designer-paineis`; textos → `redator`; termos,
+antes); LGPD → `especialista-lgpd`; acessibilidade e "atualizado em" → `designer-paineis` (em site e landing page, `designer-sites`); textos → `redator`; termos,
 marca e contrato → `advogado-contratos`; alegação de marketing → `estrategista-marketing`.
 
 ## 4. Relatório

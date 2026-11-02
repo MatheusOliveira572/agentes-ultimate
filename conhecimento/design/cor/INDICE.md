@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/better-colors/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT. Alterações: tradução, corte; a paleta da marca do projeto vence; alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/. -->
-<!-- ref: tema=cor; palavras=cor, cores, paleta, contraste, tokens de cor, rampa de cor, oklch, tema escuro, modo escuro, cor da marca, gradiente; agentes=designer-paineis, designer-documentos, engenheiro-software -->
+<!-- ref: tema=cor; palavras=cor, cores, paleta, contraste, tokens de cor, rampa de cor, oklch, tema escuro, modo escuro, cor da marca, gradiente; agentes=designer-paineis, designer-documentos, engenheiro-software, designer-sites -->
 <!-- teste-ref: sim=monte a paleta e os tokens de cor do app com tema escuro | o contraste das cores do relatório está ruim, revise a paleta; nao=prepare o parecer sobre a cláusula de multa -->
 # Cor: sistema de rampas, tokens por papel, contraste medido
 

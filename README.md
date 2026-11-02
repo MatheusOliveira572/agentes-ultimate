@@ -53,12 +53,13 @@ Para testar uma cópia local sem instalar: `claude --plugin-dir <pasta-do-reposi
 
 **Núcleo** (sempre disponível): `planejador`, `pesquisador`, `revisor`, `redator`, `curador`.
 
-30 agentes, cada um trabalhando como **as melhores empresas daquela função** (pelo menos 3 empresas diferentes por
+31 agentes, cada um trabalhando como **as melhores empresas daquela função** (pelo menos 3 empresas diferentes por
 agente, com a prática documentada e a fonte aberta), com casos de teste próprios em `evals/`.
 
 | Pacote | Entra quando o pedido fala de… | Agentes | Algumas referências |
 |---|---|---|---|
 | BI e painéis | Power BI, DAX, painel, dashboard (ou a pasta tem `.pbip`) | `designer-paineis`, `engenheiro-dados`, `dev-powerbi` | Financial Times, Airbnb, Microsoft, SQLBI |
+| Sites e landing pages | landing page, página de vendas, site institucional | `designer-sites`, `engenheiro-software` | Stripe, Nielsen Norman, Google, Apple |
 | Finanças | orçado, realizado, desvio, fechamento, caixa, capital de giro | `analista-fpa`, `analista-tesouraria` | Microsoft Finance, Equinor, Apple, Ambev |
 | Contábil e tributário | contabilidade, CPC/IFRS, imposto, reforma tributária, SPED | `contador`, `especialista-tributario` | Deloitte, KPMG, Unilever |
 | Pessoas (RH) | vaga, entrevista, cargos e salários, desempenho, clima | `analista-rh`, `recrutador` | Google People Ops, Netflix, Natura, Amazon, Nubank |
@@ -165,6 +166,13 @@ com o porquê), histórico e contexto consolidado.
 
 Detalhes em [docs/como-funciona.md](docs/como-funciona.md). Para criar um pacote seu (ex.: jurídico, marketing), veja
 [docs/criar-pacote.md](docs/criar-pacote.md).
+
+### Limites do roteamento de site × app
+- Quando o pedido não diz app, aplicativo ou sistema, uma menção a "site" decide o pedido, mesmo quando o site é de outra
+  pessoa ("dados do site do IBGE" num pedido de tela de app vai ao designer de sites).
+- Site e app no mesmo pedido vão a um lado só, salvo empate.
+- Em todos os casos, corrija com `era com <agente>`: a correção vale também para os pedidos parecidos seguintes. Detalhes
+  em `docs/como-funciona.md`.
 
 ## Referências sob demanda e ferramentas externas
 
