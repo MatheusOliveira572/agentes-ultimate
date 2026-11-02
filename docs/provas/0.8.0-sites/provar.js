@@ -277,7 +277,7 @@ async function medirMenu(b, url) {
   const aberto = () => b.ev("document.querySelector('.menu').open");
   await b.ev("document.querySelector('.menu summary').click()"); await espera(80); const abriu = await aberto();
   await b.ev("document.querySelector('.menu ul a[href=\u0022#como-ler\u0022]').click()"); await assenta(b); const fechouLink = !(await aberto());
-  const tit = await b.ev("(function(){var h=document.getElementById('como-ler').getBoundingClientRect(),n=document.querySelector('.nav').getBoundingClientRect(),u=document.querySelector('.menu ul').getBoundingClientRect();return h.top>=n.bottom-1&&(!u.height||u.bottom<=h.top)})()");
+  const tit = await b.ev("(function(){var h=document.getElementById('como-ler').getBoundingClientRect(),n=document.querySelector('.nav').getBoundingClientRect();return h.top>=n.bottom-1&&!document.querySelector('.menu').open})()");
   await b.ev("document.querySelector('.menu summary').focus(); document.querySelector('.menu').open=true"); await espera(80);
   await tecla(b, 'Escape', 'Escape', 27); await espera(100); const fechouEsc = !(await aberto());
   const foco = await b.ev("document.activeElement===document.querySelector('.menu summary')");
