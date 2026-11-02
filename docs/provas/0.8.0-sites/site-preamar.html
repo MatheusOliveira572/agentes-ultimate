@@ -150,7 +150,8 @@ tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 #p-anual:checked ~ .periodo label[for="p-anual"], #p-mensal:checked ~ .periodo label[for="p-mensal"] { background: var(--texto); color: var(--fundo); }
 #p-anual:focus-visible ~ .periodo label[for="p-anual"], #p-mensal:focus-visible ~ .periodo label[for="p-mensal"] { outline: 2px solid var(--acento-forte); outline-offset: 2px; }
 #p-anual:checked ~ .planos .so-mensal, #p-mensal:checked ~ .planos .so-anual { display: none; }
-.planos { display: grid; grid-template-columns: repeat(2, minmax(0, 380px)) minmax(0, 1fr); gap: 20px; margin-top: 24px; align-items: stretch; }
+.planos { display: grid; grid-template-columns: repeat(2, minmax(0, 380px)); gap: 20px; margin-top: 24px; align-items: stretch; }
+.garantia { grid-column: 1 / -1; }
 .plano { background: var(--cartao); border: 1px solid var(--regua); border-radius: 18px; padding: 28px; display: flex; flex-direction: column; }
 .plano.rec { border: 2px solid var(--acento); }
 .plano .selo { font-size: 13px; font-weight: 600; color: var(--acento-forte); margin-top: 4px; min-height: 20px; }
@@ -158,7 +159,7 @@ tr.baixa td { font-weight: 600; color: var(--acento-forte); }
 .valor .s { font-size: 22px; margin-right: 5px; } .valor .i { font-size: 52px; line-height: 1; } .valor .c { font-size: 24px; } .valor .p { font: 400 15px var(--sans); color: var(--texto-2); margin-left: 6px; }
 .total { font-size: 15px; color: var(--texto-2); margin-top: 8px; }
 .plano ul { margin: 18px 0 22px; padding: 0; list-style: none; flex: 1; } .plano li { padding: 7px 0; font-size: 15px; border-top: 1px solid var(--regua); }
-.garantia { align-self: end; padding: 0 0 8px 40px; font: 400 21px/1.4 var(--serif); }
+.garantia { padding-top: 8px; font: 400 21px/1.4 var(--serif); }
 .garantia small { display: block; margin-top: 10px; font: 400 15px/1.4 var(--sans); color: var(--texto-2); }
 
 /* Perguntas */
