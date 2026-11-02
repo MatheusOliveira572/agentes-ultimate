@@ -628,9 +628,6 @@
       "tema": "modo-persuadir",
       "palavras": [
         "landing page",
-        "uma pagina de vendas",
-        "pagina de vendas do meu",
-        "pagina de vendas para",
         "pagina de vendas do curso",
         "pagina de campanha",
         "convencer",
@@ -639,7 +636,8 @@
         "pitch",
         "portfolio",
         "site institucional",
-        "campanha"
+        "campanha",
+        "pagina de vendas do ebook"
       ],
       "agentes": [
         "estrategista-marketing",
@@ -882,9 +880,6 @@
       "tema": "sites-premium",
       "palavras": [
         "landing page",
-        "uma pagina de vendas",
-        "pagina de vendas do meu",
-        "pagina de vendas para",
         "pagina de vendas do curso",
         "pagina de captura",
         "site institucional",
@@ -924,7 +919,7 @@
         "pagina de contato",
         "site com animacao",
         "animacao no site",
-        "formulario de contato"
+        "pagina de vendas do ebook"
       ],
       "agentes": [
         "designer-sites",
@@ -1089,12 +1084,10 @@
         "site completo",
         "ordem dos blocos",
         "landing page",
-        "uma pagina de vendas",
-        "pagina de vendas do meu",
-        "pagina de vendas para",
         "pagina de vendas do curso",
         "site premium",
-        "teste do recorte"
+        "teste do recorte",
+        "pagina de vendas do ebook"
       ],
       "agentes": [
         "designer-sites",

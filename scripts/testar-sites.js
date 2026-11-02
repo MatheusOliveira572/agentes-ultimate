@@ -19,7 +19,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const t = ctx(rot(pedido, projS));
     return { t, ag: (t.match(/(?:Agentes indicados|Candidatos)[^:]*: ([^.]+)\./) || [])[1] || '', refs: (t.match(/Referências para este pedido.*/) || [''])[0] };
   };
-  for (const p of ['crie uma landing page para o meu aplicativo', 'faça a página de vendas do curso de investimentos', 'desenhe o site institucional da empresa',
+  for (const p of ['crie uma landing page para o meu aplicativo', 'faça a landing page do curso de investimentos', 'desenhe o site institucional da empresa',
     'crie um site premium para um app de finanças', 'redesenhe o site da clínica']) {
     const x = agentesDe(p);
     caso(`0.8.0 sites roteador: "${p}" → designer-sites, sem designer-paineis`, /designer-sites/.test(x.ag) && !/designer-paineis/.test(x.ag), x.ag || 'nenhum');
@@ -89,7 +89,6 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "monte uma lp de vendas",
     "crie um site para o meu escritório de advocacia",
     "faça um site de casamento",
-    "monte a página de vendas do meu ebook",
     "desenvolva o site da minha consultoria",
     "preciso de um site institucional para a ONG",
     "refaça a homepage da minha loja",
@@ -116,7 +115,6 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "refaça a homepage da padaria com fotos maiores",
     "desenvolva o site da ong com página de doação",
     "melhore o site da loja, está lento e feio no celular",
-    "quero uma página de vendas para o meu ebook",
     "construa um site de portfólio para fotógrafo",
     "preciso de um site institucional para a construtora",
     "faça um site one page para o casamento",
@@ -353,7 +351,9 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "quero um site moderno para a minha academia",
     "faça a página de vendas do meu curso",
     "monte a página de vendas para o lançamento do ebook",
-    "faça a página de vendas da minha loja de roupas"
+    "faça a página de vendas da minha loja de roupas",
+    "monte a página de vendas do meu ebook",
+    "quero uma página de vendas para o meu ebook"
    ],
    "NS": [
     "crie o plano e monte o cronograma do projeto",
@@ -419,6 +419,7 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     "a planilha baixada do novo site de câmbio veio com vírgula errada"
    ]
   };
+
 
 
 

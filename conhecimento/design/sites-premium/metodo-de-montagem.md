@@ -1,5 +1,5 @@
 <!-- Texto próprio do agentes-ultimate, a partir do estudo visual de 2026-11-01 (docs/referencias-visuais-2026-11.md): só padrão e proporção, nada copiado dos sites estudados. -->
-<!-- ref: tema=site-metodo-de-montagem; palavras=montar um site, site inteiro, site completo, ordem dos blocos, landing page, uma pagina de vendas, pagina de vendas do meu, pagina de vendas para, pagina de vendas do curso, site premium, teste do recorte; agentes=designer-sites, estrategista-marketing, engenheiro-software -->
+<!-- ref: tema=site-metodo-de-montagem; palavras=montar um site, site inteiro, site completo, ordem dos blocos, landing page, pagina de vendas do curso, site premium, teste do recorte, pagina de vendas do ebook; agentes=designer-sites, estrategista-marketing, engenheiro-software -->
 <!-- teste-ref: sim=monte o site inteiro do produto com a ordem dos blocos | crie a landing page completa do aplicativo; nao=faça a provisão para devedores duvidosos -->
 # Como montar um site inteiro
 
