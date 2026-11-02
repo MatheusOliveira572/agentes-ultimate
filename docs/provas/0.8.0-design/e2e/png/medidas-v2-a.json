@@ -1,5 +1,5 @@
 {
-  "data": "2026-11-02T16:10:27.807Z",
+  "data": "2026-11-02T16:32:25.138Z",
   "totalErros": 0,
   "relatorio": [
     {
@@ -17,32 +17,32 @@
       "vidro": [
         {
           "txt": "Nova tarefa…",
-          "pior": 7.45,
+          "pior": 7.4,
           "min": 4.5
         },
         {
           "txt": "N nova · ↑↓ navegar · Espaço c",
-          "pior": 5.49,
+          "pior": 5.5,
           "min": 4.5
         },
         {
           "txt": "N",
-          "pior": 7.45,
+          "pior": 7.46,
           "min": 4.5
         },
         {
           "txt": "↑",
-          "pior": 6.83,
+          "pior": 6.84,
           "min": 4.5
         },
         {
           "txt": "↓",
-          "pior": 6.83,
+          "pior": 6.9,
           "min": 4.5
         },
         {
           "txt": "Espaço",
-          "pior": 6.83,
+          "pior": 6.9,
           "min": 4.5
         }
       ],
@@ -64,22 +64,22 @@
       "vidro": [
         {
           "txt": "Hoje",
-          "pior": 13.65,
+          "pior": 14.74,
           "min": 4.5
         },
         {
           "txt": "Próximos",
-          "pior": 12.28,
+          "pior": 13.25,
           "min": 4.5
         },
         {
           "txt": "Feitas",
-          "pior": 13.13,
+          "pior": 13.25,
           "min": 4.5
         },
         {
           "txt": "Buscar",
-          "pior": 13.13,
+          "pior": 13.25,
           "min": 4.5
         }
       ],
@@ -108,27 +108,27 @@
         },
         {
           "txt": "N nova · ↑↓ navegar · Espaço c",
-          "pior": 4.91,
+          "pior": 5.18,
           "min": 4.5
         },
         {
           "txt": "N",
-          "pior": 6.54,
+          "pior": 6.71,
           "min": 4.5
         },
         {
           "txt": "↑",
-          "pior": 6.18,
+          "pior": 6.44,
           "min": 4.5
         },
         {
           "txt": "↓",
-          "pior": 6.35,
+          "pior": 6.62,
           "min": 4.5
         },
         {
           "txt": "Espaço",
-          "pior": 6.99,
+          "pior": 7.16,
           "min": 4.5
         }
       ],
@@ -150,22 +150,22 @@
       "vidro": [
         {
           "txt": "Hoje",
-          "pior": 5.93,
+          "pior": 12.71,
           "min": 4.5
         },
         {
           "txt": "Próximos",
-          "pior": 5.58,
+          "pior": 13.57,
           "min": 4.5
         },
         {
           "txt": "Feitas",
-          "pior": 7.17,
+          "pior": 13.57,
           "min": 4.5
         },
         {
           "txt": "Buscar",
-          "pior": 9.06,
+          "pior": 13.57,
           "min": 4.5
         }
       ],
@@ -189,32 +189,32 @@
       "vidro": [
         {
           "txt": "Nova tarefa…",
-          "pior": 7.45,
+          "pior": 7.4,
           "min": 4.5
         },
         {
           "txt": "N nova · ↑↓ navegar · Espaço c",
-          "pior": 5.49,
+          "pior": 5.5,
           "min": 4.5
         },
         {
           "txt": "N",
-          "pior": 7.45,
+          "pior": 7.46,
           "min": 4.5
         },
         {
           "txt": "↑",
-          "pior": 6.83,
+          "pior": 6.84,
           "min": 4.5
         },
         {
           "txt": "↓",
-          "pior": 6.83,
+          "pior": 6.9,
           "min": 4.5
         },
         {
           "txt": "Espaço",
-          "pior": 6.83,
+          "pior": 6.9,
           "min": 4.5
         }
       ],
@@ -244,27 +244,27 @@
         },
         {
           "txt": "N nova · ↑↓ navegar · Espaço c",
-          "pior": 4.91,
+          "pior": 5.18,
           "min": 4.5
         },
         {
           "txt": "N",
-          "pior": 6.54,
+          "pior": 6.71,
           "min": 4.5
         },
         {
           "txt": "↑",
-          "pior": 6.18,
+          "pior": 6.44,
           "min": 4.5
         },
         {
           "txt": "↓",
-          "pior": 6.35,
+          "pior": 6.62,
           "min": 4.5
         },
         {
           "txt": "Espaço",
-          "pior": 6.99,
+          "pior": 7.16,
           "min": 4.5
         }
       ],
@@ -287,32 +287,32 @@
       "vidro": [
         {
           "txt": "Nova tarefa…",
-          "pior": 6.08,
+          "pior": 5.97,
           "min": 4.5
         },
         {
           "txt": "N nova · ↑↓ navegar · Espaço c",
-          "pior": 5.49,
+          "pior": 5.5,
           "min": 4.5
         },
         {
           "txt": "N",
-          "pior": 7.45,
+          "pior": 7.46,
           "min": 4.5
         },
         {
           "txt": "↑",
-          "pior": 6.83,
+          "pior": 6.84,
           "min": 4.5
         },
         {
           "txt": "↓",
-          "pior": 6.83,
+          "pior": 6.9,
           "min": 4.5
         },
         {
           "txt": "Espaço",
-          "pior": 6.83,
+          "pior": 6.9,
           "min": 4.5
         }
       ],
@@ -335,32 +335,32 @@
       "vidro": [
         {
           "txt": "Nova tarefa…",
-          "pior": 7.45,
+          "pior": 7.4,
           "min": 4.5
         },
         {
           "txt": "N nova · ↑↓ navegar · Espaço c",
-          "pior": 5.49,
+          "pior": 5.5,
           "min": 4.5
         },
         {
           "txt": "N",
-          "pior": 7.45,
+          "pior": 7.46,
           "min": 4.5
         },
         {
           "txt": "↑",
-          "pior": 6.83,
+          "pior": 6.84,
           "min": 4.5
         },
         {
           "txt": "↓",
-          "pior": 6.83,
+          "pior": 6.9,
           "min": 4.5
         },
         {
           "txt": "Espaço",
-          "pior": 6.83,
+          "pior": 6.9,
           "min": 4.5
         }
       ],

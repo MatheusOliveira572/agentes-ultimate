@@ -1,5 +1,5 @@
 {
-  "data": "2026-11-02T16:12:52.438Z",
+  "data": "2026-11-02T16:35:29.361Z",
   "totalErros": 0,
   "relatorio": [
     {
@@ -15,72 +15,72 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 9.6,
+          "pior": 12.35,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 10.2,
+          "pior": 12.9,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 7.49,
+          "pior": 8.39,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 10.8,
+          "pior": 13.12,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 7.93,
+          "pior": 8.78,
           "min": 4.5
         },
         {
           "txt": "Pessoas9",
-          "pior": 11.44,
+          "pior": 13.52,
           "min": 4.5
         },
         {
           "txt": "9",
-          "pior": 8.37,
+          "pior": 9.15,
           "min": 4.5
         },
         {
           "txt": "Álbuns fixados",
-          "pior": 8.85,
+          "pior": 10.1,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral24",
-          "pior": 12.65,
+          "pior": 13.86,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 7.61,
+          "pior": 8.13,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 10.87,
+          "pior": 14.45,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 9.43,
+          "pior": 10.07,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 8.37,
+          "pior": 10.66,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 6.07,
+          "pior": 7.19,
           "min": 4.5
         },
         {
@@ -90,27 +90,32 @@
         },
         {
           "txt": "Selecionar",
-          "pior": 4.67,
+          "pior": 13.85,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 18.54,
+          "pior": 17.7,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 19.27,
+          "pior": 19.04,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 19.55,
+          "pior": 19.11,
+          "min": 4.5
+        },
+        {
+          "txt": "Imagens ilustrativas geradas p",
+          "pior": 19.19,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.10) capsula redonda lg:escuro(0.10)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.03) capsula redonda lg:escuro(0.03)",
       "png": "caso-b-produto-v2-claro-1440.png"
     },
     {
@@ -126,27 +131,32 @@
       "vidro": [
         {
           "txt": "Selecionar",
-          "pior": 4.9,
+          "pior": 11.6,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 18.67,
+          "pior": 17.67,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 19.27,
+          "pior": 18.73,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 19.4,
+          "pior": 18.89,
+          "min": 4.5
+        },
+        {
+          "txt": "Imagens ilustrativas geradas p",
+          "pior": 19.14,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 5.14,
+          "pior": 4.76,
           "min": 4.5
         },
         {
@@ -156,22 +166,22 @@
         },
         {
           "txt": "Fotos",
-          "pior": 17.77,
+          "pior": 17.75,
           "min": 4.5
         },
         {
           "txt": "Álbuns",
-          "pior": 17.99,
+          "pior": 17.97,
           "min": 4.5
         },
         {
           "txt": "Pessoas",
-          "pior": 8.86,
+          "pior": 8.89,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:escuro(0.11) Ações do álbum:escuro(0.10) capsula redonda lg:escuro(0.10) Seções:escuro+misto(0.15) Buscar:claro(0.67)",
+      "tons": "capsula redonda lg:escuro(0.04) Ações do álbum:escuro(0.04) capsula redonda lg:escuro(0.04) Seções:escuro+misto(0.15) Buscar:claro+misto(0.71)",
       "png": "caso-b-produto-v2-claro-390.png"
     },
     {
@@ -187,72 +197,72 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 5.64,
+          "pior": 5.81,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 5.75,
+          "pior": 6.07,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 8.25,
+          "pior": 9.03,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 5.69,
+          "pior": 6.25,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 8.24,
+          "pior": 9.37,
           "min": 4.5
         },
         {
           "txt": "Pessoas9",
-          "pior": 5.74,
+          "pior": 6.31,
           "min": 4.5
         },
         {
           "txt": "9",
-          "pior": 7.99,
+          "pior": 9.42,
           "min": 4.5
         },
         {
           "txt": "Álbuns fixados",
-          "pior": 4.82,
+          "pior": 5.55,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral24",
-          "pior": 5.83,
+          "pior": 6.76,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 6.11,
+          "pior": 7.14,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 5.99,
+          "pior": 7.08,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 6.86,
+          "pior": 8.42,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 10.98,
+          "pior": 11.27,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 13.62,
+          "pior": 13.61,
           "min": 4.5
         },
         {
@@ -262,27 +272,32 @@
         },
         {
           "txt": "Selecionar",
-          "pior": 4.67,
+          "pior": 13.85,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 18.54,
+          "pior": 17.7,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 19.27,
+          "pior": 19.04,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 19.55,
+          "pior": 19.11,
+          "min": 4.5
+        },
+        {
+          "txt": "Imagens ilustrativas geradas p",
+          "pior": 19.19,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.10) capsula redonda lg:escuro(0.10)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.03) capsula redonda lg:escuro(0.03)",
       "png": "caso-b-produto-v2-escuro-1440.png"
     },
     {
@@ -298,27 +313,32 @@
       "vidro": [
         {
           "txt": "Selecionar",
-          "pior": 4.9,
+          "pior": 11.6,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 18.67,
+          "pior": 17.67,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 19.27,
+          "pior": 18.73,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 19.4,
+          "pior": 18.89,
+          "min": 4.5
+        },
+        {
+          "txt": "Imagens ilustrativas geradas p",
+          "pior": 19.14,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 5.14,
+          "pior": 4.76,
           "min": 4.5
         },
         {
@@ -328,12 +348,12 @@
         },
         {
           "txt": "Fotos",
-          "pior": 17.77,
+          "pior": 17.75,
           "min": 4.5
         },
         {
           "txt": "Álbuns",
-          "pior": 17.99,
+          "pior": 17.97,
           "min": 4.5
         },
         {
@@ -343,7 +363,7 @@
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:escuro(0.11) Ações do álbum:escuro(0.10) capsula redonda lg:escuro(0.10) Seções:escuro+misto(0.15) Buscar:claro(0.67)",
+      "tons": "capsula redonda lg:escuro(0.04) Ações do álbum:escuro(0.04) capsula redonda lg:escuro(0.04) Seções:escuro+misto(0.15) Buscar:claro+misto(0.71)",
       "png": "caso-b-produto-v2-escuro-390.png"
     },
     {
@@ -359,12 +379,12 @@
       "vidro": [
         {
           "txt": "Selecionar",
-          "pior": 6.91,
+          "pior": 12.36,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 5.14,
+          "pior": 4.76,
           "min": 4.5
         },
         {
@@ -374,14 +394,14 @@
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:claro(0.57) Ações do álbum:claro+misto(0.41) capsula redonda lg:escuro(0.08) Seções:claro+misto(0.45) Buscar:claro+misto(0.44)",
+      "tons": "capsula redonda lg:claro(0.62) Ações do álbum:claro+misto(0.44) capsula redonda lg:escuro(0.08) Seções:claro+misto(0.47) Buscar:claro+misto(0.46)",
       "png": "caso-b-produto-v2-escuro-390-rolado.png"
     },
     {
       "caso": "caso-b-produto-v2-claro-1440-rolado",
       "erros": [],
       "avisos": [],
-      "pares": 2,
+      "pares": 4,
       "piorTexto": {
         "txt": "Paraty · 8 fotos",
         "r": 6.42,
@@ -390,108 +410,224 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 18.54,
+          "pior": 16.64,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 18.54,
+          "pior": 17.11,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 13.27,
+          "pior": 11.88,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 18.54,
+          "pior": 16.63,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 13.27,
+          "pior": 11.82,
           "min": 4.5
         },
         {
           "txt": "Pessoas9",
-          "pior": 18.54,
+          "pior": 14.95,
           "min": 4.5
         },
         {
           "txt": "9",
-          "pior": 13.27,
+          "pior": 10.21,
           "min": 4.5
         },
         {
           "txt": "Álbuns fixados",
-          "pior": 13.27,
+          "pior": 10.15,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral24",
-          "pior": 18.54,
+          "pior": 13.22,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 10.54,
+          "pior": 7.75,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 18.54,
+          "pior": 15.79,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 13.27,
+          "pior": 10.81,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 18.54,
+          "pior": 16.32,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 13.39,
+          "pior": 11.37,
           "min": 4.5
         },
         {
           "txt": "Apresentação",
-          "pior": 6.68,
+          "pior": 7.69,
           "min": 4.5
         },
         {
           "txt": "Selecionar",
-          "pior": 6.4,
+          "pior": 15.09,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 7.2,
+          "pior": 6.84,
           "min": 4.5
         },
         {
           "txt": "1 de outubro",
-          "pior": 10.36,
+          "pior": 10.2,
           "min": 4.5
         },
         {
           "txt": "Trilha",
-          "pior": 11.49,
+          "pior": 11.77,
           "min": 4.5
         },
         {
           "txt": "11 de outubro",
-          "pior": 15.32,
+          "pior": 15.13,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.10) capsula redonda lg:escuro(0.02)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.13) capsula redonda lg:escuro(0.02)",
       "png": "caso-b-produto-v2-claro-1440-rolado.png"
+    },
+    {
+      "caso": "caso-b-produto-v2-escuro-1440-rolado",
+      "erros": [],
+      "avisos": [],
+      "pares": 4,
+      "piorTexto": {
+        "txt": "Paraty · 8 fotos",
+        "r": 8.38,
+        "min": 4.5
+      },
+      "vidro": [
+        {
+          "txt": "Fotos",
+          "pior": 4.48,
+          "min": 3
+        },
+        {
+          "txt": "Fotos3.418",
+          "pior": 5.08,
+          "min": 4.5
+        },
+        {
+          "txt": "3.418",
+          "pior": 7.43,
+          "min": 4.5
+        },
+        {
+          "txt": "Álbuns12",
+          "pior": 5.72,
+          "min": 4.5
+        },
+        {
+          "txt": "12",
+          "pior": 8.89,
+          "min": 4.5
+        },
+        {
+          "txt": "Pessoas9",
+          "pior": 5.83,
+          "min": 4.5
+        },
+        {
+          "txt": "9",
+          "pior": 8.84,
+          "min": 4.5
+        },
+        {
+          "txt": "Álbuns fixados",
+          "pior": 5.24,
+          "min": 4.5
+        },
+        {
+          "txt": "Viagem ao litoral24",
+          "pior": 6.55,
+          "min": 4.5
+        },
+        {
+          "txt": "24",
+          "pior": 6.65,
+          "min": 4.5
+        },
+        {
+          "txt": "Família312",
+          "pior": 6.92,
+          "min": 4.5
+        },
+        {
+          "txt": "312",
+          "pior": 8.65,
+          "min": 4.5
+        },
+        {
+          "txt": "Receitas58",
+          "pior": 7.69,
+          "min": 4.5
+        },
+        {
+          "txt": "58",
+          "pior": 9.57,
+          "min": 4.5
+        },
+        {
+          "txt": "Apresentação",
+          "pior": 8.2,
+          "min": 4.5
+        },
+        {
+          "txt": "Selecionar",
+          "pior": 12.48,
+          "min": 4.5
+        },
+        {
+          "txt": "Praia ao nascer do sol",
+          "pior": 6.84,
+          "min": 4.5
+        },
+        {
+          "txt": "1 de outubro",
+          "pior": 10.2,
+          "min": 4.5
+        },
+        {
+          "txt": "Trilha",
+          "pior": 11.77,
+          "min": 4.5
+        },
+        {
+          "txt": "11 de outubro",
+          "pior": 15.13,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.11) capsula redonda lg:escuro(0.01)",
+      "png": "caso-b-produto-v2-escuro-1440-rolado.png"
     },
     {
       "caso": "caso-b-produto-v2-escuro-1440-teclado-reduzido",
@@ -506,72 +642,72 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 5.64,
+          "pior": 5.81,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 5.75,
+          "pior": 6.07,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 8.25,
+          "pior": 9.03,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 5.69,
+          "pior": 6.25,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 8.24,
+          "pior": 9.37,
           "min": 4.5
         },
         {
           "txt": "Pessoas9",
-          "pior": 5.74,
+          "pior": 6.31,
           "min": 4.5
         },
         {
           "txt": "9",
-          "pior": 7.99,
+          "pior": 9.42,
           "min": 4.5
         },
         {
           "txt": "Álbuns fixados",
-          "pior": 4.82,
+          "pior": 5.55,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral24",
-          "pior": 5.83,
+          "pior": 6.76,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 6.11,
+          "pior": 7.14,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 5.99,
+          "pior": 7.08,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 6.86,
+          "pior": 8.42,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 10.98,
+          "pior": 11.27,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 13.62,
+          "pior": 13.61,
           "min": 4.5
         },
         {
@@ -581,34 +717,39 @@
         },
         {
           "txt": "Selecionar",
-          "pior": 4.67,
+          "pior": 13.85,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 18.54,
+          "pior": 17.7,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 19.27,
+          "pior": 19.04,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 19.55,
+          "pior": 19.11,
+          "min": 4.5
+        },
+        {
+          "txt": "Imagens ilustrativas geradas p",
+          "pior": 19.19,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.10) capsula redonda lg:escuro(0.10)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.03) capsula redonda lg:escuro(0.03)",
       "teclado": "Pular para as fotos → Trilha, 3 de outubro (solid 2px, legenda 1); animações com redução: 0"
     },
     {
       "caso": "caso-b-produto-v2-claro-1440-transparencia-reduzida",
       "erros": [],
       "avisos": [],
-      "pares": 2,
+      "pares": 4,
       "piorTexto": {
         "txt": "Paraty · 8 fotos",
         "r": 6.42,
@@ -692,32 +833,32 @@
         },
         {
           "txt": "Selecionar",
-          "pior": 7.53,
+          "pior": 15.59,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 7.2,
+          "pior": 6.84,
           "min": 4.5
         },
         {
           "txt": "1 de outubro",
-          "pior": 10.36,
+          "pior": 10.2,
           "min": 4.5
         },
         {
           "txt": "Trilha",
-          "pior": 11.49,
+          "pior": 11.77,
           "min": 4.5
         },
         {
           "txt": "11 de outubro",
-          "pior": 15.32,
+          "pior": 15.13,
           "min": 4.5
         }
       ],
       "backdrop": " | none",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.10) capsula redonda lg:escuro(0.02)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.13) capsula redonda lg:escuro(0.02)",
       "png": "caso-b-produto-v2-claro-1440-transparencia-reduzida.png"
     }
   ]

@@ -120,3 +120,21 @@ ficam para comparação.
 - A barra lateral clara de B mostra uma passagem brusca onde a capa termina (é física, mas não é bonita).
 - O verificador mede contraste pixel a pixel, mas o "impressiona" continua julgado no olho, pela régua; não há medida
   automática para ele.
+
+## Rodada de correção do caso B (pv94, depois da revisão do orquestrador)
+Apontado: a barra lateral terminava num corte seco onde a capa acaba, e o vidro não lia como Liquid Glass na imagem parada.
+- **Extensão de fundo** (como no macOS 26): sob a barra lateral, a foto vizinha espelhada e desfocada, do topo ao fim da
+  página, com a cor do pé da capa esmaecendo na passagem; no escuro, escurecida (brilho 0,72) para o texto da barra.
+- **Barra lateral com material mais grosso** que o dos controles (superfície grande: tinta 0,72 claro / 0,76 escuro).
+- **Aro e borda mais legíveis:** aro de 1,5 px, linha externa de 0,5 px e brilho interno só no tom claro.
+- **"Fotos" mais fotográficas:** nuvens desfocadas, suavização que tira o fio de vetor e grão leve (±4,5); na capa, a
+  legenda "Imagens ilustrativas geradas por código (sem foto real)".
+- Mosaico com `grid-auto-flow: dense` (o 2º lugar abria buracos); tinta lida numa grade 8 × 8 (a 4 × 4 não via as nuvens),
+  e a capa passou a ter a grade.
+- **Medida:** o contraste sobre o vidro passou a ser medido na caixa das letras (`Range`), não no recuo do botão; ainda
+  pega vidro ruim (mutação com tinta escura 0,10: 4 casos reprovados).
+- Novo: `png/caso-b-produto-v2-escuro-1440-rolado.png` e `-zoom.png` (barra lateral ampliada 2×).
+- `node verificar-v2.js b`: 9 casos ok; `node verificar-v2.js a`: 8 casos ok (o vidro de A usa o mesmo `liquido.css`).
+
+**PNGs para mostrar ao usuário:** `png/caso-a-v2-claro-1440.png`, `png/caso-b-produto-v2-claro-1440-rolado.png` e
+`png/caso-b-produto-v2-escuro-1440-rolado-zoom.png`.

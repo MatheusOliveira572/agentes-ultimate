@@ -34,6 +34,7 @@ if (qual === 'b' || qual === 'tudo') {
     CASOS.push({ nome: `caso-b-produto-v2-${tema === 'light' ? 'claro' : 'escuro'}-${w}`, arq: 'caso-b-produto-v2.html', w, h, tema });
   CASOS.push({ nome: 'caso-b-produto-v2-escuro-390-rolado', arq: 'caso-b-produto-v2.html', w: 390, h: 844, tema: 'dark', rolar: 520 });
   CASOS.push({ nome: 'caso-b-produto-v2-claro-1440-rolado', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'light', rolar: 640, zoom: { x: 1060, y: 640, width: 370, height: 70 } });
+  CASOS.push({ nome: 'caso-b-produto-v2-escuro-1440-rolado', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'dark', rolar: 900, zoom: { x: 0, y: 900, width: 260, height: 360 } });
   CASOS.push({ nome: 'caso-b-produto-v2-escuro-1440-teclado-reduzido', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'dark', tecladoB: true, reduzido: true, semPng: true });
   CASOS.push({ nome: 'caso-b-produto-v2-claro-1440-transparencia-reduzida', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'light', transp: true, rolar: 640 });
 }
@@ -63,7 +64,7 @@ function medirTudo(opc) {
     const m = s.match(/\/\s*([\d.]+%?)\s*\)|rgba\([^)]*,\s*([\d.]+)\s*\)/); let a = 1; if (m) { const v = m[1] || m[2]; a = v.endsWith('%') ? parseFloat(v) / 100 : parseFloat(v); }
     if (s === 'transparent') a = 0; return [d[0], d[1], d[2], a]; };
   const comp = (cima, baixo) => [0, 1, 2].map((i) => Math.round(cima[i] * cima[3] + baixo[i] * (1 - cima[3])));
-  const visivel = (e) => { const r = e.getBoundingClientRect(); if (r.width < 1 || r.height < 1) return false;
+  const visivel = (e) => { const r = e.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false;
     if (r.bottom <= 0 || r.top >= innerHeight || r.right <= 0 || r.left >= innerWidth) return false;
     for (let x = e; x; x = x.parentElement) { const s = getComputedStyle(x); if (s.visibility === 'hidden' || s.display === 'none' || +s.opacity === 0) return false; } return true; };
   // cobre: o ponto central do texto está debaixo de outro elemento (barra fixa, aviso)?
@@ -104,7 +105,10 @@ function medirTudo(opc) {
     const fixo = (() => { for (let x = b; x; x = x.parentElement) if (getComputedStyle(x).position === 'fixed') return true; return false; })();
     if (fixo && (r.right > innerWidth + 0.5 || r.left < -0.5)) erros.push(`controle cortado pela borda: ${b.getAttribute('aria-label') || b.textContent.trim().slice(0, 30)} (${Math.round(r.left)}–${Math.round(r.right)} de ${innerWidth})`); }
   const min = pares.reduce((m, p) => (p.r < m.r ? p : m), { r: 99 });
-  return { erros, avisos, nPares: pares.length, pior: min, vidro: vidro.map((e) => { const r = e.getBoundingClientRect(); return { txt: e.textContent.trim().slice(0, 30), cor: getComputedStyle(e).color, x: r.left + scrollX, y: r.top + scrollY, vx: r.left, vy: r.top, w: r.width, h: r.height, tam: parseFloat(getComputedStyle(e).fontSize), peso: +getComputedStyle(e).fontWeight }; }) };
+  return { erros, avisos, nPares: pares.length, pior: min, vidro: vidro.map((e) => { // caixa das letras (Range sobre os nós de texto do próprio elemento), não o recuo do botão
+    const rg = document.createRange(); const rs = [...e.childNodes].filter((n) => n.nodeType === 3 && n.textContent.trim()).map((n) => { rg.selectNodeContents(n); return rg.getBoundingClientRect(); });
+    const r = rs.length ? { left: Math.min(...rs.map((q) => q.left)), top: Math.min(...rs.map((q) => q.top)), width: Math.max(...rs.map((q) => q.right)) - Math.min(...rs.map((q) => q.left)), height: Math.max(...rs.map((q) => q.bottom)) - Math.min(...rs.map((q) => q.top)) } : e.getBoundingClientRect();
+    const el0 = e.getBoundingClientRect(); return { txt: e.textContent.trim().slice(0, 30), cor: getComputedStyle(e).color, x: r.left + scrollX, y: r.top + scrollY, vx: el0.left, vy: el0.top, w: r.width, h: r.height, tam: parseFloat(getComputedStyle(e).fontSize), peso: +getComputedStyle(e).fontWeight }; }) };
 }
 
 function somasA() {

@@ -82,9 +82,10 @@
       const r = el.getBoundingClientRect(); let soma = 0, area = 0, min = 1, max = 0;
       for (const f of document.querySelectorAll(el.dataset.lgAdapta)) {
         const q = f.getBoundingClientRect();
-        // data-lum-grade: 16 valores (4 × 4) da luminância da foto; usa só as células que estão atrás do controle.
+        // data-lum-grade: n × n valores (4 × 4 ou 8 × 8) da luminância da foto; usa só as células que estão atrás do controle.
         const grade = f.dataset.lumGrade ? f.dataset.lumGrade.split(',').map(Number) : null;
-        const celulas = grade ? grade.map((L, k) => ({ L, x0: q.left + (k % 4) * q.width / 4, y0: q.top + Math.floor(k / 4) * q.height / 4, w: q.width / 4, h: q.height / 4 }))
+        const n = grade ? Math.round(Math.sqrt(grade.length)) : 1;
+        const celulas = grade ? grade.map((L, k) => ({ L, x0: q.left + (k % n) * q.width / n, y0: q.top + Math.floor(k / n) * q.height / n, w: q.width / n, h: q.height / n }))
           : [{ L: +f.dataset.lum, x0: q.left, y0: q.top, w: q.width, h: q.height }];
         for (const c of celulas) {
           const a = Math.max(0, Math.min(r.right, c.x0 + c.w) - Math.max(r.left, c.x0)) * Math.max(0, Math.min(r.bottom, c.y0 + c.h) - Math.max(r.top, c.y0));

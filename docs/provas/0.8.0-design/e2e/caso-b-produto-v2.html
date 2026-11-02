@@ -38,10 +38,13 @@
   .capa-texto { position: absolute; z-index: 1; left: calc(var(--lateral) + 40px); right: 40px; bottom: 34px; color: #fff; }
   .capa h1 { margin: 0; font: 700 68px/1 var(--fonte-exib); letter-spacing: -0.035em; text-wrap: balance; }
   .capa p { margin: 10px 0 0; font-size: 17px; color: rgb(255 255 255 / 0.92); font-variant-numeric: tabular-nums; }
+  .capa .ilustr { margin-top: 6px; font-size: 13px; color: rgb(255 255 255 / 0.86); }
 
   /* ===== Barra lateral (Liquid Glass, flutua; a capa passa por trás) ===== */
   .lateral { position: fixed; z-index: 10; left: 12px; top: 12px; bottom: 12px; width: calc(var(--lateral) - 24px); padding: 18px 10px 14px; border-radius: 28px;
-    --lg-raio: 28px; --lg-recuo: 10px; display: flex; flex-direction: column; gap: 20px; }
+    --lg-raio: 28px; --lg-recuo: 10px; display: flex; flex-direction: column; gap: 20px;
+    --lg-tinta: rgb(255 255 255 / 0.72); }   /* superfície grande: material mais grosso que o dos controles */
+  @media (prefers-color-scheme: dark) { .lateral.lg { --lg-tinta: rgb(26 26 30 / 0.76); } }
   .lateral .app { display: flex; align-items: center; gap: 10px; padding: 0 10px; font: 700 20px/1 var(--fonte-exib); letter-spacing: -0.02em; }
   .lateral h2 { margin: 0 0 4px 12px; font-size: 12px; font-weight: 650; color: var(--lg-texto-2); }
   .lateral ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
@@ -64,14 +67,21 @@
 
   /* ===== Fotos: mosaico por lugar ===== */
   main { position: relative; }
-  .lugares { padding: 8px 32px 120px calc(var(--lateral) + 24px); }
+  .lugares { position: relative; padding: 8px 32px 120px calc(var(--lateral) + 24px); }
+  /* Extensão de fundo (macOS 26: o conteúdo junto da barra lateral continua por baixo dela, espelhado e desfocado),
+     para o vidro ter conteúdo atrás do começo ao fim, sem corte onde a capa acaba. */
+  .extensao { position: absolute; z-index: 0; left: 0; top: 0; bottom: 0; width: calc(var(--lateral) + 24px); overflow: hidden; pointer-events: none;
+    -webkit-mask: linear-gradient(90deg, #000 calc(100% - 44px), transparent calc(100% - 12px)); mask: linear-gradient(90deg, #000 calc(100% - 44px), transparent calc(100% - 12px)); }
+  .extensao canvas { position: absolute; inset: -40px -40px -40px -40px; width: calc(100% + 80px); height: calc(100% + 80px); filter: blur(10px) saturate(1.15); }
+  .lugar, .rodape { position: relative; z-index: 1; }
+  @media (prefers-color-scheme: dark) { .extensao canvas { filter: blur(10px) saturate(1.15) brightness(0.72); } }
   .lugar { margin-top: 44px; }
   .lugar header { display: flex; align-items: baseline; gap: 12px; margin: 0 4px 16px; }
   .lugar h2 { margin: 0; font: 700 28px/1.1 var(--fonte-exib); letter-spacing: -0.025em; }
   .lugar header p { margin: 0; color: var(--texto-2); font-size: 15px; font-variant-numeric: tabular-nums; }
   .lugar { container-type: inline-size; }
   .mosaico { --col: 6; --vao: 6px; display: grid; grid-template-columns: repeat(var(--col), minmax(0, 1fr));
-    grid-auto-rows: calc((100cqw - (var(--col) - 1) * var(--vao)) / var(--col)); gap: var(--vao); }
+    grid-auto-rows: calc((100cqw - (var(--col) - 1) * var(--vao)) / var(--col)); gap: var(--vao); grid-auto-flow: dense; }
   .foto { position: relative; display: block; width: 100%; height: 100%; border-radius: 12px; overflow: hidden; background: #888; padding: 0;
     transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 500ms var(--mola), box-shadow 300ms ease; }
   .foto.g { grid-column: span 2; grid-row: span 2; }
@@ -122,6 +132,7 @@
     .capsula .rot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .capsula button { padding: 0 11px; }
     .lugares { padding: 0 0 130px; }
+    .extensao { display: none; }
     .lugar { margin-top: 30px; }
     .lugar header { margin: 0 16px 10px; flex-wrap: wrap; row-gap: 0; }
     .lugar h2 { font-size: 22px; }
@@ -187,11 +198,12 @@
 </div>
 
 <main id="fotos" tabindex="-1">
-  <header class="capa" data-lum-alvo>
+  <header class="capa" data-lum="0.5">
     <canvas id="capa" aria-hidden="true"></canvas>
     <div class="capa-texto sobre-foto">
       <h1>Viagem ao litoral</h1>
       <p>1 a 24 de outubro · <span id="n-fotos">24</span> fotos · 3 lugares</p>
+      <p class="ilustr">Imagens ilustrativas geradas por código (sem foto real)</p>
     </div>
   </header>
   <div class="lugares" id="lugares"></div>
@@ -246,18 +258,25 @@ const PINTAR = {
     for (let i = 0; i < 26; i++) { g.fillStyle = `rgba(255,${150 + r() * 80},80,${0.4 + r() * 0.5})`; g.fillRect(x + (r() - 0.5) * w * 0.4, y - r() * h * 0.6, 1.5, 1.5); }
     g.fillStyle = '#0a0607'; g.fillRect(x - w * 0.12, y, w * 0.24, h * 0.03); }
 };
+const NUVENS = { 'Praia ao nascer do sol': [0.58, 'rgba(255,236,220,A)'], 'Pôr do sol': [0.6, 'rgba(255,170,150,A)'], 'Areia branca': [0.45, 'rgba(255,255,255,A)'], 'Trilha': [0.45, 'rgba(255,255,255,A)'], 'Lagoa': [0.4, 'rgba(255,255,255,A)'] };
 function pintar(canvas, nome, seed) {
   const dpr = Math.min(2, devicePixelRatio || 1); const w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
   if (!w || !h) return 0.5; canvas.width = w; canvas.height = h; const g = canvas.getContext('2d', { willReadFrequently: true });
   const r0 = rnd(seed); g.filter = `hue-rotate(${((r0() - 0.5) * 26).toFixed(1)}deg) saturate(${(0.92 + r0() * 0.2).toFixed(2)})`;
   PINTAR[nome](g, w, h, rnd(seed)); g.filter = 'none';
+  const nv = NUVENS[nome]; if (nv) { const r2 = rnd(seed + 11); g.save(); g.filter = 'blur(' + Math.max(3, w / 40) + 'px)';
+    for (let i = 0; i < 7; i++) { g.fillStyle = nv[1].replace('A', (0.18 + r2() * 0.25).toFixed(2)); g.beginPath(); g.ellipse(r2() * w, h * nv[0] * (0.25 + r2() * 0.7), w * (0.12 + r2() * 0.22), h * (0.02 + r2() * 0.035), 0, 0, 7); g.fill(); } g.restore(); }
+  g.save(); g.filter = 'blur(' + (w > 600 ? 0.9 : 0.5) + 'px)'; g.drawImage(canvas, 0, 0); g.restore();   // tira o fio de vetor
+  const px = g.getImageData(0, 0, w, h); const dd = px.data; const r3 = rnd(seed + 97);
+  for (let i = 0; i < dd.length; i += 4) { const n = (r3() - 0.5) * 9; dd[i] += n; dd[i + 1] += n; dd[i + 2] += n; }   // grão leve de sensor (±4,5)
+  g.putImageData(px, 0, 0);
   const v = g.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.35, w / 2, h / 2, Math.max(w, h) * 0.75); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.22)'); g.fillStyle = v; g.fillRect(0, 0, w, h);   // vinheta de lente
-  const p = document.createElement('canvas'); p.width = p.height = 12; const q = p.getContext('2d', { willReadFrequently: true }); q.drawImage(canvas, 0, 0, 12, 12);
-  const d = q.getImageData(0, 0, 12, 12).data; let s = 0; const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
-  const grade = new Array(16).fill(0);
-  for (let i = 0; i < d.length; i += 4) { const L = 0.2126 * f(d[i]) + 0.7152 * f(d[i + 1]) + 0.0722 * f(d[i + 2]); s += L; const p = i / 4, gx = Math.floor((p % 12) / 3), gy = Math.floor(Math.floor(p / 12) / 3); grade[gy * 4 + gx] += L / 9; }
+  const p = document.createElement('canvas'); p.width = p.height = 24; const q = p.getContext('2d', { willReadFrequently: true }); q.drawImage(canvas, 0, 0, 24, 24);
+  const d = q.getImageData(0, 0, 24, 24).data; let s = 0; const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const grade = new Array(64).fill(0);   // 8 × 8: pega nuvem e sol que a média esconde
+  for (let i = 0; i < d.length; i += 4) { const L = 0.2126 * f(d[i]) + 0.7152 * f(d[i + 1]) + 0.0722 * f(d[i + 2]); s += L; const p = i / 4, gx = Math.floor((p % 24) / 3), gy = Math.floor(Math.floor(p / 24) / 3); grade[gy * 8 + gx] += L / 9; }
   canvas.closest('[data-lum]') && (canvas.closest('[data-lum]').dataset.lumGrade = grade.map((x) => x.toFixed(3)).join(','));
-  return s / 144;
+  return s / 576;
 }
 
 /* ---------- Dados: os 24 do caso B original (mesmos nomes e datas) ---------- */
@@ -290,8 +309,28 @@ function montar() {
     document.getElementById('fixados').innerHTML = [['Viagem ao litoral', 24, 'Pôr do sol', true], ['Família', 312, 'Lagoa'], ['Receitas', 58, 'Fogueira']].map(([n, c, p, at]) =>
       `<li><a href="#"${at ? ' aria-current="page" class="lg-sel"' : ''}><span class="mini"><canvas data-p="${p}" aria-hidden="true"></canvas></span>${n}<small>${c}</small></a></li>`).join('');
     document.querySelectorAll('#fixados canvas').forEach((c, i) => pintar(c, c.dataset.p, 40 + i));
+    estender();
     window.liquido && liquido.montar();
   });
+}
+function estender() {
+  const L = document.getElementById('lugares'); let ext = L.querySelector('.extensao');
+  if (innerWidth <= 760) { ext && ext.remove(); return; }
+  if (!ext) { ext = document.createElement('div'); ext.className = 'extensao'; ext.setAttribute('aria-hidden', 'true'); ext.innerHTML = '<canvas></canvas>'; L.prepend(ext); }
+  const c = ext.querySelector('canvas'); const cw = c.clientWidth, ch = c.clientHeight; c.width = Math.round(cw / 2); c.height = Math.round(ch / 2);
+  const g = c.getContext('2d'); const base = L.getBoundingClientRect(); const ox = 40, oy = 40;
+  g.fillStyle = getComputedStyle(document.body).backgroundColor; g.fillRect(0, 0, c.width, c.height);
+  // cada foto encostada na borda esquerda do mosaico é espelhada para baixo da barra (esticada para cobrir os vãos)
+  const fotos = [...L.querySelectorAll('.foto')]; const esq = Math.min(...fotos.map((f) => f.getBoundingClientRect().left));
+  const daBorda = fotos.filter((f) => Math.abs(f.getBoundingClientRect().left - esq) < 2);
+  daBorda.forEach((f, k) => { const r = f.getBoundingClientRect(); const fc = f.querySelector('canvas');
+    const y0 = k === 0 ? 0 : (r.top - base.top + oy) - 50, y1 = k === daBorda.length - 1 ? ch : (r.bottom - base.top + oy) + 50;
+    g.save(); g.translate((r.left - base.left + ox) / 2, 0); g.scale(-1, 1); g.drawImage(fc, 0, y0 / 2, (r.left - base.left + ox) / 2 + 2, (y1 - y0) / 2); g.restore(); });
+  // a capa continua no topo da extensão (cor real do pé da capa, esmaecendo em 180 px): sem linha seca na barra lateral
+  const capa = document.getElementById('capa'); const pc = capa.getContext('2d').getImageData(0, capa.height - 2, Math.max(1, Math.round(capa.width * 0.2)), 1).data;
+  let cr = 0, cg = 0, cb = 0, n = pc.length / 4; for (let i = 0; i < pc.length; i += 4) { cr += pc[i]; cg += pc[i + 1]; cb += pc[i + 2]; }
+  const cor = (al) => 'rgba(' + Math.round(cr / n) + ',' + Math.round(cg / n) + ',' + Math.round(cb / n) + ',' + al + ')';
+  const gr = g.createLinearGradient(0, 0, 0, (oy + 180) / 2); gr.addColorStop(0, cor(1)); gr.addColorStop(0.35, cor(0.85)); gr.addColorStop(1, cor(0)); g.fillStyle = gr; g.fillRect(0, 0, c.width, (oy + 180) / 2);
 }
 montar();
 let largoAntes = innerWidth > 760;
