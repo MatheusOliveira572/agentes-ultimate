@@ -216,12 +216,20 @@
           "destino": "conhecimento/escrita/adr.md"
         },
         {
+          "origem": "skills/context-engineering/SKILL.md",
+          "destino": "conhecimento/metodo/contexto.md"
+        },
+        {
           "origem": "skills/interview-me/SKILL.md",
           "destino": "conhecimento/metodo/entrevistar.md"
         },
         {
           "origem": "skills/spec-driven-development/SKILL.md",
           "destino": "conhecimento/metodo/especificar.md"
+        },
+        {
+          "origem": "evals/skill-impact.md",
+          "destino": "conhecimento/metodo/evals.md"
         },
         {
           "origem": "skills/source-driven-development/SKILL.md",
@@ -328,6 +336,10 @@
         {
           "origem": "skills/verification-loop/SKILL.md",
           "destino": "conhecimento/engenharia/verificacao.md"
+        },
+        {
+          "origem": "skills/eval-harness/SKILL.md",
+          "destino": "conhecimento/metodo/evals.md"
         },
         {
           "origem": "scripts/lib/package-manager.js",

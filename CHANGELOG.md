@@ -111,6 +111,13 @@ falhando antes.
   alternativas próximas. Palavra ambígua (`ambiguas` em `pacotes.json`) vale 0,5 e sozinha não escolhe pacote; arquivo da pasta só
   reforça com uma palavra firme do assunto; "não para o nosso BI" não conta como pedido de BI. `scripts/eval-roteamento.js`: casos em
   `evals/roteamento.json` contra o roteador real, piso de 90%, e relatório das palavras em mais de um pacote.
+- **B5 · `curador`, skills e validadores:** `conhecimento/metodo/evals.md` e `contexto.md`; **T5** `scripts/doutor.js` (relata memória e mapa
+  velhos, nunca corrige); **T10** eval de roteamento; **T12** `validar.js` confere skill só do usuário com
+  `disable-model-invocation`, `maxTurns`, `allowed-tools` e versões coerentes; **T13** `validar.js --links` (fora do padrão; hoje acha
+  4 links de fonte quebrados ou sem resposta, listados no relatório); **T14** `scripts/testar-instalacao.js` (cópia do que está no git,
+  gerador idempotente, roteador e manifesto); `ultimate` ganha padrões de orquestração, passagem entre agentes, revisor em contexto limpo e
+  régua de pronto; `rodada` ganha ponto de controle e passadas limitadas; `criar-agente` ensina as referências. **T11** (evals de
+  comportamento com o `claude` sem tela) fica descrito em `evals.md`, opcional.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

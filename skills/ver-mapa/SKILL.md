@@ -1,6 +1,7 @@
 ---
 name: ver-mapa
 description: Abre no navegador o mapa do projeto ao vivo — arquivos, quem cita quem, anotações da memória — com o que o último pedido usou em destaque e cada arquivo que o Claude ou um agente lê ou edita acendendo na hora. Use quando o usuário pedir para ver o mapa, o grafo, as conexões, "o Claude trabalhando" ou "o que a base usou".
+disable-model-invocation: true
 ---
 # Ver o mapa do projeto (ao vivo)
 

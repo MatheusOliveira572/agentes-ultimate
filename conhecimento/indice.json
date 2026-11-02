@@ -1763,6 +1763,33 @@
       }
     },
     {
+      "arquivo": "conhecimento/metodo/contexto.md",
+      "tema": "contexto",
+      "palavras": [
+        "contexto do agente",
+        "janela de contexto",
+        "contexto cheio",
+        "compactar",
+        "retomar sessao",
+        "memoria do projeto",
+        "carregar so o necessario",
+        "sessao longa"
+      ],
+      "agentes": [
+        "curador",
+        "planejador"
+      ],
+      "teste": {
+        "sim": [
+          "a janela de contexto está cheia, como compactar e retomar a sessão sem perder nada",
+          "organize o contexto do agente para carregar só o necessário"
+        ],
+        "nao": [
+          "calcule o rateio de custos indiretos"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/metodo/entrevistar.md",
       "tema": "entrevistar",
       "palavras": [
@@ -1815,6 +1842,34 @@
         ],
         "nao": [
           "faça a conciliação do cartão corporativo"
+        ]
+      }
+    },
+    {
+      "arquivo": "conhecimento/metodo/evals.md",
+      "tema": "evals",
+      "palavras": [
+        "eval",
+        "evals",
+        "avaliar agente",
+        "medir se o agente melhorou",
+        "teste de agente",
+        "regressao do agente",
+        "pass@k",
+        "qualidade dos agentes",
+        "avaliador"
+      ],
+      "agentes": [
+        "curador",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "meça se o agente melhorou depois da mudança, com evals de regressão",
+          "monte os evals do agente com avaliador por código e pass@k"
+        ],
+        "nao": [
+          "reajuste a tabela de preços do frete"
         ]
       }
     },

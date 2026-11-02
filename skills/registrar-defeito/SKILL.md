@@ -1,6 +1,7 @@
 ---
 name: registrar-defeito
 description: Registra um defeito que o usuário achou e que escapou do revisor ("defeito: o total não bate (era do dev-powerbi)"), para o placar contar contra o agente autor e a taxa de captura do revisor. Use quando o usuário apontar um erro numa entrega já revisada, disser "defeito:" ou pedir para registrar um defeito.
+disable-model-invocation: true
 ---
 # Registrar defeito achado pelo usuário
 

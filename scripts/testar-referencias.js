@@ -45,14 +45,14 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B0 validar: crédito apontando para licença que não está em terceiros/ é erro', v.code === 1 && /sem-licenca\.md: crédito sem "Licença em terceiros/.test(v.out), v.out.slice(-300));
   v = validarCopia({ 'conhecimento/teste/sem-alteracao.md': '<!-- Adaptado de usestrix/strix/a.md @abcdef1, © OmniSecure, Apache-2.0. Licença em terceiros/usestrix-strix/. -->\n# x\n' });
   caso('0.8.0 B0 validar: crédito sem marcar as alterações (Apache §4b) é erro', v.code === 1 && /sem-alteracao\.md: crédito sem "Alterações/.test(v.out), v.out.slice(-300));
-  const agBase = ler('agents', 'curador.md');
+  const agBase = ler('agents', 'analista-rh.md');
   const comGatilhos = (n, alvo) => agBase.replace('\n## Critério de pronto', '\n## Referências sob demanda\n' +
     Array.from({ length: n }, (_, i) => `- Quando caso ${i}, leia \`\${CLAUDE_PLUGIN_ROOT}/${alvo}\`.`).join('\n') + '\n\n## Critério de pronto');
-  v = validarCopia({ 'agents/curador.md': comGatilhos(1, 'conhecimento/nao-existe.md') });
-  caso('0.8.0 B0 validar: agente citando ${CLAUDE_PLUGIN_ROOT}/<arquivo> que não existe é erro', v.code === 1 && /curador\.md: cita \$\{CLAUDE_PLUGIN_ROOT\}\/conhecimento\/nao-existe\.md/.test(v.out), v.out.slice(-300));
-  v = validarCopia({ 'agents/curador.md': comGatilhos(9, 'conhecimento/LEIA-ME.md') });
-  caso('0.8.0 B0 validar: mais de 8 linhas de gatilho num agente é erro', v.code === 1 && /curador\.md: 9 linhas de gatilho/.test(v.out), v.out.slice(-300));
-  v = validarCopia({ 'agents/curador.md': comGatilhos(8, 'conhecimento/LEIA-ME.md') });
+  v = validarCopia({ 'agents/analista-rh.md': comGatilhos(1, 'conhecimento/nao-existe.md') });
+  caso('0.8.0 B0 validar: agente citando ${CLAUDE_PLUGIN_ROOT}/<arquivo> que não existe é erro', v.code === 1 && /analista-rh\.md: cita \$\{CLAUDE_PLUGIN_ROOT\}\/conhecimento\/nao-existe\.md/.test(v.out), v.out.slice(-300));
+  v = validarCopia({ 'agents/analista-rh.md': comGatilhos(9, 'conhecimento/LEIA-ME.md') });
+  caso('0.8.0 B0 validar: mais de 8 linhas de gatilho num agente é erro', v.code === 1 && /analista-rh\.md: 9 linhas de gatilho/.test(v.out), v.out.slice(-300));
+  v = validarCopia({ 'agents/analista-rh.md': comGatilhos(8, 'conhecimento/LEIA-ME.md') });
   caso('0.8.0 B0 validar: 8 gatilhos para arquivo que existe passam', v.code === 0, v.out.slice(-300));
 
   // Janela piscando no Windows: chamada de processo sem windowsHide é erro; com a opção, passa. O nome vai por partes
@@ -116,6 +116,29 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   }
   caso('0.8.0 B4 lancar.md aponta para a skill checklist-lancamento em vez de duplicar a lista', /\/checklist-lancamento/.test(ler('conhecimento', 'engenharia', 'lancar.md')), 'falta');
   caso('0.8.0 B4 marketing continua dentro de 90 linhas com a seção e sem marca [conferir]', ler('agents', 'estrategista-marketing.md').split('## Protocolo comum')[0].split('\n').length <= 90 && !/\[conferir\]/.test(ler('fonte', 'agentes', 'marketing', 'estrategista-marketing.md')), 'passou de 90 ou voltou [conferir]');
+
+  // ---- Lote 5 · curador, skills e validadores ----
+  const rodaJS = (arq, args = [], extra = {}) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', arq), ...args], { windowsHide: true, encoding: 'utf8', ...extra }); return { code: r.status, out: (r.stdout || '') + (r.stderr || '') }; };
+  let e5 = rodaJS('eval-roteamento.js');
+  caso('0.8.0 B5 eval de roteamento: casos reais acima do piso de 90%', e5.code === 0 && /eval-roteamento: \d+ casos/.test(e5.out), e5.out.slice(-400));
+  const casos5 = path.join(tmp, 'rot-ruim.json'); fs.writeFileSync(casos5, JSON.stringify({ casos: [{ pedido: 'corrija o bug no script python que lê a planilha', pacote: 'marketing' }] }));
+  e5 = rodaJS('eval-roteamento.js', ['--casos', casos5]);
+  caso('0.8.0 B5 eval de roteamento: caso errado derruba abaixo do piso e sai 1', e5.code === 1 && /0 certos/.test(e5.out), e5.out.slice(-300));
+  const projD = path.join(tmp, 'proj-doutor'); fs.mkdirSync(path.join(projD, '.claude', 'base'), { recursive: true });
+  fs.writeFileSync(path.join(projD, '.claude', 'base', 'MAPA.md'), '# Mapa\n- docs/sumiu.md → explica algo\n');
+  const mapaAntes = fs.readFileSync(path.join(projD, '.claude', 'base', 'MAPA.md'), 'utf8');
+  e5 = rodaJS('doutor.js', [projD]);
+  caso('0.8.0 B5 doutor: mapa velho é relatado e nada é alterado', e5.code === 1 && /docs\/sumiu\.md/.test(e5.out) && fs.readFileSync(path.join(projD, '.claude', 'base', 'MAPA.md'), 'utf8') === mapaAntes, e5.out);
+  fs.writeFileSync(path.join(projD, '.claude', 'base', 'MAPA.md'), '# Mapa\n');
+  e5 = rodaJS('doutor.js', [projD]);
+  caso('0.8.0 B5 doutor: sem desvio sai 0', e5.code === 0 && /0 desvio/.test(e5.out), e5.out);
+  let v5 = validarCopia({ 'skills/placar/SKILL.md': '---\nname: placar\ndescription: x\n---\n# x\n' });
+  caso('0.8.0 B5 validar: skill só do usuário sem disable-model-invocation é erro', v5.code === 1 && /skills\/placar\/SKILL\.md: skill só do usuário/.test(v5.out), v5.out.slice(-300));
+  v5 = validarCopia({ 'skills/novo/SKILL.md': '---\nname: novo\ndescription: x\nmaxTurns: muitos\n---\n# x\n' });
+  caso('0.8.0 B5 validar: maxTurns que não é número é erro', v5.code === 1 && /maxTurns "muitos"/.test(v5.out), v5.out.slice(-300));
+  caso('0.8.0 B5 ultimate: padrões de orquestração, contexto limpo do revisor, régua de pronto e passagem entre agentes', /Padrões de orquestração/.test(ler('skills', 'ultimate', 'SKILL.md')) && /contexto limpo/.test(ler('skills', 'ultimate', 'SKILL.md')) && /Passagem entre agentes/.test(ler('skills', 'ultimate', 'SKILL.md')), 'falta');
+  caso('0.8.0 B5 rodada: ponto de controle e passadas limitadas', /Ponto de controle/.test(ler('skills', 'rodada', 'SKILL.md')) && /Passadas limitadas/.test(ler('skills', 'rodada', 'SKILL.md')), 'falta');
+  caso('0.8.0 B5 curador: seção de referências e eval cobram evals e contexto', secRef('curador').includes('/conhecimento/metodo/evals.md') && ler('evals', 'curador.md').includes('conhecimento/metodo/evals.md'), 'falta');
 
   // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
   v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });

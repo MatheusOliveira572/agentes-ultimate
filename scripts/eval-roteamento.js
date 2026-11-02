@@ -27,7 +27,11 @@ function primeiro(pedido) {
   let c = '';
   try { c = JSON.parse(r.stdout).hookSpecificOutput.additionalContext; } catch (e) { return null; }
   const l = c.split('\n').find((x) => x.startsWith('Pacotes:'));
-  return l ? (nomeDe[l.replace('Pacotes: ', '').split(' (')[0]] || null) : null;
+  if (!l) return null;
+  const resto = l.replace('Pacotes: ', '');
+  // O nome do pacote pode ter parênteses ("Pessoas (RH)"): vale o nome mais longo que abre a linha.
+  const nome = Object.keys(nomeDe).filter((n) => resto.startsWith(n + ' (')).sort((a, b) => b.length - a.length)[0];
+  return nome ? nomeDe[nome] : null;
 }
 
 let certos = 0;

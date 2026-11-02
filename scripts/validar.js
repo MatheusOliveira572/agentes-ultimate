@@ -183,6 +183,42 @@ if (fs.existsSync(path.join(RAIZ, 'conhecimento'))) {
     }
   }
 }
+// Campos de skill e de agente: as skills só do usuário ficam marcadas; maxTurns é número; allowed-tools não é vazio.
+for (const s of ['placar', 'registrar-defeito', 'ver-mapa', 'atualizar-fontes']) {
+  const f = path.join(dirSk, s, 'SKILL.md');
+  if (fs.existsSync(f) && !/^disable-model-invocation:\s*true/m.test(fs.readFileSync(f, 'utf8'))) erros.push(`skills/${s}/SKILL.md: skill só do usuário sem "disable-model-invocation: true"`);
+}
+for (const f of [...agentes.map((a) => path.join(dirAg, a)), ...listar(dirSk).filter((x) => x.endsWith('SKILL.md'))]) {
+  const cab = (fs.readFileSync(f, 'utf8').match(/^---\n([\s\S]*?)\n---/) || [])[1] || '';
+  const mt = cab.match(/^maxTurns:\s*(.*)$/m);
+  if (mt && !/^\d+$/.test(mt[1].trim())) erros.push(`${rel(f)}: maxTurns "${mt[1].trim()}" não é número`);
+  const at = cab.match(/^allowed-tools:\s*(.*)$/m);
+  if (at && !at[1].trim()) erros.push(`${rel(f)}: allowed-tools vazio`);
+}
+// Versões coerentes: plugin.json = marketplace.json (o topo do CHANGELOG pode estar "em construção" da versão seguinte).
+try {
+  const vp = JSON.parse(fs.readFileSync(path.join(RAIZ, '.claude-plugin', 'plugin.json'), 'utf8')).version;
+  const mk = JSON.parse(fs.readFileSync(path.join(RAIZ, '.claude-plugin', 'marketplace.json'), 'utf8'));
+  const vm = ((mk.plugins || [])[0] || {}).version;
+  if (vm && vm !== vp) erros.push(`versões diferentes: plugin.json ${vp}, marketplace.json ${vm}`);
+  const topo = (fs.readFileSync(path.join(RAIZ, 'CHANGELOG.md'), 'utf8').match(/^## (\d+\.\d+\.\d+)/m) || [])[1];
+  if (topo && topo.localeCompare(vp, undefined, { numeric: true }) < 0) erros.push(`CHANGELOG: topo ${topo} é anterior à versão ${vp} do plugin.json`);
+} catch (e) { /* cópia parcial de teste, sem .claude-plugin */ }
+// Links das "Fonte: https://" dos agentes: só com --links (usa a rede; site que bloqueia robô dá falso negativo).
+if (process.argv.includes('--links')) {
+  const links = new Set();
+  for (const a of agentes) for (const m of fs.readFileSync(path.join(dirAg, a), 'utf8').matchAll(/Fonte:\s*(https:\/\/\S+)/g)) links.add(m[1]);
+  const sim = process.env.AGENTES_ULTIMATE_LINKS_SIMULAR ? JSON.parse(fs.readFileSync(process.env.AGENTES_ULTIMATE_LINKS_SIMULAR, 'utf8')) : null;
+  const res = spawnLinks([...links], sim);
+  for (const [u, st] of res) if (!(st >= 200 && st < 400) && st !== 403) erros.push(`link quebrado (${st}): ${u}`);
+  console.log(`links: ${res.length} conferidos`);
+}
+function spawnLinks(lista, sim) {
+  if (sim) return lista.map((u) => [u, sim[u] || sim['*'] || 200]);
+  const prog = 'const u=process.argv.slice(1);(async()=>{const r=[];for(const x of u){try{const f=await fetch(x,{method:"HEAD",redirect:"follow",signal:AbortSignal.timeout(10000)});r.push([x,f.status])}catch(e){r.push([x,0])}}console.log(JSON.stringify(r))})()';
+  const s = require('child_process').spawnSync(process.execPath, ['-e', prog, ...lista], { windowsHide: true, encoding: 'utf8', timeout: 300000 });
+  try { return JSON.parse(s.stdout); } catch (e) { return []; }
+}
 // Registro das fontes (fontes/fontes.json): toda fonte citada em terceiros/, no CREDITOS.md ou numa linha de crédito
 // está no registro; a lista origem → destino do registro está em dia com as linhas de crédito.
 {

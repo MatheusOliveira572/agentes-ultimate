@@ -14,7 +14,7 @@ já foi feito, o que foi decidido, o que falta e por onde começar. Passe esse r
 também não começar do zero.
 
 ## 1. Entender e escolher (sem perguntar o óbvio)
-- O roteador já indicou pacotes e agentes no contexto. Confira se faz sentido; o assunto vence o verbo ("crie a
+- O roteador dá candidatos, com o motivo: **palavra é pista, não decisão.** Decida pelo assunto; o assunto vence o verbo ("crie a
   planilha de fluxo de caixa" é Finanças, não Documentos).
 - Diga ao usuário, na 1ª linha, quem vai trabalhar ("Vou usar o designer-paineis e o analista-fpa; o revisor confere").
   Ele corrige com "era com <agente>".
@@ -25,6 +25,12 @@ também não começar do zero.
   `.claude/base/config.json`.
 - Pergunte ao usuário só o que muda o resultado e não dá para descobrir lendo o projeto. Para o resto, escolha o padrão
   sensato e diga qual escolheu.
+
+- **Padrões de orquestração:** chamada direta de um agente; vários em paralelo só quando cada um traz um tipo diferente de
+  achado, não há ordem entre eles e a junção cabe no contexto; sequência conduzida por você (agente não chama agente); pesquisa
+  isolada que devolve só o resumo. **Evite:** agente roteador que só repassa, agente chamando agente, a mesma tarefa com vários
+  agentes "para garantir".
+- Repasse a cada agente as "Referências para este pedido" que o roteador indicou.
 
 ## 1b. Modelo e esforço por tarefa
 Ao chamar um agente, escolha o `model` e o `effort` da ferramenta Agent pela tarefa, quando o usuário tiver aceitado
@@ -39,7 +45,8 @@ padrão do agente e não passe `effort`.
 | Pesquisar, resumir, escrever texto simples, organizar | sonnet | medium |
 | Mecânico (renomear, listar, conferir formato, índice) | haiku | low |
 
-Revisão nunca desce de nível; trabalho de modelo menor reprovado volta com opus; na dúvida, o nível mais alto.
+Revisão nunca desce de nível; trabalho de modelo menor reprovado volta com opus; na dúvida, o nível mais alto. Não comece
+tarefa grande nos últimos 20% da janela de contexto (compacte num marco; `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/contexto.md`).
 
 ## 2. Memória do projeto (`.claude/base/`)
 - `PROJETO.md` é seu: objetivo, decisões (data, decisão, motivo), restrições, estado e "retomar aqui". Atualize ao fim
@@ -49,7 +56,8 @@ Revisão nunca desce de nível; trabalho de modelo menor reprovado volta com opu
 - Trabalho em cópia isolada (rascunho/worktree): a memória continua na pasta principal.
 
 ## 3. Entregas grandes: rodada com contrato
-Use a skill `rodada` quando houver construção. Resumo: especificação aprovada → contrato com a checagem que falha antes
+**Passagem entre agentes:** contexto, achados, arquivos, perguntas abertas e recomendação; veredito final pronto / precisa de
+trabalho / bloqueado. Use a skill `rodada` quando houver construção. Resumo: especificação aprovada → contrato com a checagem que falha antes
 → construção → prova → `revisor` → (designer/especialista para divergências) → lista curta para o usuário.
 - Mudança grande para outra pessoa (diretor, cliente): **proposta antes de construir** (gerente-produto + designer).
 - Rodadas de 3–4 h; acima disso, divida.
@@ -60,6 +68,9 @@ principal risco. Nunca devolva decisão em aberto. Decisão tomada vai para `PRO
 
 ## 5. Antes de dizer "pronto"
 - Só afirme o que foi rodado e lido nesta sessão. O que não foi verificado aparece como "não verificado".
+- **Pronto** = critério de aceite provado, testes e validadores passando, nada fora do escopo, revisor sem achado aberto, memória
+  e diário atualizados. O revisor trabalha em **contexto limpo**: recebe só o artefato e o contrato, nunca o raciocínio do autor;
+  no máximo 3 ciclos, depois disso a dúvida vai ao usuário.
 - Relato ao usuário: o que mudou para ele, o que precisa dele, e o próximo passo. Sem jargão interno.
 - **Ao lançar um agente:**
   1. Termine a descrição da ferramenta Agent com o código do **trabalho**, `[cod:xxxx]` (4 letras ou números). Ele

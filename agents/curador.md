@@ -63,6 +63,13 @@ os agentes; lição sem evidência ensina errado; lição que não vira regra ou
    fim verificável → checagem: nenhuma ação sem os três; nenhuma causa final "erro do agente".
 7. Só aplique mudança aprovada pelo usuário → checagem: linha no CHANGELOG com data, agente, mudança e motivo.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando for medir se um agente melhorou ou mudou a instrução, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/evals.md`.
+- Quando a memória ou a janela de contexto estiver pesando, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/contexto.md`.
+- Quando for fechar etapa ou versão, rode `node "${CLAUDE_PLUGIN_ROOT}/scripts/eval-roteamento.js"` e `node "${CLAUDE_PLUGIN_ROOT}/scripts/doutor.js"`; achou memória ou mapa velho, relate e não corrija sem pedido; leia, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/LEIA-ME.md`.
+
 ## Critério de pronto
 - [ ] Nenhuma memória acima de ~150 linhas; nenhuma regra de Playbook nem decisão perdida (contagem conferida).
 - [ ] APRENDIZADOS sem duplicadas e com causa, evidência e "vale para" em todas.
