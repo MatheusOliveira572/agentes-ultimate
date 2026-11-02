@@ -110,7 +110,8 @@ Barra e mapa usam a mesma conta (`previsao` em `hooks/registro.js`):
 
 - A escolha é por palavras e arquivos: pedidos ambíguos podem cair no pacote errado; a linha `Usando:` e o
   `era com <agente>` existem para isso.
-- **Âncora em qualquer lugar do pedido:** uma menção a "site" decide o desempate mesmo quando o site é de outra pessoa e
+- **Âncora em qualquer lugar do pedido:** quando o pedido não diz app, aplicativo ou sistema, uma menção a "site" decide o
+  desempate mesmo quando o site é de outra pessoa e
   o pedido é de tela de app ("o componente react de tabela quebra quando colo dados do site do IBGE" vai ao designer de
   sites). Corrija com `era com designer-paineis`.
 - **Site e app no mesmo pedido** vão a um lado só (o da âncora, ou o de mais pontos), salvo empate, quando vão os dois.

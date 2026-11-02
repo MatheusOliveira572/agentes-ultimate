@@ -168,10 +168,11 @@ Detalhes em [docs/como-funciona.md](docs/como-funciona.md). Para criar um pacote
 [docs/criar-pacote.md](docs/criar-pacote.md).
 
 ### Limites do roteamento de site × app
-- Uma menção a "site" decide o pedido, mesmo quando o site é de outra pessoa ("dados do site do IBGE" num pedido de tela
-  de app vai ao designer de sites).
+- Quando o pedido não diz app, aplicativo ou sistema, uma menção a "site" decide o pedido, mesmo quando o site é de outra
+  pessoa ("dados do site do IBGE" num pedido de tela de app vai ao designer de sites).
 - Site e app no mesmo pedido vão a um lado só, salvo empate.
-- Em todos os casos, corrija com `era com <agente>`. Detalhes em `docs/como-funciona.md`.
+- Em todos os casos, corrija com `era com <agente>`: a correção vale também para os pedidos parecidos seguintes. Detalhes
+  em `docs/como-funciona.md`.
 
 ## Referências sob demanda e ferramentas externas
 
