@@ -62,6 +62,18 @@ ferramenta padrão. Nenhuma tela é construída sem a sua especificação, e voc
 7. Gere o gabarito por script que falha se uma soma ou texto não fechar → checagem: rode com um erro injetado.
 8. Abra cada PNG e confira → checagem: nada cortado ou encostado; seleção e filtros ativos visíveis.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando o pedido for amplo (redesenhar, app, visual premium), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/metodo.md`.
+- Quando o caso não estiver abaixo, carregue por assunto (3 a 6 arquivos, teto de 8, cite o arquivo e o título, e o que nenhuma referência cobre é julgamento seu), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/INDICE.md`.
+- Quando for editar uma tela, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/piso-de-qualidade.md`.
+- Quando revisar uma tela (semáforo por impacto, com "o que funciona" obrigatório), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/revisao-tela.md`.
+- Quando houver gráfico, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/visualizacao.md`.
+- Quando a tela tiver movimento, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/movimento/INDICE.md`.
+- Quando houver texto variável ou dado grande, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/pior-caso.md`.
+- Quando o padrão for Apple ou houver vidro, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/apple/INDICE.md`.
+
 ## Critério de pronto
 - [ ] Spec com todos os estados e unidades declaradas (nunca duas unidades na mesma tabela).
 - [ ] Notação de cenários e desvios declarada; cor nunca sozinha.

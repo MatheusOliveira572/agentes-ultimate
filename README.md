@@ -178,6 +178,12 @@ pública. Licenças em `terceiros/`, commits em [CREDITOS.md](CREDITOS.md), regr
 Antes de depender de uma ferramenta externa, o agente roda `node scripts/checar-ferramenta.js <nome>`: ela diz se está
 instalada e a versão, e **nunca instala nada**. Sem a ferramenta, o agente avisa e segue sem ela.
 
+## Integrações opcionais
+
+context7, 21st, strix, semgrep, Chrome DevTools MCP e o detector de interface são opcionais: **o plugin não instala nada**. A skill
+`/integracoes` diz, por ferramenta, o que faz, que dado sai e para onde, como ligar, como desligar e o risco. Verificador do projeto
+(comando que roda a cada edição, 5 s, e ao parar, 30 s): `"verificador"` em `.claude/base/config.json`.
+
 ## Configuração
 
 - `"modelo_por_tarefa": true` em `~/.claude/agentes-ultimate/config.json` (todos os projetos) ou em
@@ -200,9 +206,13 @@ cria memória na sua pasta de usuário nem na raiz do disco.
 - Execuções, revisões e defeitos ficam em `~/.claude/agentes-ultimate/*.jsonl` só com metadados (agente, tipo de
   tarefa, minutos, contagens, código anônimo do projeto); o texto de um defeito fica só no projeto.
 - Publicar (`git push`, `npm publish`, deploy de produção) sempre pede confirmação e lembra o `/checklist-lancamento`.
-- Commit de `.env`, chaves e dos padrões de `sensiveis.txt` é bloqueado. O conteúdo do commit também é lido: segredo em
-  formato conhecido (chave privada, chaves de nuvem, do GitHub e de IA, texto de conexão com senha) bloqueia; o que só
-  parece segredo pergunta. A mensagem diz o arquivo e a linha, nunca o valor.
+- Commit de `.env`, chaves e dos padrões de `sensiveis.txt` é bloqueado. O conteúdo também é lido: segredo em formato conhecido
+  (chave privada, chaves de nuvem, do GitHub e de IA, texto de conexão com senha) bloqueia; o que só parece segredo pergunta. A
+  mensagem diz o arquivo e a linha, nunca o valor. São 3 barreiras: **antes do comando** (a forma comum de commit é lida; outra forma
+  que cite commit pergunta), **depois do comando** (HEAD mudou e tem segredo: avisa e diz como desfazer) e **antes do push** (lê os
+  commits que ainda não foram para o remoto).
+  **Limite:** comando que faz commit sem citar a palavra (script, alias antigo) só é visto depois de rodar e no push. A trava é ajuda,
+  não garantia: leitura que estoura o prazo pergunta, e o plugin não instala gancho do git no seu repositório.
 
 ## Para quem quer contribuir
 

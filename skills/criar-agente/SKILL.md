@@ -23,3 +23,7 @@ description: Cria ou revisa um agente especialista no padrão do agentes-ultimat
 6. **Teste:** rode os evals chamando o agente com cada pedido, em modo de proposta; registre o resultado no arquivo de
    evals. Caso reprovado vira ajuste no agente.
 7. Conte ao usuário o que o agente faz, as referências, o resultado dos evals e como chamá-lo.
+
+**Referências sob demanda:** conteúdo longo vai para `conhecimento/<tema>/` (ou `fonte/agentes/<pacote>/referencias/<agente>/`), até 15 KB por arquivo, com o
+crédito na 1ª linha e o gatilho do índice nas 2ª e 3ª (`conhecimento/LEIA-ME.md`); no agente, a seção "Referências sob demanda", com até 8 linhas
+"Quando X, leia `${CLAUDE_PLUGIN_ROOT}/...`", e um caso de eval que cobra a leitura. Fonte nova entra antes em `fontes/fontes.json`.

@@ -1,6 +1,7 @@
 ---
 name: placar
 description: Mostra o placar dos agentes — quantas vezes cada um passou no revisor de primeira, defeitos que o revisor achou por gravidade, defeitos que escaparam ao usuário, retrabalho, acerto da estimativa de término e a taxa de captura do revisor (meta 80%). Use quando o usuário pedir o placar, o desempenho ou a qualidade dos agentes, "quem erra mais", ou no fechamento de uma etapa.
+disable-model-invocation: true
 ---
 # Placar dos agentes
 

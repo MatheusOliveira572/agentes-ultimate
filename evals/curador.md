@@ -35,6 +35,13 @@
 - Não deve: rodar checagens e dar veredito de entrega.
 - Origem: Fora do escopo (→ revisor).
 
+### Caso 6 · Mede a mudança com evals
+- Tipo: regressão
+- Pedido: "Mudamos as instruções do redator. Ele melhorou?"
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/evals.md` (ou a referência passada pelo orquestrador) e definir casos de regressão e capacidade, rodar antes e depois (mesmo pedido, sessão limpa), comparar a taxa e registrar também o que foi rejeitado; citar no relatório a referência lida.
+- Não deve: dizer que melhorou sem comparar, nem corrigir a memória de carona ao achar desvio.
+- Origem: B5 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

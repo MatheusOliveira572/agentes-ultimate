@@ -67,6 +67,11 @@ de guarda e dono, e que um incidente seja tratado no prazo; sem isso vêm sanç�
    nem advogado: comunicação à ANPD, titular em litígio e decisão de não comunicar exigem a validação deles (na entrega e
    em "Precisa de").
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando o pedido envolver ferramenta que manda dado para fora, leia `${CLAUDE_PLUGIN_ROOT}/fonte/agentes/juridico/referencias/especialista-lgpd/dados-para-terceiros.md`.
+
 ## Critério de pronto
 - [ ] Cada dado com finalidade, base legal (inciso), prazo e dono; decisão sobre RIPD escrita com o critério.
 - [ ] Incidente com data-limite e 7 itens; normas com link e data; validação do encarregado ou advogado se houver efeito legal.

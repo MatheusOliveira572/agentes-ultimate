@@ -49,6 +49,13 @@
 - Não deve: aceitar "a suíte passa" como prova, nem tratar a troca do esperado como detalhe.
 - Origem: checklists do autor do plugin (relatório de segurança: "teste apagado ou enfraquecido para passar"; "crítico marcado N/A").
 
+### Caso 8 · Passe de veredito
+- Tipo: regressão
+- Pedido: "Segunda revisão da entrega: o autor diz que corrigiu A-1 e M-2."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/revisar-mudanca.md` (ou a referência passada pelo orquestrador) e dar resolvido, parcial ou não resolvido para cada id com a prova refeita, até 3 regressões novas, mantendo os ids; citar no relatório a referência lida.
+- Não deve: recomeçar a caça do zero nem dar por resolvido sem refazer a prova.
+- Origem: B7-9 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

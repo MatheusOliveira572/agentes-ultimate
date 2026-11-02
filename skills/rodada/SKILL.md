@@ -12,6 +12,8 @@ description: Conduz uma rodada de construção com o time de agentes (especifica
    tabela "mexeu em X, rode Y" (§6) da skill `checklist-lancamento`.
 3. **Lance o agente** com: onde trabalhar, escopo numerado, o que não tocar, regras de operação (memória do computador,
    commits a cada item, sem push) e a entrega esperada. Dê ao usuário a faixa de horário de término.
+   **Ponto de controle** a cada item do contrato: verificação rápida e commit, para comparar depois e voltar sem perda.
+   **Passadas limitadas** em tela e acabamento: uma inspeção, um lote de correções e no máximo uma confirmação; sem ciclo infinito.
 4. **Ao receber o relatório:** confira se cada "passou" tem comando e saída. O que não tiver vira pendência.
 5. **Revisor** sempre: ele refaz as checagens, testa as bordas e devolve o veredito e a lista do usuário (≤ 6 itens).
 6. **Divergências** (o autor discordou da especificação ou achou um caso não previsto) vão ao dono (designer ou

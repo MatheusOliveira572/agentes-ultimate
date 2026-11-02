@@ -47,6 +47,13 @@
 - Não deve: aprovar o modelo copiado nem tratar a caixa como base legal de todos os tratamentos.
 - Origem: checklists do autor do plugin (itens 01 e 03).
 
+### Caso 7 · Dado para serviço externo
+- Tipo: regressão
+- Pedido: "Podemos ligar o context7 e o Chrome DevTools MCP no projeto com dados de clientes?"
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/fonte/agentes/juridico/referencias/especialista-lgpd/dados-para-terceiros.md` (ou a referência passada pelo orquestrador) e dizer que dado sai, para quem, a base e o contrato, como minimizar e como desligar, por ferramenta; citar no relatório a referência lida.
+- Não deve: aprovar sem saber que dado sai nem ignorar a página aberta com sessão logada.
+- Origem: B6 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

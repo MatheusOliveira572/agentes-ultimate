@@ -1,5 +1,5 @@
 {
-  "_como_usar": "Cada pacote diz quando entra (palavras do pedido e arquivos da pasta) e quais agentes traz. O roteador soma pontos: palavra = 1, expressão de 2+ palavras = 2, arquivo da pasta = 2. Entram os pacotes com pontos >= minimo. O núcleo entra sempre que o pedido não é trivial. Para criar um pacote novo, veja docs/criar-pacote.md.",
+  "_como_usar": "Cada pacote diz quando entra (palavras do pedido e arquivos da pasta) e quais agentes traz. O roteador soma pontos: palavra = 1, expressão de 2+ palavras = 2, arquivo da pasta = 2. Entram os pacotes com pontos >= minimo. O núcleo entra sempre que o pedido não é trivial. Para criar um pacote novo, veja docs/criar-pacote.md. Palavra é pista, não decisão: as de \"ambiguas\" servem a várias áreas, valem 0,5 e sozinhas não escolhem pacote; o arquivo da pasta só conta com uma palavra firme do assunto.",
   "minimo": 2,
   "pacotes": {
     "nucleo": {
@@ -784,5 +784,28 @@
       ],
       "mensagem": "Antes de publicar (deploy, loja, site ou app no ar), rode a skill `/checklist-lancamento`."
     }
-  }
+  },
+  "ambiguas": [
+    "visual",
+    "teste",
+    "testes",
+    "lancamento",
+    "dados",
+    "relatorio",
+    "analise",
+    "plano",
+    "modelo",
+    "processo",
+    "resultado",
+    "resultados",
+    "projeto",
+    "sistema",
+    "campanha",
+    "risco",
+    "erro",
+    "publicar",
+    "medida",
+    "custo",
+    "tela"
+  ]
 }

@@ -45,14 +45,14 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B0 validar: crédito apontando para licença que não está em terceiros/ é erro', v.code === 1 && /sem-licenca\.md: crédito sem "Licença em terceiros/.test(v.out), v.out.slice(-300));
   v = validarCopia({ 'conhecimento/teste/sem-alteracao.md': '<!-- Adaptado de usestrix/strix/a.md @abcdef1, © OmniSecure, Apache-2.0. Licença em terceiros/usestrix-strix/. -->\n# x\n' });
   caso('0.8.0 B0 validar: crédito sem marcar as alterações (Apache §4b) é erro', v.code === 1 && /sem-alteracao\.md: crédito sem "Alterações/.test(v.out), v.out.slice(-300));
-  const agBase = ler('agents', 'curador.md');
+  const agBase = ler('agents', 'analista-rh.md');
   const comGatilhos = (n, alvo) => agBase.replace('\n## Critério de pronto', '\n## Referências sob demanda\n' +
     Array.from({ length: n }, (_, i) => `- Quando caso ${i}, leia \`\${CLAUDE_PLUGIN_ROOT}/${alvo}\`.`).join('\n') + '\n\n## Critério de pronto');
-  v = validarCopia({ 'agents/curador.md': comGatilhos(1, 'conhecimento/nao-existe.md') });
-  caso('0.8.0 B0 validar: agente citando ${CLAUDE_PLUGIN_ROOT}/<arquivo> que não existe é erro', v.code === 1 && /curador\.md: cita \$\{CLAUDE_PLUGIN_ROOT\}\/conhecimento\/nao-existe\.md/.test(v.out), v.out.slice(-300));
-  v = validarCopia({ 'agents/curador.md': comGatilhos(9, 'conhecimento/LEIA-ME.md') });
-  caso('0.8.0 B0 validar: mais de 8 linhas de gatilho num agente é erro', v.code === 1 && /curador\.md: 9 linhas de gatilho/.test(v.out), v.out.slice(-300));
-  v = validarCopia({ 'agents/curador.md': comGatilhos(8, 'conhecimento/LEIA-ME.md') });
+  v = validarCopia({ 'agents/analista-rh.md': comGatilhos(1, 'conhecimento/nao-existe.md') });
+  caso('0.8.0 B0 validar: agente citando ${CLAUDE_PLUGIN_ROOT}/<arquivo> que não existe é erro', v.code === 1 && /analista-rh\.md: cita \$\{CLAUDE_PLUGIN_ROOT\}\/conhecimento\/nao-existe\.md/.test(v.out), v.out.slice(-300));
+  v = validarCopia({ 'agents/analista-rh.md': comGatilhos(9, 'conhecimento/LEIA-ME.md') });
+  caso('0.8.0 B0 validar: mais de 8 linhas de gatilho num agente é erro', v.code === 1 && /analista-rh\.md: 9 linhas de gatilho/.test(v.out), v.out.slice(-300));
+  v = validarCopia({ 'agents/analista-rh.md': comGatilhos(8, 'conhecimento/LEIA-ME.md') });
   caso('0.8.0 B0 validar: 8 gatilhos para arquivo que existe passam', v.code === 0, v.out.slice(-300));
 
   // Janela piscando no Windows: chamada de processo sem windowsHide é erro; com a opção, passa. O nome vai por partes
@@ -117,6 +117,42 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B4 lancar.md aponta para a skill checklist-lancamento em vez de duplicar a lista', /\/checklist-lancamento/.test(ler('conhecimento', 'engenharia', 'lancar.md')), 'falta');
   caso('0.8.0 B4 marketing continua dentro de 90 linhas com a seção e sem marca [conferir]', ler('agents', 'estrategista-marketing.md').split('## Protocolo comum')[0].split('\n').length <= 90 && !/\[conferir\]/.test(ler('fonte', 'agentes', 'marketing', 'estrategista-marketing.md')), 'passou de 90 ou voltou [conferir]');
 
+  // ---- Lote 5 · curador, skills e validadores ----
+  const rodaJS = (arq, args = [], extra = {}) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'scripts', arq), ...args], { windowsHide: true, encoding: 'utf8', ...extra }); return { code: r.status, out: (r.stdout || '') + (r.stderr || '') }; };
+  let e5 = rodaJS('eval-roteamento.js');
+  caso('0.8.0 B5 eval de roteamento: casos reais acima do piso de 90%', e5.code === 0 && /eval-roteamento: \d+ casos/.test(e5.out), e5.out.slice(-400));
+  const casos5 = path.join(tmp, 'rot-ruim.json'); fs.writeFileSync(casos5, JSON.stringify({ casos: [{ pedido: 'corrija o bug no script python que lê a planilha', pacote: 'marketing' }] }));
+  e5 = rodaJS('eval-roteamento.js', ['--casos', casos5]);
+  caso('0.8.0 B5 eval de roteamento: caso errado derruba abaixo do piso e sai 1', e5.code === 1 && /0 certos/.test(e5.out), e5.out.slice(-300));
+  const projD = path.join(tmp, 'proj-doutor'); fs.mkdirSync(path.join(projD, '.claude', 'base'), { recursive: true });
+  fs.writeFileSync(path.join(projD, '.claude', 'base', 'MAPA.md'), '# Mapa\n- docs/sumiu.md → explica algo\n');
+  const mapaAntes = fs.readFileSync(path.join(projD, '.claude', 'base', 'MAPA.md'), 'utf8');
+  e5 = rodaJS('doutor.js', [projD]);
+  caso('0.8.0 B5 doutor: mapa velho é relatado e nada é alterado', e5.code === 1 && /docs\/sumiu\.md/.test(e5.out) && fs.readFileSync(path.join(projD, '.claude', 'base', 'MAPA.md'), 'utf8') === mapaAntes, e5.out);
+  fs.writeFileSync(path.join(projD, '.claude', 'base', 'MAPA.md'), '# Mapa\n');
+  e5 = rodaJS('doutor.js', [projD]);
+  caso('0.8.0 B5 doutor: sem desvio sai 0', e5.code === 0 && /0 desvio/.test(e5.out), e5.out);
+  let v5 = validarCopia({ 'skills/placar/SKILL.md': '---\nname: placar\ndescription: x\n---\n# x\n' });
+  caso('0.8.0 B5 validar: skill só do usuário sem disable-model-invocation é erro', v5.code === 1 && /skills\/placar\/SKILL\.md: skill só do usuário/.test(v5.out), v5.out.slice(-300));
+  v5 = validarCopia({ 'skills/novo/SKILL.md': '---\nname: novo\ndescription: x\nmaxTurns: muitos\n---\n# x\n' });
+  caso('0.8.0 B5 validar: maxTurns que não é número é erro', v5.code === 1 && /maxTurns "muitos"/.test(v5.out), v5.out.slice(-300));
+  caso('0.8.0 B5 ultimate: padrões de orquestração, contexto limpo do revisor, régua de pronto e passagem entre agentes', /Padrões de orquestração/.test(ler('skills', 'ultimate', 'SKILL.md')) && /contexto limpo/.test(ler('skills', 'ultimate', 'SKILL.md')) && /Passagem entre agentes/.test(ler('skills', 'ultimate', 'SKILL.md')), 'falta');
+  caso('0.8.0 B5 rodada: ponto de controle e passadas limitadas', /Ponto de controle/.test(ler('skills', 'rodada', 'SKILL.md')) && /Passadas limitadas/.test(ler('skills', 'rodada', 'SKILL.md')), 'falta');
+  caso('0.8.0 B5 curador: seção de referências e eval cobram evals e contexto', secRef('curador').includes('/conhecimento/metodo/evals.md') && ler('evals', 'curador.md').includes('conhecimento/metodo/evals.md'), 'falta');
+
+  // ---- Lote 6 · compliance, LGPD, contratos, dados e Power BI ----
+  const b6 = { 'analista-compliance': 'fonte/agentes/compliance/referencias/analista-compliance/gravidade-e-excecoes.md', 'especialista-lgpd': 'fonte/agentes/juridico/referencias/especialista-lgpd/dados-para-terceiros.md', 'advogado-contratos': 'fonte/agentes/juridico/referencias/advogado-contratos/licencas-abertas.md', 'engenheiro-dados': 'conhecimento/engenharia/migracao.md', 'dev-powerbi': 'conhecimento/design/construir-do-desenho.md' };
+  for (const [ag, arq] of Object.entries(b6)) caso(`0.8.0 B6 ${ag}: seção cita ${arq.split('/').pop()} e o eval cobra a leitura`, secRef(ag).includes('/' + arq) && ler('evals', ag + '.md').includes(arq), 'falta');
+  const seisAg = ler('agents', 'dev-powerbi.md');
+  caso('0.8.0 B6 gerador: "Referências sob demanda" vem depois do protocolo comum, fora das 90 linhas', seisAg.indexOf('## Referências sob demanda') > seisAg.indexOf('## Protocolo comum'), 'seção antes do protocolo');
+  caso('0.8.0 B6 licenças: sem licença não se copia; Apache pede marcar alterados e levar o NOTICE', /Sem licença\*\* \| \*\*não\*\*/.test(ler(...b6['advogado-contratos'].split('/'))) && /NOTICE/.test(ler(...b6['advogado-contratos'].split('/'))), 'falta');
+
+  // ---- Lotes 7 a 9 · designer-paineis, auditor-seguranca e revisor ----
+  for (const [ag, arqs] of Object.entries({ 'designer-paineis': ['design/metodo.md', 'design/INDICE.md', 'design/piso-de-qualidade.md', 'design/revisao-tela.md', 'design/visualizacao.md', 'design/movimento/INDICE.md', 'design/pior-caso.md', 'design/apple/INDICE.md'], 'auditor-seguranca': ['seguranca/INDICE.md', 'seguranca/metodo/contraprova.md', 'seguranca/metodo/source-aware-discovery.md', 'seguranca/metodo/fix-verification.md', 'seguranca/modos/diff.md'], revisor: ['metodo/revisar-mudanca.md', 'metodo/revisar-codigo.md', 'design/revisao-tela.md', 'design/critica/INDICE.md'] })) {
+    caso('0.8.0 B7-9 ' + ag + ': seção cita as referências do método', arqs.every((a) => secRef(ag).includes('/conhecimento/' + a)), arqs.filter((a) => !secRef(ag).includes('/conhecimento/' + a)).join(', ') || 'falta');
+  }
+  caso('0.8.0 B8 strix: guias com a alteração marcada e sem comando da ferramenta (record_coverage, agent_finish, jinja)', fs.readdirSync(path.join(RAIZ, 'conhecimento', 'seguranca', 'vulnerabilidades')).every((n) => { const s = ler('conhecimento', 'seguranca', 'vulnerabilidades', n); return /^<!-- Adaptado de usestrix\/strix\/[^\n]*alterado por agentes-ultimate/.test(s) && !/record_coverage|agent_finish|\{%/.test(s); }), 'guia sem marca ou com comando');
+  caso('0.8.0 B8 strix: as 29 classes de vulnerabilidade estão lá', ['sql-injection', 'xss', 'ssrf', 'idor', 'csrf', 'rce', 'llm-prompt-injection', 'agentic-system-security'].every((c) => fs.readdirSync(path.join(RAIZ, 'conhecimento', 'seguranca', 'vulnerabilidades')).some((n) => n.startsWith(c))), 'falta classe');
   // ---- Vigia das fontes: registro + conferência semanal só por metadados ----
   v = validarCopia({ 'conhecimento/teste/fora.md': '<!-- Adaptado de fulano/projeto-x/a.md @abcdef1, © 2026 Fulano, MIT. Alterações: tradução; alterado por agentes-ultimate. Licença em terceiros/emilkowalski-skills/. -->\n' + ok.split('\n').slice(1).join('\n') });
   caso('0.8.0 B fontes: linha de crédito que cita fonte fora de fontes/fontes.json é erro', v.code === 1 && /cita fulano\/projeto-x, que não está em fontes\/fontes\.json/.test(v.out), v.out.slice(-300));
@@ -183,7 +219,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     const t = ctx(r);
     const linha = (t.split('\n').find((l) => l.startsWith('Referências para este pedido')) || '');
     const refs = [...linha.matchAll(/`([^`]+)` \(para `([^`]+)`\)/g)].map((m) => ({ arquivo: path.relative(RAIZ, m[1]).split(path.sep).join('/'), agente: m[2].replace(/^agentes-ultimate:/, '') }));
-    return { t, refs, agentes: (t.match(/Agentes indicados[^:]*: ([^.]+)\./) || [])[1] || '' };
+    return { t, refs, agentes: (t.match(/(?:Agentes indicados|Candidatos, com o motivo de cada um; decida pelo assunto)[^:]*: ([^.]+)\./) || [])[1] || '' };
   };
   const ind = (() => { try { return JSON.parse(ler('conhecimento', 'indice.json')); } catch (e) { return { referencias: [] }; } })();
   const fixo = (() => { try { return require(path.join(RAIZ, 'scripts', 'indice-referencias.js')).montar(RAIZ); } catch (e) { return null; } })();
@@ -195,7 +231,14 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   caso('0.8.0 B índice: validar acusa referência sem os 2+1 pedidos de teste e o indice.json desatualizado', v.code === 1 && /sem-teste\.md: 3ª linha sem/.test(v.out) && /indice\.json desatualizado/.test(v.out), v.out.slice(-300));
   // Acionamento: para cada tema, 2 pedidos que puxam a referência e 1 que não puxa, contra o roteador real.
   let falhasAcion = [];
-  for (const r of ind.referencias) {
+  const Rot = require(path.join(RAIZ, 'hooks', 'roteador.js'));
+  for (const r of ind.referencias.filter((x) => x.arquivo.startsWith('conhecimento/seguranca/') && !x.arquivo.endsWith('INDICE.md') && !x.arquivo.endsWith('lista.md'))) {
+    // 69 guias: a mesma função do roteador, dentro do processo (abrir 200 processos levava minutos e pisca janela).
+    const puxa = (p) => Rot.referenciasDoPedido(Rot.normalizar(p), ['auditor-seguranca', 'engenheiro-software', 'revisor'], []).some((y) => y.arquivo === r.arquivo);
+    for (const p of r.teste.sim) if (!puxa(p)) falhasAcion.push(`"${p}" não puxou ${r.arquivo}`);
+    for (const p of r.teste.nao) if (puxa(p)) falhasAcion.push(`"${p}" puxou ${r.arquivo} sem dever`);
+  }
+  for (const r of ind.referencias.filter((x) => !(x.arquivo.startsWith('conhecimento/seguranca/') && !x.arquivo.endsWith('INDICE.md') && !x.arquivo.endsWith('lista.md')))) {
     // Referência de integração opcional (requer=…) só é testada com a integração ligada no config do projeto.
     fs.writeFileSync(cfgRef, JSON.stringify(r.requer ? { integracoes: [r.requer] } : {}));
     for (const p of (r.teste || {}).sim || []) { const x = rotRef(p); if (!x.refs.some((y) => y.arquivo === r.arquivo)) falhasAcion.push(`"${p}" não puxou ${r.arquivo}`); }
@@ -219,6 +262,30 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const mkt = rotRef('monte o plano de lançamento do produto novo com a campanha nas redes sociais');
   caso('0.8.0 D-h roteador: plano de lançamento de produto vai para Marketing e não pede o checklist de publicação',
     /estrategista-marketing/.test(mkt.agentes) && !/\/checklist-lancamento/.test(mkt.t), `agentes: ${mkt.agentes}; checklist: ${/checklist-lancamento/.test(mkt.t)}`);
+
+  // ---- Palavra vira pista: casos com os erros reais do usuário ----
+  const pbip = path.join(tmp, 'pasta-pbip'); fs.mkdirSync(path.join(pbip, '.claude', 'base'), { recursive: true });
+  fs.writeFileSync(path.join(pbip, '.claude', 'base', 'desligado'), ''); fs.writeFileSync(path.join(pbip, 'Painel.pbip'), '{}');
+  const naPasta = (pedido, cwd) => {
+    const r = hook('roteador.js', { prompt: pedido, cwd, hook_event_name: 'UserPromptSubmit' });
+    const c = ctx(r);
+    const pac = (c.split('\n').find((l) => l.startsWith('Pacotes:')) || '').replace('Pacotes: ', '');
+    return { c, pac, primeiro: pac.split(' (')[0], msg: (r.json && r.json.systemMessage) || '' };
+  };
+  let rp = naPasta('redesenhar um app com visual premium', pbip);
+  caso('0.8.0 pista: "redesenhar um app com visual premium" numa pasta com .pbip não dá BI', /Interface/.test(rp.primeiro) && !/BI e painéis/.test(rp.pac), rp.pac || rp.c.slice(0, 200));
+  rp = naPasta('vai me mostrar os resultados desses testes, glass effect', pbip);
+  caso('0.8.0 pista: "os resultados desses testes, glass effect" não dá Software como primeira opção', !/Software/.test(rp.primeiro), rp.pac || 'sem pacote');
+  rp = naPasta('esses pedidos foram para o plugin, não para o nosso BI', pbip);
+  caso('0.8.0 pista: "não para o nosso BI" não dá BI', !/BI e painéis/.test(rp.pac), rp.pac);
+  rp = naPasta('um visual novo', pbip);
+  caso('0.8.0 pista: palavra ambígua sozinha com o .pbip na pasta não escolhe pacote', !/BI e painéis/.test(rp.pac), rp.pac);
+  rp = naPasta('crie a medida de margem e ajuste o relatório do dashboard', pbip);
+  caso('0.8.0 pista: pedido de BI de verdade continua indo para BI', /BI e painéis/.test(rp.primeiro), rp.pac);
+  caso('0.8.0 pista: a saída diz "Candidatos, com o motivo de cada um; decida pelo assunto"', /Candidatos, com o motivo de cada um; decida pelo assunto/.test(rp.c) && !/Agentes indicados/.test(rp.c), rp.c.slice(0, 200));
+  rp = naPasta('monte o painel de custos com a planilha de orçado e realizado', proj2());
+  caso('0.8.0 pista: mostra as alternativas próximas quando há outra área com sinal', /Alternativas próximas/.test(rp.c) || rp.pac.split(';').length > 1, rp.c.slice(0, 300));
+  function proj2() { return projRef; }
 
   // Equivalência com o apple-design-skill (lido como referência do que cobrir, sem copiar): para 4 pedidos de design,
   // as regras que a skill original aplicaria têm de estar na nossa versão, com o mesmo valor e a fonte na HIG.
@@ -248,6 +315,10 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
     /prefers-reduced-motion/.test(vidro) && /prefers-contrast/.test(vidro) && /pior fundo/i.test(vidro) && /no máximo 2–3 superfícies/.test(vidro) && /Power BI\*\* \| \*\*não há desfoque/.test(vidro) && /imagem de fundo pronta/.test(vidro), 'falta item');
   caso('0.8.0 B3 evals: designer-paineis e designer-documentos com os casos de equivalência Apple e o efeito vidro',
     /equivalência Apple/i.test(ler('evals', 'designer-paineis.md')) && /Efeito vidro/i.test(ler('evals', 'designer-paineis.md')) && /equivalência Apple/i.test(ler('evals', 'designer-documentos.md')), 'falta caso');
+
+  fs.writeFileSync(cfgRef, '{}');
+  const vd = rotRef('um card com efeito vidro estilo Apple');
+  caso('0.8.0 ponta a ponta: "um card com efeito vidro estilo Apple" → designer e engenheiro, materiais e Apple, e o /checklist-lancamento', /designer-paineis/.test(vd.agentes) && /engenheiro-software/.test(vd.agentes) && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/materiais.md') && vd.refs.some((y) => y.arquivo === 'conhecimento/design/apple/INDICE.md') && /\/checklist-lancamento/.test(vd.t), JSON.stringify(vd.refs));
 
   // Ponta a ponta (critério do usuário): pedido amplo aciona tudo sozinho. Liga no lote 3 (conteúdo de design).
   const E2E = existe('conhecimento', 'design', 'metodo.md');

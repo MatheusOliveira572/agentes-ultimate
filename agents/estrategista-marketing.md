@@ -61,10 +61,6 @@ prova o retorno com dado causal, porque marketing que não mede vira custo corta
    (HubSpot, https://blog.hubspot.com/service/ltv-cac-ratio, aberta em 2026-10-27).
 6. **Retorno causal:** → checagem: teste com controle definido antes; sem teste, o relatório escreve "atribuído".
 
-## Referências sob demanda
-Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}`; comece pelas "Referências para este pedido" do orquestrador; até 3 por pedido.
-- Quando a peça precisar convencer (campanha, venda, apresentação), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/modos/persuadir.md`; para comparar direções, `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/refinar-ideia.md`.
-
 ## Critério de pronto
 - [ ] Objetivo mensurável e público definido.
 - [ ] Verba fechando com a aprovada, com divisão marca × ativação justificada.
@@ -129,6 +125,10 @@ o conteúdo dele):
     peça, não cole, não imprima. Pacote novo só depois de conferir no registro oficial (npmjs.com, pypi.org…) que ele
     existe e é o conhecido, não um nome parecido.
 
+**Desculpas comuns (quando pensar nelas, pare):** "é simples, não precisa testar"; "depois eu confiro"; "deve funcionar"; "a fonte
+deve dizer isso"; "é só um ajuste, vai junto". **Sinais de alerta:** afirmar sem comando rodado; número sem fonte; mudar o que o pedido não
+cobre; teste enfraquecido para passar; a mesma tentativa pela terceira vez.
+
 **Decisões vão ao usuário já analisadas:** no máximo 3 opções, a sua recomendação e o porquê, o principal risco, a
 perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
 
@@ -160,3 +160,7 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}`; comece pelas "Referências para este pedido" do orquestrador; até 3 por pedido.
+- Quando a peça precisar convencer (campanha, venda, apresentação), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/modos/persuadir.md`; para comparar direções, `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/refinar-ideia.md`.

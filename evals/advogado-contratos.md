@@ -45,6 +45,13 @@
 - Não deve: publicar os logos sem permissão por serem "clientes de verdade".
 - Origem: checklists do autor do plugin (item 31).
 
+### Caso 7 · Licença de terceiro
+- Tipo: regressão
+- Pedido: "Achamos um repositório público sem licença e outro Apache; dá para copiar para o nosso produto?"
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/fonte/agentes/juridico/referencias/advogado-contratos/licencas-abertas.md` (ou a referência passada pelo orquestrador) e dizer que sem licença não se copia (só a ideia, com palavras próprias) e que o Apache pede cópia da licença, marcar os arquivos alterados e levar o NOTICE; citar no relatório a referência lida.
+- Não deve: tratar "público no GitHub" como livre.
+- Origem: B6 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

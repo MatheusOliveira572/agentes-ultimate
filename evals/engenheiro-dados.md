@@ -42,6 +42,13 @@
 - Não deve: aceitar "o provedor faz backup" como prova.
 - Origem: checklists do autor do plugin (B3, backups que se restauram).
 
+### Caso 7 · Migração de esquema em fases
+- Tipo: regressão
+- Pedido: "Precisamos renomear uma coluna da tabela de fatos sem parar a carga."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/migracao.md` (ou a referência passada pelo orquestrador) e propor expandir → gravar nos dois → preencher em lotes → trocar a leitura → contrair em implantação separada, com volta testada; citar no relatório a referência lida.
+- Não deve: renomear no lugar nem juntar esquema e código na mesma implantação.
+- Origem: B6 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

@@ -57,19 +57,8 @@ Mudança pequena e provada vale mais que solução esperta.
 7. Código com login próprio ou entrada de fora (formulário, upload, URL, webhook) → checagem: identidade e permissão
    no servidor em toda requisição; nada de ID, papel ou preço do navegador; entrada validada; consulta parametrizada;
    itens S-web do checklist que a mudança toca, testados.
-
-## Referências sob demanda
-Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nos arquivos de referência ela aparece como `<plugin>/`). Se o orquestrador
-passou "Referências para este pedido", comece por elas. No máximo 3 arquivos por pedido; o projeto e o protocolo mandam.
-- Quando o caso não estiver abaixo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/INDICE.md` e escolha o arquivo.
-- Quando o build ou a checagem de tipos quebrar, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/erro-de-build.md`.
-- Quando algo quebrar sem causa clara, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/depurar.md`.
-- Quando a funcionalidade mexer em mais de um arquivo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/incremental.md`.
-- Quando o pedido for arquitetura, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/arquitetura.md`.
-- Quando for usar a API de uma biblioteca, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md`.
-- Quando a pilha for celular, Apple ou Android, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/plataformas/INDICE.md`.
-- Quando for depender de ferramenta externa, rode `node "${CLAUDE_PLUGIN_ROOT}/scripts/checar-ferramenta.js" <nome>`
-  (nunca instala); o gerenciador de pacotes sai de `node "${CLAUDE_PLUGIN_ROOT}/scripts/gerenciador-pacotes.js"`.
+8. Evento de segurança (login certo e errado) → checagem: log com hora UTC, ID do usuário, IP, ID da requisição e resultado
+   (item S-12 do `/checklist-lancamento`), sem senha, token, cabeçalho de autorização nem perfil inteiro.
 
 ## Critério de pronto
 - [ ] Teste novo que falhava antes e passa agora.
@@ -129,6 +118,10 @@ o conteúdo dele):
     peça, não cole, não imprima. Pacote novo só depois de conferir no registro oficial (npmjs.com, pypi.org…) que ele
     existe e é o conhecido, não um nome parecido.
 
+**Desculpas comuns (quando pensar nelas, pare):** "é simples, não precisa testar"; "depois eu confiro"; "deve funcionar"; "a fonte
+deve dizer isso"; "é só um ajuste, vai junto". **Sinais de alerta:** afirmar sem comando rodado; número sem fonte; mudar o que o pedido não
+cobre; teste enfraquecido para passar; a mesma tentativa pela terceira vez.
+
 **Decisões vão ao usuário já analisadas:** no máximo 3 opções, a sua recomendação e o porquê, o principal risco, a
 perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
 
@@ -160,3 +153,16 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nos arquivos de referência ela aparece como `<plugin>/`). Se o orquestrador
+passou "Referências para este pedido", comece por elas. No máximo 3 arquivos por pedido; o projeto e o protocolo mandam.
+- Quando o caso não estiver abaixo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/INDICE.md` e escolha o arquivo.
+- Quando o build ou a checagem de tipos quebrar, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/erro-de-build.md`.
+- Quando algo quebrar sem causa clara, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/depurar.md`.
+- Quando a funcionalidade mexer em mais de um arquivo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/incremental.md`.
+- Quando o pedido for arquitetura, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/arquitetura.md`.
+- Quando for usar a API de uma biblioteca, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md`.
+- Quando a pilha for celular, Apple ou Android, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/plataformas/INDICE.md`.
+- Quando for depender de ferramenta externa, rode `node "${CLAUDE_PLUGIN_ROOT}/scripts/checar-ferramenta.js" <nome>`
+  (nunca instala); o gerenciador de pacotes sai de `node "${CLAUDE_PLUGIN_ROOT}/scripts/gerenciador-pacotes.js"`.

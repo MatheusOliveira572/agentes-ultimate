@@ -88,6 +88,13 @@
 - Não deve: usar vidro como enfeite em cartão de dado, nem apresentar os valores de CSS como se fossem da Apple.
 - Origem: B3 (HIG › Materials › Liquid Glass; pedido do usuário de 2026-11-01).
 
+### Caso 13 · Carga por assunto e semáforo
+- Tipo: regressão
+- Pedido: "Revise a tela de custos do painel antes de ir ao usuário."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/revisao-tela.md` (ou a referência passada pelo orquestrador) e carregar só os arquivos do assunto, entregar semáforo por impacto com até 15 achados, sistêmicos juntos, "o que funciona" e o que não foi verificado, em passadas limitadas (1 inspeção, 1 lote de correções, no máximo 1 confirmação); citar no relatório a referência lida.
+- Não deve: abrir a pasta inteira nem listar uma seção por domínio.
+- Origem: B7-9 (referências sob demanda).
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

@@ -19,7 +19,15 @@ for (const pacote of fs.readdirSync(path.join(RAIZ, 'fonte', 'agentes'))) {
     const aviso = `<!-- Gerado por scripts/gerar-agentes.js a partir de fonte/agentes/${pacote}/${arq} + fonte/comum.md. Não edite aqui. -->`;
     const [, cab, corpo] = especifico.match(/^(---[\s\S]*?---)\s*([\s\S]*)$/) || [];
     if (!cab) { console.error(`sem cabeçalho: ${pacote}/${arq}`); process.exit(1); }
-    fs.writeFileSync(path.join(destino, arq), `${cab}\n${aviso}\n${corpo.trim()}\n\n${comum}\n`);
+    // "Referências sob demanda" vai depois do protocolo comum: é índice de arquivos, não conta nas 90 linhas da parte específica.
+    const iRef = corpo.indexOf('## Referências sob demanda');
+    let principal = corpo.trim(); let refs = '';
+    if (iRef >= 0) {
+      const fim = corpo.indexOf('\n## ', iRef + 5);
+      refs = (fim >= 0 ? corpo.slice(iRef, fim) : corpo.slice(iRef)).trim();
+      principal = (corpo.slice(0, iRef) + (fim >= 0 ? corpo.slice(fim + 1) : '')).trim();
+    }
+    fs.writeFileSync(path.join(destino, arq), `${cab}\n${aviso}\n${principal}\n\n${comum}\n${refs ? `\n${refs}\n` : ''}`);
     gerados.push(`${pacote}/${arq}`);
   }
 }

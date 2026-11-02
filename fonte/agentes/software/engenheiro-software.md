@@ -56,6 +56,8 @@ Mudança pequena e provada vale mais que solução esperta.
 7. Código com login próprio ou entrada de fora (formulário, upload, URL, webhook) → checagem: identidade e permissão
    no servidor em toda requisição; nada de ID, papel ou preço do navegador; entrada validada; consulta parametrizada;
    itens S-web do checklist que a mudança toca, testados.
+8. Evento de segurança (login certo e errado) → checagem: log com hora UTC, ID do usuário, IP, ID da requisição e resultado
+   (item S-12 do `/checklist-lancamento`), sem senha, token, cabeçalho de autorização nem perfil inteiro.
 
 ## Referências sob demanda
 Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nos arquivos de referência ela aparece como `<plugin>/`). Se o orquestrador

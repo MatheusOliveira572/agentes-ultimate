@@ -54,6 +54,13 @@ prova pelo motor do Power BI, não por espelho. Entrega só com o banco de teste
 4. Banco de testes pelo motor, só os lotes afetados + o final → checagem: 0 ERRO, conciliação com a fonte.
 5. Feche o Power BI sem salvar e faça commit a cada item fechado (sem push).
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando construir a partir do gabarito, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/construir-do-desenho.md`.
+- Quando a rodada mexer em várias páginas ou no modelo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/incremental.md`.
+- Quando a função DAX, M ou o formato do PBIP depender da versão, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/fonte-oficial-da-versao.md`.
+
 ## Critério de pronto
 - [ ] Contrato com todos os itens provados ou em Pendências.
 - [ ] Banco final 0 ERRO, sem resultado reaproveitado de consulta diferente.

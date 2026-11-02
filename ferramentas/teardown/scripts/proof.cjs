@@ -44,12 +44,12 @@ function sheet(markup, title, viewBox = SHEET_BOX.join(' '), size = `width="${SH
 function rasterizer() {
   const chrome = findChrome();
   const named = (name, run) => Object.assign(run, {label: name});
-  if (has('rsvg-convert')) return named('rsvg-convert', (svg, png) => execFileSync('rsvg-convert', ['-w', String(PIXELS), '-o', png, svg]));
-  if (has('resvg')) return named('resvg', (svg, png) => execFileSync('resvg', ['-w', String(PIXELS), svg, png]));
-  if (chrome) return named('Chrome', (svg, png, height) => execFileSync(chrome, ['--headless', '--disable-gpu', '--hide-scrollbars', `--screenshot=${png}`, `--window-size=${PIXELS},${height}`, '--default-background-color=ffffffff', `file://${svg}`], {stdio: 'ignore'}));
+  if (has('rsvg-convert')) return named('rsvg-convert', (svg, png) => execFileSync('rsvg-convert', ['-w', String(PIXELS), '-o', png, svg], {windowsHide: true}));
+  if (has('resvg')) return named('resvg', (svg, png) => execFileSync('resvg', ['-w', String(PIXELS), svg, png], {windowsHide: true}));
+  if (chrome) return named('Chrome', (svg, png, height) => execFileSync(chrome, ['--headless', '--disable-gpu', '--hide-scrollbars', `--screenshot=${png}`, `--window-size=${PIXELS},${height}`, '--default-background-color=ffffffff', `file://${svg}`], {windowsHide: true, stdio: 'ignore'}));
   if (has('qlmanage')) {
     return named('Quick Look', (svg, png) => {
-      execFileSync('qlmanage', ['-t', '-s', String(PIXELS), '-o', path.dirname(png), svg], {stdio: 'ignore'});
+      execFileSync('qlmanage', ['-t', '-s', String(PIXELS), '-o', path.dirname(png), svg], {windowsHide: true, stdio: 'ignore'});
       fs.renameSync(path.join(path.dirname(png), path.basename(svg) + '.png'), png);
     });
   }

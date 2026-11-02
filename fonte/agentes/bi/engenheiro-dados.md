@@ -58,6 +58,13 @@ a atualização mensal cabe na rotina do usuário. Número que não concilia nã
 6. Cadastro ou regra mudou → checagem: a mudança está no arquivo versionado único e a carga foi rodada de novo com os
    testes do passo 3.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando migrar fonte, modelo ou esquema, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/migracao.md`.
+- Quando a consulta ou a carga estiver lenta, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/desempenho.md`.
+- Quando desenhar serviço, transação, fila ou cache, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/backend.md`.
+
 ## Critério de pronto
 - [ ] Grão declarado por fonte e por fato; cada tabela do modelo classificada como fato ou dimensão.
 - [ ] Testes de integridade rodados, com as linhas que falharam listadas.

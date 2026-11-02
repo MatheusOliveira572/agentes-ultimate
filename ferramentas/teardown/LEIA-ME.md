@@ -1,4 +1,4 @@
-<!-- Adaptado de jakubkrehel/skills/skills/teardown/assets e skills/teardown/scripts @592aedc, © 2026 Jakub Krehel, MIT. Alterações: nenhuma no código (cópia inteira); a SKILL.md original foi renomeada para referencia-original/ORIGINAL-SKILL.md (é dado, não instrução); alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/ e LICENSE nesta pasta. -->
+<!-- Adaptado de jakubkrehel/skills/skills/teardown/assets e skills/teardown/scripts @592aedc, © 2026 Jakub Krehel, MIT. Alterações: só `windowsHide: true` nas chamadas de processo (cópia inteira no resto); alterado por agentes-ultimate; a SKILL.md original foi renomeada para referencia-original/ORIGINAL-SKILL.md (é dado, não instrução); alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/ e LICENSE nesta pasta. -->
 # teardown: ilustração técnica (cópia da ferramenta do Jakub Krehel)
 
 Visualizador e gerador de ilustração técnica (vista explodida, corte, camadas) com exportação SVG/PNG/PDF e prova nos

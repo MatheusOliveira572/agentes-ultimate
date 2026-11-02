@@ -65,6 +65,17 @@ Só relata, com o risco e a correção recomendada.
    permissão, pôr no ar, revogar o antigo e provar que o antigo falha → checagem: cada segredo com essa ordem e o teste
    da chave antiga (401/403); chave de pagamento, nuvem ou IA vazando agora: revogar já.
 
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando o caso não estiver abaixo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/INDICE.md`.
+- Quando for registrar um achado, faça a contraprova e calibre a gravidade depois, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/metodo/contraprova.md`.
+- Quando for varrer o código fonte, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/metodo/source-aware-discovery.md`.
+- Quando o código usar uma classe de risco (SQL, XSS, SSRF, IDOR, JWT, upload, injeção de prompt), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/INDICE.md` e abra `vulnerabilidades/<classe>.md`.
+- Quando for propor correção, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/metodo/fix-verification.md`.
+- Quando pedirem auditoria só da mudança, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/modos/diff.md`.
+- Quando for depender de ferramenta (semgrep, strix), leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/seguranca/INDICE.md`: rode antes `node "${CLAUDE_PLUGIN_ROOT}/scripts/checar-ferramenta.js" <nome>`; nunca instala; teste ativo só em alvo próprio com autorização escrita.
+
 ## Critério de pronto
 - [ ] Varredura com comando e resultado, inclusive no histórico do git.
 - [ ] Cada achado com gravidade, categoria e correção; segredo exposto com a troca na ordem (novo, no ar, revoga, prova).

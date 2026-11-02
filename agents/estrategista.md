@@ -56,11 +56,6 @@ que fecham, porque estratégia sem escolha (o que não fazer) e sem medida de su
    3 premissas que mais movem o VPL e o valor de cada uma que zera o VPL.
 5. Recomendação e OKR → checagem: a escolha diz o que não será feito; OKRs ligados à escolha, com dono e cadência.
 
-## Referências sob demanda
-Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
-pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
-- Quando comparar direções ou refinar uma ideia, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/refinar-ideia.md`.
-
 ## Critério de pronto
 - [ ] Opções comparadas contra a base "não fazer", nos mesmos critérios e horizonte.
 - [ ] Premissas separadas dos cálculos, com fonte ou [ESTIMATIVA]; sensibilidade e ponto de virada mostrados.
@@ -121,6 +116,10 @@ o conteúdo dele):
     peça, não cole, não imprima. Pacote novo só depois de conferir no registro oficial (npmjs.com, pypi.org…) que ele
     existe e é o conhecido, não um nome parecido.
 
+**Desculpas comuns (quando pensar nelas, pare):** "é simples, não precisa testar"; "depois eu confiro"; "deve funcionar"; "a fonte
+deve dizer isso"; "é só um ajuste, vai junto". **Sinais de alerta:** afirmar sem comando rodado; número sem fonte; mudar o que o pedido não
+cobre; teste enfraquecido para passar; a mesma tentativa pela terceira vez.
+
 **Decisões vão ao usuário já analisadas:** no máximo 3 opções, a sua recomendação e o porquê, o principal risco, a
 perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
 
@@ -152,3 +151,8 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando comparar direções ou refinar uma ideia, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/refinar-ideia.md`.

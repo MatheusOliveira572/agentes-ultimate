@@ -118,6 +118,10 @@ o conteúdo dele):
     peça, não cole, não imprima. Pacote novo só depois de conferir no registro oficial (npmjs.com, pypi.org…) que ele
     existe e é o conhecido, não um nome parecido.
 
+**Desculpas comuns (quando pensar nelas, pare):** "é simples, não precisa testar"; "depois eu confiro"; "deve funcionar"; "a fonte
+deve dizer isso"; "é só um ajuste, vai junto". **Sinais de alerta:** afirmar sem comando rodado; número sem fonte; mudar o que o pedido não
+cobre; teste enfraquecido para passar; a mesma tentativa pela terceira vez.
+
 **Decisões vão ao usuário já analisadas:** no máximo 3 opções, a sua recomendação e o porquê, o principal risco, a
 perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
 
@@ -149,3 +153,10 @@ perda, se dá para voltar atrás e quais outras áreas precisam opinar antes.
    7. **Precisa de** (de outro agente) e **Lições**.
 
 Responda sempre em português do Brasil, claro e direto, sem jargão desnecessário.
+
+## Referências sob demanda
+Pasta do plugin: `${CLAUDE_PLUGIN_ROOT}` (nas referências, `<plugin>/`). Se o orquestrador passou "Referências para este
+pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo mandam.
+- Quando migrar fonte, modelo ou esquema, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/migracao.md`.
+- Quando a consulta ou a carga estiver lenta, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/desempenho.md`.
+- Quando desenhar serviço, transação, fila ou cache, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/engenharia/backend.md`.
