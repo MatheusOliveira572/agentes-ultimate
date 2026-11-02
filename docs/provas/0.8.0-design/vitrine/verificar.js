@@ -251,7 +251,7 @@ function focoAtual() {
       }
       if (c.rolar) { await avaliar((ex) => scrollTo(0, eval(ex)), c.rolar); await espera(900); }
       if (!c.semJs) { const ej = await avaliar(() => window.__errosJs || []); r.erros.push(...ej, ...excecoes.map((x) => 'exceção: ' + x.slice(0, 120)));
-        if (!(await avaliar(() => !!window.liquido))) r.erros.push('liquido.js não carregou (caminho ../e2e)'); }
+        if (!(await avaliar(() => !!window.liquido))) r.erros.push('liquido.js não carregou (caminho modelos/liquid-glass)'); }
       if (!c.desempenho) {
         const m = await avaliar(medirTudo, PIXEL); r.erros.push(...m.erros); r.avisos.push(...m.avisos); r.pares = m.nPares; r.piorTexto = m.pior;
         r.pixel = await medirPixel(m.pixel);

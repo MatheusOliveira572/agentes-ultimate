@@ -9,7 +9,7 @@ Pedido: "crie um site premium para um app de finanças". Feito à mão pelo enge
 | `bancada-efeitos.html` | um palco por efeito, código próprio; A4 (brilho) e D5 (texto preenchido) estão ali para serem medidos, não como recomendação |
 | `provar.js` | `node provar.js site`, `efeitos` e `quadro`; um Edge sem interface por etapa, fechado ao fim dela |
 | `resultado.json` | tudo o que foi medido |
-| `png/` | site em 2 temas (1440 e 390 px); claro em 320, 768, 905 e 1920 px; movimento reduzido; transparência reduzida; sem JS; folha da bancada |
+| `png/` | site em 2 temas (1440 e 390 px); claro em 320 px (o `provar.js` também grava 768, 905 e 1920 px; essas 3 saíram na limpeza da 0.8.0); movimento reduzido; transparência reduzida; sem JS; folha da bancada |
 
 **A ideia própria:** o mês desenhado como uma tábua de marés, com a maré baixa como o dia mais apertado. Daí saem a curva da
 dobra, o calendário, a objeção ("e quando a tábua erra?"), o preço como mais uma linha da tábua, a régua nas perguntas e o

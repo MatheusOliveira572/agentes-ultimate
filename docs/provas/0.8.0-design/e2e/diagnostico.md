@@ -121,6 +121,8 @@ Duas camadas, uma junção (texto completo em `propostas/impressionar.md`, a par
   sem função na ideia = AMARELO com a correção.
 
 ## 6. Anexo: mudanças prontas para o engenheiro aplicar (formato das fontes)
+Aplicadas no im99; a pasta `propostas/` saiu na limpeza da 0.8.0 (os textos estão nos destinos e no histórico do git).
+
 | Arquivo proposto | Vai para | Linhas da parte específica |
 |---|---|---|
 | `propostas/designer-paineis.md` | `fonte/agentes/bi/designer-paineis.md` (ganha o ramo de tela de app: ambição, junção, momento-pico, régua) | 81 (≤ 90) |

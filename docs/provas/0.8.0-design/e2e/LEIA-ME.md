@@ -25,7 +25,8 @@ Ninguém pediu as referências: elas vieram do roteador. O designer, pela seçã
 | Movimento | `design/movimento/INDICE.md` | uma entrada rara no detalhe (180 ms, ease-out, de 0,97, sem `scale(0)`), com redução de movimento; pressionar 0,97 em 160 ms |
 | Polir | `design/detalhes-interface.md` | sombra para elevação e borda para estrutura; hover só com `@media (hover: hover)`; foco visível; raio 12–16 px |
 
-PNGs: `png/caso-a-antes-claro-{1440,390}.png`, `png/caso-a-depois-{claro,escuro}-{1440,390}.png`.
+PNGs: `png/caso-a-antes-claro-1440.png` e `png/caso-a-depois-claro-1440.png` (um par antes e depois; os outros da v1 saíram na
+limpeza da 0.8.0 e continuam no histórico do git).
 
 ## 3. Caso B: "um card com efeito vidro estilo Apple" (`caso-b-landing.html`, `caso-b-produto.html`)
 Regra seguida: na **landing**, o cartão pode ter vidro, com 72–88% de opacidade e fundo calmo (decisão do lote de sites, ainda não
@@ -40,9 +41,7 @@ controles que flutuam (`apple/materiais.md`: "Nunca na camada de conteúdo"), e 
   `materiais.md`. Agora a menor medida de todas é **4,94:1** (aba ativa, escuro, 390 px); no cartão da landing, 7,71:1 no pior ponto.
 - Ajuste visto no PNG: no claro, a mancha de fundo não passava por trás do cartão e o vidro não aparecia; mudei a posição dela.
 
-PNGs: `png/caso-b-landing-{claro,escuro}-{1440,390}.png`, `png/caso-b-landing-claro-transparencia-reduzida-1440.png`,
-`png/caso-b-landing-claro-contraste-mais-1440.png`, `png/caso-b-produto-{claro,escuro}-{390,1440}.png`,
-`png/caso-b-produto-claro-transparencia-reduzida-390.png`.
+PNGs da v1 do caso B: saíram na limpeza da 0.8.0 (continuam no histórico do git); as medidas ficam em `png/medidas.json`.
 
 ## 4. Conferência
 17 PNGs, todos abertos e vistos; 0 erro de JavaScript; 0 rolagem lateral; `medidas.json` com o tema, as preferências emuladas, o
@@ -53,21 +52,22 @@ PNGs: `png/caso-b-landing-{claro,escuro}-{1440,390}.png`, `png/caso-b-landing-cl
 - Não houve `claude -p` com agentes de verdade: as páginas seguem as referências que o roteador indicou, aplicadas por um agente só.
   A prova de que o conteúdo é acionado é a saída do roteador (seção 1); a de que ele funciona, as páginas.
 - O suporte a `prefers-reduced-transparency` nos navegadores ainda é parcial (o Edge desta máquina respeita a emulação).
-- A pasta `../app-premium.html` e `../card-vidro.html` são da tentativa anterior (2026-11-01), com as ressalvas do `../LEIA-ME.md`.
+- A tentativa anterior (2026-11-01, `app-premium.html` e `card-vidro.html`) saiu na limpeza da 0.8.0; está no histórico do git.
 
 ---
 
 # v2 (pv94, 2026-11-02): refeito pelo designer-paineis porque a v1 ficou "normal"
 O usuário achou as telas da v1 "bem normais, nada que impressiona" e pediu que **impressionar** seja o padrão do plugin. Por
-que a v1 ficou assim (execução × instruções) e as propostas de mudança: `diagnostico.md` e `propostas/`. Os arquivos da v1
-ficam para comparação.
+que a v1 ficou assim (execução × instruções) e as propostas de mudança: `diagnostico.md` (as propostas já foram aplicadas a
+`conhecimento/design/impressionar.md`, `apple/materiais.md`, aos designers e ao revisor, e a pasta `propostas/` saiu). Os
+arquivos da v1 ficam para comparação.
 
 ## O que é cada coisa
 | Arquivo | O que é |
 |---|---|
 | `caso-a-depois-v2.html` | App de tarefas (mesmo conteúdo do "antes": 6 tarefas, detalhe, 12 / 5 / 42%). **Ideia: o dia lido como uma linha do tempo, com o agora no meio**; a fita do dia (cada peça é uma tarefa, clicável); o passado comprimido, o que está aberto ganha espaço; inspetor à direita; teclado (↑ ↓, Espaço, Ctrl+Enter, Ctrl+Z) com dicas na tela; concluir com mola, risco que se desenha, placar, fita e "próxima" que mudam juntos, aviso com desfazer; troca do detalhe com inclinação 3D vinda da lista; "Próximos dias" se revela ao rolar. `?estado=vazio` e `?mutar=contagem` |
 | `caso-b-produto-v2.html` | Álbum do app de fotos (mesmos 24 nomes e datas). **Ideia: a luz da viagem atravessa o vidro.** Capa que sangra por trás da barra lateral; Liquid Glass só na navegação e nos controles; fotos sólidas em mosaico por lugar que **pousam ao rolar** (3D); a mesma luz (o ponteiro) inclina as fotos e gira o aro do vidro; no celular, as abas se recolhem ao rolar e a busca se aproxima |
-| `liquido.css`, `liquido.js` | O material **Liquid Glass** usado nos dois casos: lente (`backdrop-filter: url(#svg)` com `feDisplacementMap`), aro especular que segue a luz, tinta que se adapta à luminância do que passa atrás (grade 4 × 4 por foto, mais grossa sobre fundo misto), cápsula concêntrica. Fora do Chromium: material regular declarado, sem fingir refração |
+| `modelos/liquid-glass/` (na raiz do plugin; a cópia daqui saiu na limpeza, com o defeito dos `[data-lum]` aninhados) | O material **Liquid Glass** usado nos dois casos: lente (`backdrop-filter: url(#svg)` com `feDisplacementMap`), aro especular que segue a luz, tinta que se adapta à luminância do que passa atrás (grade 8 × 8 sobre o controle, mais grossa sobre fundo misto), cápsula concêntrica. Fora do Chromium: material regular declarado, sem fingir refração |
 | `verificar-v2.js` | Edge sem interface, uma aba, uma captura por vez (`windowsHide`). Uso: `node verificar-v2.js a|b|tudo` e `node verificar-v2.js a --mutar` |
 
 ## Junção (cada elemento serve à ideia; o que não servia saiu)
@@ -99,7 +99,7 @@ ficam para comparação.
 `caso-b-produto-v2-{claro,escuro}-{1440,390}.png`, `caso-b-produto-v2-claro-1440-rolado.png` (+ `-zoom.png`, lente ampliada
 2×), `caso-b-produto-v2-escuro-390-rolado.png` (abas recolhidas), `caso-b-produto-v2-claro-1440-transparencia-reduzida.png`.
 
-## Autocrítica pela régua (`propostas/impressionar.md`, camada 2)
+## Autocrítica pela régua (`conhecimento/design/impressionar.md`, camada 2)
 | Item | A | B |
 |---|---|---|
 | 9 ideia numa frase | sim | sim |
@@ -134,7 +134,8 @@ Apontado: a barra lateral terminava num corte seco onde a capa acaba, e o vidro 
 - **Medida:** o contraste sobre o vidro passou a ser medido na caixa das letras (`Range`), não no recuo do botão; ainda
   pega vidro ruim (mutação com tinta escura 0,10: 4 casos reprovados).
 - Novo: `png/caso-b-produto-v2-escuro-1440-rolado.png` e `-zoom.png` (barra lateral ampliada 2×).
-- `node verificar-v2.js b`: 9 casos ok; `node verificar-v2.js a`: 8 casos ok (o vidro de A usa o mesmo `liquido.css`).
+- `node verificar-v2.js b`: 9 casos ok; `node verificar-v2.js a`: 8 casos ok (o vidro de A usa o mesmo modelo). Depois da limpeza, com as páginas no
+  `modelos/liquid-glass/`: `b` 9 casos ok e `a` 8 casos ok de novo (2026-11-02).
 
 **PNGs para mostrar ao usuário:** `png/caso-a-v2-claro-1440.png`, `png/caso-b-produto-v2-claro-1440-rolado.png` e
 `png/caso-b-produto-v2-escuro-1440-rolado-zoom.png`.

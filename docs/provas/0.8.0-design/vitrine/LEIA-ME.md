@@ -1,9 +1,9 @@
 # Vitrine "Clara 35" (prova do padrão "impressiona", designer-sites)
 
-Produto fictício: **Clara 35**, câmera compacta com lente fixa de 35 mm f/1,4. Nada da Motiva, nada de finanças. Preço, prazo e
+Produto fictício: **Clara 35**, câmera compacta com lente fixa de 35 mm f/1,4. Nada de finanças. Preço, prazo e
 especificações são de exemplo e a página diz isso no cartão ("preço de exemplo") e no rodapé. Paisagem, lente, diafragma, luzes e
 letreiro são **ilustrações geradas por código** (SVG e CSS, com gerador determinístico em `vitrine.js`). Nenhuma imagem, texto ou
-código de terceiros. O vidro reaproveita o módulo da prova pv94 (`../e2e/liquido.css` e `../e2e/liquido.js`, sem alteração).
+código de terceiros. O vidro é o modelo do plugin, `modelos/liquid-glass/` (a página o carrega pela raiz do plugin).
 
 **Abrir:** `index.html` no Edge ou no Chrome (a lente do vidro só existe no Chromium) e rolar devagar do herói até a reserva.
 
@@ -65,7 +65,7 @@ Edge sem interface, perfil próprio, uma aba, uma captura por vez, `windowsHide`
 | `png/vitrine-claro-390-q2-aberta.png`, `png/vitrine-escuro-390-q4-reservar.png` | lente aberta e cartão no celular |
 | `png/vitrine-claro-1440-reduzido-aberta.png`, `png/vitrine-claro-1440-transparencia-reduzida.png` | movimento reduzido (aberta, parada) e transparência reduzida (cartão opaco) |
 
-## Autocrítica pela régua (`../e2e/propostas/impressionar.md`)
+## Autocrítica pela régua (`conhecimento/design/impressionar.md`)
 **Camada 1:** 1 INP não medido (pendência, não "não"); 2 hover/foco/pressionado sim; 3 vazio/erro/carregando: não se aplica (sem
 servidor), a reserva tem desfazer; 4 teclado sim; 5 coerência sim (medida); 6 contraste no pior ponto sim; 7 390 e CPU fraca sim;
 8 reduções sim. **Camada 2:** 9 uma ideia sim; 10 primeiro quadro ocupado sim; 11 título 96 px = 4,6× o corpo sim; 12 um acento sim;

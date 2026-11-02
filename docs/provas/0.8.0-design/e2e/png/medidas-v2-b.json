@@ -1,5 +1,5 @@
 {
-  "data": "2026-11-02T19:50:12.092Z",
+  "data": "2026-11-02T20:44:42.814Z",
   "totalErros": 0,
   "relatorio": [
     {
@@ -181,7 +181,7 @@
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:escuro(0.04) Ações do álbum:escuro(0.04) capsula redonda lg:escuro(0.04) Seções:escuro+misto(0.15) Buscar:claro+misto(0.71)",
+      "tons": "capsula redonda lg:escuro(0.04) Ações do álbum:escuro(0.05) capsula redonda lg:escuro(0.04) Seções:escuro+misto(0.14) Buscar:claro+misto(0.71)",
       "png": "caso-b-produto-v2-claro-390.png"
     },
     {
@@ -363,7 +363,7 @@
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:escuro(0.04) Ações do álbum:escuro(0.04) capsula redonda lg:escuro(0.04) Seções:escuro+misto(0.15) Buscar:claro+misto(0.71)",
+      "tons": "capsula redonda lg:escuro(0.03) Ações do álbum:escuro(0.04) capsula redonda lg:escuro(0.04) Seções:escuro+misto(0.14) Buscar:claro+misto(0.71)",
       "png": "caso-b-produto-v2-escuro-390.png"
     },
     {
@@ -394,7 +394,7 @@
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:claro(0.62) Ações do álbum:claro+misto(0.44) capsula redonda lg:escuro(0.08) Seções:claro+misto(0.47) Buscar:claro+misto(0.46)",
+      "tons": "capsula redonda lg:claro(0.63) Ações do álbum:claro+misto(0.42) capsula redonda lg:escuro(0.08) Seções:claro+misto(0.47) Buscar:claro+misto(0.47)",
       "png": "caso-b-produto-v2-escuro-390-rolado.png"
     },
     {
@@ -510,7 +510,7 @@
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.13) capsula redonda lg:escuro(0.02)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.14) capsula redonda lg:escuro(0.02)",
       "png": "caso-b-produto-v2-claro-1440-rolado.png"
     },
     {
@@ -712,12 +712,12 @@
         },
         {
           "txt": "Apresentação",
-          "pior": 9.47,
+          "pior": 10.32,
           "min": 4.5
         },
         {
           "txt": "Selecionar",
-          "pior": 12.72,
+          "pior": 13.85,
           "min": 4.5
         },
         {
@@ -858,7 +858,7 @@
         }
       ],
       "backdrop": " | none",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.13) capsula redonda lg:escuro(0.02)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.14) capsula redonda lg:escuro(0.02)",
       "png": "caso-b-produto-v2-claro-1440-transparencia-reduzida.png"
     }
   ]
