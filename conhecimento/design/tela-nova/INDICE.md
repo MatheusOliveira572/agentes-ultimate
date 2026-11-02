@@ -1,5 +1,5 @@
 <!-- Adaptado de pbakaus/impeccable/skill/reference/visualize.md @e89e3ad, © 2025 Paul Bakaus, Apache-2.0. Alterações: tradução e condensação (só o fluxo de decisão das opções de composição); alterado por agentes-ultimate. Licença em terceiros/pbakaus-impeccable/ (com NOTICE.md). -->
-<!-- ref: tema=tela-nova; palavras=tela nova, pagina nova, novo site, novo app, mundo visual, direcao visual, tres direcoes, composicao, comp, do zero; agentes=designer-paineis, designer-documentos -->
+<!-- ref: tema=tela-nova; palavras=tela nova, pagina nova, novo site, novo app, mundo visual, direcao visual, tres direcoes, composicao, comp, do zero; agentes=designer-paineis, designer-documentos, designer-sites -->
 <!-- teste-ref: sim=crie uma tela nova do zero com três direções visuais para eu escolher | preciso de uma página nova com direção visual própria para o produto; nao=faça a provisão para devedores duvidosos -->
 # Tela ou página nova: escolher o mundo visual
 

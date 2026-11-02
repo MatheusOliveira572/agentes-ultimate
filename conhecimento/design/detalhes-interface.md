@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/better-ui/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT. Alterações: tradução, corte, divergências com o Emil registradas; alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/. -->
-<!-- ref: tema=detalhes-interface; palavras=detalhes de interface, raio da borda, cantos arredondados, sombra, sombras, icones, alinhamento optico, borda do cartao, botao pressionado, acabamento fino, visual premium, redesenhe, redesenho, site bonito, bonito, site institucional; agentes=designer-paineis, engenheiro-software -->
+<!-- ref: tema=detalhes-interface; palavras=detalhes de interface, raio da borda, cantos arredondados, sombra, sombras, icones, alinhamento optico, borda do cartao, botao pressionado, acabamento fino, visual premium, redesenhe, redesenho, site bonito, bonito, site institucional; agentes=designer-paineis, engenheiro-software, designer-sites -->
 <!-- teste-ref: sim=acerte os detalhes de interface: raio, sombras e ícones do cartão | o botão pressionado e o alinhamento óptico dos ícones estão estranhos; nao=calcule a taxa interna de retorno do projeto -->
 # Detalhes de interface (Jakub Krehel): valores exatos
 

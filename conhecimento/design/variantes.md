@@ -1,5 +1,5 @@
 <!-- Adaptado de jakubkrehel/skills/skills/variant/SKILL.md e skills/state-machine/SKILL.md @592aedc, © 2026 Jakub Krehel, MIT; e de emilkowalski/skills/skills/prototype/SKILL.md @a81dbca, © 2026 Emil Kowalski, MIT. Alterações: tradução, junção, corte; o seletor ficou em modelos/seletor-variantes/; alterado por agentes-ultimate. Licença em terceiros/jakubkrehel-skills/ e terceiros/emilkowalski-skills/. -->
-<!-- ref: tema=variantes; palavras=variantes, opcoes de layout, tres opcoes, alternativas de design, prototipo, prototipos, comparar versoes, estados do componente, seletor de variantes, me mostre opcoes; agentes=designer-paineis, designer-documentos, testador-qa -->
+<!-- ref: tema=variantes; palavras=variantes, opcoes de layout, tres opcoes, alternativas de design, prototipo, prototipos, comparar versoes, estados do componente, seletor de variantes, me mostre opcoes; agentes=designer-paineis, designer-documentos, testador-qa, designer-sites -->
 <!-- teste-ref: sim=me mostre três opções de layout para o cartão, lado a lado com seletor | quero protótipos de variantes do componente e todos os estados dele; nao=faça o recibo de aluguel -->
 # Variantes e estados: respostas diferentes, não tons diferentes
 
