@@ -35,16 +35,16 @@ As correções são pequenas. O agente, a biblioteca e a decisão do vidro estã
 | M-3 | Médio | Vidro: 4 trechos ainda contradizem a decisão do usuário, a começar pelo efeito A1 | `engenheiro-software` |
 | M-4 | Médio | O ponto "dia 22, maré baixa" fica solto da curva: 9 px na cena inicial, 28 px na terceira | `engenheiro-software` |
 | M-5 | Médio | Checagens cegas: 4 mutantes meus passaram na prova da página e 2 passaram nos casos de texto | `engenheiro-software` |
-| b-1 | Baixo | De 901 a ~1100 px, a coluna da garantia fica com 136 a 212 px de texto (6 linhas em 1024 px) | `engenheiro-software` |
-| b-2 | Baixo | Acabamento: espaço morto em Perguntas e no bloco final; a segunda metade da página fica genérica | `designer-sites` |
-| b-3 | Baixo | Quadro de provas: "sem animação" em efeito animado; "49,9 e 16,8 ms" fixos no texto gerado | `engenheiro-software` |
-| b-4 | Baixo | Sobras: `polimento.md` sem caminho no agente; `checklist-lancamento` ainda aponta só para `designer-paineis` | `engenheiro-software` |
-| b-5 | Baixo | Sem sinônimos: "website", "homepage", "página inicial" e "lp de vendas" não são reconhecidos | `engenheiro-software` |
-| b-6 | Baixo | Referência da NNG: "a ação" no topo não está no artigo, e o estudo é de 2018, sem data no agente | `engenheiro-software` |
-| b-7 | Baixo | 4 efeitos sem "Técnica": F2, F4, F7 e F8 | `engenheiro-software` |
-| b-8 | Baixo | Fluxo da página: "Testar o Solo" e "Testar o Casa" levam às perguntas; `aria-label` em `<p>`; pausa muda nome e estado | `engenheiro-software` |
+| M-6 | Médio | Logo acima de 900 px, a seção de preços quebra: 43 px de rolagem lateral em 905 px e garantia com 57 px de largura | `engenheiro-software` |
+| b-1 | Baixo | Acabamento: espaço morto em Perguntas e no bloco final; a segunda metade da página fica genérica | `designer-sites` |
+| b-2 | Baixo | Quadro de provas: "sem animação" em efeito animado; "49,9 e 16,8 ms" fixos no texto gerado | `engenheiro-software` |
+| b-3 | Baixo | Sobras: `polimento.md` sem caminho no agente; `checklist-lancamento` ainda aponta só para `designer-paineis` | `engenheiro-software` |
+| b-4 | Baixo | Sem sinônimos: "website", "homepage", "página inicial" e "lp de vendas" não são reconhecidos | `engenheiro-software` |
+| b-5 | Baixo | Referência da NNG: "a ação" no topo não está no artigo, e o estudo é de 2018, sem data no agente | `engenheiro-software` |
+| b-6 | Baixo | 4 efeitos sem "Técnica": F2, F4, F7 e F8 | `engenheiro-software` |
+| b-7 | Baixo | Fluxo da página: "Testar o Solo" e "Testar o Casa" levam às perguntas; `aria-label` em `<p>`; pausa muda nome e estado | `engenheiro-software` |
 
-### A-1 · Roteador (`hooks/roteador.js` real, 99 pedidos, antes em 9974b28 × agora)
+### A-1 · Roteador (`hooks/roteador.js` real, 98 pedidos, antes em 9974b28 × agora)
 
 Os casos pedidos passam no nível de agentes: "landing page" vai ao `designer-sites`; "site" isolado e "dashboard" não
 indicam agente. Fora deles, o resultado é este:
@@ -184,6 +184,25 @@ Placar total: **pegou 9 de 15**.
 
 Um 7º mutante meu (tirar a WCAG 2.2.2 só de `fonte/`) foi descartado por ser inválido: não regenerei `agents/`.
 
+### M-6 · Largura logo acima do limite de 900 px
+
+O autor só mediu 390 e 1440 px. Testei os dois lados do limite do layout de celular:
+
+| Largura | Rolagem lateral | Coluna da garantia |
+|---|---|---|
+| 768 px | 0 | 728 px, normal |
+| 905 px | **43 px** | **57 px de largura e 354 px de altura** (17 px para o texto) |
+| 960 px | 0 | 112 px e 325 px de altura |
+| 1024 px | 0 | 176 px, 6 linhas |
+| 1100 px | 0 | 252 px |
+| 1920 px | 0 | 440 px, normal |
+
+**Causa:** `.planos` usa `repeat(2, minmax(0, 380px)) minmax(0, 1fr)`, com `.garantia` e 40 px de recuo. Os 2 planos crescem
+até 380 px e sobra quase nada para a 3ª coluna. O limite de 900 px só empilha abaixo disso.
+
+**Correção pedida:** levar a garantia para baixo dos planos até ~1200 px. Incluir na prova uma largura logo depois do limite
+(901–910 px), além de 768 e 1920, que o agente já exige.
+
 ## O que está bom
 
 **Agente `designer-sites`:** padrão completo.
@@ -213,11 +232,11 @@ Um 7º mutante meu (tirar a WCAG 2.2.2 só de `fonte/`) foi descartado por ser i
 - O calendário e o bloco escuro com vidro quase opaco também funcionam. Todos os valores conferem entre si: saldo, parcelas,
   preços anuais, e novembro de 2026 começando no domingo.
 - O teste do recorte passa nessa parte.
-- Da seção de preços para baixo, vira página de SaaS comum, com espaço morto (b-2).
+- Da seção de preços para baixo, vira página de SaaS comum, com espaço morto (b-1).
 - Abaixo do premium: M-4 e o que está em A-2.
 
 Abri os 8 PNGs do autor, inclusive os 2 que ele não abriu (movimento reduzido e sem JS, ambos corretos). Abri também os
-meus, em 320, 768, 1024, 1100 e 1920 px, com 0 rolagem lateral em todos.
+meus, em 320, 768, 1024 e 1920 px. Em 1100 px só medi. A rolagem lateral foi 0 nessas larguras; a exceção está em M-6.
 
 ## Para o usuário provar (depois das correções)
 
@@ -234,4 +253,4 @@ meus, em 320, 768, 1024, 1100 e 1920 px, com 0 rolagem lateral em todos.
 - Os evals não foram rodados com o agente.
 - Nivora e Code and Chill continuam sem estudo.
 
-Placar: autor=engenheiro-software cod=sem-codigo veredito=não B=0 A=2 M=5 b=8 ids=A-1,A-2,M-1,M-2,M-3,M-4,M-5,b-1,b-2,b-3,b-4,b-5,b-6,b-7,b-8
+Placar: autor=engenheiro-software cod=sem-codigo veredito=não B=0 A=2 M=6 b=7 ids=A-1,A-2,M-1,M-2,M-3,M-4,M-5,M-6,b-1,b-2,b-3,b-4,b-5,b-6,b-7
