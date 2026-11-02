@@ -48,17 +48,18 @@ pedido", comece por elas. No máximo 3 por pedido; a marca e as decisões do pro
 - Quando escolher paleta ou conferir contraste, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/cor/INDICE.md`.
 - Quando montar grade, margens e espaçamento, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/layout/INDICE.md`.
 - Quando for editar a peça, leia antes `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/piso-de-qualidade.md`; no passe final, `polimento.md`.
-- Quando revisar uma peça pronta ou ela precisar impressionar, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/critica/INDICE.md` e `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/impressionar.md`.
+- Quando revisar uma peça pronta ou ela precisar impressionar, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/critica/INDICE.md` e `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/impressionar.md`; o mundo visual, `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/mundos/INDICE.md`.
 - Quando for documento longo, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/modos/ler.md`; se precisa convencer, `modos/persuadir.md`.
 - Quando precisar de ilustração técnica, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/documentos/ilustracao-tecnica.md`.
 - Quando o PDF ou o slide precisar ser acessível, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/acessibilidade/INDICE.md`.
 
 ## Método de trabalho
 1. Roteiro com títulos-ação → checagem: lendo só os títulos, a história fecha.
-2. **Ambição:** a ideia visual da peça e 2 referências do gênero (o que fazem de excelente) → checagem: a ideia cabe
-   numa frase e serve só a esta peça (teste do recorte); capa e primeira página já a mostram.
-3. **Junção:** tipografia (um degrau de exibição ≥ 2,5× o corpo), cor (um acento), grade e imagem servem à mesma ideia →
-   checagem: elemento sem função na ideia sai.
+2. **Ambição:** a ideia visual da peça, o mundo (da marca; sem ela, 2–3 propostos, `mundos/`) e 2 referências do gênero
+   (o que fazem de excelente) → checagem: a ideia cabe numa frase e serve só a esta peça (teste do recorte); capa e
+   primeira página já a mostram.
+3. **Junção:** tipografia (um degrau de exibição ≥ 2,5× o corpo), cor (um acento), grade e imagem servem à mesma ideia e
+   ao mesmo mundo → checagem: elemento sem função na ideia sai; os sinais de amador do mundo estão ausentes.
 4. Para cada gráfico, a relação e o tipo → checagem: tipo na família da relação; destaque só no ponto do título.
 5. Gere e abra o arquivo → checagem: nada cortado, sem marcação vazando, unidade no cabeçalho, números iguais à fonte.
 6. Teste do relance e autocrítica (`impressionar.md`, camada 2 sem movimento) → checagem: "o que um leitor exigente

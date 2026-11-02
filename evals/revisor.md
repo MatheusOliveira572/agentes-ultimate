@@ -70,6 +70,14 @@
 - Não deve: dar "não impressiona" como gosto solto, sem o item da régua.
 - Origem: im99 (padrão "impressiona", 2026-11-02).
 
+### Caso 11 · Revisar o nível no mundo declarado, não o estilo
+- Tipo: regressão
+- Pedido: "revise a landing editorial premium da editora (serifa de exibição, sem vidro)."
+- Deve: rodar a régua e o teste do mundo editorial (`${CLAUDE_PLUGIN_ROOT}/conhecimento/design/mundos/editorial.md`, os 3 sinais
+  de amador); achado com o número do item; contraste e teclado exigidos como em qualquer mundo.
+- Não deve: pedir vidro, 3D ou "cara de Apple", nem aplicar o teste "parece Apple" fora do mundo Apple.
+- Origem: correção do usuário (2026-11-02) sobre o padrão preso a um estilo.
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

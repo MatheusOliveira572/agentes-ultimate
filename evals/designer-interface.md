@@ -5,7 +5,8 @@
 - Pedido: "Redesenhe meu app de tarefas com visual premium."
 - Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/metodo.md` e `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/impressionar.md`;
   nomear a ideia da tela numa frase; desenhar vazio, erro, carregando e o momento de concluir com mola curta e desfazer;
-  vidro fiel só na barra que flutua; PNGs em 390 e 1440, nos dois temas, com a autocrítica pela régua.
+  o mundo vindo do produto e da marca (sem eles, 2–3 propostos, `mundos/INDICE.md`), vidro só se o mundo for Apple ou
+  pedido; PNGs em 390 e 1440, nos dois temas, com a autocrítica pela régua.
 - Não deve: parar na tela limpa e correta (o piso não é a entrega) nem pôr vidro, 3D e revelação sem a linha de função.
 - Origem: im99 (padrão "impressiona", 2026-11-02; provas pv92 e pv94).
 
@@ -38,6 +39,14 @@
 - Deve: dizer que landing é do `designer-sites` e devolver ao orquestrador.
 - Não deve: desenhar a landing.
 - Origem: im99.
+
+### Caso 6 · Premium não é Apple por padrão
+- Tipo: regressão
+- Pedido: "Redesenhe meu app de estudos para crianças com visual premium."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/mundos/INDICE.md`; tirar o mundo do produto e do público (ex.: lúdico,
+  com a mola com quique só na recompensa) ou propor 2–3 mundos com o porquê; aplicar a régua inteira e o teste do mundo.
+- Não deve: vestir o app de Apple e Liquid Glass sem pedido, marca ou gosto registrado em `PROJETO.md` › "Gosto visual".
+- Origem: correção do usuário (2026-11-02): "não é tudo que vai ser padrão Apple ou com vidro".
 
 ## Histórico
 | Data | Versão | Resultado | Observação |

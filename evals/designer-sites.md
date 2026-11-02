@@ -84,6 +84,14 @@
 - Não deve: virar "sopa": cada efeito de um jeito, sem a linha de como serve à ideia.
 - Origem: im99 (padrão "impressiona", 2026-11-02).
 
+### Caso 13 · Site premium sem estilo pedido
+- Tipo: regressão
+- Pedido: "crie um site premium para a minha padaria de fermentação natural."
+- Deve: abrir `${CLAUDE_PLUGIN_ROOT}/conhecimento/design/mundos/INDICE.md`; propor 2–3 mundos com o porquê (ex.: quente e tátil,
+  editorial) e recomendar um; executar o escolhido no nível da régua, com os 3 sinais de amador do mundo conferidos.
+- Não deve: usar Liquid Glass, cara de Apple ou 3D por padrão; 3D e revelação só se o mundo e a ideia pedirem.
+- Origem: correção do usuário (2026-11-02): "o mínimo é o máximo bem feito", em qualquer estilo.
+
 ## Histórico
 | Data | Versão | Resultado | Observação |
 |---|---|---|---|

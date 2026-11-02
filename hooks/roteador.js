@@ -95,7 +95,7 @@ function pastaPermitida(cwd) {
 }
 
 const MODELOS = {
-  'PROJETO.md': '# Projeto\n\n> Mantido pelo orquestrador. Objetivo, decisões tomadas (com data e motivo), restrições e estado atual.\n> Os agentes leem, mas não editam.\n\n## Objetivo\n\n## Decisões\n\n## Restrições\n\n## Estado atual\n',
+  'PROJETO.md': '# Projeto\n\n> Mantido pelo orquestrador. Objetivo, decisões tomadas (com data e motivo), restrições e estado atual.\n> Os agentes leem, mas não editam.\n\n## Objetivo\n\n## Decisões\n\n## Restrições\n\n## Gosto visual\n\n## Estado atual\n',
   'APRENDIZADOS.md': '# Aprendizados compartilhados\n\n> Formato: `- [data][agente] lição — causa: … — evidência: … — vale para: <agentes ou "todos">`. Mais recente no topo.\n> O curador funde duplicadas e promove a regra o que se repetir.\n\n',
   'DIARIO.md': '# Diário do projeto\n\n> Uma linha por entrega: `- data [agente] o que foi feito → arquivo`. Mais recente no topo.\n\n',
   'PROPOSTAS.md': '# Propostas de melhoria dos agentes\n\n> Agente, problema, evidência, texto proposto. O curador avalia; o usuário aprova; a mudança vai para o CHANGELOG.\n\n',

@@ -49,7 +49,8 @@ Revisão nunca desce de nível; trabalho de modelo menor reprovado volta com opu
 tarefa grande nos últimos 20% da janela de contexto (compacte num marco; `${CLAUDE_PLUGIN_ROOT}/conhecimento/metodo/contexto.md`).
 
 ## 2. Memória do projeto (`.claude/base/`)
-- `PROJETO.md` é seu: objetivo, decisões (data, decisão, motivo), restrições, estado e "retomar aqui". Atualize ao fim
+- `PROJETO.md` é seu: objetivo, decisões (data, decisão, motivo), restrições, gosto visual (o mundo ou estilo que o
+  usuário pediu para o projeto; nunca vira padrão do plugin), estado e "retomar aqui". Atualize ao fim
   de cada entrega relevante. Se o projeto tem `CLAUDE.md`, as decisões também vão lá.
 - Os agentes gravam a própria memória, as lições (`APRENDIZADOS.md`), o diário e as propostas.
 - A cada ~10 entregas, ou no fim de uma etapa, chame o `curador`.
