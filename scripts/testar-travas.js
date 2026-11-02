@@ -81,6 +81,20 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   q5 = novo(repo());
   x5 = trava("git commit -F - <<'EOF'\ngit add -A\nEOF", q5);
   caso('0.8.0 M-5 trava: "git add -A" dentro do heredoc da mensagem não conta como preparo', x5.code === 0 && !x5.out, `code ${x5.code} ${x5.err} ${x5.out}`);
+  // Mutação da 2ª rodada: o que só a tabela longa pegava.
+  q5 = prep(repo()); x5 = trava('eval "git commit -m x"', q5);
+  caso('0.8.0 2ª rodada trava: forma incerta com segredo já preparado bloqueia (não só pergunta)', x5.code === 2 && /a\.js:2/.test(x5.err), `code ${x5.code} ${x5.out}`);
+  q5 = muda(repo()); x5 = trava("git com''mit -am x", q5);
+  caso('0.8.0 2ª rodada trava: palavra partida por aspas ainda é commit', x5.code !== 0 || pede(x5), `code ${x5.code} ${x5.out}`);
+  const limpo5 = () => { const q = repo(); fs.writeFileSync(path.join(q, 'a.js'), 'base\nok\n'); fs.writeFileSync(path.join(q, 'sub.txt'), 'ok\n'); return q; };
+  for (const [nome, cmd] of [['add em outra pasta', 'git -C sub add . && git commit -m x'], ['opção longa fora da lista', 'git commit --fixup HEAD -a'], ['opção curta fora da lista', 'git commit -p -m x'], ['saída passada para outro programa', 'git commit -am x | sh']]) {
+    fs.mkdirSync(path.join(q5 = limpo5(), 'sub'), { recursive: true });
+    x5 = trava(cmd, q5);
+    caso('0.8.0 2ª rodada trava: ' + nome + ' pergunta, mesmo sem segredo', x5.code === 0 && pede(x5), `code ${x5.code} ${x5.out}`);
+  }
+  q5 = repo(); let ligou = true;
+  try { fs.symlinkSync(path.join(q5, 'nao-existe.js'), path.join(q5, 'quebrado.js')); } catch (e) { ligou = false; }
+  if (ligou) { x5 = trava('git add -A && git commit -m x', q5); caso('0.8.0 2ª rodada trava: arquivo novo que não abre pergunta, não passa como limpo', x5.code === 0 && pede(x5), `code ${x5.code} ${x5.out}`); }
   // ---- A-3: nome com acento, nos 2 sentidos; aspas no diff ----
   q5 = repo(); fs.writeFileSync(path.join(q5, 'configuração.js'), COM); git('git add .', q5);
   x5 = trava('git commit -m x', q5);
