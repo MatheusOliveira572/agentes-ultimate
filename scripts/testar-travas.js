@@ -107,6 +107,16 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   let y2 = noCommit('db = "' + PG + 'app:' + 'Forte9Senha' + '@db.interno:5432/app"\n');
   caso('0.8.0 M-2 trava: senha real em servidor de verdade continua bloqueada', y2.code === 2, `code ${y2.code} ${y2.out}`);
 
+  // ---- M-4: cada formato de chave bloqueia; uma letra a menos no limite não é mais o formato ----
+  const A = 'a1B2c3D4e5';
+  const ate = (n) => (A.repeat(10)).slice(0, n);
+  for (const [nome, prefixo, tam] of [['OpenAI', 'sk-' + 'proj-', 32], ['Google', 'AI' + 'za', 35], ['Slack', 'xo' + 'xb-', 10], ['Stripe', 's' + 'k_live_', 20], ['npm', 'np' + 'm_', 36], ['Azure Storage', 'Account' + 'Key=', 40]]) {
+    const cheio = noCommit('v = "' + prefixo + ate(tam) + '"\n', 'c.js');
+    caso('0.8.0 M-4 trava: chave ' + nome + ' é bloqueada, sem mostrar o valor', cheio.code === 2 && /c\.js:1/.test(cheio.err) && !cheio.err.includes(ate(tam)), `code ${cheio.code} ${cheio.err}`);
+    const curto = noCommit('v = "' + prefixo + ate(tam - 1) + '"\n', 'c.js');
+    caso('0.8.0 M-4 trava: ' + nome + ' com uma letra a menos não é o formato', curto.code === 0, `code ${curto.code} ${curto.err}`);
+  }
+
   // ---- b-1: segredos que passavam ----
   y2 = noCommit(PW + 'Forte9Senha;' + SV + 'db01;Database=x;\n');
   caso('0.8.0 b-1 trava: texto ADO com a senha antes do servidor é bloqueado', y2.code === 2, `code ${y2.code} ${y2.out}`);
