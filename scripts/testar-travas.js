@@ -95,6 +95,20 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   q5 = repo(); let ligou = true;
   try { fs.symlinkSync(path.join(q5, 'nao-existe.js'), path.join(q5, 'quebrado.js')); } catch (e) { ligou = false; }
   if (ligou) { x5 = trava('git add -A && git commit -m x', q5); caso('0.8.0 2ª rodada trava: arquivo novo que não abre pergunta, não passa como limpo', x5.code === 0 && pede(x5), `code ${x5.code} ${x5.out}`); }
+  // ---- M-10 (3ª rodada): modelo de .env passa; .env de verdade, .pem, .key e id_rsa continuam barrando, com o nome na mensagem ----
+  for (const nomeM of ['.env.example', '.env.sample', '.env.template', '.env.dist', 'config/.env.example']) {
+    const q = repo(); fs.mkdirSync(path.dirname(path.join(q, nomeM)), { recursive: true }); fs.writeFileSync(path.join(q, nomeM), 'API_URL=\nAPI_' + 'KEY=\n');
+    const y = trava('git add -A && git commit -m x', q);
+    caso('0.8.0 M-10 trava: ' + nomeM + ' com valores vazios passa sem pergunta', y.code === 0 && !y.out, `code ${y.code} ${y.err} ${y.out}`);
+  }
+  for (const nomeM of ['.env', '.env.local', 'chave.pem', 'servidor.key', 'id_rsa']) {
+    const q = repo(); fs.writeFileSync(path.join(q, nomeM), 'x\n');
+    const y = trava('git add -A && git commit -m x', q);
+    caso('0.8.0 M-10 trava: ' + nomeM + ' continua barrado, com o nome na mensagem', y.code === 2 && y.err.includes(nomeM), `code ${y.code} ${y.err}`);
+  }
+  q5 = repo(); fs.writeFileSync(path.join(q5, '.env.example'), 'API_' + 'KEY=' + 'sk-' + 'ant-' + 'q8W2e4R6t8Y0u2I4o6P8a1S3d5F7g9H1\n');
+  x5 = trava('git add -A && git commit -m x', q5);
+  caso('0.8.0 M-10 trava: .env.example com chave real continua barrado pelo conteúdo', x5.code === 2 && /\.env\.example:1/.test(x5.err), `code ${x5.code} ${x5.err}`);
   // ---- A-3: nome com acento, nos 2 sentidos; aspas no diff ----
   q5 = repo(); fs.writeFileSync(path.join(q5, 'configuração.js'), COM); git('git add .', q5);
   x5 = trava('git commit -m x', q5);

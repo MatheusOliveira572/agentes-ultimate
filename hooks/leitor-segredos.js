@@ -7,7 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync, spawn } = require('child_process');
 
-const FIXOS = [/(^|\/)\.env(\..*)?$/i, /\.(pem|key|pfx|p12)$/i, /(^|\/)(id_rsa|id_ed25519)$/, /credenciais|credentials|secrets?\./i];
+// .env.example, .sample, .template e .dist são modelos que o checklist manda ter no git: o nome não bloqueia, o conteúdo é lido.
+const FIXOS = [/(^|\/)\.env(?!\.(?:example|sample|template|dist)$)(\..*)?$/i, /\.(pem|key|pfx|p12)$/i, /(^|\/)(id_rsa|id_ed25519)$/, /credenciais|credentials|secrets?\./i];
 
 // Alta certeza = formato conhecido (prefixo do provedor, cabeçalho seguido do corpo da chave, texto de conexão com senha de
 // verdade). Média = parece segredo, mas pode ser exemplo. `senha` marca o grupo que é o valor: marcador como <senha> não conta.
