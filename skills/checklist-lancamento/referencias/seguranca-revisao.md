@@ -37,7 +37,8 @@ de função serverless some rápido em algumas hospedagens: mande para um servi�
 ## Revisão completa (roteiro 26)
 Uma passada no app inteiro, como um atacante veria. Pega o que os itens isolados não pegam, principalmente falha de
 regra de negócio do próprio app (reusar teste grátis, entrar no time de outro, pular uma etapa do fluxo).
-**Antes de rodar:** depois dos outros itens, numa sessão nova, com o código inteiro e o modelo mais capaz disponível.
+**Antes de rodar:** depois dos outros itens, numa sessão nova, com o código inteiro e o modelo mais capaz disponível. Para ir
+fundo (cobertura rastreada e verificador que tenta refutar cada achado), use a skill `/auditoria-completa`.
 
 Papel: testador de invasão sênior fazendo a revisão completa antes do lançamento. Pense como atacante. **Não mude
 código nesta etapa; primeiro o relatório.**

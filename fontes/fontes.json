@@ -731,6 +731,98 @@
       "vigiar": true,
       "uso": "só a lista do que cobrir; texto nosso a partir da HIG pública; nada copiado",
       "arquivos": []
+    },
+    {
+      "repo": "cloudflare/security-audit-skill",
+      "licenca": "MIT",
+      "branch": "main",
+      "pasta": "cloudflare-security-audit-skill",
+      "commit_usado": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8",
+      "ultimo_conferido": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8",
+      "conferido_em": "2026-11-02",
+      "vigiar": true,
+      "arquivos": [
+        {
+          "origem": "skills/security-audit/SUPPLY-CHAIN-AND-RELEASE.md",
+          "destino": "conhecimento/seguranca/blocos/cadeia-e-release.md"
+        },
+        {
+          "origem": "skills/security-audit/CLIENT-SIDE.md",
+          "destino": "conhecimento/seguranca/blocos/cliente.md"
+        },
+        {
+          "origem": "skills/security-audit/DESKTOP-MOBILE-AND-LOCAL-IPC.md",
+          "destino": "conhecimento/seguranca/blocos/desktop-e-ipc.md"
+        },
+        {
+          "origem": "skills/security-audit/RESOURCE-EXHAUSTION-AND-AVAILABILITY.md",
+          "destino": "conhecimento/seguranca/blocos/esgotamento.md"
+        },
+        {
+          "origem": "skills/security-audit/AI-AND-LLM.md",
+          "destino": "conhecimento/seguranca/blocos/ia-e-llm.md"
+        },
+        {
+          "origem": "skills/security-audit/DATA-ISOLATION-AND-LIFECYCLE.md",
+          "destino": "conhecimento/seguranca/blocos/isolamento-e-ciclo.md"
+        },
+        {
+          "origem": "skills/security-audit/MEMORY-SAFETY-AND-BINARY.md",
+          "destino": "conhecimento/seguranca/blocos/memoria-e-binario.md"
+        },
+        {
+          "origem": "skills/security-audit/CLOUD-AND-DEPLOYMENT.md",
+          "destino": "conhecimento/seguranca/blocos/nuvem-e-implantacao.md"
+        },
+        {
+          "origem": "skills/security-audit/PROTOCOLS-RPC-AND-MESSAGING.md",
+          "destino": "conhecimento/seguranca/blocos/protocolos-e-filas.md"
+        },
+        {
+          "origem": "skills/security-audit/WEB-PROTOCOL-AND-AUTH.md",
+          "destino": "conhecimento/seguranca/blocos/web-e-autenticacao.md"
+        },
+        {
+          "origem": "skills/security-audit/ATTACK-CLASSES.md",
+          "destino": "conhecimento/seguranca/classes-de-ataque-1.md"
+        },
+        {
+          "origem": "skills/security-audit/ATTACK-CLASSES.md",
+          "destino": "conhecimento/seguranca/classes-de-ataque-2.md"
+        },
+        {
+          "origem": "skills/security-audit/HUNTING.md",
+          "destino": "conhecimento/seguranca/metodo/cacar-por-cobertura-1.md"
+        },
+        {
+          "origem": "skills/security-audit/HUNTING.md",
+          "destino": "conhecimento/seguranca/metodo/cacar-por-cobertura-2.md"
+        },
+        {
+          "origem": "skills/security-audit/RECONNAISSANCE.md",
+          "destino": "conhecimento/seguranca/metodo/reconhecimento-1.md"
+        },
+        {
+          "origem": "skills/security-audit/RECONNAISSANCE.md",
+          "destino": "conhecimento/seguranca/metodo/reconhecimento-2.md"
+        },
+        {
+          "origem": "skills/security-audit/VALIDATION-AND-REPORTING.md",
+          "destino": "conhecimento/seguranca/metodo/validar-e-relatar-1.md"
+        },
+        {
+          "origem": "skills/security-audit/VALIDATION-AND-REPORTING.md",
+          "destino": "conhecimento/seguranca/metodo/validar-e-relatar-2.md"
+        },
+        {
+          "origem": "skills/security-audit/SKILL.md",
+          "destino": "conhecimento/seguranca/modos/orientar-ou-auditar-1.md"
+        },
+        {
+          "origem": "skills/security-audit/SKILL.md",
+          "destino": "conhecimento/seguranca/modos/orientar-ou-auditar-2.md"
+        }
+      ]
     }
   ]
 }
