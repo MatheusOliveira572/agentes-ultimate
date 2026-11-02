@@ -92,6 +92,9 @@ falhando antes.
 - **Janela piscando no Windows:** todas as chamadas de processo de `hooks/` e `scripts/` levam `windowsHide: true` (58, em
   `travas.js`, `checar-ferramenta.js` e nos testes); `validar.js` passa a dar erro em chamada sem a opção
   (`scripts/chamadas-processo.js`). A confirmação de que era isso que piscava é do usuário: daqui não dá para ver a tela.
+- **Revisão da parte A, A-1 (Alto):** a trava lê o comando antes de ele rodar: `git add` na mesma linha (o que ele levaria,
+  inclusive arquivo novo), `cd`/`Set-Location` e `git -C`, caminho no commit, `--include`, `git.exe`, `bash -c`. O que não dá
+  para calcular (variável na pasta ou no caminho) pergunta. O texto da mensagem deixa de ser lido como opção (b-2).
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

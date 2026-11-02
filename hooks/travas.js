@@ -78,6 +78,152 @@ function padroesDoProjeto(cwd) {
   } catch (e) { return []; }
 }
 
+// ---- Leitura do comando: o que ele vai preparar e onde. O gancho roda ANTES do comando, então o "git add" da mesma linha
+// e o "cd" ainda não aconteceram. O que não dá para calcular (variável na pasta ou no caminho) vira pergunta. ----
+const semHeredoc = (c) => c.replace(/<<-?\s*['"]?(\w+)['"]?[^\n]*\n[\s\S]*?\n\s*\1[ \t]*(?=\n|$)/g, '').replace(/@(['"])\r?\n[\s\S]*?\r?\n\1@/g, '""');
+
+// Comandos e palavras, respeitando aspas. Quebra em && || ; | & nova linha, parênteses e chaves fora de aspas.
+function segmentos(cmd) {
+  const segs = []; let atual = []; let tok = ''; let tem = false; let aspa = null;
+  const fechaTok = () => { if (tem) atual.push(tok); tok = ''; tem = false; };
+  const fechaSeg = () => { fechaTok(); if (atual.length) segs.push(atual); atual = []; };
+  for (let i = 0; i < cmd.length; i++) {
+    const c = cmd[i];
+    if (aspa) {
+      if (c === aspa) aspa = null;
+      else if (c === '\\' && aspa === '"' && /["\\$`]/.test(cmd[i + 1] || '')) tok += cmd[++i];
+      else tok += c;
+      continue;
+    }
+    if (c === '"' || c === "'") { aspa = c; tem = true; continue; }
+    if (/\s/.test(c) && c !== '\n') { fechaTok(); continue; }
+    if ('\n;&|(){}'.includes(c)) { fechaSeg(); continue; }
+    tok += c; tem = true;
+  }
+  fechaSeg();
+  return segs;
+}
+const variavel = (s) => /[$`%]/.test(s) || /^~[^/\\]/.test(s);
+const nomeProg = (t) => path.basename(String(t).replace(/\\/g, '/')).toLowerCase().replace(/\.exe$/, '');
+function resolver(base, alvo) {
+  let a = String(alvo).replace(/^~(?=[/\\]|$)/, process.env.HOME || process.env.USERPROFILE || '~');
+  if (process.platform === 'win32') a = a.replace(/^\/([a-zA-Z])(?=\/|$)/, '$1:');
+  return path.resolve(base, a);
+}
+// Opções do commit que levam valor no argumento seguinte (o texto da mensagem nunca é lido como opção).
+const COMMIT_COM_VALOR = new Set(['--message', '--file', '--author', '--date', '--reuse-message', '--reedit-message', '--fixup', '--squash', '--template', '--cleanup', '--trailer']);
+function lerCommit(args) {
+  const r = { todos: false, incluir: false, caminhos: [], incerto: false };
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (a === '--') { r.caminhos.push(...args.slice(i + 1)); break; }
+    if (a.startsWith('--')) {
+      const nome = a.split('=')[0];
+      if (nome === '--all') r.todos = true;
+      else if (nome === '--include') r.incluir = true;
+      else if (nome === '--pathspec-from-file') r.incerto = true;
+      else if (COMMIT_COM_VALOR.has(nome) && !a.includes('=')) i++;
+      continue;
+    }
+    if (a.startsWith('-') && a.length > 1) {
+      for (let k = 1; k < a.length; k++) {
+        const c = a[k];
+        if (c === 'a') r.todos = true;
+        else if (c === 'i') r.incluir = true;
+        else if ('mFCctS'.includes(c)) { if (k === a.length - 1 && c !== 'S') i++; break; }
+      }
+      continue;
+    }
+    r.caminhos.push(a);
+  }
+  if (r.caminhos.some(variavel)) r.incerto = true;
+  return r;
+}
+// Plano do comando: cada commit com a pasta dele e o que o comando prepara antes dele naquela pasta.
+function planejar(cmd, cwd, plano = { commits: [], incerto: null }, estado = { cwd, adds: [] }) {
+  for (const seg of segmentos(semHeredoc(cmd))) {
+    const prog = nomeProg(seg[0]);
+    if (['bash', 'sh', 'zsh', 'powershell', 'pwsh', 'cmd'].includes(prog)) {
+      const i = seg.findIndex((t, n) => n > 0 && /^(-c|-lc|-command|\/c|\/k)$/i.test(t));
+      if (i > 0 && seg.slice(i + 1).length) planejar(seg.slice(i + 1).join(' '), estado.cwd, plano, estado);
+      continue;
+    }
+    if (['cd', 'chdir', 'set-location', 'sl', 'pushd'].includes(prog)) {
+      const alvo = seg.slice(1).filter((t) => !/^(\/d|-path|-literalpath)$/i.test(t))[0];
+      if (alvo) { if (variavel(alvo)) estado.incerto = `pasta em variável (${alvo})`; else estado.cwd = resolver(estado.cwd, alvo); }
+      continue;
+    }
+    if (prog !== 'git') continue;
+    let i = 1; let pasta = estado.cwd; let incerto = estado.incerto || null;
+    while (i < seg.length && seg[i].startsWith('-')) {
+      const o = seg[i];
+      if (o === '-C') { const a = seg[i + 1] || ''; if (variavel(a)) incerto = `pasta em variável (${a})`; else pasta = resolver(pasta, a); i += 2; continue; }
+      if (o === '-c') { i += 2; continue; }
+      if (/^--(git-dir|work-tree)/.test(o)) { incerto = `opção ${o.split('=')[0]}`; i += o.includes('=') ? 1 : 2; continue; }
+      i++;
+    }
+    const sub = seg[i]; const args = seg.slice(i + 1);
+    if (sub === 'add' || sub === 'stage') {
+      const add = { cwd: pasta, tudo: false, soRastreados: false, forcado: false, caminhos: [] };
+      let fim = false;
+      for (const a of args) {
+        if (fim || !a.startsWith('-')) { add.caminhos.push(a); continue; }
+        if (a === '--') fim = true;
+        else if (a === '-A' || a === '--all') add.tudo = true;
+        else if (a === '-u' || a === '--update') { add.tudo = true; add.soRastreados = true; }
+        else if (a === '-f' || a === '--force') add.forcado = true;
+        else if (a === '-p' || a === '--patch' || a === '-i' || a === '--interactive' || a.startsWith('--pathspec-from-file')) incerto = incerto || `git add ${a}`;
+      }
+      if (add.caminhos.some(variavel)) incerto = incerto || 'caminho em variável no git add';
+      if (incerto) plano.incerto = plano.incerto || incerto;
+      estado.adds.push(add);
+    } else if (sub === 'commit') {
+      const c = lerCommit(args);
+      if (c.incerto) incerto = incerto || 'caminho em variável no git commit';
+      if (incerto) plano.incerto = plano.incerto || incerto;
+      plano.commits.push({ cwd: pasta, ...c, adds: estado.adds.filter((a) => a.cwd === pasta) });
+    }
+  }
+  return plano;
+}
+
+// O que o commit levaria: nomes e linhas acrescentadas. Um arquivo novo que o "git add" do comando levaria entra inteiro.
+function conteudoDoCommit(c) {
+  const opc = { cwd: c.cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'], windowsHide: true };
+  const roda = (a) => { try { return execSync(a, { ...opc, windowsHide: true }); } catch (e) { return ''; } };
+  const aspas = (l) => l.map((s) => JSON.stringify(s)).join(' ');
+  let diff = ''; let nomes = [];
+  const lista = (t) => t.split('\n').map((s) => s.trim()).filter(Boolean);
+  if (c.caminhos.length && !c.incluir) {
+    const ps = ' -- ' + aspas(c.caminhos);
+    diff = roda('git diff --cached -U0 --no-color --no-ext-diff' + ps) + '\n' + roda('git diff -U0 --no-color --no-ext-diff' + ps);
+    nomes = lista(roda('git diff --cached --name-only' + ps) + '\n' + roda('git diff --name-only' + ps));
+  } else {
+    diff = roda('git diff --cached -U0 --no-color --no-ext-diff');
+    nomes = lista(roda('git diff --cached --name-only'));
+    if (c.todos) { diff += '\n' + roda('git diff -U0 --no-color --no-ext-diff'); nomes.push(...lista(roda('git diff --name-only'))); }
+    if (c.incluir && c.caminhos.length) { const ps = ' -- ' + aspas(c.caminhos); diff += '\n' + roda('git diff -U0 --no-color --no-ext-diff' + ps); nomes.push(...lista(roda('git diff --name-only' + ps))); }
+  }
+  const novos = [];
+  for (const a of c.adds) {
+    const ps = a.tudo && !a.caminhos.length ? '' : ' -- ' + aspas(a.caminhos);
+    diff += '\n' + roda('git diff -U0 --no-color --no-ext-diff' + ps);
+    nomes.push(...lista(roda('git diff --name-only' + ps)));
+    if (!a.soRastreados) novos.push(...lista(roda('git ls-files --others --exclude-standard' + ps)));
+    if (a.forcado) novos.push(...a.caminhos);
+  }
+  const linhas = acrescentadas(diff);
+  for (const f of [...new Set(novos)]) {
+    nomes.push(f);
+    try {
+      const b = fs.readFileSync(path.resolve(c.cwd, f));
+      if (b.subarray(0, 8000).includes(0)) continue;
+      b.toString('utf8').split('\n').forEach((texto, n) => linhas.push({ arq: f, linha: n + 1, texto }));
+    } catch (e) { /* pasta ou arquivo que sumiu */ }
+  }
+  return { nomes: [...new Set(nomes)], linhas };
+}
+
 const bloquear = (msg) => { process.stderr.write(msg + '\n'); process.exit(2); };
 const perguntar = (motivo) => {
   process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'ask', permissionDecisionReason: motivo } }));
@@ -95,25 +241,18 @@ process.stdin.on('end', () => {
     if (/<<-?\s*['"]?\w+['"]?/.test(cmd) && />>?\s*["']?[^\s"'|;&]+\.(js|cjs|mjs|ps1|py|sh)\b/.test(cmd) && cmd.includes('\\')) {
       bloquear('agentes-ultimate: script com barra invertida não se grava por heredoc (o arquivo sai estragado). Use a ferramenta de escrita de arquivo e rode com o interpretador.');
     }
-    if (/\bgit\s+(-\S+\s+(\S+\s+)?)*push\b/.test(cmd) || /\bnpm\s+publish\b/.test(cmd) || /\b(vercel|netlify)\b.*--prod\b/.test(cmd)) {
+    if (/\bgit(?:\.exe)?["']?\s+(-\S+\s+(\S+\s+)?)*push\b/.test(cmd) || /\bnpm\s+publish\b/.test(cmd) || /\b(vercel|netlify)\b.*--prod\b/.test(cmd)) {
       perguntar('agentes-ultimate: publicar é visível a outros. Confirme que quer enviar agora. Se for um lançamento ou abrir para mais gente, rodou o /checklist-lancamento?');
     }
-    if (/\bgit\s+(-\S+\s+(\S+\s+)?)*commit\b/.test(cmd)) {
-      let prep = '';
-      try { prep = execSync('git diff --cached --name-only', { windowsHide: true, cwd, encoding: 'utf8' }); } catch (e) { prep = ''; }
-      const regras = FIXOS.concat(padroesDoProjeto(cwd));
-      const ruins = prep.split('\n').map((s) => s.trim()).filter(Boolean).filter((f) => regras.some((r) => r.test(f)));
+    const plano = planejar(cmd, cwd);
+    const paraPerguntar = [];
+    for (const c of plano.commits) {
+      const { nomes, linhas } = conteudoDoCommit(c);
+      const regras = FIXOS.concat(padroesDoProjeto(c.cwd));
+      const ruins = nomes.filter((f) => regras.some((r) => r.test(f)));
       if (ruins.length) {
-        bloquear(`agentes-ultimate: o commit levaria arquivo sensível para o git:\n  ${ruins.join('\n  ')}\nTire com \`git restore --staged <arquivo>\` e ponha o padrão no .gitignore.`);
+        bloquear(`agentes-ultimate: o commit levaria arquivo sensível para o git:\n  ${ruins.join('\n  ')}\nTire do commit (\`git restore --staged <arquivo>\`, se já preparado) e ponha o padrão no .gitignore.`);
       }
-      // Conteúdo: o que já está preparado e, com -a/--all, também as mudanças dos arquivos já versionados.
-      const opc = { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] };
-      let diff = '';
-      try { diff = execSync('git diff --cached -U0 --no-color --no-ext-diff', { ...opc, windowsHide: true }); } catch (e) { diff = ''; }
-      if (/\bcommit\b[^|;&]*\s(?:-[a-zA-Z]*a[a-zA-Z]*|--all)\b/.test(cmd)) {
-        try { diff += '\n' + execSync('git diff -U0 --no-color --no-ext-diff', { ...opc, windowsHide: true }); } catch (e) { /* sem diff */ }
-      }
-      const linhas = acrescentadas(diff);
       const altos = achar(linhas, ALTOS);
       if (altos.length) {
         bloquear(`agentes-ultimate: o commit levaria um segredo para o git (o valor não é mostrado):\n  ${altos.join('\n  ')}\n` +
@@ -122,11 +261,10 @@ process.stdin.on('end', () => {
           'Troque o valor por um marcador como <senha> ou ${VARIAVEL}.');
       }
       const medios = achar(linhas, MEDIOS);
-      if (medios.length) {
-        perguntar(`agentes-ultimate: o commit parece levar um segredo (média certeza; o valor não é mostrado):\n  ${medios.join('\n  ')}\n` +
-          'Confirme só se for valor de exemplo ou de teste.');
-      }
+      if (medios.length) paraPerguntar.push(`o commit parece levar um segredo (média certeza; o valor não é mostrado):\n  ${medios.join('\n  ')}\nConfirme só se for valor de exemplo ou de teste.`);
     }
+    if (plano.incerto && plano.commits.length) paraPerguntar.push(`não dá para saber o que este commit leva (${plano.incerto}). Confira que não vai segredo nem arquivo sensível.`);
+    if (paraPerguntar.length) perguntar('agentes-ultimate: ' + paraPerguntar.join('\n'));
   } catch (e) { /* trava nunca quebra o trabalho */ }
   process.exit(0);
 });

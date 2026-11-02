@@ -9,6 +9,7 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   const ler = (...p) => { try { return fs.readFileSync(path.join(RAIZ, ...p), 'utf8'); } catch (e) { return ''; } };
   const existe = (...p) => fs.existsSync(path.join(RAIZ, ...p));
 
+  try { require('./testar-travas.js')({ caso, tmp, hook }); } catch (e) { caso('trava: scripts/testar-travas.js roda', false, e.message); }
   try { require('./testar-painel.js')({ caso, tmp, RAIZ, hook }); } catch (e) { caso('painel: scripts/testar-painel.js roda', false, e.message); }
 
   // ---- Lote 0 · infraestrutura ----
