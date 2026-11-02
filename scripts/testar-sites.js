@@ -391,6 +391,9 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   // Referência: "site" sozinho não entrega nada a designer; pedido de site entrega a biblioteca.
   const refSite = agentesDe('crie um site para a minha padaria');
   caso('0.8.0 sites A-1: pedido de site leva a biblioteca de sites ao designer de sites', /sites-premium\/INDICE\.md` \(para `agentes-ultimate:designer-sites`\)/.test(refSite.refs.replace(/\\/g, '/')), refSite.refs.slice(0, 200));
+  const cf = ler('docs', 'como-funciona.md'), cp = ler('docs', 'criar-pacote.md'), rd = ler('README.md');
+  caso('0.8.0 sites b-16: pares, âncora e desempate documentados, e os 2 limites declarados no README', /\*\*Pares\*\*/.test(cf) && /\*\*Desempate entre áreas vizinhas\*\*/.test(cf) && /`pares`/.test(cp) && /`desempate`/.test(cp) &&
+    /Limites do roteamento de site × app/.test(rd) && /dados do site do IBGE/.test(rd) && /a um lado só, salvo empate/.test(rd), 'falta');
   // b-15: âncora negada ('não é um app') não conta; sem o !negado da âncora, o pedido iria aos dois designers.
   const neg = agentesDe('não é um app: crie o site com react e efeito vidro');
   caso('0.8.0 sites b-15: âncora negada ("não é um app") não conta no desempate', /designer-sites/.test(neg.ag) && !/designer-paineis/.test(neg.ag), neg.ag);

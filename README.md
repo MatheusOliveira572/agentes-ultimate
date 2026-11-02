@@ -167,6 +167,12 @@ com o porquê), histórico e contexto consolidado.
 Detalhes em [docs/como-funciona.md](docs/como-funciona.md). Para criar um pacote seu (ex.: jurídico, marketing), veja
 [docs/criar-pacote.md](docs/criar-pacote.md).
 
+### Limites do roteamento de site × app
+- Uma menção a "site" decide o pedido, mesmo quando o site é de outra pessoa ("dados do site do IBGE" num pedido de tela
+  de app vai ao designer de sites).
+- Site e app no mesmo pedido vão a um lado só, salvo empate.
+- Em todos os casos, corrija com `era com <agente>`. Detalhes em `docs/como-funciona.md`.
+
 ## Referências sob demanda e ferramentas externas
 
 Cada agente tem, no corpo, até 8 linhas "Quando X, leia `${CLAUDE_PLUGIN_ROOT}/conhecimento/...`". O Claude Code troca
