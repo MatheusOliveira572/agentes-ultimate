@@ -163,6 +163,26 @@ falhando antes.
   Passa a olhar `ferramentas/` e `modelos/`; as 6 chamadas do `ferramentas/teardown` ganharam a opção (alteração marcada no LEIA-ME).
 - **Revisão da parte A, b-6:** o `engenheiro-software` volta a ter os campos do log de segurança (passo 8 do método, com o S-12), que é o que
   o caso 8 do eval cobra.
+- **Revisão da parte A, 3ª rodada** (`docs/revisao-0.8.0-parteA.md`, seção "3ª rodada"; só o que vale em qualquer desenho):
+  - **B-2:** nenhum git roda fora da pasta da sessão, nem antes nem depois do comando; fora, a trava pergunta sem ler e diz qual pasta.
+    Dentro da sessão, inclusive outro repositório lá dentro (decisão do usuário), as leituras desligam verificação de assinatura,
+    `core.fsmonitor`, diff externo, pager e `trace2`. Prova: o repositório com `gpg.program` espião (sonda do revisor) não rodou nos 5
+    caminhos (antes 8 casos falhavam); no `claude -p` real, `git -C <pasta de fora> push` perguntou "fora da sessão" e a marca não foi criada.
+  - **A-4:** publicar junto de commit, script, alias, `eval`, `gh ... --push`, `gh repo create` ou `npm run deploy` pergunta dizendo que o
+    segredo não pôde ser conferido antes de publicar; comando que grava em arquivo deixa de ser forma lida com certeza; o depois diz "já foi
+    publicado: troque a chave" quando o commit já está num remoto (antes 8 casos falhavam).
+  - **A-5:** o verificador roda o comando em lista, sem shell; o nome do arquivo vai como argumento. Prova: `x%USERNAME%.js` chegava
+    expandido no código antigo e chega literal no novo; o exemplo da skill `integracoes` foi corrigido.
+  - **M-6:** o depois também roda no `PostToolUseFailure` (comando que faz o commit e depois falha).
+  - **M-7:** a tabela de formas roda no fluxo real: o depois e o push com a pasta da sessão, o push no mesmo comando contra um remoto local
+    e um comando que falha depois do commit (52 formas). Os ganchos do a13ea41 têm 10 furos nela; os novos, 0. **Correção:** a frase da 2ª
+    rodada "todas as 19 avisam depois do comando e barram no push" não valia no Claude Code para commit feito de fora da sessão; nesses, o
+    que vale é a pergunta antes e a pergunta no push.
+  - **M-10:** `.env.example`, `.sample`, `.template` e `.dist` não barram pelo nome; o conteúdo continua lido. `.env`, `.pem`, `.key` e
+    `id_rsa` continuam barrando, com o nome na mensagem.
+  - **Declarados, sem correção** (decisão do usuário, no README): UTF-16 (M-8), formas pouco comuns que perguntam (M-9), prazo em
+    repositório grande (M-11), `com$'mit'` (b-10), `SessionEnd` cancelado no `claude -p` (b-11), cerca de 0,4 s por comando (b-12), além
+    de script, alias e palavra montada.
 
 ## 0.8.0 · em construção (parte A: regras dos checklists do autor do plugin)
 Fonte: `docs/regras-pdfs-2026-11.md`, a partir dos checklists do autor do plugin ("The App Launch Checklist" e

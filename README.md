@@ -211,8 +211,25 @@ cria memória na sua pasta de usuário nem na raiz do disco.
   mensagem diz o arquivo e a linha, nunca o valor. São 3 barreiras: **antes do comando** (a forma comum de commit é lida; outra forma
   que cite commit pergunta), **depois do comando** (HEAD mudou e tem segredo: avisa e diz como desfazer) e **antes do push** (lê os
   commits que ainda não foram para o remoto).
-  **Limite:** comando que faz commit sem citar a palavra (script, alias antigo) só é visto depois de rodar e no push. A trava é ajuda,
-  não garantia: leitura que estoura o prazo pergunta, e o plugin não instala gancho do git no seu repositório.
+  O git só roda na pasta da sessão e dentro dela (inclusive outro repositório lá dentro, como um worktree). Fora dela, a trava
+  pergunta sem ler e diz qual pasta. Publicar junto de um commit, script, alias, `eval`, `gh ... --push` ou `npm run deploy` pergunta,
+  dizendo que o segredo não pôde ser conferido; o aviso de depois diz "já foi publicado: troque a chave" quando o push já rodou.
+
+  **Limites conhecidos (decisão do usuário: declarados, não corrigidos agora).** A trava é ajuda, não garantia, e o plugin não instala
+  gancho do git no seu repositório.
+  - Comando que faz commit sem citar a palavra (script, alias antigo, palavra montada em variável) só é visto depois de rodar e no push.
+  - Arquivo em UTF-16 (o que o Windows PowerShell 5.1 grava com `>` e `>>`) não é lido: passa pelas 3 barreiras.
+  - Formas pouco comuns de commit perguntam mesmo sem segredo (`git rm`, `git mv`, `checkout -b`, "R$5" na mensagem, `--trailer`,
+    caminho com barra invertida sem aspas no PowerShell, `| Out-Null`).
+  - Em repositório grande (1º push de um projeto com histórico), a leitura passa do prazo de 7 s e vira a pergunta genérica "não deu
+    para conferir".
+  - `com$'mit'` (aspas ANSI-C do bash) não é visto como commit antes; com a pasta em variável, nada avisa.
+  - No `claude -p`, o gancho `retomar.js` do fim de sessão às vezes é cancelado pelo Claude Code ("Hook cancelled").
+  - O depois custa cerca de 0,4 s em todo comando de shell.
+  - **Repositório malicioso posto dentro da pasta da sessão** roda a configuração dele quando o git lê a pasta de trabalho. As leituras
+    desligam verificação de assinatura (`gpg.program`), `core.fsmonitor`, diff externo, `textconv`, pager e `trace2`; fica descoberto o
+    filtro `clean` de `.gitattributes` (roda em `git diff` da pasta de trabalho) e qualquer chave nova que o git passe a executar. É o
+    mesmo nível de confiança que você dá à pasta ao abrir o Claude Code nela.
 
 ## Para quem quer contribuir
 
