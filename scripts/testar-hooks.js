@@ -274,6 +274,23 @@ if (process.platform === 'win32') {
   const fimJ = Date.now() + 20000; while (Date.now() < fimJ && !(fs.existsSync(saidaJ) && /visivel=[A-Za-z]/.test(fs.readFileSync(saidaJ, 'utf8')))) { /* espera o 2º plano */ }
   const viu = fs.existsSync(saidaJ) ? fs.readFileSync(saidaJ, 'utf8').trim() : 'sem saída';
   caso('revisão final A-2: o claude chamado pela atualização diária não abre janela visível', /visivel=False/.test(viu), viu);
+  // Conferência A-3: quem instalou pelo npm tem claude.cmd, que o Windows não acha sem shell. Um claude.cmd falso, num PATH só
+  // com ele e o System32 (o claude de verdade nunca roda), anota os argumentos e grava se o próprio console está visível.
+  const binA3 = path.join(tmp, 'bin-a3'); fs.mkdirSync(binA3, { recursive: true });
+  const marcaA3 = path.join(tmp, 'a3-chamadas.txt'), janelaA3 = path.join(tmp, 'a3-janela.txt');
+  const sis = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32');
+  fs.writeFileSync(path.join(binA3, 'claude.cmd'), `@echo off\r\necho %*>>"${marcaA3}"\r\n"${path.join(sis, 'WindowsPowerShell', 'v1.0', 'powershell.exe')}" -NoProfile -ExecutionPolicy Bypass -File "${ps1}"\r\n`);
+  const envA3 = Object.fromEntries(Object.entries(envAt).filter(([k]) => !/^path$/i.test(k) && k !== 'AGENTES_ULTIMATE_CLAUDE_CMD'));
+  Object.assign(envA3, { Path: [binA3, sis].join(';'), AU_JANELA: janelaA3 });
+  try { fs.unlinkSync(estJ); } catch (e) { /* */ }
+  atualizar(envA3);
+  const lerA3 = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '');
+  const fimA3 = Date.now() + 30000;
+  while (Date.now() < fimA3 && !(/agentes-ultimate@agentes-ultimate/.test(lerA3(marcaA3)) && /visivel=[A-Za-z]/.test(lerA3(janelaA3)))) { /* espera o 2º plano */ }
+  const logA3 = lerA3(path.join(casa, '.claude', 'agentes-ultimate', 'atualizacao.log'));
+  caso('conferência A-3: com claude.cmd (npm), a atualização roda os 2 comandos pelo cmd.exe, sem janela visível e com o motivo no log',
+    /marketplace update agentes-ultimate/.test(lerA3(marcaA3)) && /plugin update agentes-ultimate@agentes-ultimate/.test(lerA3(marcaA3)) &&
+    /visivel=False/.test(lerA3(janelaA3)) && /ENOENT/.test(logA3), `chamadas: ${lerA3(marcaA3).trim() || 'nenhuma'} | ${lerA3(janelaA3).trim() || 'sem janela'} | log: ${logA3.trim().slice(0, 200)}`);
 }
 {
   const shellDestacado = require(path.join(RAIZ, 'scripts', 'chamadas-processo.js')).shellDestacado || (() => []);

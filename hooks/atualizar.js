@@ -63,9 +63,21 @@ function programaClaude() {
   const partes = [...t.matchAll(/"([^"]*)"|(\S+)/g)].map((m) => (m[1] !== undefined ? m[1] : m[2]));
   return [partes[0], partes.slice(1)];
 }
+// Sem shell, o Windows só acha claude.exe; quem instalou pelo npm tem claude.cmd (ENOENT). Aí vai pelo cmd.exe, com texto fixo
+// e sem detached (este node já está destacado: o console novo nasce escondido). O motivo de cada falha vai para atualizacao.log.
 function executar() {
   const [prog, ini] = programaClaude();
-  const roda = (args) => spawnSync(prog, [...ini, ...args], { windowsHide: true, stdio: 'inherit', timeout: 5 * 60 * 1000 });
+  const opc = { windowsHide: true, stdio: 'inherit', timeout: 5 * 60 * 1000 };
+  const roda = (args) => {
+    let r = spawnSync(prog, [...ini, ...args], opc);
+    if (r.error && r.error.code === 'ENOENT' && process.platform === 'win32' && prog === 'claude') {
+      console.log(`claude ${args.join(' ')}: claude.exe não encontrado sem shell (ENOENT); tentando claude.cmd pelo cmd.exe`);
+      r = spawnSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', ['claude', ...args].join(' ')], opc);
+    }
+    if (r.error) console.log(`claude ${args.join(' ')}: falhou (${r.error.code || r.error.message})`);
+    else if (r.status !== 0) console.log(`claude ${args.join(' ')}: saiu com código ${r.status}`);
+    return r;
+  };
   const r = roda(['plugin', 'marketplace', 'update', 'agentes-ultimate']);
   if (r.status === 0) roda(['plugin', 'update', 'agentes-ultimate@agentes-ultimate']);
   process.exit(0);
