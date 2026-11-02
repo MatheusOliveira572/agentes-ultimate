@@ -226,9 +226,10 @@ visto falhando antes.
   público); ficam [HIPÓTESE] o Marco Civil e a LBI para ferramenta interna e a ausência de lei sobre rótulo de IA, e
   [conferir] o alinhamento da NBR 17225 à WCAG 2.2 (texto da ABNT não aberto); casos de `testar-hooks.js` ajustados.
 - **Trava de segredos, falso positivo:** senha sem nenhuma letra ou número (`…`, `***`) conta como marcador; o próprio
-  CHANGELOG, que descreve o formato `Server=…;Password=…`, era bloqueado. Medido depois: a árvore inteira do plugin (206
-  arquivos) e a de um projeto real (671 arquivos, 158 mil linhas) como um commit só passam sem bloqueio nem pergunta, em
-  cerca de 3 s.
+  CHANGELOG, que descreve o formato `Server=…;Password=…`, era bloqueado. Correção (M-3 da revisão): a afirmação de que a árvore inteira
+  do plugin passava estava errada, ela era bloqueada no próprio arquivo de testes. Agora passa sem bloqueio nem pergunta, e um
+  caso em `scripts/testar-travas.js` prova isso a cada rodada. A árvore de um projeto real (671 arquivos) passou em 3,1 s
+  na conferência do revisor.
 - Testes: 103 casos novos da parte A em `scripts/testar-hooks.js`, rodados contra a cópia do commit 60cf275 (antes da
   parte A): 90 falham lá e passam aqui; os outros 13 guardam a regressão (falso positivo da trava, commit que só remove o
   segredo, limite de 90 linhas, validador sem aviso no plugin real). O commit do G1 diz "14 vistos falhando"; o

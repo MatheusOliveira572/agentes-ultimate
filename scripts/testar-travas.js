@@ -125,4 +125,10 @@ module.exports = function testarTravas({ caso, tmp, hook, RAIZ }) {
   y2 = noCommit('aws_' + 'secret_access_key = "' + 'q8W2e4R6t8Y0u2I4o6P8a1S3d5F7g9H1j3K5l7Z9"\n', 'cfg.ini');
   caso('0.8.0 b-1 trava: aws_secret_access_key sem o id pergunta', y2.code === 0 && pede(y2), `code ${y2.code} ${y2.out}`);
 
+  // ---- M-3: a árvore do próprio plugin passa, num repositório novo ----
+  const arv = path.join(tmp, 'arvore-plugin'); fs.mkdirSync(arv, { recursive: true });
+  for (const d of ['agents', 'conhecimento', 'docs', 'evals', 'fonte', 'fontes', 'hooks', 'modelos', 'pacotes', 'scripts', 'skills', 'terceiros', 'ferramentas', 'README.md', 'CHANGELOG.md', 'CREDITOS.md']) if (fs.existsSync(path.join(RAIZ, d))) fs.cpSync(path.join(RAIZ, d), path.join(arv, d), { recursive: true });
+  git('git init -q', arv); git('git config user.email t@t', arv); git('git config user.name t', arv);
+  const ta = trava('git add -A && git commit -m tudo', arv);
+  caso('0.8.0 M-3 trava: a árvore inteira do plugin passa sem bloqueio nem pergunta', ta.code === 0 && !ta.out, `code ${ta.code} ${ta.err.slice(0, 400)}`);
 };
