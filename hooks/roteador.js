@@ -195,6 +195,16 @@ function main(d) {
     }
   }
 
+  // Áreas vizinhas (pacotes.json → desempate, ex.: site × tela de app): se as duas passam do mínimo, fica a de mais pontos;
+  // no empate, as duas. Assim a palavra comum (react, efeito vidro) serve às duas e quem decide é a pista mais forte.
+  for (const [a, b] of cfg.desempate || []) {
+    const min = cfg.minimo || 2;
+    if ((pontos[a] || 0) >= min && (pontos[b] || 0) >= min && pontos[a] !== pontos[b]) {
+      const perde = pontos[a] > pontos[b] ? b : a;
+      motivos[perde].push(`desempate: ${perde === a ? b : a} pontuou mais`);
+      pontos[perde] = 0;
+    }
+  }
   const escolhidos = Object.keys(pontos).filter((id) => pontos[id] >= (cfg.minimo || 2)).sort((a, b) => pontos[b] - pontos[a]);
   // Trivial = curto e sem nenhuma palavra de assunto. Com assunto abaixo do mínimo, vai para o núcleo.
   // Tema de uma referência sob demanda (0.8.0) também é assunto: "o build quebrou" não é pergunta trivial.

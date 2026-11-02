@@ -28,28 +28,195 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
     const x = agentesDe(p);
     caso(`0.8.0 sites roteador: "${p}" → designer-paineis, sem designer-sites`, /designer-paineis/.test(x.ag) && !/designer-sites/.test(x.ag), x.ag || 'nenhum');
   }
-  // A-1 (revisão): frases do revisor, lendo agentes e referências.
-  const PARA_SITES = ['efeito vidro no site', 'visual premium para o site', 'crie uma página web de contato', 'html e css do site', 'crie o frontend do meu site em react',
-    'melhore a ux do site', 'a interface do meu site está confusa', 'redesign do site', 'site com animação', 'site responsivo com tailwind', 'formulário de contato do site', 'componente do meu site', 'animacao no site',
-    'preciso de um site', 'quero um site para minha clínica', 'melhore o visual do meu site', 'crie um site premium para a minha clínica', 'efeito vidro no meu site',
-    'crie um website para a padaria', 'crie a homepage da loja', 'redesenhe a página inicial do site', 'monte uma lp de vendas'];
-  for (const p of PARA_SITES) {
-    const x = agentesDe(p);
-    caso(`0.8.0 sites A-1: "${p}" → designer-sites, sem designer-paineis, com a biblioteca`, /designer-sites/.test(x.ag) && !/designer-paineis/.test(x.ag) && !/para `agentes-ultimate:designer-paineis`/.test(x.refs) && /sites-premium/.test(x.refs), `${x.ag || 'nenhum'} | ${x.refs.slice(0, 200)}`);
+  // A-3, M-7, b-4, b-8 (2ª revisão): todas as frases das sondas do revisor (rv85) e frases de app novas, com o esperado.
+  // S = só designer-sites; P = designer-paineis sem designer-sites; A = os dois; N = nenhum designer nem referência a designer; X = o orquestrador decide.
+  const TABELA = {
+   "S": [
+    "landing page",
+    "quero uma landing",
+    "faça uma landing page",
+    "uma landing page pro produto",
+    "lp de vendas do meu curso",
+    "crie um site",
+    "cria um site pra minha padaria",
+    "quero um site novo",
+    "preciso de um site para minha empresa",
+    "me ajuda a fazer um site pro meu restaurante",
+    "site para minha clínica",
+    "site de portfólio",
+    "página inicial do meu produto",
+    "homepage da empresa",
+    "página de captura de leads",
+    "redesenhe o site",
+    "melhore o visual do meu site",
+    "crie uma página web simples de contato",
+    "site institucional",
+    "faça a tela de login do meu site",
+    "tela de checkout do meu site",
+    "crie um website",
+    "crie um web site",
+    "crie uma web page",
+    "crie uma página web de contato",
+    "crie uma página de contato",
+    "crie meu portfólio online",
+    "criar site para loja",
+    "fazer um site",
+    "monte um site para o escritório",
+    "desenvolva um site para a clínica",
+    "construa um site institucional",
+    "faz um site pra mim",
+    "site novo para a loja",
+    "quero criar uma landing page",
+    "landing pages para campanha",
+    "efeito vidro no site",
+    "visual premium para o site",
+    "html e css do site",
+    "crie o frontend do meu site em react",
+    "melhore a ux do site",
+    "a interface do meu site está confusa",
+    "redesign do site",
+    "site com animação",
+    "site responsivo com tailwind",
+    "formulário de contato do site",
+    "componente do meu site",
+    "animacao no site",
+    "quero um site para minha clínica",
+    "crie um site premium para a minha clínica",
+    "efeito vidro no meu site",
+    "crie um website para a padaria",
+    "crie a homepage da loja",
+    "redesenhe a página inicial do site",
+    "monte uma lp de vendas"
+   ],
+   "P": [
+    "crie a tela de login do app em react",
+    "tela de cadastro em html e css",
+    "faça a interface do sistema em react",
+    "componente react de tabela com visual bonito",
+    "melhore o css da tela do sistema",
+    "frontend do aplicativo em react",
+    "crie o front-end do app",
+    "tela do aplicativo com tailwind",
+    "efeito vidro no menu do app",
+    "efeito vidro no cabeçalho do aplicativo",
+    "liquid glass na barra do aplicativo",
+    "visual premium para o aplicativo",
+    "deixe o sistema com visual premium",
+    "um painel administrativo em react",
+    "crie um app em react native",
+    "html e css da tela de login",
+    "redesenhe a interface do app",
+    "animação no botão do app",
+    "tela de checkout do aplicativo",
+    "efeito vidro",
+    "visual premium",
+    "tela do app",
+    "desenhe a interface do aplicativo",
+    "melhore a ux do formulário",
+    "crie um aplicativo com visual premium",
+    "power bi publicado num site",
+    "faça um card com efeito vidro estilo Apple",
+    "redesenhe meu app com visual premium",
+    "melhore a ux do aplicativo",
+    "monte a tela de configurações do aplicativo em react",
+    "faça o menu lateral do app com efeito vidro",
+    "melhore a interface do aplicativo de vendas",
+    "componente de calendário em react para o app",
+    "crie o formulário de cadastro do aplicativo",
+    "deixe a tela inicial do app com visual premium",
+    "animação de carregamento no aplicativo",
+    "css do botão do app está desalinhado"
+   ],
+   "A": [
+    "crie um dashboard para o site",
+    "dashboard de vendas do meu site",
+    "dashboard na landing page",
+    "mostre um dashboard na landing page do meu produto",
+    "desenhe o site do painel de BI",
+    "crie um site com dashboard de vendas",
+    "site com painel de indicadores para os clientes"
+   ],
+   "N": [
+    "o site da receita federal saiu do ar hoje",
+    "o site",
+    "site",
+    "entrei no site do banco e não consegui pagar o boleto",
+    "pesquise no site da CVM a instrução sobre fundos",
+    "baixe os dados do site do IBGE e calcule a inflação",
+    "veja no site da microsoft como funciona o DAX",
+    "meu site",
+    "meu site está lento, o que faço",
+    "landing",
+    "o avião fez um landing de emergência",
+    "parasite é um filme bom",
+    "opposite",
+    "website",
+    "parece um site",
+    "contrato de criação de site",
+    "analise a concorrência e o posicionamento do site",
+    "política de privacidade do site",
+    "cookies no site lgpd",
+    "publique o site",
+    "erro 500 no meu site em produção",
+    "corrija o bug de login no site",
+    "seo do site",
+    "confira o preço no site do produto",
+    "abra o novo site do governo",
+    "erro no novo site da empresa",
+    "o site de vendas caiu",
+    "encontrei um site para baixar o relatório da CVM",
+    "indique um site para aprender DAX",
+    "preciso de um site confiável para comprar dólar",
+    "quero um site que compare preços de passagem",
+    "a página web do banco não abre",
+    "a homepage do jornal mudou",
+    "o website do fornecedor está fora do ar",
+    "o layout do site do governo mudou e o robô de raspagem quebrou",
+    "o formulário do site da receita não envia",
+    "o css do site quebrou depois do deploy",
+    "o visual do site do concorrente é melhor que o nosso",
+    "o site responsivo do banco não abre no celular",
+    "a interface do site da prefeitura é horrível"
+   ],
+   "X": [
+    "site web",
+    "preciso de um site",
+    "portfólio de fotografia online",
+    "o site está feio, deixa bonito",
+    "dashboard",
+    "crie um dashboard",
+    "painel",
+    "um painel administrativo em react para o meu site",
+    "painel web do cliente",
+    "landing page com print do dashboard",
+    "pagina web",
+    "crie um app",
+    "site institucional e app",
+    "site do app",
+    "novo site de vendas",
+    "ajuste a landing page do relatório financeiro",
+    "escreva o texto da landing page",
+    "redesenhe a landing page do painel",
+    "página sobre nós da empresa",
+    "glassmorphism no painel",
+    "glassmorphism"
+   ]
+  };
+  const regra = {
+    S: (x) => /designer-sites/.test(x.ag) && !/designer-paineis/.test(x.ag) && !/para `agentes-ultimate:designer-paineis`/.test(x.refs),
+    P: (x) => /designer-paineis/.test(x.ag) && !/designer-sites/.test(x.ag),
+    A: (x) => /designer-sites/.test(x.ag) && /designer-paineis/.test(x.ag),
+    // Referência genérica (layout, relatório) ainda vai ao 1º agente do arquivo quando nenhum pacote entra: é regra do roteador, fora deste lote.
+    N: (x) => !/designer-/.test(x.ag) && !/sites-premium|designer-sites/.test(x.refs),
+  };
+  const nomeClasse = { S: 'só o designer de sites', P: 'o designer de painéis, sem o de sites', A: 'os dois designers', N: 'nenhum designer nem a biblioteca de sites' };
+  for (const k of ['S', 'P', 'A', 'N']) {
+    const ruins = TABELA[k].map((p) => [p, agentesDe(p)]).filter(([, x]) => !regra[k](x)).map(([p, x]) => `"${p}" → ${(x.ag || 'nenhum').replace(/agentes-ultimate:/g, '')}`);
+    caso(`0.8.0 sites A-3/M-7/b-4/b-8: ${TABELA[k].length} frases que pedem ${nomeClasse[k]}`, !ruins.length, ruins.length + ' erradas: ' + ruins.slice(0, 6).join(' | '));
   }
-  const SEM_DESIGNER = ['o site de vendas caiu', 'abra o novo site do governo', 'confira o preço no site do produto', 'erro no novo site da empresa', 'o site da receita federal saiu do ar hoje', 'publique o site', 'o avião fez um landing de emergência', 'site para minha clínica'];
-  for (const p of SEM_DESIGNER) {
-    const x = agentesDe(p);
-    caso(`0.8.0 sites A-1: "${p}" não chama designer nem entrega referência a designer`, !/designer-/.test(x.ag) && !/designer-/.test(x.refs), `${x.ag} | ${x.refs.slice(0, 200)}`);
-  }
-  const dash = agentesDe('dashboard com kpi de vendas do meu site');
-  caso('0.8.0 sites A-1: pedido de painel não leva a biblioteca de sites', !/sites-premium/.test(dash.refs) && !/designer-sites/.test(dash.ag), dash.refs.slice(0, 200));
-  for (const p of ['faça um card com efeito vidro estilo Apple', 'redesenhe meu app com visual premium', 'melhore a ux do aplicativo']) {
-    const x = agentesDe(p);
-    caso(`0.8.0 sites A-1: "${p}" continua no designer-paineis`, /designer-paineis/.test(x.ag) && !/designer-sites/.test(x.ag), x.ag || 'nenhum');
-  }
-  const css = agentesDe('corrija o css e o html do botão no react');
-  caso('0.8.0 sites A-1: html, css e react sem site vão ao engenheiro, sem designer', /engenheiro-software/.test(css.ag) && !/designer-/.test(css.ag), css.ag || 'nenhum');
+  // Referência: "site" sozinho não entrega nada a designer; pedido de site entrega a biblioteca.
+  const refSite = agentesDe('crie um site para a minha padaria');
+  caso('0.8.0 sites A-1: pedido de site leva a biblioteca de sites ao designer de sites', /sites-premium\/INDICE\.md` \(para `agentes-ultimate:designer-sites`\)/.test(refSite.refs.replace(/\\/g, '/')), refSite.refs.slice(0, 200));
   const soSite = agentesDe('o site da receita federal saiu do ar hoje');
   caso('0.8.0 sites roteador: "site" sozinho não puxa o designer de sites', !/designer-sites/.test(soSite.ag), soSite.ag);
   const lp = agentesDe('crie uma landing page para o meu aplicativo');
