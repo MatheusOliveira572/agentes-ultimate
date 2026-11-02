@@ -77,6 +77,9 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
   mais testados.
 - [ ] Vidro, se houver, passa no teste "parece Apple" (`apple/materiais.md`), com a ampliação 2× anexada.
 - [ ] PNGs abertos e conferidos em 390 e 1440 px.
+- [ ] Fonte, ícone e imagem com licença que cobre o uso; texto alternativo em toda imagem que informa e nome em cada
+  controle só de ícone (leitor de tela).
+- [ ] Referência estudada vira ideia: nada de composição, layout, texto ou identidade copiados dela.
 
 ## Erros conhecidos
 - Tirar os vícios e parar ali: tela limpa, correta e vazia (prova pv92). O piso não é a entrega.

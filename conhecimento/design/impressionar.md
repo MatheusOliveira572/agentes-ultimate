@@ -47,7 +47,7 @@ pixel) + Liquid Glass fiel + 3D + revelação ao rolar + a ideia. Regras:
 ## Autocrítica (escrita no relatório, antes de entregar)
 Para cada PNG: os 16 itens com sim/não; a frase "o que um usuário exigente notaria nos primeiros 5 s"; com vidro, "parece
 Apple ou parece tentativa?" (teste em `apple/materiais.md`); o teste de junção; uma referência da categoria nomeada e o
-que ela ainda faz melhor. Camada 1 com "não" = não entrega. Camada 2 com 2 ou mais "não" = novo passe (até 3). O que
+que ela ainda faz melhor (estudada, nunca imitada: sem copiar composição, layout nem a ordem dos blocos). Camada 1 com "não" = não entrega. Camada 2 com 2 ou mais "não" = novo passe (até 3). O que
 continuar abaixo vai em "ainda não está no nível", sem esconder.
 
 ## O revisor

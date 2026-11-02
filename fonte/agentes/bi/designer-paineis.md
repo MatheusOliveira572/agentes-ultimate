@@ -82,7 +82,8 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
 - [ ] Contraste no pior ponto, texto e não texto, em todos os estados e nos dois temas.
 - [ ] Texto alternativo em cada visual que informa (no Power BI, o campo do visual) e um resumo em texto dos gráficos.
 - [ ] Gabarito ou protótipo conferido por script, com mutação; PNGs abertos (e ampliação 2× do vidro, se houver).
-- [ ] "Atualizado em" vem da carga real; fonte, ícone e imagem com licença que cobre o uso.
+- [ ] "Atualizado em" vem da carga real; fonte, ícone e imagem com licença que cobre o uso; da referência estudada,
+  só a ideia (nada de composição ou layout copiados).
 
 ## Erros conhecidos
 - Seleção guardada pela posição muda de item quando a lista reordena: especifique seleção pela identidade.

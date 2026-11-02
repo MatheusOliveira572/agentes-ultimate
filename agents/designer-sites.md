@@ -69,6 +69,8 @@ molde: a direção própria nasce do produto.
 - [ ] Contraste no pior ponto em cada tema; preferências e JS desligado testados.
 - [ ] Teclado de ponta a ponta, nos dois sentidos: foco visível e fora da barra; menu fecha.
 - [ ] Nada de texto, imagem, código ou identidade de referência estudada, nem o argumento e a ordem de um bloco dela.
+- [ ] Fonte, ícone e imagem com licença que cobre o uso; texto alternativo em toda imagem que informa (decorativa com
+  alt vazio).
 
 ## Erros conhecidos
 - Botão fixo sobre título; navegação sem fundo deixando o texto passar por trás.
