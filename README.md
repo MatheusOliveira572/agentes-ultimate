@@ -95,6 +95,9 @@ diz quando a decisão precisa de advogado ou contador habilitado. O padrão comp
 | `placar` | Placar por agente: passou no revisor de primeira, defeitos, retrabalho, acerto da estimativa |
 | `registrar-defeito` | Registra um defeito que o usuário achou e que escapou do revisor |
 | `checklist-lancamento` | Antes de publicar: escolhe os blocos pelo perfil (segredos, app web, LGPD, acessibilidade, honestidade, licenças), prova o comportamento de cada item e entrega o relatório |
+| `auditoria-completa` | Auditoria de segurança de um repositório em 6 fases, com verificador independente; só você chama, e o relatório vai para fora do git e de pasta sincronizada |
+| `integracoes` | Guia das ferramentas externas opcionais: o que fazem, que dado sai, como ligar e desligar; nada é instalado |
+| `atualizar-fontes` | Trata as novidades das fontes de terceiros achadas pelo vigia: o que mudou, licença, o que trazer; só aplica com o seu OK |
 
 ## Como funciona
 

@@ -113,9 +113,10 @@ Barra e mapa usam a mesma conta (`previsao` em `hooks/registro.js`):
 - **Âncora em qualquer lugar do pedido:** quando o pedido não diz app, aplicativo ou sistema, uma menção a "site" decide o
   desempate mesmo quando o site é de outra pessoa e
   o pedido é de tela de app ("o componente react de tabela quebra quando colo dados do site do IBGE" vai ao designer de
-  sites). Corrija com `era com designer-paineis`.
+  sites). Corrija com `era com designer-interface`.
 - **Site e app no mesmo pedido** vão a um lado só (o da âncora, ou o de mais pontos), salvo empate, quando vão os dois.
   Peça em dois pedidos ou diga quem você quer.
 - O "já feito" entende os sinônimos da lista e as ligações por nome de arquivo, não o significado livre do texto.
   Acrescente grupos de sinônimos do seu domínio em `pacotes/sinonimos.json`.
-- As referências de mercado dos agentes estão marcadas "(a confirmar)" até alguém abrir e conferir cada fonte.
+- Cada referência de mercado diz quando a fonte foi aberta; `node scripts/validar.js --links` confere se os links ainda
+  respondem (usa a rede; site que bloqueia robô dá falso negativo).

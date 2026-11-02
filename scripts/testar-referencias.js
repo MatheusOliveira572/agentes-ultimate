@@ -177,6 +177,13 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   try { require('./testar-liquid-glass.js')({ caso, RAIZ }); } catch (e) { caso('im99: scripts/testar-liquid-glass.js carrega e roda', false, e.message); }
   // ---- Revisão final M-4 · padrão "impressiona" (régua, junção, VERMELHO, licença, texto alternativo, não imitar) ----
   try { require('./testar-impressionar.js')({ caso, RAIZ }); } catch (e) { caso('revisão final M-4: scripts/testar-impressionar.js carrega e roda', false, e.message); }
+  // ---- Revisão final b-1 · o README lista todas as skills ----
+  {
+    const tab = (ler('README.md').split('**Skills:**')[1] || '').split('\n\n')[1] || '';
+    const nomes = [...tab.matchAll(/^\| `([a-z0-9-]+)`/gm)].map((m) => m[1]);
+    const faltam = fs.readdirSync(path.join(RAIZ, 'skills')).filter((s) => fs.existsSync(path.join(RAIZ, 'skills', s, 'SKILL.md')) && !nomes.includes(s));
+    caso('revisão final b-1: a tabela de skills do README lista todas as skills da pasta skills/', !faltam.length, 'faltam: ' + faltam.join(', '));
+  }
   // ---- Lote 15 · skill auditoria-completa e validadores ----
   try { require('./testar-auditoria.js')({ caso, tmp, RAIZ }); } catch (e) { caso('0.8.0 B15: scripts/testar-auditoria.js carrega e roda', false, e.message); }
   // ---- Lote 13 · ponytail: regras como orientação, sem ganchos ----
