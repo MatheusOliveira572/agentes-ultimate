@@ -13,3 +13,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Acessibilidade:** link "pular para o conteúdo"; `scroll-margin-top` igual à altura da barra; foco nunca oculto sob ela (WCAG 2.4.11).
 - **Erro comum:** barra transparente sem fundo ao rolar, com títulos passando por trás; somar barra de promoção e botão
   flutuante até cobrir conteúdo. **Conte as camadas fixas: no máximo 2 visíveis na dobra** e meça a área coberta (até 15–20%).
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

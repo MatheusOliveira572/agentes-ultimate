@@ -13,3 +13,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** o valor nunca empurra o título para fora.
 - **Acessibilidade:** tabela ou lista real, valor com sinal em texto.
 - **Erro comum:** dado de exemplo com marca real em situação depreciativa.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

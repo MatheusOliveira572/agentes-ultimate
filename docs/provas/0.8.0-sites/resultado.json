@@ -192,9 +192,9 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 55,
+   "quadros": 60,
    "p95_ms": 16.8,
-   "quadros_longos": 1,
+   "quadros_longos": 0,
    "props": [],
    "reduzido_ok": true,
    "reduzido_rodando": 0,
@@ -210,7 +210,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 90,
+   "quadros": 89,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [],
@@ -246,7 +246,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 60,
+   "quadros": 61,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [],
@@ -265,7 +265,7 @@
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
    "quadros": 90,
-   "p95_ms": 16.7,
+   "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [
     "transform"
@@ -363,9 +363,9 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 53,
-   "p95_ms": 16.9,
-   "quadros_longos": 1,
+   "quadros": 60,
+   "p95_ms": 16.8,
+   "quadros_longos": 0,
    "props": [],
    "reduzido_ok": true,
    "reduzido_rodando": 0,
@@ -381,7 +381,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 51,
+   "quadros": 52,
    "p95_ms": 16.8,
    "quadros_longos": 1,
    "props": [],
@@ -417,9 +417,9 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 58,
-   "p95_ms": 16.9,
-   "quadros_longos": 1,
+   "quadros": 60,
+   "p95_ms": 16.8,
+   "quadros_longos": 0,
    "props": [],
    "reduzido_ok": true,
    "reduzido_rodando": 0,
@@ -458,7 +458,10 @@
    "quadros": 90,
    "p95_ms": 16.8,
    "quadros_longos": 0,
-   "props": [],
+   "props": [
+    "opacity",
+    "transform"
+   ],
    "reduzido_ok": true,
    "reduzido_rodando": 0,
    "reduzido_texto_invisivel": 0,
@@ -491,9 +494,9 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 86,
-   "p95_ms": 16.8,
-   "quadros_longos": 1,
+   "quadros": 90,
+   "p95_ms": 16.7,
+   "quadros_longos": 0,
    "props": [],
    "reduzido_ok": true,
    "reduzido_rodando": 0,
@@ -509,9 +512,9 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 85,
+   "quadros": 90,
    "p95_ms": 16.8,
-   "quadros_longos": 1,
+   "quadros_longos": 0,
    "props": [
     "strokeDashoffset"
    ],
@@ -529,9 +532,9 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 90,
-   "p95_ms": 16.8,
-   "quadros_longos": 0,
+   "quadros": 84,
+   "p95_ms": 17,
+   "quadros_longos": 1,
    "props": [],
    "reduzido_ok": true,
    "reduzido_rodando": 0,
@@ -583,7 +586,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 90,
+   "quadros": 89,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [
@@ -603,7 +606,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 60,
+   "quadros": 59,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [],
@@ -623,7 +626,7 @@
    "erros_js": 0,
    "pausa_ok": true,
    "quadros": 90,
-   "p95_ms": 16.8,
+   "p95_ms": 16.7,
    "quadros_longos": 0,
    "props": [],
    "reduzido_ok": true,
@@ -640,7 +643,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 90,
+   "quadros": 91,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [
@@ -703,7 +706,7 @@
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
    "pausa_ok": true,
-   "quadros": 89,
+   "quadros": 90,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [
@@ -724,7 +727,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 89,
+   "quadros": 90,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [
@@ -763,7 +766,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 89,
+   "quadros": 90,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [
@@ -806,7 +809,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 86,
+   "quadros": 83,
    "p95_ms": 16.8,
    "quadros_longos": 1,
    "props": [
@@ -827,7 +830,7 @@
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
    "quadros": 90,
-   "p95_ms": 16.7,
+   "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [],
    "reduzido_ok": true,
@@ -844,7 +847,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 87,
+   "quadros": 88,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [
@@ -886,7 +889,7 @@
    "mexeu": true,
    "texto_invisivel_no_fim": 0,
    "erros_js": 0,
-   "quadros": 90,
+   "quadros": 89,
    "p95_ms": 16.8,
    "quadros_longos": 0,
    "props": [
@@ -940,5 +943,26 @@
    "provado": true
   }
  ],
- "efeitos_condicao": "Edg/156.0.4314.58, sem interface, 390 px, CPU freada 4×; quadros por requestAnimationFrame em 1,5 s. Sem aparelho real."
+ "efeitos_condicao": "Edg/156.0.4314.58, sem interface, 390 px, CPU freada 4×; quadros por requestAnimationFrame em 1,5 s. Sem aparelho real.",
+ "efeitos_controles": [
+  {
+   "nome": "carga de 12 ms por quadro (medida sem freio) na linha principal: só passa de 34 ms se a CPU estiver freada",
+   "p95_ms": 100,
+   "pegou": true
+  },
+  {
+   "nome": "desfoque de 40 px animado na tela inteira (só informativo: mostra se a medida enxerga custo de pintura)",
+   "p95_ms": 16.8,
+   "informativo": true,
+   "pegou": false
+  },
+  {
+   "nome": "marquee sem o ramo de movimento reduzido",
+   "pegou": true
+  },
+  {
+   "nome": "marquee sem a animação (o \"mexeu\" tem de dar falso)",
+   "pegou": true
+  }
+ ]
 }

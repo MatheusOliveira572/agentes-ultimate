@@ -12,3 +12,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** a linha vira vertical à esquerda.
 - **Acessibilidade:** lista ordenada real.
 - **Erro comum:** 6 passos para vender simplicidade.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

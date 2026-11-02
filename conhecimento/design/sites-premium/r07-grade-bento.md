@@ -13,3 +13,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** uma coluna, ordem por importância, mini-demonstração legível (2 colunas só para peças pequenas).
 - **Acessibilidade:** ordem do DOM igual à visual; demonstração decorativa com `aria-hidden` e o valor no texto.
 - **Erro comum:** ícone + título + frase em caixas iguais não é bento, é lista. Demonstração com dado ilegível.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

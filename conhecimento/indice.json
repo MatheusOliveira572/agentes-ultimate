@@ -931,6 +931,29 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/sites-premium/efeitos/provas.md",
+      "tema": "efeitos-provados",
+      "palavras": [
+        "prova dos efeitos",
+        "efeito provado",
+        "quadros do efeito",
+        "efeito pesa"
+      ],
+      "agentes": [
+        "designer-sites",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "este efeito pesa, qual a prova dos efeitos",
+          "mostre o efeito provado e os quadros do efeito"
+        ],
+        "nao": [
+          "calcule o custo médio ponderado do estoque"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/sites-premium/efeitos/repeticao-e-micro.md",
       "tema": "efeito-repeticao",
       "palavras": [

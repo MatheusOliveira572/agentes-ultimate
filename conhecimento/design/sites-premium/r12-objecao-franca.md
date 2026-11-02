@@ -12,3 +12,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** uma coluna, resposta antes da imagem.
 - **Acessibilidade:** é texto comum, sem acordeão escondendo o argumento.
 - **Erro comum:** desviar da pergunta. Isso custa mais confiança que não fazer a seção.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

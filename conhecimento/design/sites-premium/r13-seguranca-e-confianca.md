@@ -12,3 +12,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** lista.
 - **Acessibilidade:** selo com nome no texto.
 - **Erro comum:** "nível bancário" e cadeado sem o que sustenta. Citar lei sem o que foi de fato feito.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

@@ -44,10 +44,12 @@ async function abrirEdge() {
     if (m.method === 'Log.entryAdded' && m.params.entry.level === 'error') erros.push(m.params.entry.text);
     if (m.method === 'Runtime.consoleAPICalled' && m.params.type === 'error') erros.push('console.error');
   };
+  // Conexão caiu: falha alto, em vez de deixar a promessa pendente e o Node sair calado com código 0.
+  ws.onclose = () => { for (const { erro } of pend.values()) erro(new Error('conexão com o Edge caiu')); pend.clear(); };
   const cdp = (metodo, params = {}) => new Promise((ok, erro) => { const id = ++seq; pend.set(id, { ok, erro }); ws.send(JSON.stringify({ id, method: metodo, params })); });
   await cdp('Page.enable'); await cdp('Runtime.enable'); await cdp('Log.enable');
   const ev = async (expr) => { const r = await cdp('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true }); if (r.exceptionDetails) throw new Error(`${expr.slice(0, 80)}: ${r.exceptionDetails.exception ? r.exceptionDetails.exception.description : r.exceptionDetails.text}`); return r.result.value; };
-  const fechar = async () => { try { await cdp('Browser.close'); } catch (e) { /* já fechou */ } try { ws.close(); } catch (e) { /* idem */ } await espera(500); try { proc.kill(); } catch (e) { /* idem */ } await espera(300); try { fs.rmSync(perfil, { recursive: true, force: true }); } catch (e) { /* trava de arquivo no Windows */ } };
+  const fechar = async () => { try { await Promise.race([cdp('Browser.close'), espera(3000)]); } catch (e) { /* já fechou */ } try { ws.close(); } catch (e) { /* idem */ } await espera(500); try { proc.kill(); } catch (e) { /* idem */ } await espera(300); try { fs.rmSync(perfil, { recursive: true, force: true }); } catch (e) { /* trava de arquivo no Windows */ } };
   const versao = (await cdp('Browser.getVersion')).product;
   return { cdp, ev, erros, fechar, versao };
 }
@@ -333,7 +335,7 @@ async function provarEfeitos() {
   const t0 = Date.now(); let b = await abrirEdge(); const url = urlDe(path.join(AQUI, 'bancada-efeitos.html'));
   const preparar = async (fm, freio) => { await janela(b, 390, 844); await midia(b, fm); await ir(b, url); if (freio) await b.cdp('Emulation.setCPUThrottlingRate', { rate: 4 }); };
   let usados = 0;
-  const talvezNovo = async (fm, freio) => { if (++usados > 8) { usados = 1; await b.fechar(); b = await abrirEdge(); await preparar(fm, freio); } };
+  const talvezNovo = async (fm, freio) => { if (++usados > 8) { usados = 1; await b.fechar(); b = await abrirEdge(); await preparar(fm, freio); await espera(500); } };
   await janela(b, 390, 844); await midia(b, []); await ir(b, url);
   const lista = await b.ev('bancada.ids()');
   const saida = []; const quadros = {};
@@ -392,7 +394,7 @@ async function provarEfeitos() {
     await mouse(b, 2, 840); await b.ev(`bancada.ativar(${j})`); await espera(60);
     const c = await b.ev(`bancada.centro(${j})`); const clip = clipDe(c);
     await interagir(b, r, 400);
-    await espera(250); const f1 = await foto(b, clip); await espera(450); const f2 = await foto(b, clip);
+    await espera(600); const f1 = await foto(b, clip); await espera(450); const f2 = await foto(b, clip);
     const rod = await b.ev('bancada.rodando()');
     const txt = await b.ev(`bancada.texto(${j})`);
     r.reduzido_ok = f1.equals(f2) && rod === 0 && txt === 0; r.reduzido_rodando = rod; r.reduzido_texto_invisivel = txt;
@@ -412,10 +414,12 @@ async function provarEfeitos() {
   // Controles: a medida de quadros, o "mexeu" e o "reduzido" têm de falhar no caso errado.
   await b.fechar(); b = await abrirEdge();
   const controles = [];
-  await janela(b, 390, 844); await midia(b, []); await ir(b, url); await b.cdp('Emulation.setCPUThrottlingRate', { rate: 4 });
-  await b.ev(`bancada.ativar('A3'); (function q(){var t=performance.now();while(performance.now()-t<12){} requestAnimationFrame(q)})()`);
+  await janela(b, 390, 844); await midia(b, []); await ir(b, url);
+  await b.ev(`window.__voltas=(function(){var n=0,t=performance.now();while(performance.now()-t<12){n++}return n})()`);
+  await b.cdp('Emulation.setCPUThrottlingRate', { rate: 4 });
+  await b.ev(`bancada.ativar('A3'); (function q(){var x=0;for(var i=0;i<__voltas;i++){x+=performance.now()}requestAnimationFrame(q)})()`);
   const qc = await b.ev('bancada.medir(1500)');
-  controles.push({ nome: 'carga de 12 ms por quadro na linha principal (só passa de 34 ms se a CPU estiver freada)', p95_ms: +qc.p95.toFixed(1), pegou: qc.p95 > 34 });
+  controles.push({ nome: 'carga de 12 ms por quadro (medida sem freio) na linha principal: só passa de 34 ms se a CPU estiver freada', p95_ms: +qc.p95.toFixed(1), pegou: qc.p95 > 34 });
   await b.fechar(); b = await abrirEdge();
   await janela(b, 390, 844); await midia(b, []); await ir(b, url); await b.cdp('Emulation.setCPUThrottlingRate', { rate: 4 });
   await b.ev(`(function(){var d=document.createElement('div');d.style.cssText='position:fixed;inset:0;background:linear-gradient(#2a7388,#7a3b2a)';document.body.appendChild(d);d.animate([{filter:'blur(0px)'},{filter:'blur(40px)'}],{duration:800,iterations:Infinity,direction:'alternate'})})()`);
@@ -463,7 +467,7 @@ ${provados} de ${IDS.length} efeitos passaram na bancada (\`docs/provas/0.8.0-si
 \`prefers-reduced-motion\`, teve pausa quando o catálogo exige, 0 erro de JS e p95 do quadro até 34 ms na condição acima.
 **Controles:** ${(res.efeitos_controles || []).map((c) => `${c.nome}: ${c.p95_ms !== undefined ? c.p95_ms + ' ms, ' : ''}${c.informativo ? (c.pegou ? 'a medida subiu' : 'a medida não subiu: custo de pintura não aparece aqui') : (c.pegou ? 'pegou' : 'NÃO pegou')}`).join('; ') || '—'}.
 **Não prova:** aparelho real, GPU, bateria, nem o restante da faixa do catálogo, que continua [ESTIMATIVA: ponto de partida
-nosso]. Quadro por \`requestAnimationFrame\` mede a linha principal, não o compositor. Teclado e leitor de tela: só o
+nosso]. Quadro por \`requestAnimationFrame\` sobe com carga na linha principal; com pintura cara, o controle de desfoque variou entre rodadas (49,9 e 16,8 ms), então **custo de pintura e de compositor não está medido**: vidro, aurora e sombra precisam de aparelho real. Teclado e leitor de tela: só o
 que está na página de prova (\`site-preamar.html\`), não em cada efeito. Os avançados do grupo G não foram construídos.
 
 | Efeito | Nome | Situação | Valor usado | p95 do quadro | Reduzido testado | Propriedades animadas |

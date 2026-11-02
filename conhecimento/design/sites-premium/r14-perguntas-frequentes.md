@@ -12,3 +12,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** alvo inteiro da linha.
 - **Acessibilidade:** `details/summary` ou botão com `aria-expanded`; busca do navegador deve achar o texto.
 - **Erro comum:** perguntas que ninguém faz, só para repetir vantagem.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

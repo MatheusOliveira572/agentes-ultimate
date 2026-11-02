@@ -15,3 +15,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** recomendado primeiro, ou empilhado com ele em destaque; sem rolagem horizontal de tabela.
 - **Acessibilidade:** seletor como grupo de rádio; preço em texto legível por completo; preço riscado explicado.
 - **Erro comum:** esconder o total anual, ou riscar preço que nunca existiu (padrão enganoso, proibido).
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

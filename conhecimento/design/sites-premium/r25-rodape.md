@@ -12,3 +12,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** colunas viram acordeão ou lista.
 - **Acessibilidade:** `nav` com rótulo.
 - **Erro comum:** cinza claro ilegível "porque é rodapé".
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

@@ -13,3 +13,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** botão em toda a largura, 48–56 px.
 - **Acessibilidade:** QR sempre tem link em texto; botões de loja têm nome.
 - **Erro comum:** nova promessa no fim. Vários botões disputando.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

@@ -12,3 +12,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** menos blocos invertidos colados, porque cansam mais.
 - **Acessibilidade:** recalcular contraste em cada fundo, inclusive de links e foco.
 - **Erro comum:** alternar por hábito, sem relação com o conteúdo. Aqui, fundo escuro é opção de projeto: **respeite a marca e a decisão de quem pediu.**
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

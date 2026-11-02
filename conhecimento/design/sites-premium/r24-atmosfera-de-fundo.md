@@ -11,3 +11,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** menos luzes, imagem leve.
 - **Acessibilidade:** nada de texto diretamente sobre a parte de maior variação.
 - **Erro comum:** violeta sobre preto com brilho: é o visual mais gasto do setor; use só se a marca for essa.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

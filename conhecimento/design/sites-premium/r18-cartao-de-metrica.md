@@ -13,3 +13,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** valor nunca corta; abrevia antes de quebrar.
 - **Acessibilidade:** cor não é o único sinal (WCAG 1.4.1); valor completo em `aria-label` quando abreviado.
 - **Erro comum:** precisão falsa, período omitido, variação sem base de comparação.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

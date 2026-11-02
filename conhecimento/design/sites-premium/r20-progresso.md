@@ -12,3 +12,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Celular:** célula ≥ 32 px quando for tocável, com detalhe ao tocar.
 - **Acessibilidade:** valor em texto sempre; dia do calendário com `aria-label` completo; mapa de calor com níveis distintos sem cor (ou valor).
 - **Erro comum:** vermelho e verde como único código. Rosca para comparar muitas partes.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].

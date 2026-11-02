@@ -13,3 +13,5 @@ Repertório, não molde: use, combine, corte ou vá além, a partir da direção
 - **Acessibilidade:** mais de 5 s em paralelo ao conteúdo exige meio de pausar (WCAG 2.2.2); nada de anúncio ao vivo a cada
   passo; `aria-hidden` no decorativo, com uma frase-resumo.
 - **Erro comum:** simulação que muda valores e parece erro ao recarregar. Animar 3 coisas ao mesmo tempo.
+
+**Prova:** usada na página de `docs/provas/0.8.0-sites/` (site-preamar.html); os valores escolhidos ali passaram nas checagens de `resultado.json`. A faixa acima continua [ESTIMATIVA].
