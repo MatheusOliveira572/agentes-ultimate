@@ -181,7 +181,8 @@ instalada e a versão, e **nunca instala nada**. Sem a ferramenta, o agente avis
 
 context7, 21st, strix, semgrep, Chrome DevTools MCP e o detector de interface são opcionais: **o plugin não instala nada**. A skill
 `/integracoes` diz, por ferramenta, o que faz, que dado sai e para onde, como ligar, como desligar e o risco. Verificador do projeto
-(comando que roda a cada edição, 5 s, e ao parar, 30 s): `"verificador"` em `.claude/base/config.json`.
+(comando que roda a cada edição, 5 s, e ao parar, 30 s): `"verificador"` em `.claude/base/config.json`, com o comando em lista
+(`["node", "regras.js", "{arquivo}"]`): roda sem shell, e o nome do arquivo vai como argumento.
 
 ## Configuração
 

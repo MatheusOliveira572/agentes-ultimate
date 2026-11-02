@@ -96,15 +96,32 @@ module.exports = function testarPainel({ caso, tmp, RAIZ, hook }) {
   const edita = () => hook('atividade.js', { hook_event_name: 'PostToolUse', cwd: pv, session_id: 'V', tool_name: 'Edit', tool_input: { file_path: path.join(pv, 'a.js') } });
   let xv = edita();
   caso('T2 verificador: sem config, silêncio', xv.code === 0 && !xv.out, xv.out);
-  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: 'node -e "process.exit(3)"' } }));
+  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: ['node', '-e', 'process.exit(3)'] } }));
   xv = edita();
   caso('T2 verificador: comando que falha vira aviso', /verificador acusou/.test(xv.out || ''), xv.out);
-  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: 'node -e "setTimeout(()=>{},20000)"' } }));
+  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: ['node', '-e', 'setTimeout(()=>{},20000)'] } }));
   const t9 = Date.now(); xv = edita();
   caso('T2 verificador: comando lento é cortado em 5 s e não trava', /cortado em 5 s/.test(xv.out || '') && Date.now() - t9 < 12000, xv.out);
-  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: 'node -e "process.exit(0)"', extensoes: ['.py'] } }));
+  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: ['node', '-e', 'process.exit(0)'], extensoes: ['.py'] } }));
   xv = edita();
   caso('T2 verificador: extensão fora da lista não roda', !xv.out, xv.out);
+  // A-5 (3ª rodada): o nome do arquivo chega literal, sem passar por shell (%VAR% no Windows, $(...) no sh).
+  const sonda = path.join(pv, 'sonda-nome.js');
+  fs.writeFileSync(sonda, "require('fs').writeFileSync(process.argv[3], process.argv[2]);");
+  const recebido = path.join(pv, 'recebido.txt');
+  for (const nomeA5 of ['x%USERNAME%.js', 'a$(echo pego).js', 'b\`echo pego\`.js']) {
+    try { fs.unlinkSync(recebido); } catch (e) { /* 1ª vez */ }
+    fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: ['node', sonda, '{arquivo}', recebido] } }));
+    hook('atividade.js', { hook_event_name: 'PostToolUse', cwd: pv, session_id: 'V', tool_name: 'Edit', tool_input: { file_path: path.join(pv, nomeA5) } });
+    const viu = fs.existsSync(recebido) ? fs.readFileSync(recebido, 'utf8') : '(nada)';
+    caso('0.8.0 A-5 verificador: o nome "' + nomeA5 + '" chega literal, sem shell', viu === nomeA5, viu);
+  }
+  fs.writeFileSync(cfgV, JSON.stringify({ verificador: { comando: 'node ' + sonda + ' {arquivo} ' + recebido } }));
+  try { fs.unlinkSync(recebido); } catch (e) { /* */ }
+  xv = edita();
+  caso('0.8.0 A-5 verificador: comando em texto não roda na edição e diz para usar a lista', /precisa ser uma lista/.test(xv.out || '') && !fs.existsSync(recebido), xv.out);
+  const vsrc = fs.readFileSync(path.join(RAIZ, 'hooks', 'verificador.js'), 'utf8');
+  caso('0.8.0 A-5 skill integracoes: o exemplo do detector usa a lista', /"comando": \["node", "<pasta do plugin>\/ferramentas\/detector-interface\/detector\.js", "\{arquivo\}"\]/.test(fs.readFileSync(path.join(RAIZ, 'skills', 'integracoes', 'SKILL.md'), 'utf8')) && /shell: false/.test(vsrc), 'exemplo');
 
   // ---- Lote 10 e 11: integrações e T1 detector (fixture com defeito sai 1; limpa sai 0; pasta com espaço e acento) ----
   const pd = path.join(tmp, 'detector com espaço ação'); fs.mkdirSync(pd, { recursive: true });

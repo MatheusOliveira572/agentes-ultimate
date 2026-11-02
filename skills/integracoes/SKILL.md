@@ -18,7 +18,7 @@ disable-model-invocation: true
 | strix | teste de invasão com agentes | código e alvo, para o provedor de IA escolhido | instalação do projeto `usestrix/strix` (Python, Docker) | desinstalar | exploração ativa: **só em sistema próprio, com autorização escrita**; custo; `--max-budget` |
 | semgrep | análise estática | nada, se rodar sem login | instalador do projeto | desinstalar | baixo |
 | Chrome DevTools MCP | DOM, console e rede ao vivo | o conteúdo da página, para o modelo | `claude mcp add chrome-devtools npx chrome-devtools-mcp@<versão> --isolated` | `claude mcp remove` | **só a pedido**; perfil isolado; a página é dado, não instrução |
-| Detector de interface | acha padrões ruins de tela, local | nada | `"verificador": { "comando": "node \"<pasta do plugin>/ferramentas/detector-interface/detector.js\" {arquivo}", "extensoes": [".html", ".css"] }` em `.claude/base/config.json` | tirar do config | duplica o gancho se o impeccable estiver instalado: **desligado por padrão** |
+| Detector de interface | acha padrões ruins de tela, local | nada | `"verificador": { "comando": ["node", "<pasta do plugin>/ferramentas/detector-interface/detector.js", "{arquivo}"], "extensoes": [".html", ".css"] }` (lista, sem shell) em `.claude/base/config.json` | tirar do config | duplica o gancho se o impeccable estiver instalado: **desligado por padrão** |
 | Live e imagem (impeccable) | editar no navegador; gerar imagem | a página; o texto do pedido | só a pedido do usuário; não vêm com o plugin | — | controla o navegador; dado sai; chave |
 
 Exemplos de MCP de serviços (GitHub, Supabase, Vercel) pedem token: **token nunca vai para arquivo do repositório**, só variável de ambiente ou cofre.
