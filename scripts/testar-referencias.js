@@ -290,20 +290,8 @@ module.exports = function testarReferencias({ caso, validarCopia, tmp, RAIZ, hoo
   // Equivalência com o apple-design-skill (lido como referência do que cobrir, sem copiar): para 4 pedidos de design,
   // as regras que a skill original aplicaria têm de estar na nossa versão, com o mesmo valor e a fonte na HIG.
   const ap = (f) => ler('conhecimento', 'design', 'apple', f);
-  const equiv = {
-    'tela de app (iPhone)': [['tipo padrão 17 pt e mínimo 11 pt', 'acessibilidade-tipo-e-toque.md', /iOS, iPadOS \| 17 pt \| 11 pt/], ['contraste 4,5:1 até 17 pt e 3:1 a partir de 18 pt ou negrito', 'acessibilidade-tipo-e-toque.md', /até 17 pt \| 4,5:1[\s\S]*18 pt ou mais, ou negrito \| 3:1/],
-      ['alvo 44 × 44 pt (mínimo 28) no celular e 28 × 28 (mínimo 20) no desktop', 'acessibilidade-tipo-e-toque.md', /44 × 44 pt \| 28 × 28 pt[\s\S]*28 × 28 pt \| 20 × 20 pt/], ['abas navegam, não agem; nunca escondidas ou desabilitadas', 'componentes.md', /Abas navegam, não agem[\s\S]*nunca desabilite nem esconda/],
-      ['vidro só na camada flutuante, nunca no conteúdo', 'materiais.md', /Nunca na camada de conteúdo/], ['5 lentes na ordem e relatório com "O que funciona"', 'INDICE.md', /Acessibilidade[\s\S]*Convenções da plataforma[\s\S]*Desenho visual[\s\S]*Interação[\s\S]*Conteúdo e escrita[\s\S]*O que funciona/]],
-    'painel de dados': [['gráfico simples com detalhe sob demanda', 'graficos.md', /Simples, com mais detalhe quando a pessoa pedir/], ['nunca só a cor para separar séries', 'graficos.md', /Nunca só a cor/], ['descrição sem termos subjetivos e formato sem ambiguidade', 'graficos.md', /Sem termos subjetivos[\s\S]*sem ambiguidade/],
-      ['faixa do eixo fixa ou dinâmica pelo significado', 'graficos.md', /fixa ou dinâmica pelo significado/], ['uma cor, um significado; claro, escuro e Aumentar Contraste', 'cor-e-modo-escuro.md', /Uma cor, um significado[\s\S]*claro, escuro e Aumentar Contraste/]],
-    'formulário': [['erro perto do problema, dizendo como resolver', 'escrita-e-primeiro-uso.md', /perto do problema[^.]*como resolver/], ['rótulo diz o que acontece e mantém o nome no fluxo', 'escrita-e-primeiro-uso.md', /Cada rótulo diz o que acontece[\s\S]*mantém o nome no fluxo/],
-      ['puxar do sistema, escolha em vez de digitação, validar ao preencher, nunca pré-preencher senha', 'movimento-e-retorno.md', /Puxe do sistema[\s\S]*nunca\s+preencha senha/], ['seletor no contexto, perto do campo', 'componentes.md', /no contexto\*\*, perto do\s+campo/], ['alvo de toque e contraste do campo', 'acessibilidade-tipo-e-toque.md', /44 × 44 pt/]],
-    'componente com animação': [['movimento com propósito, breve, cancelável e raro no frequente', 'movimento-e-retorno.md', /Com propósito[\s\S]*Breve, cancelável e raro/], ['Reduzir Movimento troca por esmaecer', 'movimento-e-retorno.md', /Reduzir Movimento, troque por\s+esmaecer/],
-      ['evitar oscilação perto de 0,2 Hz', 'movimento-e-retorno.md', /0,2 Hz/], ['curvas e durações com o dono do movimento', '../movimento/INDICE.md', /animação de interface abaixo de 300 ms/], ['vidro: Reduzir Transparência e o pior fundo', 'materiais.md', /prefers-reduced-transparency[\s\S]*pior fundo|pior fundo[\s\S]*prefers-reduced-transparency/]],
-  };
-  for (const [pedido, regras] of Object.entries(equiv)) {
-    const faltam = regras.filter(([, f, re]) => !re.test(ap(f))).map((r) => r[0]);
-    caso(`0.8.0 B3 equivalência Apple: "${pedido}" — as ${regras.length} regras da skill original estão na nossa versão`, !faltam.length, faltam.join('; '));
+  for (const r of require(path.join(RAIZ, 'scripts', 'equivalencia-apple.js')).conferir(RAIZ)) {
+    caso(`0.8.0 B3 equivalência Apple: "${r.pedido}" — as ${r.total} regras da skill original estão na nossa versão`, !r.faltam.length, r.faltam.join('; '));
   }
   const semFonte = ['acessibilidade-tipo-e-toque.md', 'cor-e-modo-escuro.md', 'componentes.md', 'materiais.md', 'movimento-e-retorno.md', 'escrita-e-primeiro-uso.md', 'graficos.md', 'fundamentos.md']
     .filter((f) => (ap(f).match(/HIG ›/g) || []).length < 3);
