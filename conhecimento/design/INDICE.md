@@ -24,6 +24,7 @@ Ordem de quem manda: marca e decisões do projeto → norma (WCAG) → referênc
 | gráfico e dado | `visualizacao.md`, `apple/graficos.md` |
 | estilo Apple, HIG, vidro (Liquid Glass): só no mundo Apple ou a pedido | `apple/INDICE.md`, `apple/materiais.md` |
 | animação, transição, curva, duração | `movimento/INDICE.md` |
+| nível HD: mola única, tira de quadros, objeto 3D real, 2× (em qualquer mundo) | `nivel-hd.md` |
 | raio, sombra, ícone, alinhamento óptico | `detalhes-interface.md` |
 | texto variável, vazio, mil linhas: quebrar com dado plausível | `pior-caso.md` |
 | o usuário pediu opções; estados do componente | `variantes.md` |
@@ -32,4 +33,5 @@ Ordem de quem manda: marca e decisões do projeto → norma (WCAG) → referênc
 | revisar a tela (semáforo, até 15 achados) | `revisao-tela.md` |
 
 Modelos (só desenvolvimento): `<plugin>/modelos/seletor-variantes/seletor.js` (troca variante e estado pela URL) e
-`<plugin>/modelos/pior-caso/dados.js` (alternador demonstração × pior caso).
+`<plugin>/modelos/pior-caso/dados.js` (alternador demonstração × pior caso), `<plugin>/modelos/mola-linear.js` (mola em
+`linear()`) e `<plugin>/modelos/tiras/` (tiras de quadros com relógio controlado).

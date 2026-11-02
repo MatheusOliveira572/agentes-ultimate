@@ -111,6 +111,51 @@ function testar({ caso, RAIZ }) {
   const ix = ler('conhecimento', 'design', 'sites-premium', 'efeitos', 'INDICE.md');
   caso('impressiona: efeitos/INDICE.md lista a vitrine-apple.md, e ela existe',
     /vitrine-apple\.md/.test(ix) && !!ler('conhecimento', 'design', 'sites-premium', 'efeitos', 'vitrine-apple.md'), 'falta no índice');
+
+  // ---- Nível HD (hd105): referência, régua, designers, revisor e os 2 modelos ----
+  const hd = ler('conhecimento', 'design', 'nivel-hd.md');
+  const regrasHd = secao(hd, '1. Regras').split('\n### A validar')[0];
+  const faltaRegra = []; for (let i = 1; i <= 10; i++) if (!new RegExp('^' + i + '\\. \\*\\*', 'm').test(regrasHd)) faltaRegra.push(i);
+  caso('nível HD: nivel-hd.md com as 10 regras ABERTA, "A validar", método, verificação, telas de app e critério de pronto',
+    !faltaRegra.length && /### A validar \(\[HIPÓTESE\]/.test(hd) && ['2. Método', '3. Verificação automática', '4. Telas de app', '5. Critério de pronto'].every((s) => hd.includes('\n## ' + s)),
+    'faltam regras ' + faltaRegra.join(', ') + ' ou seções');
+  caso('nível HD: o nível é universal e a Apple é um mundo entre os outros, nunca o padrão',
+    /Apple com Liquid Glass é um mundo\s+entre os outros, nunca o padrão/.test(hd) && /nada de vidro ou cara de\s+Apple/.test(hd), 'falta');
+  caso('nível HD: a fórmula do amortecimento da nota da pesquisa fica como [HIPÓTESE] a conferir na WWDC23',
+    /4π\(1 − bounce\) ÷ duração/.test(secao(hd, '1. Regras')) && /provável erro de transcrição\. Conferir na sessão da WWDC23/.test(hd), 'falta');
+  const nu = secao(im, 'Nível universal (vale em todo mundo)');
+  caso('nível HD: a régua resume e cita nivel-hd.md (sem duplicar as regras), e nivel-hd.md cita a régua',
+    /`nivel-hd\.md`/.test(nu) && nu.trim().split('\n').length <= 6 && !/corner-shape|font-optical-sizing/.test(nu) && /impressionar\.md/.test(hd.split('\n')[0]), 'duplicado ou sem citação');
+  for (const n of DESIGNERS) {
+    caso(`nível HD: ${n} com o nível HD (nivel-hd.md) no critério de pronto`, /nivel-hd\.md/.test(secao(corpo(n), 'Critério de pronto')), 'falta no Critério de pronto');
+  }
+  for (const n of ['designer-interface', 'designer-sites', 'designer-paineis']) {
+    const met = secao(corpo(n), 'Método de trabalho');
+    caso(`nível HD: ${n} prova com capturas a 2× e tiras de quadros (modelos/tiras) no método`, /modelos\/tiras\//.test(met) && /2×/.test(met) && /mola[^\n]*\n?[^\n]*linear\(\)/.test(met), 'falta no Método');
+  }
+  caso('nível HD: revisor abre capturas a 2× e tiras; tira ausente ou curva reprovada = achado',
+    /capturas a 2× e tiras\s+abertas por você/.test(secao(rv, 'Método de trabalho')) && /tira ausente ou curva reprovada = achado/.test(rv), 'falta no Método');
+
+  const carregar = (rel) => { try { return require(path.join(RAIZ, rel)); } catch (e) { return null; } };
+  const ml = carregar('modelos/mola-linear.js');
+  const m0 = ml ? ml.mola({ duracao: 0.42, bounce: 0 }) : null;
+  const pts = m0 ? m0.css.slice(7, -1).split(',').map(Number) : [];
+  caso('nível HD: modelos/mola-linear.js gera linear() com 30+ pontos de 0 a 1, amortecimento crítico em bounce 0',
+    !!m0 && pts.length >= 30 && pts[0] === 0 && pts[pts.length - 1] === 1 && Math.abs(m0.amortecimento - 2 * Math.sqrt(m0.rigidez)) < 0.01 && m0.ms === 663, JSON.stringify(m0 && { ms: m0.ms, pontos: pts.length }));
+  const ida = ml ? ml.parametros({ duracao: 0.5, bounce: 0.15 }) : null, volta = ida ? ml.parametros({ rigidez: ida.k, amortecimento: ida.c }) : null;
+  caso('nível HD: mola-linear.js converte duração+bounce ⇄ rigidez+amortecimento e recusa bounce fora de 0 a 1',
+    !!volta && Math.abs(volta.duracao - 0.5) < 1e-9 && Math.abs(volta.bounce - 0.15) < 1e-9 && (() => { try { ml.mola({ duracao: 0.5, bounce: 1 }); return false; } catch (e) { return true; } })(), JSON.stringify(volta));
+  const gm = carregar('docs/provas/0.8.0-design/e2e/gerar-molas.js');
+  caso('nível HD: a prova e2e usa o modelo (gerar-molas.js = mola-linear.js, mesma curva)',
+    !!gm && !!ml && /modelos\/mola-linear\.js/.test(ler('docs', 'provas', '0.8.0-design', 'e2e', 'gerar-molas.js')) && gm.mola(0.55, 0.3).css === ml.mola({ duracao: 0.55, bounce: 0.3 }).css, 'não unificado');
+  const tr = carregar('modelos/tiras/tiras.js');
+  const sm = ml ? (() => { const c = ml.mola({ duracao: 0.5, bounce: 0 }).css.slice(7, -1).split(',').map(Number); return [0, 3, 6, 9, 13, 18, 25, 33, 48].map((i) => c[i] * 240); })() : [];
+  caso('nível HD: modelos/tiras aprova a mola e reprova degrau, salto no 1º quadro e recuo',
+    !!tr && !tr.curva(sm).erros.length && /degrau/.test(tr.curva([0, 0, 0, 200, 200, 240]).erros.join()) &&
+    /salto/.test(tr.curva([0, 200, 220, 232, 238, 240]).erros.join()) && /recuo/.test(tr.curva([0, 80, 160, 250, 230, 240]).erros.join()) &&
+    !tr.curva([0, 80, 160, 250, 230, 240], { recuoMax: 0.1 }).erros.includes('recuo'), JSON.stringify(tr && tr.curva(sm)));
+  caso('nível HD: modelos/tiras tem LEIA-ME e exemplo (roteiro com mutante que tem de reprovar)',
+    /relógio/.test(ler('modelos', 'tiras', 'LEIA-ME.md')) && /TIRAS_MUTAR/.test(ler('modelos', 'tiras', 'exemplo', 'roteiro.js')) && /mutar/.test(ler('modelos', 'tiras', 'exemplo', 'pagina.html')), 'falta');
 }
 
 module.exports = testar;

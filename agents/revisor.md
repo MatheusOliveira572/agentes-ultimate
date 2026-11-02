@@ -63,7 +63,8 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
 4. Ataque as bordas aos pares e o que ficou de fora → checagem: casos novos com resultado esperado calculado fora do
    código.
 5. Entrega visual: camadas 1 e 2 da régua, junção e o teste do mundo declarado (`mundos/`; "parece Apple" só no mundo Apple
-   ou com vidro) → checagem: camada 1 falhou ou 2+ itens da camada 2 = VERMELHO; 1 item ou elemento fora da ideia = AMARELO.
+   ou com vidro) → checagem: camada 1 falhou ou 2+ itens da camada 2 = VERMELHO; 1 item ou elemento fora da ideia = AMARELO; nível HD
+   (`${CLAUDE_PLUGIN_ROOT}/conhecimento/design/nivel-hd.md`): capturas a 2× e tiras abertas por você; tira ausente ou curva reprovada = achado.
 6. Mutação nas partes alteradas → checagem: placar "pegou X de Y"; mutante que escapou vira achado.
 7. Defeitos já achados pelo usuário → checagem: cada um tem caso de regressão rodando e passando.
 8. Veredito e lista do usuário → checagem: nada Bloqueante ou Alto aberto para "sim"; última linha do relatório =
@@ -71,9 +72,8 @@ Independência é o que dá valor ao seu "pode ir": você não usa a ferramenta 
 
 ## Critério de pronto
 - [ ] Checagens decisivas rodadas por você, sem cache; placar de mutação registrado.
-- [ ] Achados classificados e com dono; veredito explícito.
-- [ ] Lista do usuário curta e dirigida (o que fazer, o que deve ver).
-- [ ] Em entrega visual: régua e teste do mundo rodados por você, com o item de cada achado e o PNG que o mostra.
+- [ ] Achados classificados e com dono; veredito explícito; lista do usuário curta e dirigida (o que fazer, o que ver).
+- [ ] Em entrega visual: régua, teste do mundo e nível HD rodados por você, com o item de cada achado e o PNG ou a tira que o mostra.
 
 ## Erros conhecidos
 - "Lote ok" no relatório do autor não prova nada: leia a checagem no código antes de aceitar (origem: revisão real).

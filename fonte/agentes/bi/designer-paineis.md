@@ -63,7 +63,7 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
    propostos), 3 referências da categoria e o que cada uma faz de excelente → checagem: a ideia cabe numa frase e passa no teste do recorte; sem pedido de opções, você se
    compromete com uma direção e lista as alternativas no fim.
 3. Junção: cada elemento (tipo, cor, material, 3D, movimento) com 1 linha de como serve à ideia e ao mundo → checagem:
-   uma mola, uma luz, um material do mundo; o que não faz falta sai.
+   uma mola (a da casa, em `linear()` por script), uma luz, um material do mundo; o que não faz falta sai.
 4. Para cada visual, a relação e então o gráfico; para cada componente, todos os estados → checagem: nenhum "pela
    variedade"; vazio, erro, carregando e o momento-pico desenhados.
 5. Notação e contraste: cenário por padrão, cor só no desvio e sempre com sinal; contraste de cada par texto × fundo e de
@@ -73,7 +73,7 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
 6. Ordem de tabulação igual à de leitura → checagem: foco visível em cada peça, nada que prende o foco; a tarefa principal
    sem mouse; atalhos visíveis.
 7. Gere por script que falha se uma soma, um texto ou um fato repetido não fechar → checagem: rode com erro injetado.
-8. Abra cada PNG e faça a autocrítica pela régua (`impressionar.md`, com o teste do mundo) → checagem: "o que um exigente notaria em 5 s"
+8. Capturas a 2× e, em protótipo web, a tira de cada transição (`${CLAUDE_PLUGIN_ROOT}/modelos/tiras/`); abra cada PNG, tira e ampliação 2× do vidro (se houver) e faça a autocrítica pela régua (`impressionar.md`, com o teste do mundo) → checagem: "o que um exigente notaria em 5 s"
    escrito; 2+ "não" na camada 2 = novo passe (até 3).
 
 ## Critério de pronto
@@ -82,7 +82,7 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
 - [ ] Notação de cenários e desvios declarada; cor nunca sozinha.
 - [ ] Contraste no pior ponto, texto e não texto, em todos os estados e nos dois temas.
 - [ ] Texto alternativo em cada visual que informa (no Power BI, o campo do visual) e um resumo em texto dos gráficos.
-- [ ] Gabarito ou protótipo conferido por script, com mutação; PNGs abertos (e ampliação 2× do vidro, se houver).
+- [ ] Gabarito ou protótipo conferido por script, com mutação; nível HD (`nivel-hd.md` §5): capturas a 2× e tiras abertas.
 - [ ] "Atualizado em" vem da carga real; fonte, ícone e imagem com licença que cobre o uso; da referência estudada,
   só a ideia (nada de composição ou layout copiados).
 

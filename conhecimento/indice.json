@@ -1081,6 +1081,48 @@
       }
     },
     {
+      "arquivo": "conhecimento/design/nivel-hd.md",
+      "tema": "nivel-hd",
+      "palavras": [
+        "nivel hd",
+        "acabamento hd",
+        "acabamento premium",
+        "cara de amador",
+        "cara de trabalho amador",
+        "mola",
+        "spring",
+        "linear()",
+        "view transition",
+        "view-transition-name",
+        "transicao premium",
+        "tira de quadros",
+        "filmstrip",
+        "objeto 3d",
+        "webgl",
+        "three.js",
+        "tone mapping",
+        "2x",
+        "devicescalefactor"
+      ],
+      "agentes": [
+        "designer-sites",
+        "designer-interface",
+        "designer-paineis",
+        "designer-documentos",
+        "revisor",
+        "engenheiro-software"
+      ],
+      "teste": {
+        "sim": [
+          "tira essa cara de trabalho amador: transições premium e acabamento HD",
+          "a lente em 3D parece desenho, quero cara de produto real com WebGL"
+        ],
+        "nao": [
+          "faça a conciliação bancária de outubro"
+        ]
+      }
+    },
+    {
       "arquivo": "conhecimento/design/pior-caso.md",
       "tema": "pior-caso",
       "palavras": [

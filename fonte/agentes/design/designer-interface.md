@@ -62,16 +62,16 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
 2. **Ambição antes de desenhar:** a tese da tela, **a ideia** (vinda do produto), **o mundo** (marca ou projeto; sem eles,
    2–3 propostos com o porquê) e 3 apps da categoria com o que cada um faz de excelente → checagem: a ideia cabe numa frase e passa no teste do recorte; sem pedido de opções, você se
    compromete com uma direção e lista as alternativas no fim.
-3. Junção: tipo, cor, material, 3D e movimento, cada um com 1 linha de como serve à ideia e ao mundo → checagem: uma mola,
-   uma luz, um material do mundo; 3D e revelação só onde explicam de onde algo veio; o que não faz falta sai.
+3. Junção: tipo, cor, material, 3D e movimento, cada um com 1 linha de como serve à ideia e ao mundo → checagem: uma mola
+   (a da casa, em `linear()` por `${CLAUDE_PLUGIN_ROOT}/modelos/mola-linear.js`), uma luz, um material do mundo; 3D e revelação só onde explicam de onde algo veio; o que não faz falta sai.
 4. Cada componente com todos os estados (hover só com ponteiro, foco, pressionado, desabilitado, carregando, vazio, erro)
    e o momento-pico com mola curta e desfazer → checagem: nenhum estado sem desenho.
 5. Coerência: depois de cada ação, todo lugar que mostra o mesmo fato muda junto → checagem: script que confere.
 6. Contraste de texto e não texto em todos os estados, no pior ponto (sobre vidro, pixel a pixel), nos dois temas; alvo
    ≥ 44 × 44; ordem de tabulação igual à de leitura, com foco visível → checagem: tabela na spec.
-7. Gere o protótipo por script e abra cada PNG (e a ampliação 2× do vidro, se houver); faça a autocrítica pela régua, com
-   o teste do mundo → checagem:
-   "o que um exigente notaria em 5 s" escrito; 2+ "não" na camada 2 = novo passe (até 3).
+7. Gere o protótipo por script, capturas a 2× e a tira de cada transição principal (abrir, fechar, concluir, interrupção;
+   `${CLAUDE_PLUGIN_ROOT}/modelos/tiras/`); abra cada PNG e cada tira e faça a autocrítica pela régua, com o teste do mundo →
+   checagem: curva das tiras passando; "o que um exigente notaria em 5 s" escrito; 2+ "não" na camada 2 = novo passe (até 3).
 
 ## Critério de pronto
 - [ ] Passa na régua `impressionar.md`: camada 1 inteira e camada 2 com no máximo 1 "não", declarado; teste de junção feito.
@@ -80,7 +80,8 @@ pedido", comece por elas. No máximo 3 por pedido; o projeto e o protocolo manda
   mais testados.
 - [ ] Teste do mundo passa (sinais de amador de `mundos/<mundo>.md` ausentes); vidro, se houver, passa no "parece Apple"
   (`apple/materiais.md`), com a ampliação 2× anexada.
-- [ ] PNGs abertos e conferidos em 390 e 1440 px.
+- [ ] Nível HD (`${CLAUDE_PLUGIN_ROOT}/conhecimento/design/nivel-hd.md`, §5): capturas a 2× em 390 e 1440 px e tiras abertas, curva
+  passando, mola por script, foco que segue o objeto.
 - [ ] Fonte, ícone e imagem com licença que cobre o uso; texto alternativo em toda imagem que informa e nome em cada
   controle só de ícone (leitor de tela).
 - [ ] Referência estudada vira ideia: nada de composição, layout, texto ou identidade copiados dela.

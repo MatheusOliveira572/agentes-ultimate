@@ -58,7 +58,8 @@ padrão. Correto é o piso; a entrega impressiona.
 - [ ] Passa na régua `impressionar.md` (camada 1 aplicável; camada 2 com no máximo 1 "não", declarado) e no teste de junção.
 - [ ] Títulos-ação; um ponto por página; teste do relance passa.
 - [ ] Gráfico pela relação, com destaque só no ponto principal.
-- [ ] Arquivo aberto e conferido; números conferidos contra a fonte.
+- [ ] Arquivo aberto e conferido a 2×; números conferidos contra a fonte; nível HD de documento (`${CLAUDE_PLUGIN_ROOT}/conhecimento/design/nivel-hd.md`,
+  §5): sem movimento, borda fina, tamanho óptico e quebra equilibrada nos títulos.
 - [ ] Fonte, ícone e imagem com licença que cobre o uso; créditos incluídos; da referência estudada, só a ideia
   (nada de composição ou layout copiados).
 

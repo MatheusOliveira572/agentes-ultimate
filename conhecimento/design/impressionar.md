@@ -45,14 +45,11 @@ orquestrador), nunca para os outros. Apple / Liquid Glass é um mundo entre os o
     produto) parece feito de verdade, não clip-art nem degradê genérico.
 16. Final memorável: o último passo do fluxo é o mais cuidado (confirmação discreta, desfazer).
 
-## Nível universal (vale em todo mundo; da pesquisa de acabamento, só itens ABERTA)
-- Animar só `transform` e `opacity`; `will-change` só no que vai mudar.
-- Mola definida por duração e quique: quique 0 por padrão, ~0,4 no máximo; interrompida, continua da velocidade atual;
-  em CSS, `linear()` amostrada (30 a 60 pontos). Movimento nunca é o único meio de informar.
-- Títulos com `text-wrap: balance`; fonte com eixo `opsz` em `font-optical-sizing: auto`; texto corrido com `pretty`.
-- Cantos contínuos (`corner-shape: squircle`) só com `@supports` e raio simples de reserva.
-- Provas visuais com `deviceScaleFactor: 2` e quadros por relógio controlado (`page.clock`), não por espera.
-- 3D em WebGL com mapa de ambiente e mapeamento de tons explícito (a imagem pronta no lugar do WebGL é a reserva do item 7, ainda [HIPÓTESE] na pesquisa).
+## Nível universal (vale em todo mundo)
+O nível HD é a mesma exigência em qualquer estilo: objeto real quando houver objeto, mola única (CSS em `linear()` gerado
+por script), só `transform` e `opacity`, continuidade do objeto, provas a 2× e tiras de quadros por relógio controlado.
+Regras (só itens ABERTA da pesquisa), o que ainda está a validar, método, verificação e critério: `nivel-hd.md`. Modelos:
+`<plugin>/modelos/mola-linear.js` e `<plugin>/modelos/tiras/`.
 
 ## A junção (a combinação do mundo escolhido, sem virar "sopa")
 O padrão é a **combinação numa peça só, dentro do mundo escolhido**: a ideia + o par tipográfico + a paleta + o material +

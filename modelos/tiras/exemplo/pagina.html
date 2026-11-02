@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Exemplo do modelo de tiras</title>
+<!-- Texto próprio do agentes-ultimate. Um cartão que entra com a mola da casa (duração 0,5 s, bounce 0), gerada por
+     node modelos/mola-linear.js 0.5 0 casa. ?mutar=seco troca a mola por um corte seco (a tira TEM de reprovar). -->
+<style>
+  :root {
+    --mola-casa: linear(0, 0.0183, 0.0633, 0.1245, 0.1945, 0.2681, 0.3416, 0.4126, 0.4796, 0.5416, 0.5983, 0.6495, 0.6953, 0.7373, 0.7731, 0.8046, 0.8321, 0.8561, 0.8769, 0.8948, 0.9103, 0.9237, 0.9351, 0.9449, 0.9533, 0.9604, 0.9665, 0.9717, 0.9761, 0.9798, 0.983, 0.9857, 0.9879, 0.9898, 0.9915, 0.9928, 0.994, 0.995, 0.9958, 0.9965, 0.997, 0.9975, 0.9979, 0.9983, 0.9985, 0.9988, 0.999, 0.9991, 1);
+    --mola-casa-ms: 769ms;
+  }
+  body { margin: 0; font: 17px/1.5 system-ui, sans-serif; background: #f4f2ee; color: #1d1d1f; }
+  .cartao { position: absolute; left: 120px; top: 160px; width: 420px; padding: 28px; border-radius: 18px; background: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 12px 32px rgb(0 0 0 / 0.10); transform: translateY(240px); opacity: 0;
+    transition: transform var(--mola-casa-ms) var(--mola-casa), opacity 200ms linear; }
+  .cartao.dentro { transform: translateY(0); opacity: 1; }
+  .seco .cartao { transition: transform var(--mola-casa-ms) steps(2, jump-start), opacity 200ms linear; }
+  h1 { margin: 0 0 6px; font-size: 28px; letter-spacing: -0.02em; }
+  @media (prefers-reduced-motion: reduce) { .cartao { transition: opacity 200ms linear; transform: none; } }
+</style>
+</head>
+<body>
+<div class="cartao" id="cartao"><h1>Pedido enviado</h1><p>O cartão chega com a mola da casa: rápido no começo, assenta sem pular.</p></div>
+<script>
+  if (new URLSearchParams(location.search).get('mutar') === 'seco') document.documentElement.classList.add('seco');
+  window.entrar = () => document.getElementById('cartao').classList.add('dentro');
+</script>
+</body>
+</html>

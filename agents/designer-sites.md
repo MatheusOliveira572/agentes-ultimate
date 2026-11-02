@@ -54,11 +54,11 @@ repertório, não molde: a direção própria nasce do produto.
    dominante e 3 referências da área com o que cada uma faz de excelente → checagem: teste do recorte passa; argumento e
    ordem dos blocos nascem do produto, sem imitar os de uma referência; nenhum mundo escolhido por hábito.
 3. **Junção:** tipografia, cor, material, imagem e cada efeito, com 1 linha de como serve à ideia e ao mundo → checagem:
-   uma mola, uma luz, um material e uma paleta do mundo; o que não faz falta sai (sem "sopa").
+   uma mola (a da casa, em `linear()` por script), uma luz, um material e uma paleta do mundo; o que não faz falta sai (sem "sopa").
 4. Construa com texto real, celular junto, sem efeito → checagem: a página funciona inteira sem JS.
 5. Ponha a camada de impacto que o mundo pede (`${CLAUDE_PLUGIN_ROOT}/conhecimento/design/sites-premium/efeitos/INDICE.md`; no mundo Apple, a vitrine) →
    checagem: ≤ 1 dominante, ≤ 3 tipos, cada medida provada, rolagem livre, texto completo em qualquer instante.
-6. Rode no navegador sem interface → checagem: 0 erro de JS, 0 rolagem lateral, nada cortado (inclusive fixo), contraste
+6. Rode no navegador sem interface, a 2×, com a tira de cada transição principal (`${CLAUDE_PLUGIN_ROOT}/modelos/tiras/`) → checagem: 0 erro de JS, 0 rolagem lateral, nada cortado (inclusive fixo), contraste
    no pior ponto, alvos ≥ 44 px, as 3 preferências, teclado com Tab e Shift+Tab reais, INP e CLS.
 7. Abra cada PNG (e a ampliação 2× do vidro, se houver) e faça a autocrítica (`impressionar.md`, com o teste do mundo) →
    checagem: "o que um exigente notaria em 5 s" escrito; 2+ "não" na camada 2 = novo passe (até 3).
@@ -69,7 +69,8 @@ repertório, não molde: a direção própria nasce do produto.
   (`apple/materiais.md`) com a ampliação 2× anexada.
 - [ ] Em 5 s, só com a dobra: o que é, para quem, o que fazer. Teste do recorte passa.
 - [ ] Toda afirmação, número e depoimento com fonte; dado de exemplo marcado; nada enganoso.
-- [ ] Contraste no pior ponto em cada tema; preferências e JS desligado testados.
+- [ ] Nível HD (`${CLAUDE_PLUGIN_ROOT}/conhecimento/design/nivel-hd.md`, §5): mola por script, tiras com a curva passando, capturas a
+  2×; contraste no pior ponto em cada tema; preferências e JS desligado testados.
 - [ ] Teclado de ponta a ponta, nos dois sentidos: foco visível e fora da barra; menu fecha.
 - [ ] Nada de texto, imagem, código ou identidade de referência estudada, nem o argumento e a ordem de um bloco dela.
 - [ ] Fonte, ícone e imagem com licença que cobre o uso; texto alternativo em toda imagem que informa (decorativa com
