@@ -222,7 +222,8 @@ cria memória na sua pasta de usuário nem na raiz do disco.
     não pergunta nada: o segredo chega ao remoto, e o depois só avisa "já foi publicado: troque a chave". Fora da pasta da sessão, nada é
     lido: o depois fica calado e o push só pergunta "não conferido".
   - Arquivo em UTF-16 (o que o Windows PowerShell 5.1 grava com `>` e `>>`) não é lido: passa pelas 3 barreiras.
-  - Formas pouco comuns de commit perguntam mesmo sem segredo (`git rm`, `git mv`, `checkout -b`, "R$5" na mensagem, `--trailer`,
+  - Formas pouco comuns de commit perguntam mesmo sem segredo (`git rm`, `git mv`, `checkout -b`, `switch -c`, `npm test && git commit`,
+    `commit -S`, "R$5" na mensagem, `--trailer`,
     caminho com barra invertida sem aspas no PowerShell, `| Out-Null`).
   - Em repositório grande (1º push de um projeto com histórico), a leitura passa do prazo de 7 s e vira a pergunta genérica "não deu
     para conferir".
