@@ -1,5 +1,8 @@
 # Revisão independente da 0.8.0, parte A (regras dos 2 checklists)
 
+> **Situação atual: pode publicar NÃO** (2ª rodada, 2026-11-02, seção no fim deste arquivo): 1 Bloqueante e 3 Altos abertos.
+> O texto logo abaixo é da 1ª rodada.
+
 **Pode publicar: NÃO.** Há 1 achado Alto aberto (A-1): a trava de segredo não vê o caso mais comum de commit de um agente,
 `git add` e `git commit` no mesmo comando. Provado no Claude Code real: o segredo foi para o commit.
 
@@ -210,3 +213,166 @@ Mutante R1 pego. Como os demais, o eval está como "não rodado".
 5. Rode `/checklist-lancamento` num painel de verdade e diga se as perguntas e o relatório fazem sentido no seu dia a dia.
 
 Placar: autor=engenheiro-software cod=sem-codigo veredito=não B=0 A=1 M=4 b=7 ids=A-1,M-1,M-2,M-3,M-4,b-1,b-2,b-3,b-4,b-5,b-6,b-7
+
+## 2ª rodada (2026-11-02)
+
+**Pode publicar: NÃO.**
+- **Bloqueante B-1:** a correção do A-1 faz a trava rodar texto do comando antes da permissão. No Claude Code real, a permissão foi
+  negada e o comando embutido rodou mesmo assim.
+- **Alto A-2:** a mesma correção abriu um furo novo. `git commit -m x 2>&1`, forma comum de agente, era barrado e agora leva o segredo.
+- **Alto A-3:** arquivo com acento no nome não é lido quando o `git add` vai no mesmo comando.
+
+As 8 formas pedidas no A-1 estão barradas. O que foi corrigido em M-2, M-3, M-4, b-2, b-3, b-4, b-5, b-7 e no `windowsHide` se sustenta.
+
+- Revisor: `revisor`. Revisado: cópia `git archive` do 9974b28, que era o HEAD no início. O HEAD atual, 71eacea, não muda `hooks/travas.js`,
+  `scripts/testar-travas.js` nem `scripts/chamadas-processo.js`. Comparação com o código anterior: 13d4afd.
+- Bateria sem cache: 383 ok, 0 falha. Com `AGENTES_ULTIMATE_SEM_PASTA=1`: 383 ok, 0 falha. `validar.js`: 0 erro, 0 aviso.
+- A bateria passa com tudo isso aberto: nenhum caso dela cobre as formas abaixo.
+
+### Passe de veredito
+| Id | Veredito | Prova |
+|---|---|---|
+| A-1 | **parcial** | As 8 formas pedidas: barradas no gancho e, em 7 delas, no `claude -p`. Restam 11 formas em que o segredo entra (tabela abaixo) |
+| M-1 | **parcial** | 32 MB e 72 MB perguntam, sem passar calado. Se o gancho passa de 10 s, o segredo ainda entra sem aviso (2 provas reais) |
+| M-2 | resolvido | Marcador com crase, ponto e parêntese e chave só com "x" passam; `localhost` e `myPassword` perguntam. Efeito colateral em b-8 |
+| M-3 | resolvido | Árvore inteira do HEAD num repositório novo (297 arquivos): passa, sem bloqueio nem pergunta, em 3,4 s (preparada) e 7,3 s (`git add -A`, máquina ocupada). CHANGELOG corrigido |
+| M-4 | resolvido | Tirar cada um dos 6 formatos derruba a bateria da trava: pegou 6 de 6 |
+| b-1 | **parcial** | ADO com a senha antes do servidor bloqueia e `API_KEY=` pergunta. Sem aspas, `aws_secret_access_key` e `api_key` minúsculo passam; o caso do autor só testou com aspas |
+| b-2 | resolvido | "-a" no texto da mensagem não varre o não preparado. UUID atribuído a `token` só pergunta, como aceito |
+| b-3 | resolvido | Os 2 casos existem e passam. Conferem o texto da skill, não o comportamento |
+| b-4 | resolvido | 383 ok com a variável no ambiente |
+| b-5 | resolvido | Registro no topo da proposta. A confirmação de autoria do usuário não é verificável por mim (lista do usuário) |
+| b-6 | **parcial** | O eval aponta para o S-12, com a frase repetida. O G4 do CHANGELOG ainda atribui os campos ao agente, e o agente não cita S-12 nem os campos: o caso 8 cobra o que ele não tem |
+| b-7 | resolvido | O CHANGELOG explica as 2 mensagens, sem reescrever o histórico |
+
+### Achados abertos
+| Id | Gravidade | Achado | Dono |
+|---|---|---|---|
+| B-1 | Bloqueante | O gancho roda texto do comando avaliado, antes da permissão (regressão) | `engenheiro-software` |
+| A-1 | Alto | Ainda há formas de preparar ou commitar que a trava não vê | `engenheiro-software` |
+| A-2 | Alto | Redirecionamento e prefixo antes do `git` fazem o commit passar (regressão) | `engenheiro-software` |
+| A-3 | Alto | Nome de arquivo com acento: conteúdo e nome sensível não são lidos | `engenheiro-software` |
+| M-1 | Médio | Gancho acima de 10 s é encerrado e o commit segue sem aviso | `engenheiro-software` |
+| M-5 | Médio | 6 mutantes reais escapam da bateria da trava | `engenheiro-software` |
+| b-1 | Baixo | Segredo sem aspas em minúsculas passa, inclusive no formato do arquivo de credenciais da AWS | `engenheiro-software` |
+| b-6 | Baixo | Campos do log: CHANGELOG e eval não batem com o agente | `engenheiro-software` |
+| b-8 | Baixo | Afrouxamentos do M-2: 3 casos de senha real (regressão) | `engenheiro-software` |
+| b-9 | Baixo | `windowsHide`: furos do detector e 6 chamadas fora do que ele olha | `engenheiro-software` |
+
+### B-1 · Bloqueante · a trava roda texto do comando
+`conteudoDoCommit` monta a linha com `JSON.stringify` e chama `execSync`, que passa pelo `cmd.exe`. Aspas dentro de um caminho encerram o texto, e o que vem depois vira comando.
+
+Prova no Claude Code real, sem permissão para a ferramenta Bash, com o comando `` git commit -m x 'q" & echo pego > INJETADO.txt & "' ``:
+- retorno da ferramenta: "This command requires approval", com o comando na lista de negados e nenhum commit;
+- **o arquivo `INJETADO.txt` foi criado**, e o agente relatou que nada tinha sido criado;
+- o gancho sozinho, em `git commit` e em `git add`, cria o arquivo; com caminho comum, não. Na versão 13d4afd essas chamadas não recebiam texto do comando.
+
+**Por que é Bloqueante:** quem consegue propor um comando, por exemplo por injeção de prompt, roda o que quiser sem a pergunta de permissão.
+
+[HIPÓTESE, não testada aqui] Em Linux e macOS, `$(...)` no caminho também executa, porque continua entre aspas duplas. A marca de "pergunta" não impede: o texto é usado antes de a pergunta sair.
+
+**Correção sugerida:** `execFileSync('git', [args])`, sem shell, e um caso para aspas no caminho de `git add` e de `git commit`.
+
+### A-2 · Alto · redirecionamento e prefixo (regressão)
+O leitor de comando novo trata `2>` como caminho do commit, então o `git diff` olha um caminho que não existe e volta vazio. Ele também só reconhece o `git` como primeira palavra. As 10 formas abaixo eram barradas no 13d4afd com o arquivo preparado e agora passam, conferidas rodando o comando de verdade:
+
+- `git commit -m x 2>&1`, `2>/dev/null`, `> log.txt` e `2>&1 | tail -3`;
+- `VAR=x git commit`, `env git commit`, `command git commit`, `if git commit ...`, `timeout 60 git commit`, `! git commit`.
+
+Com `git add` junto, também passam `git add -A 2>&1 && git commit -m x 2>&1`, `git add -A > /dev/null && git commit -m x` e `git add -A && if true; then git commit -m x; fi` (estas 3 já passavam antes).
+
+**Prova no `claude -p`:** `git commit -m x 2>&1`, `git add -A 2>&1 && git commit -m x 2>&1` e `GIT_AUTHOR_NAME=x git commit -m x` levaram o segredo para o commit.
+
+**Correção sugerida:** tirar redirecionamentos na leitura e achar o `git` depois de atribuições, `env`, `command`, `if`, `then`, `!` e `timeout`. **Na dúvida, perguntar:** se a palavra `commit` aparece e o plano não reconheceu nenhum commit, a trava não pode ficar calada.
+
+### A-3 · Alto · nome com acento
+`git ls-files` e `git diff --name-only` devolvem nome com acento entre aspas e em octal (`"configura\303\247..."`), por causa do padrão `core.quotepath`. O `statSync` falha, o `catch` engole o erro e o arquivo não é lido. O nome sensível também não casa, porque sobra a aspa no fim.
+
+| Caso, com `git add -A && git commit -m x` (ou o nome no add) | Resultado |
+|---|---|
+| Arquivo `configuração.js` | segredo no commit |
+| Arquivo em pasta `área/` | segredo no commit |
+| `.env` em pasta `área/` | arquivo no commit |
+
+**Prova no `claude -p`:** o segredo foi para o commit. Em projeto em português isso é comum.
+
+**Correção sugerida:** usar `-z` nas listas de nomes (ou `core.quotepath=false`) e tratar o `+++` com aspas do diff. Se não conseguir ler o arquivo, perguntar em vez de ignorar.
+
+### A-1 · o que resta
+Todas com o segredo no commit, rodando o comando de verdade (11 formas):
+| Forma | Causa |
+|---|---|
+| `git -C sub add . && git commit`, `cd sub && git add . && cd .. && git commit`, `git add -A && cd sub && git commit` | o add só conta se foi na mesma pasta do commit |
+| `Push-Location <repo>; git commit` | só `cd`, `chdir`, `Set-Location`, `sl` e `pushd` são lidos |
+| `cd /pasta\ com\ espaco && git commit` | a barra antes do espaço não é lida, a pasta não existe e o erro vira "sem conteúdo" |
+| `echo novo.js \| xargs git add && git commit` | `xargs` não é lido |
+| `git -c alias.k=commit k -am x`, `git config alias.ci commit && git ci -am x` | alias não é lido |
+| `eval "git add -A && git commit -m x"` | `eval` não é lido |
+| `git add -f build && git commit` | pasta ignorada forçada: só o nome da pasta é tentado |
+| Heredoc com `&& git add -A && git commit` na mesma linha do `<<EOF` | o resto da linha sai junto com o heredoc |
+
+**`git add -A && git commit -m x && git push`:** a trava só pergunta sobre publicar, sem ler o commit, porque a checagem de push vem antes. Quem confirma envia o segredo. Já era assim no 13d4afd, mas é a forma mais grave: ler o commit antes da pergunta de push.
+
+### M-1 · o gancho ainda pode estourar 10 s
+| Tamanho (árvore do MVP, segredo no último arquivo) | Gancho | Resultado |
+|---|---|---|
+| ×1, 8,0 MB | 3,6 s | bloqueia |
+| ×2, 16,1 MB | 6,8 s | bloqueia |
+| ×3, 24,1 MB | 7,3 s | pergunta |
+| ×4, 32,2 MB | 7,4 s | pergunta; no `claude -p`, nada foi para o commit |
+| ×9, 72,3 MB | 8,3 s | pergunta; no `claude -p`, nada foi para o commit |
+
+O caso medido na 1ª rodada está resolvido. Os prazos não cobrem operações que não podem ser interrompidas:
+- **Arquivo novo recém-escrito.** Nesta máquina, a 1ª leitura de um arquivo de 5 MB com texto de código levou 176 e 204 s, e a 2ª levou 0,00 s. A causa provável é o antivírus [HIPÓTESE: o tempo medido é da leitura; o antivírus como causa não foi confirmado]. O `readFileSync` trava o gancho. **No `claude -p`, com `git add -A && git commit`, o segredo foi para o commit.** Com 1 MB, a mesma leitura levou 9,8 s.
+- **Linha única de 23 MB com `Host=a;`:** o gancho leva 12,0 s, porque o prazo só é conferido entre regras. **No `claude -p`, o segredo foi para o commit.** Esse arquivo é improvável; o caso prova o mecanismo.
+
+**Correção sugerida:** rodar a leitura num processo filho com prazo, e o pai pergunta quando o prazo vence.
+
+### M-5 · mutação na trava: pegou 18 de 26
+- Mutação geral em `hooks/travas.js`: 12 de 20. Formatos de chave: 6 de 6. Controle sem mudança: 56 ok.
+- **Escaparam, e são reais (6):**
+  - `git add -f` ignorado;
+  - `git add -u` levando não rastreado;
+  - estouro do buffer sem marcar leitura incompleta: é o caminho acima de 25 MB, nenhum caso passa dele;
+  - prazo de leitura ignorado;
+  - número da linha errado na mensagem;
+  - heredoc sem tratamento: o caso existente põe o texto depois do commit e passaria de qualquer jeito.
+- **Escaparam, mas não são defeito (2):** `--include` ignorado, porque o caminho é lido do mesmo jeito; e o filtro de pasta do add removido, que é justamente a direção da correção do A-1.
+
+### Baixos novos
+- **b-8 (regressão do M-2),** todos barrados no 13d4afd:
+  - senha que começa com barra invertida agora **passa**, porque `limpaValor` corta tudo depois da barra e sobra vazio;
+  - `@localhost.empresa.com` só pergunta, porque o nome é testado só pelo começo;
+  - servidor real com `localhost` em outro ponto da linha só pergunta.
+  - Senha que começa com `$` passa, mas já passava antes.
+- **b-9 (`windowsHide`),** ver abaixo.
+
+### `windowsHide`
+- **Em `hooks/` e `scripts/`, nenhuma chamada ficou sem a opção.** Conferi de 2 jeitos:
+  - detector sobre a árvore inteira: 0 nessas pastas;
+  - registro em tempo de execução com a bateria inteira, envolvendo `child_process`: 0 chamadas sem a opção. O registro acusou a chamada sem a opção no controle positivo. Ele só vê processos que herdam `NODE_OPTIONS`. Com ele ligado, 2 casos do abrir sozinho falham (381 ok); sem ele, 383 ok. Atribuo a falha ao registro.
+- **A regra falha sem a opção:** tirar a opção de `travas.js`, `checar-ferramenta.js` e `grafo.js` dá erro no `validar.js`, com arquivo e linha. Subpasta de `scripts/` também é varrida.
+- **Furos do detector (b-9):**
+  - aceita `windowsHide: false`, a palavra em comentário e a palavra em texto;
+  - não vê `require('child_process').exec(`, nem função renomeada;
+  - pula sem aviso quando não acha o fechamento da chamada: apóstrofo em comentário ou parêntese em regex;
+  - não olha `modelos/` nem `ferramentas/`: há 6 chamadas sem a opção em `ferramentas/teardown` (`scripts/check-viewer.cjs`, `commands.cjs`, `proof.cjs`), que podem abrir janela no Windows quando a ferramenta roda [HIPÓTESE, não testada]. O detector também aponta `assets/flipbook.js`, mas ali `spawn` é função local, não processo.
+
+### Regressões causadas pelas correções
+1. **B-1:** a trava executa texto do comando (A-1, 6d566bc).
+2. **A-2:** 10 formas barradas antes passam agora (A-1, 6d566bc).
+3. **b-8:** 3 casos de senha real ficaram mais fracos (M-2, 9fd2b43).
+
+### Não verificado
+- Linux e macOS: tudo rodou no Windows.
+- A autoria dos PDFs (b-5).
+- A causa do tempo de leitura (antivírus).
+
+### Lista do usuário (depois de corrigir B-1, A-1, A-2 e A-3)
+1. Confirme que os 2 PDFs são seus (D-1): o registro diz que sim, e eu não tenho como conferir.
+2. Numa sessão com a nova versão, peça um commit com `git add -A`, `2>&1` e um arquivo de chave falsa com acento no nome: deve bloquear, dizer arquivo e linha, e não mostrar o valor.
+3. Peça `git add -A && git commit -m x && git push` com essa chave falsa: deve bloquear pelo segredo, antes de perguntar sobre publicar.
+4. Peça um commit de um README com um texto de conexão de exemplo entre crases, com `<senha>`: deve passar.
+5. Rode `/checklist-lancamento` num painel de verdade e diga se as perguntas e o relatório fazem sentido no seu dia a dia.
+
+Placar: autor=engenheiro-software cod=sem-codigo veredito=não B=1 A=3 M=2 b=4 ids=B-1,A-1,A-2,A-3,M-1,M-5,b-1,b-6,b-8,b-9
