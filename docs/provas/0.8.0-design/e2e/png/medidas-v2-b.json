@@ -1,10 +1,11 @@
 {
-  "data": "2026-11-02T20:44:42.814Z",
+  "data": "2026-11-02T21:46:57.170Z",
   "totalErros": 0,
   "relatorio": [
     {
       "caso": "caso-b-produto-v2-claro-1440",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 2,
       "piorTexto": {
@@ -15,112 +16,113 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 12.35,
+          "pior": 13.78,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 12.9,
+          "pior": 14.68,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 8.39,
+          "pior": 9.94,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 13.12,
+          "pior": 14.14,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 8.78,
-          "min": 4.5
-        },
-        {
-          "txt": "Pessoas9",
-          "pior": 13.52,
-          "min": 4.5
-        },
-        {
-          "txt": "9",
-          "pior": 9.15,
-          "min": 4.5
-        },
-        {
-          "txt": "Álbuns fixados",
           "pior": 10.1,
           "min": 4.5
         },
         {
+          "txt": "Pessoas9",
+          "pior": 13.78,
+          "min": 4.5
+        },
+        {
+          "txt": "9",
+          "pior": 9.97,
+          "min": 4.5
+        },
+        {
+          "txt": "Álbuns fixados",
+          "pior": 9.41,
+          "min": 4.5
+        },
+        {
           "txt": "Viagem ao litoral24",
-          "pior": 13.86,
+          "pior": 12.88,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 8.13,
+          "pior": 7.67,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 14.45,
+          "pior": 12.18,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 10.07,
+          "pior": 8.49,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 10.66,
+          "pior": 11.46,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 7.19,
+          "pior": 8.07,
           "min": 4.5
         },
         {
           "txt": "Apresentação",
-          "pior": 10.32,
+          "pior": 6.02,
           "min": 4.5
         },
         {
           "txt": "Selecionar",
-          "pior": 13.85,
+          "pior": 9.12,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 17.7,
+          "pior": 3.87,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 19.04,
+          "pior": 8.69,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 19.11,
+          "pior": 10.81,
           "min": 4.5
         },
         {
-          "txt": "Imagens ilustrativas geradas p",
-          "pior": 19.19,
+          "txt": "Imagens renderizadas por códig",
+          "pior": 9.03,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.03) capsula redonda lg:escuro(0.03)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.23) capsula redonda lg:escuro(0.16)",
       "png": "caso-b-produto-v2-claro-1440.png"
     },
     {
       "caso": "caso-b-produto-v2-claro-390",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 2,
       "piorTexto": {
@@ -131,62 +133,63 @@
       "vidro": [
         {
           "txt": "Selecionar",
-          "pior": 11.6,
+          "pior": 16.71,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 17.67,
+          "pior": 3.56,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 18.73,
+          "pior": 5.6,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 18.89,
+          "pior": 5.78,
           "min": 4.5
         },
         {
-          "txt": "Imagens ilustrativas geradas p",
-          "pior": 19.14,
+          "txt": "Imagens renderizadas por códig",
+          "pior": 7.46,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 4.76,
+          "pior": 6.21,
           "min": 4.5
         },
         {
           "txt": "1 de outubro",
-          "pior": 9.02,
+          "pior": 9.83,
           "min": 4.5
         },
         {
           "txt": "Fotos",
-          "pior": 17.75,
+          "pior": 9.42,
           "min": 4.5
         },
         {
           "txt": "Álbuns",
-          "pior": 17.97,
+          "pior": 16.93,
           "min": 4.5
         },
         {
           "txt": "Pessoas",
-          "pior": 8.89,
+          "pior": 9.08,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:escuro(0.04) Ações do álbum:escuro(0.05) capsula redonda lg:escuro(0.04) Seções:escuro+misto(0.14) Buscar:claro+misto(0.71)",
+      "tons": "capsula redonda lg:escuro(0.19) Ações do álbum:claro+misto(0.50) capsula redonda lg:escuro(0.19) Seções:escuro+misto(0.26) Buscar:claro(0.59)",
       "png": "caso-b-produto-v2-claro-390.png"
     },
     {
       "caso": "caso-b-produto-v2-escuro-1440",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 2,
       "piorTexto": {
@@ -197,112 +200,113 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 5.81,
+          "pior": 4.99,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 6.07,
+          "pior": 5.13,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 9.03,
+          "pior": 7.41,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 6.25,
+          "pior": 5.7,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 9.37,
+          "pior": 7.85,
           "min": 4.5
         },
         {
           "txt": "Pessoas9",
-          "pior": 6.31,
+          "pior": 6.21,
           "min": 4.5
         },
         {
           "txt": "9",
-          "pior": 9.42,
+          "pior": 8.55,
           "min": 4.5
         },
         {
           "txt": "Álbuns fixados",
-          "pior": 5.55,
+          "pior": 6,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral24",
-          "pior": 6.76,
+          "pior": 7.61,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 7.14,
+          "pior": 7.74,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 7.08,
+          "pior": 8.74,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 8.42,
+          "pior": 10.51,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 11.27,
+          "pior": 9.91,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 13.61,
+          "pior": 12,
           "min": 4.5
         },
         {
           "txt": "Apresentação",
-          "pior": 10.32,
+          "pior": 6.02,
           "min": 4.5
         },
         {
           "txt": "Selecionar",
-          "pior": 13.85,
+          "pior": 9.12,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 17.7,
+          "pior": 3.87,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 19.04,
+          "pior": 8.69,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 19.11,
+          "pior": 10.81,
           "min": 4.5
         },
         {
-          "txt": "Imagens ilustrativas geradas p",
-          "pior": 19.19,
+          "txt": "Imagens renderizadas por códig",
+          "pior": 9.03,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.03) capsula redonda lg:escuro(0.03)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.23) capsula redonda lg:escuro(0.16)",
       "png": "caso-b-produto-v2-escuro-1440.png"
     },
     {
       "caso": "caso-b-produto-v2-escuro-390",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 2,
       "piorTexto": {
@@ -313,62 +317,63 @@
       "vidro": [
         {
           "txt": "Selecionar",
-          "pior": 11.6,
+          "pior": 16.71,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 17.67,
+          "pior": 3.56,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 18.73,
+          "pior": 5.6,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 18.89,
+          "pior": 5.78,
           "min": 4.5
         },
         {
-          "txt": "Imagens ilustrativas geradas p",
-          "pior": 19.14,
+          "txt": "Imagens renderizadas por códig",
+          "pior": 7.46,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 4.76,
+          "pior": 6.21,
           "min": 4.5
         },
         {
           "txt": "1 de outubro",
-          "pior": 9.02,
+          "pior": 9.83,
           "min": 4.5
         },
         {
           "txt": "Fotos",
-          "pior": 17.75,
+          "pior": 9.42,
           "min": 4.5
         },
         {
           "txt": "Álbuns",
-          "pior": 17.97,
+          "pior": 16.93,
           "min": 4.5
         },
         {
           "txt": "Pessoas",
-          "pior": 8.9,
+          "pior": 9.09,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:escuro(0.03) Ações do álbum:escuro(0.04) capsula redonda lg:escuro(0.04) Seções:escuro+misto(0.14) Buscar:claro+misto(0.71)",
+      "tons": "capsula redonda lg:escuro(0.19) Ações do álbum:claro+misto(0.50) capsula redonda lg:escuro(0.19) Seções:escuro+misto(0.26) Buscar:claro(0.59)",
       "png": "caso-b-produto-v2-escuro-390.png"
     },
     {
       "caso": "caso-b-produto-v2-escuro-390-rolado",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 2,
       "piorTexto": {
@@ -379,27 +384,28 @@
       "vidro": [
         {
           "txt": "Selecionar",
-          "pior": 12.36,
+          "pior": 13.9,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 4.76,
+          "pior": 6.21,
           "min": 4.5
         },
         {
           "txt": "1 de outubro",
-          "pior": 9.02,
+          "pior": 9.83,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "capsula redonda lg:claro(0.63) Ações do álbum:claro+misto(0.42) capsula redonda lg:escuro(0.08) Seções:claro+misto(0.47) Buscar:claro+misto(0.47)",
+      "tons": "capsula redonda lg:claro(0.64) Ações do álbum:claro+misto(0.59) capsula redonda lg:escuro(0.16) Seções:claro+misto(0.32) Buscar:claro+misto(0.35)",
       "png": "caso-b-produto-v2-escuro-390-rolado.png"
     },
     {
       "caso": "caso-b-produto-v2-claro-1440-rolado",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 4,
       "piorTexto": {
@@ -410,112 +416,113 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 16.64,
+          "pior": 17.49,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 17.11,
+          "pior": 17.79,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 11.88,
+          "pior": 12.23,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 16.63,
+          "pior": 17.79,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 11.82,
+          "pior": 12.15,
           "min": 4.5
         },
         {
           "txt": "Pessoas9",
-          "pior": 14.95,
+          "pior": 17.79,
           "min": 4.5
         },
         {
           "txt": "9",
-          "pior": 10.54,
+          "pior": 12.24,
           "min": 4.5
         },
         {
           "txt": "Álbuns fixados",
-          "pior": 10.15,
+          "pior": 12.74,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral24",
-          "pior": 13.22,
+          "pior": 17.23,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 7.75,
+          "pior": 9.74,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 15.79,
+          "pior": 17.84,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 10.83,
+          "pior": 12.14,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 16.32,
+          "pior": 17.83,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 11.39,
+          "pior": 12.13,
           "min": 4.5
         },
         {
           "txt": "Apresentação",
-          "pior": 7.69,
+          "pior": 17.45,
           "min": 4.5
         },
         {
           "txt": "Selecionar",
-          "pior": 15.09,
+          "pior": 11.8,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 6.84,
+          "pior": 8.26,
           "min": 4.5
         },
         {
           "txt": "1 de outubro",
-          "pior": 10.2,
+          "pior": 10.62,
           "min": 4.5
         },
         {
           "txt": "Trilha",
-          "pior": 11.77,
+          "pior": 18.72,
           "min": 4.5
         },
         {
           "txt": "11 de outubro",
-          "pior": 15.13,
+          "pior": 19.33,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.14) capsula redonda lg:escuro(0.02)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:claro+misto(0.39) capsula redonda lg:escuro(0.01)",
       "png": "caso-b-produto-v2-claro-1440-rolado.png"
     },
     {
       "caso": "caso-b-produto-v2-escuro-1440-rolado",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 4,
       "piorTexto": {
@@ -526,112 +533,113 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 4.48,
+          "pior": 4.22,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 5.08,
+          "pior": 4.53,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 7.43,
+          "pior": 6.78,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 5.72,
+          "pior": 4.8,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 8.88,
+          "pior": 7.58,
           "min": 4.5
         },
         {
           "txt": "Pessoas9",
-          "pior": 5.83,
+          "pior": 5.04,
           "min": 4.5
         },
         {
           "txt": "9",
-          "pior": 9.28,
+          "pior": 8.45,
           "min": 4.5
         },
         {
           "txt": "Álbuns fixados",
-          "pior": 5.24,
+          "pior": 4.65,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral24",
-          "pior": 6.55,
+          "pior": 5.83,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 6.65,
+          "pior": 6.68,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 6.92,
+          "pior": 6.22,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 8.65,
+          "pior": 8.1,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 7.69,
+          "pior": 6.7,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 9.59,
+          "pior": 8.97,
           "min": 4.5
         },
         {
           "txt": "Apresentação",
-          "pior": 8.2,
+          "pior": 6.83,
           "min": 4.5
         },
         {
           "txt": "Selecionar",
-          "pior": 12.48,
+          "pior": 9.61,
           "min": 4.5
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 6.84,
+          "pior": 8.26,
           "min": 4.5
         },
         {
           "txt": "1 de outubro",
-          "pior": 10.2,
+          "pior": 10.62,
           "min": 4.5
         },
         {
           "txt": "Trilha",
-          "pior": 11.77,
+          "pior": 18.72,
           "min": 4.5
         },
         {
           "txt": "11 de outubro",
-          "pior": 15.13,
+          "pior": 19.33,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.11) capsula redonda lg:escuro(0.01)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.30) capsula redonda lg:escuro(0.17)",
       "png": "caso-b-produto-v2-escuro-1440-rolado.png"
     },
     {
       "caso": "caso-b-produto-v2-escuro-1440-teclado-reduzido",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 2,
       "piorTexto": {
@@ -642,112 +650,165 @@
       "vidro": [
         {
           "txt": "Fotos",
-          "pior": 5.81,
+          "pior": 4.99,
           "min": 3
         },
         {
           "txt": "Fotos3.418",
-          "pior": 6.07,
+          "pior": 5.13,
           "min": 4.5
         },
         {
           "txt": "3.418",
-          "pior": 9.03,
+          "pior": 7.41,
           "min": 4.5
         },
         {
           "txt": "Álbuns12",
-          "pior": 6.25,
+          "pior": 5.7,
           "min": 4.5
         },
         {
           "txt": "12",
-          "pior": 9.37,
+          "pior": 7.85,
           "min": 4.5
         },
         {
           "txt": "Pessoas9",
-          "pior": 6.31,
+          "pior": 6.21,
           "min": 4.5
         },
         {
           "txt": "9",
-          "pior": 9.42,
+          "pior": 8.55,
           "min": 4.5
         },
         {
           "txt": "Álbuns fixados",
-          "pior": 5.55,
+          "pior": 6,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral24",
-          "pior": 6.76,
+          "pior": 7.61,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 7.14,
+          "pior": 7.74,
           "min": 4.5
         },
         {
           "txt": "Família312",
-          "pior": 7.08,
+          "pior": 8.74,
           "min": 4.5
         },
         {
           "txt": "312",
-          "pior": 8.42,
+          "pior": 10.51,
           "min": 4.5
         },
         {
           "txt": "Receitas58",
-          "pior": 11.27,
+          "pior": 9.91,
           "min": 4.5
         },
         {
           "txt": "58",
-          "pior": 13.61,
+          "pior": 12,
           "min": 4.5
         },
         {
           "txt": "Apresentação",
-          "pior": 10.32,
+          "pior": 6.02,
           "min": 4.5
         },
         {
           "txt": "Selecionar",
-          "pior": 13.85,
+          "pior": 9.12,
           "min": 4.5
         },
         {
           "txt": "Viagem ao litoral",
-          "pior": 17.7,
+          "pior": 3.87,
           "min": 3
         },
         {
           "txt": "1 a 24 de outubro · 24 fotos ·",
-          "pior": 19.04,
+          "pior": 8.69,
           "min": 4.5
         },
         {
           "txt": "24",
-          "pior": 19.11,
+          "pior": 10.81,
           "min": 4.5
         },
         {
-          "txt": "Imagens ilustrativas geradas p",
-          "pior": 19.19,
+          "txt": "Imagens renderizadas por códig",
+          "pior": 9.03,
           "min": 4.5
         }
       ],
       "backdrop": "lg-lente | url(\"#lg-1\")",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.03) capsula redonda lg:escuro(0.03)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.23) capsula redonda lg:escuro(0.16)",
       "teclado": "Pular para as fotos → Trilha, 3 de outubro (solid 2px, legenda 1); animações com redução: 0"
+    },
+    {
+      "caso": "caso-b-produto-v2-escuro-1440-visor",
+      "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
+      "visor": "Pôr do sol; continuidade: 7 animações; foco: Fechar a foto; Esc → Pôr do sol, 4 de outubro",
+      "avisos": [],
+      "pares": 0,
+      "piorTexto": {
+        "r": 99
+      },
+      "vidro": [
+        {
+          "txt": "Pôr do sol",
+          "pior": 7.98,
+          "min": 4.5
+        },
+        {
+          "txt": "4 de outubro de 2026",
+          "pior": 13.59,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "Biblioteca:tema(-) Ações do álbum:escuro(0.10) capsula redonda lg:escuro(0.08) capsula redonda lg:tema(-) capsula lg:tema(-) Ações da foto:tema(-)",
+      "png": "caso-b-produto-v2-escuro-1440-visor.png"
+    },
+    {
+      "caso": "caso-b-produto-v2-claro-390-visor",
+      "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
+      "visor": "Pôr do sol; continuidade: 7 animações; foco: Fechar a foto; Esc → Pôr do sol, 4 de outubro",
+      "avisos": [],
+      "pares": 0,
+      "piorTexto": {
+        "r": 99
+      },
+      "vidro": [
+        {
+          "txt": "Pôr do sol",
+          "pior": 18.53,
+          "min": 4.5
+        },
+        {
+          "txt": "4 de outubro de 2026",
+          "pior": 13.26,
+          "min": 4.5
+        }
+      ],
+      "backdrop": "lg-lente | url(\"#lg-1\")",
+      "tons": "capsula redonda lg:tema(-) Ações do álbum:tema(-) capsula redonda lg:tema(-) capsula redonda lg:tema(-) capsula lg:tema(-) Ações da foto:tema(-) Seções:claro+misto(0.56) Buscar:claro+misto(0.50)",
+      "png": "caso-b-produto-v2-claro-390-visor.png"
     },
     {
       "caso": "caso-b-produto-v2-claro-1440-transparencia-reduzida",
       "erros": [],
+      "titulo": "Viagem ao litoral · Fotos",
       "avisos": [],
       "pares": 4,
       "piorTexto": {
@@ -838,27 +899,27 @@
         },
         {
           "txt": "Praia ao nascer do sol",
-          "pior": 6.84,
+          "pior": 8.26,
           "min": 4.5
         },
         {
           "txt": "1 de outubro",
-          "pior": 10.2,
+          "pior": 10.62,
           "min": 4.5
         },
         {
           "txt": "Trilha",
-          "pior": 11.77,
+          "pior": 18.72,
           "min": 4.5
         },
         {
           "txt": "11 de outubro",
-          "pior": 15.13,
+          "pior": 19.33,
           "min": 4.5
         }
       ],
       "backdrop": " | none",
-      "tons": "Biblioteca:tema(-) Ações do álbum:escuro+misto(0.14) capsula redonda lg:escuro(0.02)",
+      "tons": "Biblioteca:tema(-) Ações do álbum:claro+misto(0.39) capsula redonda lg:escuro(0.01)",
       "png": "caso-b-produto-v2-claro-1440-transparencia-reduzida.png"
     }
   ]

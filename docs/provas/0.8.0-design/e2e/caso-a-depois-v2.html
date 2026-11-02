@@ -1,254 +1,255 @@
 <!doctype html>
-<!-- Caso A, "depois" v2 (pv94, designer-paineis): o mesmo app de tarefas fictício do caso-a-antes.html, redesenhado com uma
-     direção própria. Ideia: "o dia lido como uma linha do tempo, com o agora no meio" + a fita do dia (cada peça é uma
-     tarefa real e clicável). Conteúdo do "antes" mantido: as 6 tarefas, o detalhe e os números 12 tarefas / 5 feitas / 42%
-     (as 6 tarefas que faltavam para 12 são fictícias, marcadas aqui). Hora "agora" fixa em 11:20 para a captura ser
-     reproduzível (num app real vem do relógio). Parâmetros: ?mutar=contagem (erro proposital para o verificador),
-     ?estado=vazio (dia sem tarefas abertas). Direção e régua: LEIA-ME.md e diagnostico.md desta pasta. -->
+<!-- Caso A, "depois" v2 (pv94; acabamento HD em hd103, designer-paineis): o mesmo app de tarefas fictício do caso-a-antes.html.
+     Mundo visual próprio, escolhido pelo produto (uma agenda do dia), e de propósito diferente do caso B (Apple, vidro):
+     AGENDA DE PAPEL editorial e tátil. Ideia: "o dia lido como uma página de agenda, com o agora riscado em caneta vermelha".
+     Conteúdo do "antes" mantido (6 tarefas, detalhe, 12 / 5 / 42%; as 6 que completam 12 são fictícias). Hora "agora" fixa em
+     11:20 para a captura ser reproduzível. ?mutar=contagem (erro proposital) e ?estado=vazio. Molas: gerar-molas.js. -->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <title>Hoje · Tarefas</title>
-<link rel="stylesheet" href="../../../../modelos/liquid-glass/liquido.css">
 <style>
+  /* Mundo visual: AGENDA DE PAPEL (editorial, quente, tátil). Papel com textura, tinta, caneta vermelha para o que pede atenção
+     e marca-texto para a seleção. Serifa Sitka (fonte variável com tamanho óptico) nos títulos e nas tarefas; sem serifa só em
+     rótulos e números de interface. Sem vidro e sem 3D: profundidade de folha sobre a mesa (sombras em camadas, borda fina).
+     Movimento: molas por duração + bounce (gerar-molas.js), só transform e opacity; continuidade da tarefa entre a lista e o
+     detalhe por View Transition. */
   :root {
-    --fonte: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
-    --fonte-exib: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
-    /* Papel e tinta: neutros quentes, um acento (tinta) para ação, seleção e agora; ferrugem só para atraso. */
-    --fundo: #ecebe6; --palco: #faf9f6; --painel: #ffffff; --elevado: #ffffff;
-    --texto: #1b1a17; --texto-2: #57534b; --texto-3: #6b675e;
-    --linha: rgb(27 26 23 / 0.09); --linha-forte: rgb(27 26 23 / 0.16);
-    --tinta: #2b3fc4; --tinta-texto: #ffffff; --tinta-suave: rgb(43 63 196 / 0.09); --tinta-borda: rgb(43 63 196 / 0.28);
-    --atraso: #a8341a; --atraso-suave: rgb(168 52 26 / 0.08);
-    --marcador: #8a857b;
-    --p-aurora: #c75a22; --p-fornec: #23805f; --p-financas: #6b4fc6; --p-plan: #a8860f;
-    --hover: rgb(27 26 23 / 0.045);
-    --vidro: rgb(250 249 246 / 0.74); --vidro-borda: rgb(27 26 23 / 0.10); --vidro-opaco: #faf9f6;
-    --sombra-palco: 0 0 0 1px rgb(27 26 23 / 0.06), 0 1px 2px rgb(27 26 23 / 0.04), 0 12px 32px -8px rgb(27 26 23 / 0.10);
-    --sombra-flutua: 0 1px 2px rgb(27 26 23 / 0.06), 0 10px 30px -6px rgb(27 26 23 / 0.22);
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    /* Mola curta (quique ~7%), em linear(): entrada da lista, troca do detalhe e o círculo ao concluir. */
-    --mola: linear(0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%, 1.017 20.4%, 1.067, 1.077 26.1%, 1.069 28.6%, 1.033 33.5%, 0.997 39.6%, 0.988 44.3%, 0.997 55.6%, 1.001 69.1%, 1);
-    --raio: 14px;
+    --mola-resposta: linear(0, 0.0199, 0.066, 0.1307, 0.2016, 0.2784, 0.3547, 0.4254, 0.4941, 0.5573, 0.6128, 0.6644, 0.7088, 0.7495, 0.7852, 0.8153, 0.8424, 0.8659, 0.8854, 0.9029, 0.9173, 0.9301, 0.941, 0.95, 0.9579, 0.9646, 0.9701, 0.9749, 0.9788, 0.9822, 0.9851, 0.9875, 0.9895, 0.9913, 0.9927, 0.9939, 0.9949, 0.9957, 0.9964, 0.997, 0.9975, 0.9979, 0.9983, 0.9986, 0.9988, 0.999, 0.9992, 0.9993, 1); --mola-resposta-ms: 663ms; /* duração 0.42, bounce 0, assenta em 663 ms, passa -0.1% */
+    --mola-objeto: linear(0, 0.0176, 0.062, 0.1241, 0.197, 0.2752, 0.3547, 0.4326, 0.5067, 0.5759, 0.6391, 0.6961, 0.7468, 0.7914, 0.83, 0.8633, 0.8915, 0.9152, 0.935, 0.9513, 0.9645, 0.9751, 0.9836, 0.9902, 0.9952, 0.999, 1.0017, 1.0036, 1.0049, 1.0056, 1.0059, 1.006, 1.0058, 1.0055, 1.0051, 1.0047, 1.0042, 1.0037, 1.0033, 1.0028, 1.0024, 1.0021, 1.0017, 1.0014, 1.0012, 1.001, 1.0008, 1.0006, 1); --mola-objeto-ms: 744ms; /* duração 0.5, bounce 0.15, assenta em 744 ms, passa 0.6% */
+    --mola-pico: linear(0, 0.023, 0.0795, 0.1609, 0.2536, 0.3548, 0.4538, 0.5513, 0.6395, 0.7212, 0.791, 0.8524, 0.9024, 0.9442, 0.9771, 1.0016, 1.02, 1.0323, 1.0403, 1.0443, 1.0454, 1.0444, 1.0417, 1.0381, 1.0338, 1.0292, 1.0247, 1.0203, 1.0163, 1.0126, 1.0094, 1.0066, 1.0044, 1.0025, 1.001, 0.9999, 0.9991, 0.9985, 0.9982, 0.998, 0.9979, 0.998, 0.9981, 0.9983, 0.9985, 0.9987, 0.9989, 0.9991, 1); --mola-pico-ms: 925ms; /* duração 0.55, bounce 0.3, assenta em 925 ms, passa 4.5% */
+    --serif: "Sitka Text", "Sitka", "Iowan Old Style", "Charter", Georgia, serif;
+    --serif-exib: "Sitka Display", "Sitka Banner", "Sitka", "Iowan Old Style", Georgia, serif;
+    --sans: "Segoe UI Variable Text", "SF Pro Text", -apple-system, "Segoe UI", system-ui, sans-serif;
+    --papel: #efe9dd; --folha: #fbf8f1; --folha-2: #fffdf8;
+    --tinta: #1c1915; --tinta-2: #554d43; --tinta-3: #6a6155;
+    --regra: rgb(28 25 21 / 0.11); --regra-forte: rgb(28 25 21 / 0.22);
+    --caneta: #b8321a; --caneta-suave: rgb(184 50 26 / 0.08);
+    --marca: rgb(245 214 92 / 0.62); --marca-forte: #f2d25a;
+    --hover: rgb(28 25 21 / 0.04);
+    --botao: #1c1915; --botao-texto: #fbf8f1;
+    --sombra-folha: 0 0 0 0.5px rgb(28 25 21 / 0.14), 0 1px 1px rgb(28 25 21 / 0.04), 0 6px 14px -6px rgb(28 25 21 / 0.10), 0 28px 56px -24px rgb(28 25 21 / 0.16);
+    --sombra-tira: 0 0 0 0.5px rgb(28 25 21 / 0.16), 0 1px 2px rgb(28 25 21 / 0.06), 0 10px 24px -10px rgb(28 25 21 / 0.22), 0 32px 60px -30px rgb(28 25 21 / 0.28);
+    --p-aurora: #b85a26; --p-fornec: #3b7a58; --p-financas: #5a4aa0; --p-plan: #94761a;
+    --grao: none;
+    --raio: 6px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --fundo: #0c0c0e; --palco: #141417; --painel: #19191d; --elevado: #222227;
-      --texto: #f1efea; --texto-2: #b3afa7; --texto-3: #9b978f;
-      --linha: rgb(255 255 255 / 0.07); --linha-forte: rgb(255 255 255 / 0.14);
-      --tinta: #9fadff; --tinta-texto: #0d1240; --tinta-suave: rgb(159 173 255 / 0.12); --tinta-borda: rgb(159 173 255 / 0.36);
-      --atraso: #ff9a7a; --atraso-suave: rgb(255 154 122 / 0.09);
-      --marcador: #8f8b83;
-      --p-aurora: #f08a52; --p-fornec: #4cc79a; --p-financas: #a993ff; --p-plan: #e0bd45;
-      --hover: rgb(255 255 255 / 0.04);
-      --vidro: rgb(28 28 32 / 0.72); --vidro-borda: rgb(255 255 255 / 0.10); --vidro-opaco: #1c1c20;
-      --sombra-palco: 0 0 0 1px rgb(255 255 255 / 0.06), 0 12px 32px -8px rgb(0 0 0 / 0.6);
-      --sombra-flutua: 0 0 0 1px rgb(255 255 255 / 0.06), 0 12px 32px -6px rgb(0 0 0 / 0.7);
+      --papel: #12100d; --folha: #1a1713; --folha-2: #201c17;
+      --tinta: #f1e8da; --tinta-2: #c2b6a4; --tinta-3: #a89c8a;
+      --regra: rgb(241 232 218 / 0.09); --regra-forte: rgb(241 232 218 / 0.18);
+      --caneta: #ff8d6e; --caneta-suave: rgb(255 141 110 / 0.09);
+      --marca: rgb(196 160 52 / 0.34); --marca-forte: #c9a63c;
+      --hover: rgb(241 232 218 / 0.04);
+      --botao: #f1e8da; --botao-texto: #1a1713;
+      --p-aurora: #f0955f; --p-fornec: #6cc596; --p-financas: #a998f0; --p-plan: #e2c25a;
+      --sombra-folha: 0 0 0 0.5px rgb(241 232 218 / 0.08), 0 1px 1px rgb(0 0 0 / 0.3), 0 28px 56px -24px rgb(0 0 0 / 0.7);
+      --sombra-tira: 0 0 0 0.5px rgb(241 232 218 / 0.10), 0 10px 24px -10px rgb(0 0 0 / 0.6), 0 32px 60px -30px rgb(0 0 0 / 0.7);
     }
   }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
-  html { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; }
-  body { margin: 0; background: var(--fundo); color: var(--texto); font: 15px/1.45 var(--fonte); caret-color: var(--tinta); }
-  ::selection { background: var(--tinta-suave); }
+  html { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { margin: 0; background: var(--papel); color: var(--tinta); font: 15px/1.45 var(--sans); font-optical-sizing: auto; caret-color: var(--caneta); }
+  /* Grão de papel (gerado por código no carregamento, 2 % de ruído): textura e nada de faixas no fundo. */
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50; background-image: var(--grao); background-size: 160px; mix-blend-mode: multiply; opacity: 0.55; }
+  @media (prefers-color-scheme: dark) { body::after { mix-blend-mode: screen; opacity: 0.35; } }
+  ::selection { background: var(--marca); }
   button { font: inherit; color: inherit; background: none; border: 1px solid transparent; padding: 0; cursor: pointer; text-align: start; }
-  :focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; border-radius: 8px; }
+  :focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; border-radius: 4px; }
   .icone { width: 18px; height: 18px; flex: none; }
-  .num { font-variant-numeric: tabular-nums; }
-  kbd { font: 500 11.5px/1 var(--fonte); color: var(--texto-2); padding: 3px 5px; border-radius: 5px; background: var(--hover);
-    box-shadow: inset 0 -1px 0 var(--linha-forte), 0 0 0 1px var(--linha); white-space: nowrap; }
-  .pular { position: absolute; left: 12px; top: -60px; z-index: 9; background: var(--tinta); color: var(--tinta-texto); padding: 10px 14px; border-radius: 10px; }
+  .num { font-variant-numeric: tabular-nums lining-nums; }
+  kbd { font: 600 11px/1 var(--sans); color: var(--tinta-2); padding: 3px 5px 2px; border-radius: 4px; background: var(--folha-2);
+    box-shadow: 0 0 0 0.5px var(--regra-forte), 0 1px 0 var(--regra-forte); white-space: nowrap; }
+  .pular { position: absolute; left: 12px; top: -60px; z-index: 9; background: var(--botao); color: var(--botao-texto); padding: 10px 14px; border-radius: 6px; }
   .pular:focus { top: 12px; }
   .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .rotulo { font: 650 11px/1.2 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--tinta-2); }
 
-  /* ===== Estrutura: barra lateral sobre o fundo + palco embutido (lista | detalhe) ===== */
+  /* ===== Estrutura: a mesa (papel), a folha do dia e a ficha da tarefa ===== */
   .app { display: grid; grid-template-columns: 244px minmax(0, 1fr); height: 100dvh; }
-  .lateral { display: flex; flex-direction: column; gap: 22px; padding: 18px 14px 16px 16px; min-height: 0; }
-  .palco { display: grid; grid-template-columns: minmax(0, 1fr) 452px; margin: 8px 8px 8px 0; min-height: 0;
-    background: var(--palco); border-radius: 16px; box-shadow: var(--sombra-palco); overflow: hidden; }
+  .lateral { display: flex; flex-direction: column; gap: 24px; padding: 22px 14px 16px 20px; min-height: 0; }
+  .palco { display: grid; grid-template-columns: minmax(0, 1fr) 452px; margin: 12px 12px 12px 0; min-height: 0;
+    background: var(--folha); border-radius: var(--raio); box-shadow: var(--sombra-folha); overflow: hidden; }
+  @supports (corner-shape: squircle) { .palco { corner-shape: squircle; border-radius: 14px; } }
 
-  /* Barra lateral */
-  .marca-app { display: flex; align-items: center; gap: 10px; padding: 2px 6px; font-weight: 650; font-size: 15px; letter-spacing: -0.01em; }
-  .marca-app i { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--tinta); color: var(--tinta-texto); }
-  .marca-app i svg { width: 16px; height: 16px; }
-  .busca { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; padding: 0 8px 0 10px; border-radius: 10px;
-    background: var(--palco); box-shadow: 0 0 0 1px var(--linha); color: var(--texto-2); }
+  .marca-app { display: flex; align-items: baseline; gap: 8px; padding: 0 6px; font: 600 24px/1 var(--serif-exib); letter-spacing: -0.02em; }
+  .marca-app i { display: none; }
+  .marca-app::after { content: "nº 2026"; font: italic 400 13px/1 var(--serif); color: var(--tinta-3); letter-spacing: 0; }
+  .busca { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; padding: 0 8px 0 10px; border-radius: 6px;
+    background: var(--folha-2); box-shadow: 0 0 0 0.5px var(--regra-forte), 0 1px 1px var(--regra); color: var(--tinta-2); }
   .busca span { flex: 1; }
   .nav { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
-  .nav-titulo { margin: 0 0 6px 10px; font-size: 12px; font-weight: 600; color: var(--texto-3); }
-  .nav a { display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 0 10px; border-radius: 9px; color: var(--texto); text-decoration: none; }
-  .nav a .icone { color: var(--texto-2); }
+  .nav-titulo { margin: 0 0 8px 10px; font: 650 11px/1.2 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--tinta-2); }
+  .nav a { position: relative; display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 0 10px; border-radius: 4px; color: var(--tinta); text-decoration: none; }
+  .nav a .icone { color: var(--tinta-2); }
   .nav a b { font-weight: 450; flex: 1; }
-  .nav a small { color: var(--texto-3); font-size: 13px; }
-  .nav a[aria-current="page"] { background: var(--palco); box-shadow: 0 0 0 1px var(--linha), 0 1px 2px rgb(0 0 0 / 0.05); }
+  .nav a small { color: var(--tinta-3); font-size: 13px; }
+  .nav a[aria-current="page"] b { font-weight: 650; }
+  .nav a[aria-current="page"]::before { content: ""; position: absolute; left: 4px; right: 4px; top: 7px; bottom: 6px; z-index: -1; background: var(--marca);
+    border-radius: 3px 8px 4px 9px / 8px 4px 9px 3px; transform: rotate(-0.6deg); }
   .nav a[aria-current="page"] .icone { color: var(--tinta); }
-  .nav a[aria-current="page"] b { font-weight: 600; }
   @media (hover: hover) { .nav a:not([aria-current]):hover { background: var(--hover); } }
-  .ponto { width: 9px; height: 9px; border-radius: 50%; flex: none; margin: 0 4px 0 4px; }
-  .rodape-lateral { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 8px 6px 0; border-top: 1px solid var(--linha); }
-  .avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 650;
-    background: linear-gradient(135deg, #d9c6a5, #b99a6c); color: #2a2216; }
+  .lateral .nav { isolation: isolate; }
+  .ponto { width: 8px; height: 8px; border-radius: 50%; flex: none; margin: 0 4px; }
+  .rodape-lateral { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 6px 0; border-top: 0.5px solid var(--regra-forte); }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 600 12px/1 var(--serif); background: #d8c7a6; color: #2a2216; }
   .rodape-lateral div { font-size: 13px; line-height: 1.3; }
-  .rodape-lateral small { display: flex; align-items: center; gap: 5px; color: var(--texto-3); font-size: 12px; }
-  .sinc { width: 7px; height: 7px; border-radius: 50%; background: var(--p-fornec); }
+  .rodape-lateral small { display: flex; align-items: center; gap: 5px; color: var(--tinta-3); font-size: 12px; }
+  .sinc { width: 6px; height: 6px; border-radius: 50%; background: #3f8a5c; }
 
-  /* ===== Coluna da lista ===== */
+  /* ===== A folha do dia ===== */
   .coluna-lista { position: relative; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scroll-padding-block-end: 96px; }
-  .cabeca { padding: 34px 44px 18px 44px; }
-  .cabeca-linha { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
-  .cabeca h1 { margin: 0; font: 700 54px/0.98 var(--fonte-exib); letter-spacing: -0.035em; }
-  .data { margin: 6px 0 0; color: var(--texto-2); font-size: 15px; }
-  .placar { display: flex; align-items: flex-end; gap: 10px; text-align: end; }
-  .placar strong { font: 650 56px/0.86 var(--fonte-exib); letter-spacing: -0.04em; }
-  .placar span { display: block; font-size: 13px; line-height: 1.35; color: var(--texto-2); text-align: start; padding-bottom: 1px; }
-  .placar span b { color: var(--texto); font-weight: 600; }
+  .cabeca { padding: 38px 48px 14px 48px; }
+  .cabeca-linha { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 18px; border-bottom: 1.5px solid var(--tinta); }
+  .cabeca h1 { margin: 0; font: 600 68px/0.9 var(--serif-exib); letter-spacing: -0.025em; }
+  .data { margin: 10px 0 0; color: var(--tinta-2); font: italic 400 19px/1.2 var(--serif); }
+  .placar { display: flex; align-items: flex-end; gap: 12px; }
+  .placar strong { display: inline-block; font: 500 68px/0.82 var(--serif-exib); letter-spacing: -0.03em; }
+  .placar span { display: block; font-size: 13px; line-height: 1.4; color: var(--tinta-2); padding-bottom: 2px; }
+  .placar span b { color: var(--tinta); font-weight: 650; }
 
-  /* A fita do dia: cada peça é uma tarefa (clicável, ligada à linha da lista). */
-  .fita { margin-top: 22px; display: grid; grid-template-columns: 8fr 4fr; gap: 14px; }
+  /* Fita do dia: uma casa por tarefa, como as casinhas de uma agenda. */
+  .fita { margin-top: 18px; display: grid; grid-template-columns: 8fr 4fr; gap: 18px; }
   .fita-grupo { min-width: 0; }
-  .fita-pecas { display: flex; gap: 4px; }
-  .peca { flex: 1; height: 26px; min-width: 0; border-radius: 7px; border: 1.5px solid var(--marcador); background: transparent;
-    position: relative; transition: background-color 200ms ease, border-color 200ms ease, transform 160ms var(--ease-out); }
+  .fita-pecas { display: flex; gap: 5px; }
+  .peca { position: relative; flex: 1; height: 24px; min-width: 0; border-radius: 3px; border: 1.25px solid var(--tinta-3); background: transparent;
+    transform-origin: 50% 100%; transition: background-color 220ms ease, border-color 220ms ease; }
   .peca.feita { background: var(--tinta); border-color: var(--tinta); }
-  .peca.atrasada { border-color: var(--atraso);
-    background: repeating-linear-gradient(-45deg, var(--atraso-suave) 0 4px, transparent 4px 8px), var(--atraso-suave); }
-  .peca.atrasada::after { content: "!"; position: absolute; inset: 0; display: grid; place-items: center; font: 700 13px/1 var(--fonte); color: var(--atraso); }
-  .peca[aria-current="true"] { box-shadow: 0 0 0 2px var(--palco), 0 0 0 4px var(--tinta); }
-  .peca.realce { transform: translateY(-2px); }
-  .peca:not(:disabled):active { transform: scale(0.96); }
-  .fita-rotulo { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12.5px; color: var(--texto-3); }
-  .fita-rotulo b { color: var(--texto-2); font-weight: 600; }
-  .agora-info { display: flex; align-items: center; gap: 8px; margin: 18px 0 0; padding: 10px 12px; border-radius: 12px; background: var(--tinta-suave);
-    font-size: 14px; color: var(--texto); }
-  .agora-info .icone { color: var(--tinta); }
-  .agora-info b { font-weight: 600; }
-  .agora-info em { font-style: normal; color: var(--texto-2); }
+  .peca.atrasada { border-color: var(--caneta); background: repeating-linear-gradient(-45deg, var(--caneta-suave) 0 3px, transparent 3px 6px), var(--caneta-suave); }
+  .peca.atrasada::after { content: "!"; position: absolute; inset: 0; display: grid; place-items: center; font: 700 13px/1 var(--serif); color: var(--caneta); }
+  .peca[aria-current="true"] { box-shadow: 0 0 0 3px var(--folha), 0 0 0 7px var(--marca-forte); }
+  .peca.realce { transform: translateY(-2px); transition: transform 300ms var(--mola-resposta); }
+  .fita-rotulo { display: flex; justify-content: space-between; margin-top: 9px; font-size: 12px; color: var(--tinta-3); }
+  .fita-rotulo b { font: 650 11px/1.2 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--tinta-2); }
+  .agora-info { display: flex; align-items: center; gap: 9px; margin: 16px 0 0; font: italic 400 16px/1.35 var(--serif); color: var(--tinta-2); }
+  .agora-info .icone { color: var(--caneta); }
+  .agora-info b { font-style: normal; font-weight: 600; color: var(--tinta); font-family: var(--serif); }
+  .agora-info em { font-style: italic; }
 
-  /* Lista em linha do tempo */
-  .grupos { padding: 4px 28px 120px 28px; }
-  .grupo-titulo { display: flex; align-items: baseline; gap: 8px; margin: 22px 16px 6px 16px; font-size: 13px; font-weight: 650; color: var(--texto); }
-  .grupo-titulo small { font-weight: 500; color: var(--texto-3); font-size: 13px; }
-  .grupo-titulo.atraso { color: var(--atraso); }
+  /* Linha do tempo com pauta, como uma página de agenda */
+  .grupos { padding: 0 32px 124px 32px; }
+  .grupo-titulo { display: flex; align-items: baseline; gap: 8px; margin: 26px 16px 4px 16px; font: 650 11px/1.2 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--tinta-2); }
+  .grupo-titulo small { font: 400 12px/1 var(--sans); letter-spacing: 0; text-transform: none; color: var(--tinta-3); }
+  .grupo-titulo.atraso { color: var(--caneta); }
   .linhas { list-style: none; margin: 0; padding: 0; position: relative; }
-  .linhas.tempo::before { content: ""; position: absolute; left: 87px; top: 8px; bottom: 8px; width: 1px; background: var(--linha-forte); }
-  .linha { position: relative; display: grid; grid-template-columns: 60px 44px minmax(0, 1fr); align-items: center; column-gap: 6px;
-    min-height: 52px; padding: 0 12px 0 4px; border-radius: 12px; transition: background-color 120ms ease; }
+  .linhas.tempo::before { content: ""; position: absolute; left: 84px; top: 6px; bottom: 6px; width: 0; border-left: 1px solid var(--caneta); opacity: 0.35; }
+  .linha { position: relative; display: grid; grid-template-columns: 60px 44px minmax(0, 1fr); align-items: center; column-gap: 4px;
+    min-height: 54px; padding: 0 12px 0 4px; border-bottom: 0.5px solid var(--regra); transition: background-color 120ms ease; }
   .linha.realce { background: var(--hover); }
   @media (hover: hover) { .linha:hover { background: var(--hover); } }
-  .linha[aria-current="true"] { background: var(--tinta-suave); box-shadow: inset 0 0 0 1px var(--tinta-borda); }
-  .hora { justify-self: end; padding-right: 6px; font-size: 13px; font-weight: 600; color: var(--texto-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .marcar { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; position: relative; z-index: 1; }
-  .circulo { width: 22px; height: 22px; border-radius: 50%; border: 1.75px solid var(--marcador); background: var(--palco); display: grid; place-items: center;
-    transition: background-color 180ms var(--ease-out), border-color 180ms var(--ease-out), transform 160ms var(--ease-out); }
-  .marcar:not(:disabled):active .circulo { transform: scale(0.88); }
-  .feita .circulo { transition: background-color 180ms var(--ease-out), border-color 180ms var(--ease-out), transform 500ms var(--mola); }
-  .circulo svg { width: 14px; height: 14px; color: var(--tinta-texto); }
-  .circulo path { stroke-dasharray: 16; stroke-dashoffset: 16; transition: stroke-dashoffset 220ms var(--ease-out) 60ms; }
-  .feita .circulo { background: var(--tinta); border-color: var(--tinta); }
-  .feita .circulo path { stroke-dashoffset: 0; }
-  .atrasada .circulo { border-color: var(--atraso); }
+  .hora { justify-self: end; padding-right: 8px; font: 600 12.5px/1 var(--sans); color: var(--tinta-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .marcar { width: 44px; height: 44px; display: grid; place-items: center; position: relative; z-index: 1; border-radius: 6px; }
+  /* Casinha de marcar com o "visto" de caneta que passa da borda. */
+  .circulo { position: relative; width: 19px; height: 19px; border-radius: 4px; border: 1.4px solid var(--tinta-2); background: var(--folha-2);
+    transition: transform 520ms var(--mola-pico), border-color 200ms ease; }
+  .marcar:not(:disabled):active .circulo { transform: scale(0.84); transition: transform 90ms ease-out; }
+  .circulo svg { position: absolute; left: -2px; top: -9px; width: 26px; height: 26px; overflow: visible; color: var(--tinta); }
+  /* Sem traço: some (a ponta redonda de um traço de comprimento zero deixaria um ponto). Ao marcar, aparece e se desenha. */
+  .circulo path { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset 260ms cubic-bezier(0.3, 0.7, 0.2, 1), opacity 0s linear 260ms; }
+  .feita .circulo path { stroke-dashoffset: 0; opacity: 1; transition: stroke-dashoffset 280ms cubic-bezier(0.3, 0.7, 0.2, 1) 40ms, opacity 0s linear 40ms; }
+  .feita .circulo { border-color: var(--tinta-3); }
+  .atrasada .circulo { border-color: var(--caneta); }
   @media (hover: hover) { .marcar:hover .circulo { border-color: var(--tinta); } }
-  .abrir { display: grid; gap: 1px; min-height: 52px; align-content: center; padding: 6px 0; border-radius: 8px; min-width: 0; }
-  .titulo { position: relative; justify-self: start; max-width: 100%; font-size: 15px; font-weight: 500; letter-spacing: -0.005em;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 200ms ease; }
-  .titulo::after { content: ""; position: absolute; left: 0; right: 0; top: 52%; height: 1.5px; background: currentColor;
-    transform: scaleX(0); transform-origin: left; transition: transform 220ms var(--ease-out); }
-  .feita .titulo { color: var(--texto-3); }
-  .feita .titulo::after { transform: scaleX(1); }
-  .meta { display: flex; align-items: center; gap: 12px; font-size: 12.5px; color: var(--texto-3); white-space: nowrap; overflow: hidden; }
+  .abrir { position: relative; display: grid; gap: 2px; min-height: 54px; align-content: center; padding: 6px 0; border-radius: 4px; min-width: 0; isolation: isolate; }
+  .titulo { position: relative; justify-self: start; max-width: 100%; font: 500 17px/1.25 var(--serif); letter-spacing: -0.005em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 240ms ease; }
+  /* Risco de caneta: desenhado da esquerda para a direita, levemente torto, como à mão. */
+  .titulo::after { content: ""; position: absolute; left: -2px; right: -2px; top: 55%; height: 1.6px; border-radius: 1px; background: currentColor;
+    transform: scaleX(0) rotate(-0.8deg); transform-origin: left; transition: transform 420ms var(--mola-resposta); }
+  .feita .titulo { color: var(--tinta-3); }
+  .feita .titulo::after { transform: scaleX(1) rotate(-0.8deg); }
+  /* Marca-texto sob a tarefa selecionada (é o mesmo objeto que viaja entre as linhas). */
+  .marcador { position: absolute; z-index: -1; left: -6px; right: -10px; top: 8px; bottom: 7px; background: var(--marca);
+    border-radius: 3px 9px 4px 10px / 9px 4px 10px 3px; transform: rotate(-0.5deg); view-transition-name: marcador; pointer-events: none; }
+  .meta { display: flex; align-items: center; gap: 12px; font-size: 12.5px; color: var(--tinta-3); white-space: nowrap; overflow: hidden; }
   .meta span { display: inline-flex; align-items: center; gap: 5px; }
   .meta .icone { width: 13px; height: 13px; }
-  .meta .ponto { width: 7px; height: 7px; margin: 0; }
-  .meta .alerta { color: var(--atraso); font-weight: 600; }
-  /* O passado se comprime (uma linha, sem metadados); o que está aberto ganha o espaço. */
-  .linha.feita { min-height: 34px; }
-  .linha.feita .abrir { min-height: 34px; padding: 2px 0; }
-  .linha.feita .marcar { height: 34px; }
-  .linha.feita .circulo { width: 18px; height: 18px; }
-  .linha.feita .circulo svg { width: 11px; height: 11px; }
-  .linha.feita .titulo { font-size: 14px; font-weight: 450; }
+  .meta .ponto { width: 6px; height: 6px; margin: 0; }
+  .meta .alerta { color: var(--caneta); font-weight: 600; }
+  .linha.feita { min-height: 36px; }
+  .linha.feita .abrir { min-height: 36px; padding: 2px 0; }
+  .linha.feita .marcar { height: 36px; }
+  .linha.feita .titulo { font-size: 15px; font-weight: 400; }
   .linha.feita .meta { display: none; }
-  .linha.feita .hora { font-weight: 500; color: var(--texto-3); }
-  /* O agora: uma linha de tinta que corta a linha do tempo. */
-  .agora { position: relative; display: grid; grid-template-columns: 60px 44px 1fr; column-gap: 6px; align-items: center; height: 26px; padding: 0 12px 0 4px; }
-  .agora b { justify-self: end; padding: 2px 7px; border-radius: 6px; background: var(--tinta); color: var(--tinta-texto); font-size: 12px; font-weight: 650; font-variant-numeric: tabular-nums; }
-  .agora i { justify-self: center; width: 9px; height: 9px; border-radius: 50%; background: var(--tinta); box-shadow: 0 0 0 3px var(--palco); }
-  .agora span { height: 1.5px; background: var(--tinta); margin-left: -22px; }
-  .vazio { display: grid; justify-items: start; gap: 6px; margin: 8px 16px; padding: 22px; border-radius: 14px; background: var(--hover); }
-  .vazio b { font: 650 20px/1.2 var(--fonte-exib); letter-spacing: -0.02em; }
-  .vazio span { color: var(--texto-2); }
+  .linha.feita .hora { font-weight: 500; color: var(--tinta-3); }
+  /* O agora: um traço de caneta vermelha atravessando a pauta. */
+  .agora { position: relative; display: grid; grid-template-columns: 60px 44px 1fr; column-gap: 4px; align-items: center; height: 26px; padding: 0 12px 0 4px; }
+  .agora b { justify-self: end; padding-right: 8px; color: var(--caneta); font: italic 600 13px/1 var(--serif); font-variant-numeric: tabular-nums; }
+  .agora i { justify-self: center; width: 7px; height: 7px; border-radius: 50%; background: var(--caneta); }
+  .agora span { height: 1.5px; background: var(--caneta); margin-left: -20px; border-radius: 1px; }
+  .vazio { display: grid; justify-items: start; gap: 6px; margin: 10px 16px; padding: 22px 0; border-top: 1.5px solid var(--tinta); }
+  .vazio b { font: 600 24px/1.2 var(--serif-exib); letter-spacing: -0.015em; }
+  .vazio span { color: var(--tinta-2); font: italic 400 16px/1.4 var(--serif); }
 
-  /* Barra de captura rápida: controle que flutua sobre a lista, em Liquid Glass (liquido.css/js, o mesmo material do caso B). */
-  .captura { position: sticky; bottom: 18px; margin: -96px 36px 18px; z-index: 3; display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 10px 0 16px;
-    border-radius: 16px; border: 1px solid var(--vidro-borda); box-shadow: var(--sombra-flutua); color: var(--texto-2); width: calc(100% - 72px); }
-  .vidro { background: var(--vidro); -webkit-backdrop-filter: blur(18px) saturate(170%); backdrop-filter: blur(18px) saturate(170%); }
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .vidro { background: var(--vidro-opaco); } }
-  @media (prefers-reduced-transparency: reduce) { .vidro { background: var(--vidro-opaco); -webkit-backdrop-filter: none; backdrop-filter: none; } }
-  .captura .mais { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--tinta); color: var(--tinta-texto); flex: none; }
-  .captura .mais svg { width: 16px; height: 16px; }
-  .captura span { flex: 1; font-size: 15px; }
-  .captura .dicas { display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--texto-3); }
+  /* Captura rápida: uma tira de papel sobre a folha (sólida, sombra em camadas). */
+  .captura { position: sticky; bottom: 18px; margin: -96px 40px 18px; z-index: 3; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 12px 0 16px;
+    border-radius: 5px; background: var(--folha-2); box-shadow: var(--sombra-tira); color: var(--tinta-2); width: calc(100% - 80px); }
+  .captura .mais { width: 24px; height: 24px; border-radius: 4px; display: grid; place-items: center; background: var(--botao); color: var(--botao-texto); flex: none; }
+  .captura .mais svg { width: 15px; height: 15px; }
+  .captura span { flex: 1; font: italic 400 16px/1 var(--serif); }
+  .captura .dicas { flex: none; display: flex; gap: 6px; align-items: center; font: 400 12px/1 var(--sans); color: var(--tinta-3); }
 
-  /* ===== Detalhe (inspetor) ===== */
-  .detalhe { min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: var(--painel); border-left: 1px solid var(--linha); }
-  .detalhe-barra { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 16px 0 28px; }
-  .trilha { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--texto-2); }
+  /* ===== Ficha da tarefa ===== */
+  .detalhe { min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; background: var(--folha-2); border-left: 0.5px solid var(--regra-forte); }
+  .detalhe-barra { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 16px 0 32px; }
+  .trilha { display: flex; align-items: center; gap: 8px; font: 650 11px/1.2 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--tinta-2); }
   .trilha .ponto { margin: 0; }
   .ferramentas { display: flex; gap: 2px; }
-  .ferramenta { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; color: var(--texto-2); }
-  @media (hover: hover) { .ferramenta:hover { background: var(--hover); color: var(--texto); } }
-  .detalhe-corpo { overflow-y: auto; padding: 18px 28px 24px; overscroll-behavior: contain; }
+  .ferramenta { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 6px; color: var(--tinta-2); }
+  @media (hover: hover) { .ferramenta:hover { background: var(--hover); color: var(--tinta); } }
+  .detalhe-corpo { overflow-y: auto; padding: 18px 32px 24px; overscroll-behavior: contain; view-transition-name: ficha; }
   .detalhe-titulo { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; }
-  .detalhe-titulo .marcar { width: 44px; height: 44px; margin: -4px 0 0 -7px; }
-  .detalhe-titulo .circulo { width: 26px; height: 26px; }
-  .detalhe h2 { margin: 0; font: 650 28px/1.15 var(--fonte-exib); letter-spacing: -0.025em; text-wrap: balance; }
-  .props { display: grid; grid-template-columns: 92px 1fr; gap: 0; margin: 22px 0 0; font-size: 14px; }
-  .props dt, .props dd { margin: 0; min-height: 36px; display: flex; align-items: center; border-top: 1px solid var(--linha); }
-  .props dt { color: var(--texto-3); font-size: 13px; }
-  .props dd { gap: 8px; flex-wrap: wrap; }
-  .selo { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 7px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
-  .selo.tinta { background: var(--tinta-suave); color: var(--tinta); }
-  .selo.neutro { background: var(--hover); color: var(--texto-2); box-shadow: inset 0 0 0 1px var(--linha); font-weight: 500; }
-  .secao { margin-top: 24px; }
-  .secao h3 { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 8px; font-size: 13px; font-weight: 650; }
-  .secao h3 small { font-weight: 500; color: var(--texto-3); font-size: 12.5px; }
-  .nota { margin: 0; max-width: 60ch; color: var(--texto); line-height: 1.55; text-wrap: pretty; }
+  .detalhe-titulo .marcar { width: 44px; height: 44px; margin: -2px 0 0 -9px; }
+  .detalhe-titulo .circulo { width: 24px; height: 24px; }
+  .detalhe-titulo .circulo svg { width: 32px; height: 32px; top: -11px; }
+  .detalhe h2 { margin: 0; font: 600 34px/1.08 var(--serif-exib); letter-spacing: -0.02em; text-wrap: balance; width: fit-content; }
+  .props { display: grid; grid-template-columns: 96px 1fr; margin: 24px 0 0; font-size: 14px; border-top: 1.5px solid var(--tinta); }
+  .props dt, .props dd { margin: 0; min-height: 38px; display: flex; align-items: center; border-bottom: 0.5px solid var(--regra-forte); }
+  .props dt { font: 650 10.5px/1.2 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--tinta-2); }
+  .props dd { gap: 8px; flex-wrap: wrap; font-family: var(--serif); font-size: 15.5px; }
+  .selo { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 3px; font: 600 12px/1.1 var(--sans); white-space: nowrap; }
+  .selo.tinta { background: var(--caneta-suave); color: var(--caneta); }
+  .selo.neutro { background: transparent; color: var(--tinta-2); box-shadow: inset 0 0 0 0.75px var(--regra-forte); font-weight: 500; }
+  .secao { margin-top: 26px; }
+  .secao h3 { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 8px; font: 650 11px/1.2 var(--sans); letter-spacing: 0.09em; text-transform: uppercase; color: var(--tinta-2); }
+  .secao h3 small { font: 400 12px/1 var(--sans); letter-spacing: 0; text-transform: none; color: var(--tinta-3); }
+  .nota { margin: 0; max-width: 60ch; font: 400 17px/1.55 var(--serif); text-wrap: pretty; }
   .passos { list-style: none; margin: 0; padding: 0; }
-  .passos li { display: flex; align-items: center; gap: 4px; min-height: 40px; border-top: 1px solid var(--linha); }
-  .passos li:last-child { border-bottom: 1px solid var(--linha); }
+  .passos li { display: flex; align-items: center; gap: 4px; min-height: 42px; border-bottom: 0.5px solid var(--regra-forte); }
   .passos .marcar { width: 36px; height: 36px; margin-left: -8px; }
-  .passos .circulo { width: 18px; height: 18px; border-radius: 6px; }
-  .passos .circulo svg { width: 12px; height: 12px; }
-  .passos .titulo { font-weight: 450; font-size: 14.5px; white-space: normal; }
-  .anexo { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--linha); }
-  .anexo i { width: 34px; height: 40px; border-radius: 6px; background: var(--atraso-suave); color: var(--atraso); display: grid; place-items: end center;
-    padding-bottom: 5px; font: 700 9px/1 var(--fonte); letter-spacing: 0.04em; }
-  .anexo div { flex: 1; min-width: 0; font-size: 14px; }
-  .anexo small { display: block; color: var(--texto-3); font-size: 12.5px; }
-  .atividade { list-style: none; margin: 0; padding: 0; font-size: 13px; color: var(--texto-2); }
-  .atividade li { display: flex; gap: 10px; padding: 4px 0; }
-  .atividade time { color: var(--texto-3); margin-left: auto; white-space: nowrap; }
-  .acoes { display: flex; gap: 8px; padding: 14px 20px 16px 28px; border-top: 1px solid var(--linha); background: var(--painel); }
-  .botao { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 14px; border-radius: 11px; font-size: 14px; font-weight: 600;
-    transition: transform 160ms var(--ease-out), background-color 150ms ease; }
-  .botao.principal { background: var(--tinta); color: var(--tinta-texto); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 1px 2px rgb(0 0 0 / 0.12); }
-  .botao.principal kbd { background: rgb(255 255 255 / 0.16); color: var(--tinta-texto); box-shadow: none; }
-  .botao.secundario { box-shadow: inset 0 0 0 1px var(--linha-forte); }
+  .passos .circulo { width: 16px; height: 16px; border-radius: 3px; }
+  .passos .circulo svg { width: 22px; height: 22px; top: -8px; }
+  .passos .titulo { font-size: 16px; font-weight: 400; white-space: normal; }
+  .anexo { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 4px; background: var(--folha); box-shadow: 0 0 0 0.5px var(--regra-forte), 0 1px 2px var(--regra); }
+  .anexo i { width: 30px; height: 38px; border-radius: 2px; background: var(--folha-2); color: var(--caneta); display: grid; place-items: end center;
+    padding-bottom: 5px; font: 700 8.5px/1 var(--sans); letter-spacing: 0.06em; box-shadow: 0 0 0 0.5px var(--regra-forte), 2px 2px 0 -0.5px var(--folha), 2px 2px 0 0 var(--regra-forte); }
+  .anexo div { flex: 1; min-width: 0; font: 400 15px/1.3 var(--serif); }
+  .anexo small { display: block; color: var(--tinta-3); font: 400 12px/1.4 var(--sans); }
+  .atividade { list-style: none; margin: 0; padding: 0; font-size: 13px; color: var(--tinta-2); }
+  .atividade li { display: flex; gap: 10px; padding: 5px 0; }
+  .atividade time { color: var(--tinta-3); margin-left: auto; white-space: nowrap; }
+  .acoes { display: flex; gap: 8px; padding: 14px 20px 16px 32px; border-top: 0.5px solid var(--regra-forte); background: var(--folha-2); }
+  .botao { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 15px; border-radius: 5px; font: 600 14px/1 var(--sans);
+    transition: transform 380ms var(--mola-resposta), background-color 150ms ease; }
+  .botao.principal { background: var(--botao); color: var(--botao-texto); box-shadow: 0 1px 0 rgb(255 255 255 / 0.08) inset, 0 1px 2px rgb(0 0 0 / 0.16), 0 6px 14px -8px rgb(0 0 0 / 0.4); }
+  .botao.principal kbd { background: transparent; color: var(--botao-texto); box-shadow: inset 0 0 0 0.75px currentColor; opacity: 0.85; }
+  .botao.secundario { box-shadow: inset 0 0 0 0.75px var(--regra-forte); }
   @media (hover: hover) { .botao.secundario:hover { background: var(--hover); } }
-  .botao:not(:disabled):active { transform: scale(0.97); }
+  .botao:not(:disabled):active { transform: scale(0.97); transition: transform 90ms ease-out; }
 
-  /* Aviso de desfazer (flutua; aparece depois de concluir). */
-  /* Fica acima da barra de captura: nunca vidro sobre vidro. */
-  .aviso { position: fixed; left: calc(244px + (100% - 244px - 452px - 8px) / 2); bottom: 96px; z-index: 6; display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 14px; border-radius: 14px;
-    border: 1px solid var(--vidro-borda); box-shadow: var(--sombra-flutua); font-size: 14px; opacity: 0; pointer-events: none;
-    transform: translate(-50%, 10px); transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out); }
+  /* Aviso de desfazer: uma etiqueta de tinta acima da tira de captura. */
+  .aviso { position: fixed; left: calc(244px + (100% - 244px - 452px - 12px) / 2); bottom: 100px; z-index: 6; display: flex; align-items: center; gap: 14px;
+    padding: 8px 8px 8px 14px; border-radius: 6px; background: var(--botao); color: var(--botao-texto); box-shadow: var(--sombra-tira); font-size: 14px;
+    opacity: 0; pointer-events: none; transform: translate(-50%, 14px) scale(0.97); transition: opacity 180ms ease, transform 620ms var(--mola-objeto); }
   .aviso.ativo { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
-  .aviso .icone { color: var(--tinta); }
-  .aviso button { color: var(--tinta); font-weight: 650; padding: 6px 10px; border-radius: 9px; display: inline-flex; gap: 8px; align-items: center; }
+  .aviso b { font-family: var(--serif); font-weight: 600; }
+  .aviso button { color: var(--marca-forte); font-weight: 650; padding: 6px 10px; border-radius: 4px; display: inline-flex; gap: 8px; align-items: center; }
+  .aviso button kbd { background: transparent; color: var(--botao-texto); box-shadow: inset 0 0 0 0.75px currentColor; opacity: 0.8; }
 
-  /* Barra de abas no celular (vidro, flutua sobre a lista). */
   .abas { display: none; }
 
   /* ===== Larguras ===== */
@@ -260,66 +261,73 @@
   }
   @media (max-width: 700px) {
     body { font-size: 17px; }
-    .cabeca { padding: 22px 20px 10px; }
-    .cabeca h1 { font-size: 36px; }
-    .placar strong { font-size: 44px; }
-    .cabeca-linha { gap: 12px; }
-    .data { font-size: 14px; white-space: nowrap; }
+    .cabeca { padding: 26px 20px 8px; }
+    .cabeca-linha { gap: 12px; padding-bottom: 14px; }
+    .cabeca h1 { font-size: 48px; }
+    .data { font-size: 16px; white-space: nowrap; }
+    .placar strong { font-size: 48px; }
     .placar span { font-size: 12.5px; }
     .fita-rotulo span { display: none; }
-    .fita { gap: 10px; margin-top: 18px; }
+    .fita { gap: 10px; margin-top: 16px; }
     .fita-pecas { gap: 3px; }
-    .peca { height: 22px; border-radius: 6px; }
-    .agora-info { font-size: 14px; align-items: flex-start; }
+    .peca { height: 22px; }
+    .agora-info { font-size: 15px; align-items: flex-start; }
     .grupos { padding: 0 6px 150px; }
-    .grupo-titulo { margin: 20px 12px 4px; }
+    .grupo-titulo { margin: 22px 12px 4px; }
     .linha, .agora { grid-template-columns: 48px 44px minmax(0, 1fr); column-gap: 4px; padding-right: 10px; }
-    .linhas.tempo::before { left: 74px; }
+    .linhas.tempo::before { left: 72px; }
+    .agora span { margin-left: -20px; }
+    .titulo { font-size: 18px; }
+    .meta { font-size: 13px; }
+    .hora { font-size: 12px; padding-right: 4px; }
     .linha.feita, .linha.feita .abrir, .linha.feita .marcar { min-height: 44px; height: auto; }
     .linha.feita .marcar { height: 44px; }
-    .agora span { margin-left: -20px; }
-    .titulo { font-size: 17px; }
-    .meta { font-size: 13px; }
-    .hora { font-size: 12.5px; padding-right: 2px; }
     .captura { display: none; }
-    .abas { position: fixed; z-index: 4; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 4px;
-      padding: 6px; border-radius: 22px; border: 1px solid var(--vidro-borda); box-shadow: var(--sombra-flutua); }
-    .abas a { flex: 1; display: grid; justify-items: center; gap: 2px; min-height: 48px; padding: 6px 0 4px; border-radius: 16px; font-size: 11px; font-weight: 600;
-      color: var(--lg-texto-2); text-decoration: none; }
-    .abas a[aria-current="page"] { color: var(--lg-texto); background: rgb(127 127 140 / 0.20); }
+    .abas { position: fixed; z-index: 4; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 2px; padding: 6px 10px calc(8px + env(safe-area-inset-bottom));
+      background: var(--folha-2); box-shadow: 0 -0.5px 0 var(--regra-forte), 0 -12px 24px -16px rgb(28 25 21 / 0.25); }
+    .abas a { position: relative; flex: 1; display: grid; justify-items: center; gap: 2px; min-height: 50px; padding: 6px 0 4px; font: 600 11px/1.2 var(--sans);
+      color: var(--tinta-2); text-decoration: none; isolation: isolate; }
+    .abas a[aria-current="page"] { color: var(--tinta); }
+    .abas a[aria-current="page"]::before { content: ""; position: absolute; z-index: -1; left: 18%; right: 18%; top: 4px; height: 30px; background: var(--marca);
+      border-radius: 3px 9px 4px 10px / 9px 4px 10px 3px; transform: rotate(-1deg); }
     .abas a svg { width: 22px; height: 22px; }
-    .abas .nova { flex: none; width: 56px; height: 48px; border-radius: 16px; display: grid; place-items: center; background: var(--tinta); color: var(--tinta-texto); }
-    .abas .nova svg { width: 24px; height: 24px; }
+    .abas .nova { flex: none; width: 52px; height: 46px; border-radius: 6px; display: grid; place-items: center; background: var(--botao); color: var(--botao-texto); }
+    .abas .nova svg { width: 22px; height: 22px; }
     .aviso { bottom: 92px; left: 50%; }
   }
 
-  /* ===== Preferências ===== */
+  /* ===== Movimento (só sem redução) ===== */
+  @media (prefers-reduced-motion: no-preference) {
+    /* Entrada escalonada (34 ms entre itens, o título primeiro), uma vez, com a mola de objeto. */
+    .entrada .cabeca h1, .entrada .placar, .entrada .data { animation: sobe var(--mola-objeto-ms) var(--mola-objeto) both; }
+    .entrada .data { animation-delay: 60ms; }
+    .entrada .grupo-titulo, .entrada .linha, .entrada .agora { animation: sobe var(--mola-objeto-ms) var(--mola-objeto) both; animation-delay: calc(var(--i, 0) * 34ms + 90ms); }
+    .entrada .peca { animation: cresce var(--mola-pico-ms) var(--mola-pico) both; animation-delay: calc(var(--i, 0) * 28ms + 140ms); }
+    @keyframes sobe { from { opacity: 0; transform: translateY(12px); } }
+    @keyframes cresce { from { opacity: 0; transform: scaleY(0.3); } }
+    /* Continuidade lista → ficha: o título da tarefa viaja (mesmo objeto); o marca-texto escorrega de uma linha à outra; a ficha
+       troca com um deslize curto. Mola de objeto em tudo. */
+    ::view-transition-group(tarefa-titulo), ::view-transition-group(marcador) { animation-duration: var(--mola-objeto-ms); animation-timing-function: var(--mola-objeto); }
+    ::view-transition-old(tarefa-titulo), ::view-transition-new(tarefa-titulo) { animation-duration: 280ms; }
+    ::view-transition-old(ficha) { animation: 140ms ease-out both sai-ficha; }
+    ::view-transition-new(ficha) { animation: var(--mola-objeto-ms) var(--mola-objeto) 60ms both entra-ficha; }
+    ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+    @keyframes sai-ficha { to { opacity: 0; transform: translateY(-6px); } }
+    @keyframes entra-ficha { from { opacity: 0; transform: translateY(14px); } }
+    @supports (animation-timeline: view()) {
+      .linhas.revela .linha { animation: revela linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
+      @keyframes revela { from { opacity: 0.25; transform: translateY(16px); } }
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: 0.01ms !important; transition-delay: 0s !important; animation: none !important; }
     .aviso { transition: opacity 150ms ease !important; }
-    .peca.realce { transform: none; }
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
   }
   @media (prefers-contrast: more) {
-    :root { --texto-2: var(--texto); --texto-3: var(--texto); --linha: var(--texto-2); --marcador: var(--texto); }
-    .vidro { background: var(--vidro-opaco); border-color: var(--texto); }
+    :root { --tinta-2: var(--tinta); --tinta-3: var(--tinta); --regra: var(--tinta-2); --regra-forte: var(--tinta); }
   }
-  @media (forced-colors: active) { .peca.feita, .feita .circulo { background: CanvasText; } }
-  /* Movimento (só sem redução): entrada em cascata com mola, uma vez; troca do detalhe com inclinação 3D vinda da lista;
-     "Próximos dias" se revela ao rolar (animation-timeline: view(), sem JS e sem prender a rolagem). */
-  @media (prefers-reduced-motion: no-preference) {
-    .entrada .grupo-titulo, .entrada .linha, .entrada .agora { animation: sobe 560ms var(--mola) both; animation-delay: calc(var(--i, 0) * 34ms + 60ms); }
-    .entrada .peca { transform-origin: 50% 100%; animation: cresce 520ms var(--mola) both; animation-delay: calc(var(--i, 0) * 30ms + 120ms); }
-    .entrada .cabeca h1, .entrada .placar { animation: sobe 600ms var(--mola) both; }
-    @keyframes sobe { from { opacity: 0; transform: translateY(14px) scale(0.985); } }
-    @keyframes cresce { from { opacity: 0; transform: scaleY(0.35); } }
-    .detalhe-corpo, .acoes { transform-origin: 0% 50%; }
-    .troca .detalhe-corpo, .troca .acoes, .troca .detalhe-barra { animation: vira 460ms var(--mola) both; }
-    @keyframes vira { from { opacity: 0; transform: perspective(1000px) rotateY(-8deg) translateX(18px); } }
-    @supports (animation-timeline: view()) {
-      .linhas.revela .linha { animation: revela linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
-      @keyframes revela { from { opacity: 0.2; transform: perspective(800px) translateY(18px) rotateX(-12deg); } }
-    }
-  }
+  @media (forced-colors: active) { .peca.feita { background: CanvasText; } .marcador { background: Highlight; } }
   .sem-transicao, .sem-transicao * { transition: none !important; }
 </style>
 </head>
@@ -370,7 +378,7 @@
         <p class="agora-info" id="agora-info"></p>
       </header>
       <div class="grupos" id="grupos"></div>
-      <div class="captura lg" data-lg-desfoque="7" role="group" aria-label="Captura rápida">
+      <div class="captura" role="group" aria-label="Captura rápida">
         <span class="mais" aria-hidden="true"><svg><use href="#i-mais"/></svg></span>
         <span>Nova tarefa…</span>
         <span class="dicas"><kbd>N</kbd> nova · <kbd>↑</kbd><kbd>↓</kbd> navegar · <kbd>Espaço</kbd> concluir</span>
@@ -381,7 +389,7 @@
   </main>
 </div>
 
-<nav class="abas lg" data-lg-desfoque="7" aria-label="Seções">
+<nav class="abas" aria-label="Seções">
   <a href="#" aria-current="page"><svg aria-hidden="true"><use href="#i-hoje"/></svg>Hoje</a>
   <a href="#"><svg aria-hidden="true"><use href="#i-proximos"/></svg>Próximos</a>
   <a href="#"><svg aria-hidden="true"><use href="#i-feitas"/></svg>Feitas</a>
@@ -389,7 +397,7 @@
   <button class="nova" type="button" aria-label="Nova tarefa"><svg aria-hidden="true"><use href="#i-mais"/></svg></button>
 </nav>
 
-<div class="aviso lg" data-lg-desfoque="7" id="aviso" role="status" aria-live="polite"></div>
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
 <script>
 /* Dados fictícios. As 6 tarefas do "antes" (marcadas com antes:true) + 6 que completam os 12 do placar do "antes". */
@@ -480,8 +488,8 @@ function linha(t) {
   if (t.id === 't7') meta.push(`<span>${svg('i-sino')}13:30</span>`);
   const hora = t.grupo === 'atraso' ? 'sex 30' : (t.feita ? t.hora : t.hora);
   li.innerHTML = `<span class="hora" aria-hidden="true">${hora}</span>
-    <button class="marcar" type="button" aria-pressed="${!!t.feita}" aria-label="${t.feita ? 'Reabrir' : 'Concluir'}: ${t.titulo}"><span class="circulo">${'<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'}</span></button>
-    <button class="abrir" type="button" aria-describedby="m-${t.id}"><span class="titulo">${t.titulo}</span><span class="meta" id="m-${t.id}">${meta.join('')}</span></button>`;
+    <button class="marcar" type="button" aria-pressed="${!!t.feita}" aria-label="${t.feita ? 'Reabrir' : 'Concluir'}: ${t.titulo}"><span class="circulo">${'<svg aria-hidden="true" viewBox="0 0 16 16"><path pathLength="1" d="M2.6 9.2c1.1.7 2.2 1.9 3.1 3.4C7.6 8.4 10.4 4.6 14.6 1.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>'}</span></button>
+    <button class="abrir" type="button" aria-describedby="m-${t.id}">${t.id === selecionada ? '<span class="marcador" aria-hidden="true"></span>' : ''}<span class="titulo">${t.titulo}</span><span class="meta" id="m-${t.id}">${meta.join('')}</span></button>`;
   li.querySelector('.marcar').onclick = () => alternar(t.id);
   li.querySelector('.abrir').onclick = () => selecionar(t.id);
   li.onmouseenter = () => realce(t.id, true); li.onmouseleave = () => realce(t.id, false);
@@ -534,7 +542,7 @@ function desenharDetalhe() {
     </div>
     <div class="detalhe-corpo">
       <div class="detalhe-titulo ${t.feita ? 'feita' : ''}">
-        <button class="marcar" type="button" aria-pressed="${!!t.feita}" aria-label="${t.feita ? 'Reabrir' : 'Concluir'}: ${t.titulo}"><span class="circulo"><svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+        <button class="marcar" type="button" aria-pressed="${!!t.feita}" aria-label="${t.feita ? 'Reabrir' : 'Concluir'}: ${t.titulo}"><span class="circulo"><svg aria-hidden="true" viewBox="0 0 16 16"><path pathLength="1" d="M2.6 9.2c1.1.7 2.2 1.9 3.1 3.4C7.6 8.4 10.4 4.6 14.6 1.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
         <h2 id="t-detalhe">${t.titulo}</h2>
       </div>
       <dl class="props">
@@ -547,7 +555,7 @@ function desenharDetalhe() {
       <section class="secao"><h3>Notas</h3>
         <p class="nota">Ler a proposta enviada, marcar dúvidas e responder até as 14h.</p></section>
       <section class="secao"><h3>Passos <small class="num">${feitosP} de ${passos.length}</small></h3>
-        <ul class="passos">${passos.map(([n, f]) => `<li class="${f ? 'feita' : ''}"><button class="marcar" type="button" aria-pressed="${f}" aria-label="${f ? 'Reabrir' : 'Concluir'} passo: ${n}"><span class="circulo"><svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><span class="titulo">${n}</span></li>`).join('')}</ul></section>
+        <ul class="passos">${passos.map(([n, f]) => `<li class="${f ? 'feita' : ''}"><button class="marcar" type="button" aria-pressed="${f}" aria-label="${f ? 'Reabrir' : 'Concluir'} passo: ${n}"><span class="circulo"><svg aria-hidden="true" viewBox="0 0 16 16"><path pathLength="1" d="M2.6 9.2c1.1.7 2.2 1.9 3.1 3.4C7.6 8.4 10.4 4.6 14.6 1.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><span class="titulo">${n}</span></li>`).join('')}</ul></section>
       <section class="secao"><h3>Anexo</h3>
         <div class="anexo"><i aria-hidden="true">PDF</i><div>Proposta Aurora v3.pdf<small class="num">2,4 MB · recebido ontem às 18:42</small></div></div></section>
       <section class="secao"><h3>Atividade</h3>
@@ -564,12 +572,17 @@ function desenharDetalhe() {
 function realce(id, liga) {
   document.querySelectorAll(`[data-id="${id}"]`).forEach(e => e.classList.toggle('realce', liga));
 }
+const semMov = matchMedia('(prefers-reduced-motion: reduce)');
 function selecionar(id, rolar) {
-  const mudou = id !== selecionada; selecionada = id; tudo();
-  const d = document.getElementById('detalhe');
-  if (mudou) { d.classList.remove('troca'); void d.offsetWidth; d.classList.add('troca'); }
-  const b = document.querySelector(`.linha[data-id="${id}"] .abrir`);
-  if (b) { b.focus({ preventScroll: !rolar }); if (rolar) b.scrollIntoView({ block: 'nearest' }); }
+  const mudou = id !== selecionada;
+  const depois = () => { const b = document.querySelector(`.linha[data-id="${id}"] .abrir`); if (b) { b.focus({ preventScroll: !rolar }); if (rolar) b.scrollIntoView({ block: 'nearest' }); } };
+  if (mudou && document.startViewTransition && !semMov.matches) {
+    const deLinha = document.querySelector(`.linha[data-id="${id}"] .titulo`); const h2 = document.getElementById('t-detalhe');
+    if (h2) h2.style.viewTransitionName = 'none';
+    if (deLinha) deLinha.style.viewTransitionName = 'tarefa-titulo';
+    const vt = document.startViewTransition(() => { selecionada = id; tudo(); const n = document.getElementById('t-detalhe'); if (n) n.style.viewTransitionName = 'tarefa-titulo'; });
+    window.__vt = vt; vt.updateCallbackDone.then(depois);
+  } else { selecionada = id; tudo(); depois(); }
 }
 let ultimo = null, tAviso = null;
 function alternar(id) {
@@ -580,7 +593,7 @@ function alternar(id) {
   document.querySelectorAll(`.linha[data-id="${id}"], .peca[data-id="${id}"]`).forEach(e => e.classList.toggle('feita', t.feita));
   document.querySelectorAll(`.linha[data-id="${id}"] .marcar`).forEach(b => b.setAttribute('aria-pressed', t.feita));
   if (id === selecionada) { const dt = document.querySelector('.detalhe-titulo'); if (dt) dt.classList.toggle('feita', t.feita); }
-  desenharPlacar(); desenharAgora();
+  desenharPlacar(); desenharAgora(); fisica(id, t.feita);
   document.getElementById('g-hoje').textContent = resumoHoje();
   for (const [nome, filtro] of [['Hoje', x => x.grupo !== 'proximos'], ['Próximos dias', x => x.grupo === 'proximos']]) {
     const l = T.filter(filtro); const e = document.querySelector(`[data-fita="${nome}"]`); if (e) e.textContent = `${l.filter(x => x.feita).length} de ${l.length}`; }
@@ -590,6 +603,16 @@ function alternar(id) {
     const p = document.getElementById('selo-prazo'); if (p) p.hidden = t.feita; }
   document.querySelectorAll(`.linha[data-id="${id}"] .marcar`).forEach(b => b.setAttribute('aria-label', (t.feita ? 'Reabrir' : 'Concluir') + ': ' + t.titulo));
   ultimo = id; avisar(t);
+}
+function mola(nome) { const s = getComputedStyle(document.documentElement); return { easing: s.getPropertyValue('--mola-' + nome).trim(), duration: parseFloat(s.getPropertyValue('--mola-' + nome + '-ms')) }; }
+function animar(el, quadros, nome) { if (!el || semMov.matches) return; el.getAnimations().forEach((a) => a.cancel()); el.animate(quadros, { ...mola(nome), fill: 'none' }); }
+function fisica(id, feita) {
+  // interrompível: cada chamada cancela a anterior no mesmo elemento e parte do estado atual (sem esperar o fim)
+  animar(document.getElementById('n-feitas'), [{ transform: 'translateY(0.32em)', opacity: 0 }, { transform: 'none', opacity: 1 }], 'objeto');
+  if (feita) {
+    document.querySelectorAll(`.linha[data-id="${id}"] .circulo, .detalhe-titulo .circulo`).forEach((c) => animar(c, [{ transform: 'scale(0.8)' }, { transform: 'scale(1)' }], 'pico'));
+    animar(document.querySelector(`.peca[data-id="${id}"]`), [{ transform: 'scaleY(0.55)' }, { transform: 'scaleY(1)' }], 'pico');
+  }
 }
 function avisar(t) {
   const a = document.getElementById('aviso');
@@ -609,10 +632,13 @@ document.addEventListener('keydown', (e) => {
   else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && selecionada) { e.preventDefault(); alternar(selecionada); }
   else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && ultimo) { e.preventDefault(); alternar(ultimo); }
 });
+(function grao() { const c = document.createElement('canvas'); c.width = c.height = 160; const g = c.getContext('2d'); const d = g.createImageData(160, 160);
+  let s = 7; const r = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+  for (let i = 0; i < d.data.length; i += 4) { const v = 128 + (r() - 0.5) * 60; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 10; }
+  g.putImageData(d, 0, 0); document.documentElement.style.setProperty('--grao', 'url(' + c.toDataURL() + ')'); })();
 tudo();
 requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove('sem-transicao')));
-setTimeout(() => document.body.classList.remove('entrada'), 1400);   // a cascata é só da primeira aparição
+setTimeout(() => document.body.classList.remove('entrada'), 1800);   // a cascata é só da primeira aparição
 </script>
-<script src="../../../../modelos/liquid-glass/liquido.js"></script>
 </body>
 </html>

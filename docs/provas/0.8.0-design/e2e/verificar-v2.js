@@ -36,9 +36,11 @@ if (qual === 'b' || qual === 'tudo') {
   CASOS.push({ nome: 'caso-b-produto-v2-claro-1440-rolado', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'light', rolar: 640, zoom: { x: 1060, y: 640, width: 370, height: 70 } });
   CASOS.push({ nome: 'caso-b-produto-v2-escuro-1440-rolado', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'dark', rolar: 900, zoom: { x: 0, y: 900, width: 260, height: 360 } });
   CASOS.push({ nome: 'caso-b-produto-v2-escuro-1440-teclado-reduzido', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'dark', tecladoB: true, reduzido: true, semPng: true });
+  CASOS.push({ nome: 'caso-b-produto-v2-escuro-1440-visor', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'dark', rolar: 420, visor: true });
+  CASOS.push({ nome: 'caso-b-produto-v2-claro-390-visor', arq: 'caso-b-produto-v2.html', w: 390, h: 844, tema: 'light', rolar: 380, visor: true });
   CASOS.push({ nome: 'caso-b-produto-v2-claro-1440-transparencia-reduzida', arq: 'caso-b-produto-v2.html', w: 1440, h: 900, tema: 'light', transp: true, rolar: 640 });
 }
-if (qual === 'teste') CASOS.push({ nome: '_teste', arq: process.argv[3], w: 640, h: 320, tema: 'light' });
+if (qual === 'teste') CASOS.push({ nome: '_teste', arq: process.argv[3], w: 1600, h: 800, tema: 'light' });
 if (MUTAR) CASOS.splice(0, CASOS.length, { nome: 'mutacao', arq: 'caso-a-depois-v2.html', qs: '?mutar=contagem', w: 1440, h: 900, tema: 'light', somas: true, semPng: true });
 
 // ---------- CDP mínimo ----------
@@ -74,7 +76,7 @@ function medirTudo(opc) {
   const comTexto = [...document.querySelectorAll('body *')].filter((e) => [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) && !e.closest('svg,script,style,.vh'));
   for (const e of comTexto) {
     if (!visivel(e)) continue;
-    const cob = coberto(e); if (cob && !e.closest('.vidro, .lg, .sobre-foto')) continue;          // passa por baixo de uma camada (sólida ou vidro): não é para ler ali
+    const cob = coberto(e); if (cob) continue;          // passa por baixo de uma camada (sólida ou vidro): não é para ler ali
     const s = getComputedStyle(e);
     const cor = rgba(s.color); if (cor[3] === 0) continue;
     const sobreVidro = !!e.closest('.vidro, .lg, .sobre-foto');
@@ -147,9 +149,9 @@ async function concluirEDesfazer() {
   if (document.querySelector('[data-fita="Hoje"]').textContent !== '6 de 8') erros.push('concluir: rótulo da fita não atualizou');
   if (!/Reabrir/.test(document.getElementById('b-concluir').textContent)) erros.push('concluir: botão do detalhe não virou Reabrir');
   if (document.getElementById('selo-prazo').offsetWidth > 0) erros.push('concluir: "em 2 h 40 min" continua na tarefa feita');
-  { const a = document.getElementById('aviso').getBoundingClientRect(); for (const o of document.querySelectorAll('.lg:not(#aviso)')) { const b = o.getBoundingClientRect(); if (b.width && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) erros.push('vidro sobre vidro: o aviso cobre ' + o.className); } }
+  { const a = document.getElementById('aviso').getBoundingClientRect(); for (const o of document.querySelectorAll('.lg:not(#aviso), .captura')) { const b = o.getBoundingClientRect(); if (b.width && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) erros.push('sobreposição: o aviso cobre ' + o.className); } }
   const risco = getComputedStyle(linha.querySelector('.titulo'), '::after').transform;
-  if (risco === 'none' || risco.startsWith('matrix(0')) erros.push('concluir: risco do título não chegou ao fim: ' + risco);
+  const m = (risco.match(/matrix(([^)]*))/) || [, '0,0'])[1].split(',').map(Number); if (risco === 'none' || Math.hypot(m[0], m[1]) < 0.95) erros.push('concluir: risco do título não chegou ao fim: ' + risco);
   return { erros, antes };
 }
 async function desfazer(antes) {
@@ -173,7 +175,8 @@ async function reduzido() {
 function focoAtual() {
   const a = document.activeElement; const s = getComputedStyle(a);
   return { tag: a.tagName, cls: a.className, txt: (a.getAttribute('aria-label') || a.textContent).trim().slice(0, 40), outline: s.outlineStyle, larg: parseFloat(s.outlineWidth), cor: s.outlineColor, sel: document.querySelector('.linha[aria-current="true"]')?.dataset.id,
-    anim: document.getAnimations().map((x) => x.animationName).filter(Boolean) };
+    anim: document.getAnimations().map((x) => x.animationName).filter(Boolean), vt: document.getAnimations().map((x) => x.effect && x.effect.pseudoElement).filter(Boolean),
+    props: [...new Set(document.getAnimations().filter((x) => !(x instanceof CSSTransition) && !String(x.animationName || '').startsWith('-ua-')).flatMap((x) => x.effect.getKeyframes().flatMap((k) => Object.keys(k).filter((p) => !['offset', 'computedOffset', 'easing', 'composite'].includes(p)))))] };
 }
 
 // ---------- Pior ponto do texto sobre vidro (pixel a pixel) ----------
@@ -206,7 +209,7 @@ async function medirVidro(itens) {
   if (!EDGE) throw new Error('Edge não encontrado');
   fs.mkdirSync(PNG, { recursive: true });
   const edge = spawn(EDGE, ['--headless=new', `--remote-debugging-port=${PORTA}`, `--user-data-dir=${PERFIL}`, '--no-first-run', '--no-default-browser-check',
-    '--disable-extensions', '--hide-scrollbars', '--force-color-profile=srgb', '--allow-file-access-from-files', 'about:blank'], { windowsHide: true, stdio: 'ignore' });
+    '--disable-extensions', '--hide-scrollbars', '--force-color-profile=srgb', '--allow-file-access-from-files', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', 'about:blank'], { windowsHide: true, stdio: 'ignore' });
   let alvo;
   for (let i = 0; i < 60 && !alvo; i++) { await espera(250); try { const l = await (await fetch(`http://127.0.0.1:${PORTA}/json/list`)).json(); alvo = l.find((t) => t.type === 'page'); } catch { /* subindo */ } }
   if (!alvo) throw new Error('Edge não respondeu');
@@ -219,16 +222,25 @@ async function medirVidro(itens) {
   try {
     for (const c of CASOS) {
       const mobile = c.w < 700;
-      await cdp('Emulation.setDeviceMetricsOverride', { width: c.w, height: c.h, deviceScaleFactor: 1, mobile });
+      await cdp('Emulation.setDeviceMetricsOverride', { width: c.w, height: c.h, deviceScaleFactor: 2, mobile });   // HD: capturas e medidas a 2×
       await cdp('Emulation.setTouchEmulationEnabled', { enabled: mobile });
       await cdp('Emulation.setEmulatedMedia', { features: [
         { name: 'prefers-color-scheme', value: c.tema }, { name: 'prefers-reduced-motion', value: c.reduzido ? 'reduce' : 'no-preference' },
         { name: 'prefers-reduced-transparency', value: c.transp ? 'reduce' : 'no-preference' }, { name: 'prefers-contrast', value: 'no-preference' }] });
       const carregou = quando('Page.loadEventFired');
       await cdp('Page.navigate', { url: url(c.arq, c.qs || '') }); await carregou; await espera(1700);
+      await avaliar(() => new Promise((ok) => { const t0 = Date.now(); const ver = () => (window.__pronto !== false || Date.now() - t0 > 8000) ? ok() : setTimeout(ver, 100); ver(); }));
       if (c.rolar) { await avaliar((y) => { const s = document.querySelector('[data-rolagem]') || document.scrollingElement; s.scrollTop = y; }, c.rolar); await espera(500); }
-      const r = { caso: c.nome, erros: [] };
+      const r = { caso: c.nome, erros: [] }; r.titulo = await avaliar(() => document.title);
       const errosJs = await avaliar(() => window.__errosJs || []); r.erros.push(...errosJs);
+      if (c.visor) {
+        const v = await avaliar(async () => { const bt = document.querySelectorAll(".foto")[3]; bt.click(); const vt = window.__vt; let nomes = []; if (vt) { await vt.ready; nomes = document.getAnimations().map((a) => a.effect && a.effect.pseudoElement).filter(Boolean); await vt.finished; }
+          await new Promise((r) => setTimeout(r, 300)); return { aberto: !document.getElementById("visor").hidden, foco: document.activeElement.getAttribute("aria-label"), nomes, titulo: document.getElementById("visor-titulo").textContent }; });
+        if (!v.aberto) r.erros.push("visor não abriu");
+        if (!v.nomes.includes("::view-transition-group(foto-aberta)")) r.erros.push("abrir a foto sem continuidade (a mesma foto não cresce): " + v.nomes.join(","));
+        if (v.foco !== "Fechar a foto") r.erros.push("foco não foi para Fechar: " + v.foco);
+        r.visor = `${v.titulo}; continuidade: ${v.nomes.filter((n) => /foto-aberta|visor/.test(n)).length} animações; foco: ${v.foco}`;
+      }
       const m = await avaliar(medirTudo, {}); r.erros.push(...m.erros); r.avisos = m.avisos; r.pares = m.nPares; r.piorTexto = m.pior;
       r.vidro = await medirVidro(m.vidro);
       for (const v of r.vidro) if (v.pior < v.min) r.erros.push(`vidro: "${v.txt}" ${v.pior}:1 < ${v.min} no pior ponto`);
@@ -258,7 +270,11 @@ async function medirVidro(itens) {
         await avaliar(() => document.querySelector('.linha[data-id="t7"] .abrir').focus());
         await tecla('ArrowDown', 'ArrowDown', 40); const f2 = await avaliar(focoAtual);
         if (f2.sel !== 't8') r.erros.push('seta para baixo não selecionou a próxima tarefa: ' + f2.sel);
-        if (!f2.anim.includes('vira')) r.erros.push('troca do detalhe sem a transição 3D (vira): ' + f2.anim.join(','));
+        if (!f2.vt.includes('::view-transition-group(tarefa-titulo)')) r.erros.push('troca da tarefa sem continuidade (View Transition do título): ' + f2.vt.join(','));
+        const fora = f2.props.filter((p) => !['transform', 'opacity'].includes(p)); if (fora.length) r.erros.push('anima propriedade fora de transform/opacity: ' + fora.join(','));
+        const molas = await avaliar(() => ['resposta', 'objeto', 'pico'].map((n) => (getComputedStyle(document.documentElement).getPropertyValue('--mola-' + n).match(/,/g) || []).length + 1));
+        if (molas.some((n) => n < 30)) r.erros.push('mola em linear() com menos de 30 pontos: ' + molas.join(','));
+        r.continuidade = `${f2.vt.length} animações de View Transition; propriedades: ${f2.props.join(', ')}; pontos das molas: ${molas.join('/')}`;
         const rev = await avaliar(() => document.querySelectorAll('.linhas.revela .linha').length && getComputedStyle(document.querySelector('.linhas.revela .linha')).animationTimeline);
         if (!/view/.test(rev)) r.erros.push('revelação ao rolar sem animation-timeline: view(): ' + rev);
         await tecla('Tab', 'Tab', 9); await tecla('Tab', 'Tab', 9); const f3 = await avaliar(focoAtual);
@@ -267,6 +283,8 @@ async function medirVidro(itens) {
       }
       if (c.zoom) { const z = await cdp('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false, clip: { ...c.zoom, scale: 2 } }); fs.writeFileSync(path.join(PNG, c.nome + '-zoom.png'), Buffer.from(z.data, 'base64')); }
       if (!c.semPng && !c.interacao) { const shot = await cdp('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(PNG, c.nome + '.png'), Buffer.from(shot.data, 'base64')); r.png = c.nome + '.png'; }
+      if (c.visor) { await cdp('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 }); await cdp('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 }); await espera(1300);
+        const f = await avaliar(() => ({ fechado: document.getElementById('visor').hidden, foco: document.activeElement.getAttribute('aria-label') })); if (!f.fechado) r.erros.push('Esc não fechou o visor'); if (!/Pôr do sol/.test(f.foco || '')) r.erros.push('foco não voltou à foto: ' + f.foco); r.visor += '; Esc → ' + f.foco; }
       totalErros += r.erros.length; relatorio.push(r);
       console.log(`${r.erros.length ? 'ERRO' : 'ok  '} ${c.nome}: ${r.pares || 0} textos, pior ${r.piorTexto ? r.piorTexto.r + ':1 "' + r.piorTexto.txt + '"' : '-'}` +
         (r.vidro.length ? `; vidro pior ${Math.min(...r.vidro.map((v) => v.pior))}:1` : '') + (r.erros.length ? '\n     ' + r.erros.join('\n     ') : ''));

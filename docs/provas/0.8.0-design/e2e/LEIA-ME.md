@@ -139,3 +139,61 @@ Apontado: a barra lateral terminava num corte seco onde a capa acaba, e o vidro 
 
 **PNGs para mostrar ao usuário:** `png/caso-a-v2-claro-1440.png`, `png/caso-b-produto-v2-claro-1440-rolado.png` e
 `png/caso-b-produto-v2-escuro-1440-rolado-zoom.png`.
+
+---
+
+# Nível HD (hd103, 2026-11-02): movimento, acabamento 2× e imagem real, em dois mundos diferentes
+Revisão do usuário: "faltou melhorar os movimentos e os efeitos de transição; os acabamentos precisam ser mais HD; tem cara de
+desenho, não de coisa real; o mínimo é o máximo bem feito". E: "não é tudo que vai ser padrão Apple ou com vidro". Base: a pesquisa
+`docs/pesquisas/acabamento-premium-2026-11.md` (só as regras ABERTA). Regras propostas para telas de app:
+`../vitrine/proposta-padrao-hd.md` §8.
+
+## Dois mundos, o mesmo nível
+| | Caso A, app de tarefas | Caso B, fotos |
+|---|---|---|
+| Mundo | **Agenda de papel editorial**, porque o produto é a agenda do dia: serifa Sitka (fonte variável com tamanho óptico), papel com grão, caneta vermelha para o agora e o atraso, marca-texto na seleção; **sem vidro, sem Apple** | **Apple / Liquid Glass**, porque o pedido foi "efeito vidro estilo Apple" (`modelos/liquid-glass/`, não alterado) |
+| Continuidade | lista → ficha: o título da tarefa viaja e o marca-texto escorrega (View Transition) | grade → tela cheia: a mesma foto cresce, o fundo escurece, as barras de vidro descem; e volta ao lugar |
+| Momento-pico | concluir: a casinha salta (mola pico), o visto de caneta se desenha, o risco corre, o placar rola, a casa da fita assenta | abrir a foto |
+| Imagem | — | "fotos" renderizadas por shader próprio (`fotos-webgl.js`), não mais pintura vetorial |
+
+## Movimento
+- **Molas por duração e bounce** (`gerar-molas.js`, física da WWDC23; 49 pontos em `linear()`): resposta (0,42 s, bounce 0), objeto
+  (0,5 s, 0,15; passa 0,6%), pico (0,55 s, 0,3; passa 4,5%). Assentam em 663, 744 e 925 ms.
+- Só `transform` e `opacity` nas animações da página (conferido; as do próprio navegador para a View Transition ficam de fora).
+- **Interrupção:** concluir e desfazer aos 160 ms: o risco estava em 0,89 e o visto em 0,119, e continuam exatamente dali (salto 0,000).
+- Movimento reduzido: nenhuma animação longa em A; 0 animações rodando em B; a View Transition não roda (troca direta).
+
+## Acabamento HD
+Capturas e medidas em `deviceScaleFactor: 2`; bordas de 0,5 px; sombras em 3 a 4 camadas; números tabulares; tamanho óptico;
+`text-wrap: balance`; cantos contínuos (`corner-shape: squircle`) só dentro de `@supports`; grão de papel gerado no carregamento (A).
+
+## "Fotos" reais sem foto de terceiros (B)
+`fotos-webgl.js` calcula cada cena por pixel: céu com dispersão do sol, nuvens por ruído fractal, mar com Fresnel e brilho do sol,
+praia com areia molhada e espuma, morros com névoa, mergulho com cáusticas, píer com luminárias e reflexo, fogueira. Pós: ACES,
+vinheta e grão. No navegador sem interface (SwiftShader), só compilar o shader leva ~40 s, então as 24 fotos (1024 px) e a capa
+(2880 × 1000) são renderizadas **uma vez** por `gerar-fotos.js` (via `render-fotos.html`) em `img/*.webp` (2,1 MB), com a
+luminância em `img/fotos-lum.js` (o `file://` bloqueia ler pixels de imagem). A origem está escrita na capa e no rodapé.
+
+## Conferência (rodada em 2026-11-02, saída lida)
+- `node verificar-v2.js a`: 8 casos ok, contraste do pior texto 5,03:1. Novos: a troca de tarefa precisa da View Transition do
+  título; animação fora de `transform`/`opacity` reprova; molas com 30 ou mais pontos. `--mutar`: pega (placar 6 × lista 5).
+- `node verificar-v2.js b`: 11 casos ok. Pior texto sobre vidro ou foto: título da capa 3,87:1 (texto grande, mínimo 3:1); texto
+  pequeno 5,13:1. Novos: o visor abre com a View Transition da foto, o foco vai para "Fechar", e o Esc fecha e devolve o foco à foto.
+- `node tiras-v2.js tudo`: tiras de quadros com `getAnimations()` pausado e `currentTime` avançado.
+- **Defeitos que só as tiras e os PNGs 2× mostraram** (corrigidos): a foto que crescia passava **por baixo** do fundo do visor (faltava
+  ordem nos grupos da View Transition); ponto solto acima de cada casinha vazia (ponta de traço de comprimento zero); estrelas
+  quadradas; luminárias do píer somando um borrão branco; morros chapados; cápsula do visor lendo a luminância das fotos escondidas.
+
+## PNGs e tiras (`png/`, todos a 2×)
+- A: `caso-a-v2-{claro,escuro}-{1440,390}.png`, `-claro-1440-concluir.png`, `-claro-1440-vazio.png`; tiras
+  `tira-a-lista-ficha-claro.png`, `tira-a-concluir-claro.png`, `tira-a-interrupcao-escuro.png`.
+- B: `caso-b-produto-v2-{claro,escuro}-{1440,390}.png`, rolados, `-escuro-1440-visor.png`, `-claro-390-visor.png`,
+  `-claro-1440-transparencia-reduzida.png`, ampliações `-rolado-zoom.png`; tiras `tira-b-abrir-foto-escuro.png`, `tira-b-fechar-foto-claro.png`.
+
+## O que ainda não está no nível
+- Os morros da "Trilha" e a "Areia branca" são as cenas mais fracas: névoa de vale exagerada, areia sem textura visível.
+- As cenas se repetem por lugar (8 cenas × 3 sementes); com 24 cenas diferentes o álbum leria mais verdadeiro.
+- O visor amplia uma imagem de 1024 px até ~1450 px de tela a 2×: o grão disfarça, mas não é nítido de verdade.
+- Em B, a barra lateral ainda mostra uma passagem suave onde a capa termina.
+- A tira mede posições e a interrupção, mas o "parece app da Apple ou template?" continua no olho.
+- As abas que se recolhem no celular (B) animam `flex-grow` (layout), fora da regra de só `transform`/`opacity`.
