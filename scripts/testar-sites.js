@@ -443,6 +443,18 @@ function testarSites({ caso, tmp, RAIZ, rot, ctx }) {
   const cf = ler('docs', 'como-funciona.md'), cp = ler('docs', 'criar-pacote.md'), rd = ler('README.md');
   caso('0.8.0 sites b-16: pares, âncora e desempate documentados, e os 2 limites declarados no README', /\*\*Pares\*\*/.test(cf) && /\*\*Desempate entre áreas vizinhas\*\*/.test(cf) && /`pares`/.test(cp) && /`desempate`/.test(cp) &&
     /Limites do roteamento de site × app/.test(rd) && /dados do site do IBGE/.test(rd) && /a um lado só, salvo empate/.test(rd), 'falta');
+  // M-12: o "era com" vale depois do desempate. Casa própria, para o exemplo aprendido não vazar para os outros casos.
+  {
+    const casaM12 = fs.mkdtempSync(path.join(os.tmpdir(), 'au-m12-'));
+    const envM12 = { ...process.env, HOME: casaM12, USERPROFILE: casaM12 }; delete envM12.AGENTES_ULTIMATE_SEM_PASTA;
+    const rotM12 = (prompt) => { const r = spawnSync(process.execPath, [path.join(RAIZ, 'hooks', 'roteador.js')], { windowsHide: true, input: JSON.stringify({ prompt, cwd: projS, hook_event_name: 'UserPromptSubmit' }), env: envM12, encoding: 'utf8' }); let j = null; try { j = JSON.parse(r.stdout || 'null'); } catch (e) { /* texto */ } const t = (j && j.hookSpecificOutput && j.hookSpecificOutput.additionalContext) || ''; return (t.match(/(?:Agentes indicados|Candidatos)[^:]*: ([^.]+)\./) || [])[1] || ''; };
+    const ped = 'o componente react de tabela quebra quando colo dados do site do IBGE';
+    const antes = rotM12(ped); rotM12('era com designer-paineis'); const depois = rotM12(ped);
+    caso('0.8.0 sites M-12: depois do "era com designer-paineis", o mesmo pedido vai ao designer de painéis, sem o de sites', /designer-sites/.test(antes) && /designer-paineis/.test(depois) && !/designer-sites/.test(depois), `antes: ${antes} | depois: ${depois}`);
+    const ctl = rotM12('crie um site para a minha padaria com cardápio');
+    caso('0.8.0 sites M-12 (controle): a correção não muda um pedido de site diferente', /designer-sites/.test(ctl) && !/designer-paineis/.test(ctl), ctl);
+    fs.rmSync(casaM12, { recursive: true, force: true });
+  }
   // b-15: âncora negada ('não é um app') não conta; sem o !negado da âncora, o pedido iria aos dois designers.
   const neg = agentesDe('não é um app: crie o site com react e efeito vidro');
   caso('0.8.0 sites b-15: âncora negada ("não é um app") não conta no desempate', /designer-sites/.test(neg.ag) && !/designer-paineis/.test(neg.ag), neg.ag);

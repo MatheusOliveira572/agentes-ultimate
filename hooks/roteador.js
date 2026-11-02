@@ -213,6 +213,9 @@ function main(d) {
     const min = cfg.minimo || 2;
     const anc = (id) => ((d.ancoras || {})[id] || []).some((w) => contem(texto, w) && !negado(texto, w));
     const pa = pontos[a] || 0, pb = pontos[b] || 0;
+    // A correção do usuário ("era com <agente>") vale mais que a âncora: se ela aponta para um só dos lados, ele fica.
+    const corrigido = agenteExemplo ? [a, b].filter((id) => ((cfg.pacotes[id] || {}).agentes || []).includes(agenteExemplo)) : [];
+    if (corrigido.length === 1) { const perde = corrigido[0] === a ? b : a; if (pontos[perde]) motivos[perde].push(`desempate: você já indicou ${agenteExemplo}`); pontos[perde] = 0; continue; }
     const ganha = (g, p) => { pontos[g] = Math.max(pontos[g], pontos[p]); motivos[g].push(`desempate: âncora de ${g}`); pontos[p] = 0; };
     if (pa > 0 && pb > 0 && (pa >= min || pb >= min) && anc(a) !== anc(b)) { if (anc(a)) ganha(a, b); else ganha(b, a); continue; }
     if (pa >= min && pb >= min && pa !== pb) {
