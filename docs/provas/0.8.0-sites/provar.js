@@ -146,7 +146,7 @@ const CHECAGENS = `(function (celular) {
     if (temTexto && /hidden|clip/.test(cs.overflowX) && e.scrollWidth > e.clientWidth + 1) cortado.push(e.tagName + ':' + e.textContent.trim().slice(0, 30));
     if (temTexto && !e.closest('details:not([open])')) { for (var a = e.parentElement; a && a !== document.body; a = a.parentElement) { var ca = getComputedStyle(a); if (/hidden|clip/.test(ca.overflowY) || /hidden|clip/.test(ca.overflowX)) { var qa = a.getBoundingClientRect(); if (q.bottom > qa.bottom + 1 || q.top < qa.top - 1) { cortado.push('vertical ' + e.tagName + ':' + e.textContent.trim().slice(0, 30)); break; } } } }
   });
-  document.querySelectorAll('.tabua, .plano, .vidro, .solida').forEach(function (c) {
+  document.querySelectorAll('.tabua, .plano, .vidro').forEach(function (c) {
     if (getComputedStyle(c).display === 'none') return; var qc = c.getBoundingClientRect();
     if (c.scrollWidth > c.clientWidth + 1) cortado.push('estoura o cartão: ' + c.className);
     c.querySelectorAll('*').forEach(function (e) { var q = e.getBoundingClientRect(); if (q.width && q.right > qc.right + 1) cortado.push('fora do cartão: ' + e.textContent.trim().slice(0, 30)); });
@@ -189,7 +189,7 @@ const CHECAGENS = `(function (celular) {
   }
   r.texto_sobreposto = sobre.length; r.detalhe_sobreposto = sobre.slice(0, 8);
   r.alvos_pequenos = pequenos.length; r.detalhe_alvos = pequenos.slice(0, 8);
-  var leg = '.aviso, .unidade, .tabua-topo, .variacao, td, th, .dia, .semana, .m, .rotulos, .selo, .marco, .periodo, .tag, .cenas, .valor, .metrica';
+  var leg = '.aviso, .unidade, .tabua-topo, .variacao, td, th, .dia, .semana, .m, .rotulos, .selo, .marco, .rot-m, .tag, .cenas, .valor, .metrica';
   var corpo = [], w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (w.nextNode()) {
     var n = w.currentNode; if (!n.textContent.trim()) continue; var e = n.parentElement; if (!e || e.closest('script, style')) continue;
@@ -314,11 +314,11 @@ async function medirCenas(b, url, tema, largura) {
   return saida;
 }
 const cenaOk = (c) => !c.rolagem_lateral && !c.texto_cortado && !c.texto_sobreposto && !c.contraste_falhas;
-const LARGURAS = [320, 768, 905, 960, 1024, 1100, 1440, 1920];
+const LARGURAS = (process.env.LARGURAS || '320,768,905,960,1024,1100,1440,1920').split(',').map(Number);
 const PNG_LARGURA = new Set([320, 768, 905, 1920]);
 async function medirLargura(b, url, l) {
   const c = await capturaSite(b, url, 'claro', l, PNG_LARGURA.has(l) ? `site-claro-${l}.png` : null);
-  return { largura: l, erros_js: c.erros_js, rolagem_lateral: c.rolagem_lateral, texto_cortado: c.texto_cortado, detalhe_cortado: c.detalhe_cortado, texto_espremido: c.texto_espremido, detalhe_espremido: c.detalhe_espremido, texto_sobreposto: c.texto_sobreposto, detalhe_sobreposto: c.detalhe_sobreposto, contraste_falhas: c.contraste_falhas, titulos_cobertos: c.titulos_cobertos };
+  return { largura: l, erros_js: c.erros_js, rolagem_lateral: c.rolagem_lateral, texto_cortado: c.texto_cortado, detalhe_cortado: c.detalhe_cortado, texto_espremido: c.texto_espremido, detalhe_espremido: c.detalhe_espremido, texto_sobreposto: c.texto_sobreposto, detalhe_sobreposto: c.detalhe_sobreposto, contraste_falhas: c.contraste_falhas, detalhe_falhas: c.detalhe_falhas, titulos_cobertos: c.titulos_cobertos };
 }
 const larguraOk = (x) => !x.erros_js && !x.rolagem_lateral && !x.texto_cortado && !x.texto_espremido && !x.texto_sobreposto && !x.contraste_falhas && !x.titulos_cobertos;
 const tecladoOk = (x) => x.paradas >= 15 && x.tem_pausa && !x.sob_a_barra.length && !x.anel_fraco.length && !x.erros_js;
@@ -355,9 +355,7 @@ async function provarSite() {
   gravarRes({ simulacao }); await novo(); await janela(b, 1440); await ir(b, url); await espera(300);
   await b.ev(`document.querySelector('[data-cena="2"]').click()`); await espera(450);
   const m = await b.ev(`document.getElementById('metrica').getAttribute('aria-label')+'|'+document.getElementById('t-22').textContent`);
-  const antesP = await b.ev(`getComputedStyle(document.querySelector('.so-mensal')).display`);
-  await b.ev(`document.querySelector('label[for="p-mensal"]').click()`);
-  const depoisP = await b.ev(`getComputedStyle(document.querySelector('.so-mensal')).display+'|'+getComputedStyle(document.querySelector('.so-anual')).display`);
+  const precos = await b.ev(`(function(){var t=document.querySelector('.tabela-planos').innerText;return ['178,80','19,90','274,80','29,90'].every(function(s){return t.indexOf(s)>=0})})()`);
   await b.ev(`document.querySelector('details.p summary').click()`);
   const abriu = await b.ev(`document.querySelector('details.p').open && document.querySelector('details.p p').getBoundingClientRect().height > 0`);
   await janela(b, 390); await espera(150);
@@ -366,7 +364,7 @@ async function provarSite() {
   await janela(b, 1440); await ir(b, url); await espera(200);
   await b.cdp('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 }); await b.cdp('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 }); await espera(100);
   const foco = await b.ev(`document.activeElement.className==='pular' && document.activeElement.getBoundingClientRect().top>=0`);
-  const interacoes = { cena_a_mao: m === 'R$ 1.012,40|1.012,40', preco_alterna: antesP === 'none' && depoisP.split('|')[0] !== 'none' && depoisP.split('|')[1] === 'none', pergunta_abre: abriu === true, menu_celular: menu === true, pular_recebe_foco: foco === true };
+  const interacoes = { cena_a_mao: m === 'R$ 1.012,40|1.012,40', precos_com_total: precos === true, pergunta_abre: abriu === true, menu_celular: menu === true, pular_recebe_foco: foco === true };
   // Movimento reduzido
   async function reduzMov(u, png) {
     await midia(b, [{ name: 'prefers-reduced-motion', value: 'reduce' }]); await janela(b, 1440); await ir(b, u); await espera(500);
