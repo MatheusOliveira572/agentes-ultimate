@@ -152,4 +152,46 @@ dono: `engenheiro-software`)
 - A correção do A-3 foi provada numa sonda, não no `atualizar.js`: o autor precisa do caso na bateria.
 - Não reapliquei a régua inteira (camadas 1 e 2) às provas HD; abri 3 imagens.
 
-Placar: autor=engenheiro-software cod=hd105 veredito=não B=0 A=1 M=2 b=5 ids=A-3,M-7,M-8,b-8,b-9,b-10,b-11,b-12
+Placar (1ª passada): autor=engenheiro-software cod=hd105 veredito=não B=0 A=1 M=2 b=5 ids=A-3,M-7,M-8,b-8,b-9,b-10,b-11,b-12
+
+## Reconferência (2026-11-02, 20h40 a 21h05, `main` em `d1de95c`)
+
+Correções do autor: `c852df4` e `3aa1851` (A-3), `b84353a` (M-7), `2408954` (M-8), `ffb8680` (b-12), `a8889fb` (b-8 e b-10),
+`9f78ba7` (b-9) e `d1de95c` (b-11).
+
+## Pode publicar: SIM
+
+| Id | Situação | Prova (rodada por mim agora) |
+|---|---|---|
+| A-3 | **Fechado** | Uma sonda nova (`rv107-cmd/sonda-atualizar.js`) roda o `hooks/atualizar.js` **real**, com a casa num temp, sem `claude.exe` e com um `claude.cmd` falso no PATH (`where claude` mostra só ele). **Atual:** os 2 comandos rodaram (`plugin marketplace update agentes-ultimate`, depois `plugin update agentes-ultimate@agentes-ultimate`), o console de cada um deu `visivel=False` e o log diz o motivo ("ENOENT; tentando claude.cmd pelo cmd.exe"). **Controle, o `atualizar.js` de `447a447`:** nenhuma chamada, nenhum log. O fallback só entra com ENOENT, no Windows, para o `claude` padrão, e o texto do `cmd /c` é fixo, sem nada de fora |
+| A-3, caso novo da bateria | **Pega o defeito** | Bateria `SEM_FORMAS` numa cópia `git archive d1de95c` com o `atualizar.js` antigo: **741 ok, 1 falha**. A falha é justamente "conferência A-3: com claude.cmd (npm)… → chamadas: nenhuma". 741 + 1 = 742, o total do autor |
+| M-7 | **Fechado** na árvore | `git grep` pelo login em HEAD: 0. A linha agora é `file:///<pasta>/lente3d.js`. A busca pela empresa, pelo e-mail e por `C:\Users\<número>` em HEAD e nas mensagens dos 8 commits novos também deu 0. O histórico continua com o login em 2 commits não publicados (decisão 1 abaixo) |
+| M-8 | **Fechado** | `agents/designer-sites.md:3` e a fonte agora dizem "painel ou dashboard (→ designer-paineis), tela de app (→ designer-interface)". Nenhuma descrição manda mais tela de app ao `designer-paineis` |
+| b-8, b-10 | **Fechados** | CHANGELOG com `## 0.8.0 · 2026-11-02`; mostruário (mt106) na linha 445; "15,9 MB (já com o mostruário)" |
+| b-9 | **Fechado** | `docs/provas/0.8.0-design/LEIA-ME.md` lista `mundos/` |
+| b-11 | **Fechado** | README, linhas 80–82: régua, nível HD e 10 mundos, "Apple / Liquid Glass é um deles" |
+| b-12 | **Fechado** | Mesmos 6 mutantes na cópia nova: o "Apple vira padrão" agora é pego. O `testar-impressionar` pega 5 de 6, e o 6º (índice) é pego pelo `validar.js`: 6 de 6 |
+
+Outras checagens:
+- `validar.js`: 32 agentes, 19 pacotes, 13 skills, 0 erro, 0 aviso;
+- `claude plugin validate .`: ✔;
+- `testar-impressionar.js`: 73 casos, 0 falha;
+- `eval-roteamento.js`: 23 de 24 (95,8%), o mesmo erro antigo;
+- versão 0.8.0 no manifesto.
+
+Não rodei de novo a bateria inteira no HEAD: o autor teve 742 ok, e a minha cópia com só o `atualizar.js` trocado deu 741 ok mais a
+falha esperada. Também não rodei a tabela de formas, porque nada nos commits novos mexe nas travas.
+
+### Decisões do usuário (continuam)
+1. **Login no histórico (M-7):** o login continua em `152751e` e `88ec688`, que vão no push. Recomendo publicar assim: é um
+   login, não um segredo, e o nome do dono já é público. A alternativa é reescrever os commits locais antes do push; depois
+   do push, não há mais volta.
+2. **Peso:** 15,9 MB é aceitável na 0.8.0. Na 0.8.1, tirar `docs/provas/` da árvore (fica em cerca de 3,4 MB).
+
+### Lista do usuário (mantida)
+1. Num PC com o Claude Code do npm (`where claude` mostra `claude.cmd`), na sessão do dia seguinte ao push, deve aparecer
+   "agentes-ultimate atualizado: 0.7.0 → 0.8.0" e nenhuma janela preta.
+2. Neste PC (WinGet), o mesmo aviso, também sem janela.
+3. No push, a trava pergunta sobre publicar: a resposta vem em menos de 7 s?
+
+Placar: autor=engenheiro-software cod=hd105 veredito=sim B=0 A=0 M=0 b=0 ids=
